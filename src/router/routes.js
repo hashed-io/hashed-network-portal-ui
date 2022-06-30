@@ -8,7 +8,7 @@ const routes = [
     children: [
       // Native Bitcoin Vault layout and routes
       {
-        path: 'nvb',
+        path: 'nbv',
         name: 'nbv',
         component: () => import('layouts/MainLayout.vue'),
         children: [
@@ -19,7 +19,8 @@ const routes = [
             meta: {
               breadcrumb: [
                 { name: 'Home', icon: 'home' }
-              ]
+              ],
+              app: 'nbv'
             }
           },
           // Vaults
@@ -30,7 +31,8 @@ const routes = [
             meta: {
               breadcrumb: [
                 { name: 'Vaults', icon: 'storage' }
-              ]
+              ],
+              app: 'nbv'
             }
           },
           // XPubs
@@ -41,7 +43,8 @@ const routes = [
             meta: {
               breadcrumb: [
                 { name: 'XPUB', icon: 'key' }
-              ]
+              ],
+              app: 'nbv'
             }
           },
           {
@@ -53,7 +56,8 @@ const routes = [
               breadcrumb: [
                 { name: 'Vaults', icon: 'storage', to: { name: 'manageVaults' } },
                 { name: 'Details', icon: 'summarize' }
-              ]
+              ],
+              app: 'nbv'
             }
           }
         ]
@@ -70,7 +74,8 @@ const routes = [
             meta: {
               breadcrumb: [
                 { name: 'Home', icon: 'home' }
-              ]
+              ],
+              app: 'marketplaces'
             }
           }
         ]

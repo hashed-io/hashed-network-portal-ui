@@ -177,8 +177,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Hashed template quasar vue 3',
-        short_name: 'Hashed template quasar vue 3',
+        name: 'Hashed Network Portal',
+        short_name: 'Hashed Network Portal',
         description: 'This is a template developed by HASHED',
         display: 'standalone',
         orientation: 'portrait',
