@@ -8,7 +8,7 @@ q-layout(view="lHh lpR lFf")
         class="drawerBackground"
     )
       q-list.q-pa-md.q-gutter-sm
-        .q-pa-lg
+        .q-pa-lg.q-mt-lg
             q-img(src="~/assets/portal/logo-gradient-white.png")
         q-item(
             v-for="option in optionsMenu"

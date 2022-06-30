@@ -3,10 +3,7 @@
   q-layout.containerLayout(view="lHh lpR lFf" container)
     q-header
       q-toolbar
-        q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        .row.q-gutter-x-sm
+        .row.q-gutter-x-sm.q-ml-md
           q-item.routerItems(
             clickable
             :to="{ name: 'manageVaults'}"
@@ -25,6 +22,10 @@
           )
             q-item-section.q-pa-sm
               q-item-label Extended Keys
+        q-space
+        q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(:selectedAccount="selectedAccount")
+          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
