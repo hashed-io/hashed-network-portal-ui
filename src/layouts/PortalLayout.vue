@@ -20,6 +20,16 @@ q-layout(view="lHh lpR lFf")
             q-item-section(avatar)
                 q-icon(:name="option.icon")
             q-item-section(avatar) {{ option.label }}
+      .row.full-width.justify-around.fixed-bottom.q-mb-md
+        q-icon(
+            name="discord"
+            color="accent"
+        )
+        q-icon(
+            name="telegram"
+            color="accent"
+        )
+        i.twitterIcon.icon
     q-page-container
         router-view
 </template>
@@ -64,6 +74,7 @@ export default {
 }
 </script>
 
+// TO DO - Icons SVG Component
 <style lang="stylus">
 @import '~/css/colors.styl'
 .drawerBackground
@@ -76,4 +87,12 @@ export default {
 .defaultRouter
   color: white
   border-radius: 10px
+.twitterIcon
+  mask: url(../assets/common/customIcons/twitter-brands.svg)
+  mask-size: cover
+.icon
+  display: inline-block
+  width: 15px
+  height: 15px
+  background: $accent
 </style>
