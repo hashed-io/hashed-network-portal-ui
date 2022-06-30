@@ -4,7 +4,7 @@ q-layout(view="lHh lpR lFf")
         v-model="drawerLeft"
         show-if-above
         :width="225"
-        :breakpoint="700"
+        :breakpoint="800"
         class="drawerBackground"
     )
       q-list.q-pa-md.q-gutter-sm
