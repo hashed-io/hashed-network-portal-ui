@@ -1,11 +1,9 @@
 <template lang="pug">
-q-layout(view="lHh Lpr lFf")
+#container.full-height
+  q-layout.containerLayout(view="lHh lpR lFf" container)
     q-header
       q-toolbar
-        q-btn(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        .row.q-gutter-x-sm
+        .row.q-gutter-x-sm.q-ml-md
           q-item.routerItems(
             clickable
             :to="{ name: 'manageVaults'}"
@@ -13,7 +11,7 @@ q-layout(view="lHh Lpr lFf")
             :class="{ 'activeRouter': isActive('Vaults')}"
             dense
           )
-            q-item-section
+            q-item-section.q-pa-sm
               q-item-label Vaults
           q-item.routerItems(
             clickable
@@ -22,19 +20,24 @@ q-layout(view="lHh Lpr lFf")
             :class="{ 'activeRouter': isActive('XPUB')}"
             dense
           )
-            q-item-section
-              q-item-label XPUB
+            q-item-section.q-pa-sm
+              q-item-label Extended Keys
+        q-space
+        q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(:selectedAccount="selectedAccount")
+          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="breadcrumb in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to }")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to, 'cursor-pointer': breadcrumb.back }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
         .col-10
           .q-px-lg.q-pa-lg
-            not-accounts(v-if="!selectedAccount")
+            not-connected(v-if="!isConnectedToServer")
+            not-accounts(v-else-if="!selectedAccount")
             router-view(v-else)
 </template>
 
@@ -42,9 +45,10 @@ q-layout(view="lHh Lpr lFf")
 import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
+import NotConnected from '~/pages/NotConnected.vue'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
@@ -52,16 +56,19 @@ export default defineComponent({
   components: {
     AccountsMenu,
     SelectedAccountBtn,
-    NotAccounts
+    NotAccounts,
+    NotConnected
   },
 
   setup () {
     const { showNotification, showLoading, hideLoading } = useNotifications()
     const $store = useStore()
     const $route = useRoute()
+    const $router = useRouter()
     const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
+    const isConnectedToServer = computed(() => $store.$connectedToServer)
     const accounts = ref(undefined)
     const breadcrumbList = ref(undefined)
     watchEffect(() => updateBreadcrumbs($route))
@@ -117,18 +124,30 @@ export default defineComponent({
       return false
     }
 
+    function handlerBreadcrumb (index) {
+      // console.log('handlerBreadcrumb', breadcrumb, index)
+      const breadUpdated = $route.meta.breadcrumb[index]
+      if (breadUpdated.back) {
+        $router.back()
+      } else if (breadUpdated.to) {
+        $router.push(breadUpdated.to)
+      }
+    }
+
     return {
       availableAccounts,
       onSelectAccount,
       selectedAccount,
       breadcrumbList,
-      isActive
+      isActive,
+      handlerBreadcrumb,
+      isConnectedToServer
     }
   }
 })
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 
 .routerItems
   border-radius: 5px
@@ -143,4 +162,6 @@ export default defineComponent({
 
 .hasLink
   color: $light
+.containerLayout
+ height: 100vh
 </style>

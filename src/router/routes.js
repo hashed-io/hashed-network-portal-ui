@@ -1,54 +1,86 @@
 
 const routes = [
   {
+    // Portal Layout
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PortalLayout.vue'),
     name: 'root',
     children: [
+      // Native Bitcoin Vault layout and routes
       {
-        path: '',
-        name: 'home',
-        component: () => import('pages/Index.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Home', icon: 'home' }
-          ]
-        }
+        path: 'nbv',
+        name: 'nbv',
+        component: () => import('layouts/MainLayout.vue'),
+        children: [
+          {
+            path: 'home',
+            name: 'nbvIndex',
+            component: () => import('pages/Index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Home', icon: 'home' }
+              ],
+              app: 'nbv'
+            }
+          },
+          // Vaults
+          {
+            path: 'vaults',
+            name: 'manageVaults',
+            component: () => import('src/pages/vaults/manage-vaults.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Vaults', icon: 'storage' }
+              ],
+              app: 'nbv'
+            }
+          },
+          // XPubs
+          {
+            path: 'xpub',
+            name: 'manageXpub',
+            component: () => import('pages/xpub/manage-xpub.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'XPUB', icon: 'key' }
+              ],
+              app: 'nbv'
+            }
+          },
+          {
+            path: 'vaults/details',
+            name: 'vaultDetails',
+            props: true,
+            component: () => import('pages/vaults/vault-details.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Vaults', icon: 'storage', to: { name: 'manageVaults' } },
+                { name: 'Details', icon: 'summarize' }
+              ],
+              app: 'nbv'
+            }
+          }
+        ]
       },
-      // XPubs
       {
-        path: 'xpub',
-        name: 'manageXpub',
-        component: () => import('pages/xpub/manage-xpub.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'XPUB', icon: 'key' }
-          ]
-        }
+        path: 'marketplaces',
+        name: 'marketplaceRoot',
+        component: () => import('layouts/MainLayout.vue'),
+        children: [
+          {
+            path: 'home',
+            name: 'marketplaceHome',
+            component: () => import('pages/NotAccounts.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Home', icon: 'home' }
+              ],
+              app: 'marketplaces'
+            }
+          }
+        ]
       },
-      // Vaults
-      {
-        path: 'vaults',
-        name: 'manageVaults',
-        component: () => import('src/pages/vaults/manage-vaults.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Vaults', icon: 'storage' }
-          ]
-        }
-      },
-      {
-        path: 'vaults/details',
-        name: 'vaultDetails',
-        props: true,
-        component: () => import('pages/vaults/vault-details.vue'),
-        meta: {
-          breadcrumb: [
-            { name: 'Vaults', icon: 'storage', to: { name: 'manageVaults' } },
-            { name: 'Details', icon: 'summarize' }
-          ]
-        }
-      },
+      // General not accounts page
       {
         path: 'not-accounts',
         name: 'notAccounts',
