@@ -1,0 +1,100 @@
+{
+  "name": "hashed-template-quasar-vue3",
+  "version": "0.0.1",
+  "description": "This is a template developed by HASHED",
+  "productName": "Hashed Template",
+  "author": "Jose Maria <josemgo.9.11@gmail.com",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo \"No test specified\" && exit 0",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "prepare": "husky install",
+    "cypress:open": "cypress open",
+    "deploy": "node gh-pages-deploy.js"
+  },
+  "dependencies": {
+    "@jmgayosso/test-btn": "^1.0.1",
+    "@polkadot/api": "^8.1.1",
+    "@polkadot/extension-dapp": "^0.43.1",
+    "@polkadot/vue-identicon": "^2.0.1",
+    "@quasar/extras": "^1.14.2",
+    "@smontero/nbv-ur-codec": "^1.0.2",
+    "axios": "^0.21.1",
+    "chart.js": "^3.7.1",
+    "core-js": "^3.6.5",
+    "eslint-loader": "^4.0.2",
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "path": "^0.12.7",
+    "primeicons": "^5.0.0",
+    "primevue": "^3.12.5",
+    "process": "^0.11.10",
+    "quasar": "^2.7.4",
+    "vue": "^3.0.0",
+    "vue-chart-3": "^3.1.8",
+    "vue-i18n": "^9.0.0",
+    "vue-router": "^4.0.0",
+    "vue3-qr-reader": "^1.0.0",
+    "vuex": "^4.0.1",
+    "webpack": "^5.68.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/eslint-parser": "^7.13.14",
+    "@quasar/app-webpack": "^3.5.6",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack5": "^6.5.9",
+    "@storybook/manager-webpack5": "^6.5.9",
+    "@storybook/vue3": "^6.5.9",
+    "@vue/eslint-config-standard": "6.0.0",
+    "babel-loader": "^8.2.3",
+    "cypress": "^9.5.4",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-storybook": "^0.5.13",
+    "eslint-plugin-vue": "^7.0.0",
+    "eslint-webpack-plugin": "^2.4.0",
+    "execa": "^6.1.0",
+    "husky": "^7.0.4",
+    "lint-staged": ">=10",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "stylus": "^0.56.0",
+    "stylus-loader": "^6.2.0",
+    "vue-loader": "^16.8.3"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
+  "engines": {
+    "node": ">= 12.22.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "yarn lint"
+    ]
+  }
+}

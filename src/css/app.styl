@@ -1,0 +1,72 @@
+// app global css in Sass form
+:root
+  --q-primary: #2ebe6a !important
+  --q-secondary: #008d3e !important
+  --q-accent: #9C27B0;
+  --q-positive: #21BA45;
+  --q-negative: #C10015;
+  --q-info: #31CCEC;
+  --q-warning: #F2C037;
+  --q-dark: #1D1D1D;
+  --q-dark-page: #121212;
+$primary   = #2ebe6a
+$secondary = #008d3e
+$accent    = #9C27B0
+
+$dark      = #1D1D1D
+$light     = #6bf299
+
+$positive  = #21BA45
+$negative  = #C10015
+$info      = #31CCEC
+$warning   = #F2C037
+
+$bg-body   = rgba(0,0,0,.25)
+
+.global-font
+  font-size: 2rem
+  color: $positives
+
+.modalSize
+  width: 65vw
+  max-width: 80vw !important
+
+.modalQrSize
+  width: 25vw
+  max-width: 80vw !important
+
+.text-wrap
+  width: 500px !important
+  overflow-wrap: break-all
+  color: green
+
+.one-line
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+  max-width: 100%
+  overflow: hidden
+  -webkit-line-clamp: 1
+  -webkit-box-orient: vertical
+  height: auto
+
+.icon-btn
+  transition: all 0.3s
+  max-width: 400px
+
+.icon-btn:hover
+  transform: scale(1.3)
+  cursor: pointer
+
+.no-padding
+  padding: 0px !important
+
+.q-item
+  min-height: 0px
+
+.animated-item
+  transition: all 0.3s
+.animated-item:hover
+  transform: scale(1.02)
+  cursor: pointer
+  background: rgba(0,0,0,.01)
