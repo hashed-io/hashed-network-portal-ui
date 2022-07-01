@@ -7,7 +7,6 @@
           q-item.routerItems(
             clickable
             :to="{ name: 'manageVaults'}"
-            active-class="activeRouter"
             :class="{ 'activeRouter': isActive('Vaults')}"
             dense
           )
@@ -16,7 +15,6 @@
           q-item.routerItems(
             clickable
             :to="{ name: 'manageXpub'}"
-            active-class="activeRouter"
             :class="{ 'activeRouter': isActive('XPUB')}"
             dense
           )
@@ -118,8 +116,10 @@ export default defineComponent({
 
     function isActive (module) {
       if (module && breadcrumbList.value.length > 0) {
-        const fund = breadcrumbList.value.find(v => v.name === module)
-        return !!fund
+        const fund = breadcrumbList.value.find(v => v.name.toLowerCase() === module.toLowerCase())
+        const isActive = !!fund
+        console.log('isActove', module, fund, isActive)
+        return isActive
       }
       return false
     }
@@ -151,6 +151,7 @@ export default defineComponent({
 
 .routerItems
   border-radius: 5px
+  color: white
 
 .routerItems:hover
   background-color: $secondary
