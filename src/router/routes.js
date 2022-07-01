@@ -12,22 +12,11 @@ const routes = [
         name: 'nbv',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-          {
-            path: 'home',
-            name: 'nbvIndex',
-            component: () => import('pages/Index.vue'),
-            meta: {
-              breadcrumb: [
-                { name: 'Home', icon: 'home' }
-              ],
-              app: 'nbv'
-            }
-          },
           // Vaults
           {
-            path: 'vaults',
+            path: '',
             name: 'manageVaults',
-            component: () => import('src/pages/vaults/manage-vaults.vue'),
+            component: () => import('src/pages/nbv/vaults/manage-vaults.vue'),
             meta: {
               breadcrumb: [
                 { name: 'Vaults', icon: 'storage' }
@@ -39,7 +28,7 @@ const routes = [
           {
             path: 'xpub',
             name: 'manageXpub',
-            component: () => import('pages/xpub/manage-xpub.vue'),
+            component: () => import('pages/nbv/xpub/manage-xpub.vue'),
             meta: {
               breadcrumb: [
                 { name: 'XPUB', icon: 'key' }
@@ -47,11 +36,12 @@ const routes = [
               app: 'nbv'
             }
           },
+          // Vault details
           {
             path: 'vaults/details',
             name: 'vaultDetails',
             props: true,
-            component: () => import('pages/vaults/vault-details.vue'),
+            component: () => import('pages/nbv/vaults/vault-details.vue'),
             meta: {
               breadcrumb: [
                 { name: 'Vaults', icon: 'storage', to: { name: 'manageVaults' } },
@@ -59,9 +49,25 @@ const routes = [
               ],
               app: 'nbv'
             }
+          },
+          // Proposals Details
+          {
+            path: 'proposal',
+            name: 'proposalDetails',
+            props: true,
+            component: () => import('src/pages/nbv/proposals/proposal-details.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Vaults', icon: 'storage', to: { name: 'manageVaults' } },
+                { name: 'Details', icon: 'summarize', back: true },
+                { name: 'Proposal', icon: 'history_edu' }
+              ],
+              app: 'nbv'
+            }
           }
         ]
       },
+      // Marketplaces
       {
         path: 'marketplaces',
         name: 'marketplaceRoot',
@@ -70,7 +76,7 @@ const routes = [
           {
             path: 'home',
             name: 'marketplaceHome',
-            component: () => import('pages/NotAccounts.vue'),
+            component: () => import('pages/Error404.vue'),
             meta: {
               breadcrumb: [
                 { name: 'Home', icon: 'home' }

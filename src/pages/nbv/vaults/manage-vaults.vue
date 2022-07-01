@@ -1,5 +1,9 @@
 <template lang="pug">
 #container
+  //- Action Btn
+  q-page-sticky(position="bottom-right" :offset="[18, 18]")
+    q-btn(fab icon="refresh" color="secondary" @click="getVaults")
+      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") Refresh
   .row.justify-between.q-mb-md
     .text-h5 Manage Vaults
     q-btn(
@@ -10,6 +14,14 @@
       outline
       @click="isShowingCreateVault = true"
     )
+    //- q-btn(
+    //-   label="Sign and verify message"
+    //-   color="warning"
+    //-   icon="message"
+    //-   no-caps
+    //-   outline
+    //-   @click="signAndVerifyMessage"
+    //- )
   vault-list.q-my-md(:vaults="vaultList")
   #modals
     q-dialog(v-model="isShowingCreateVault")
@@ -19,8 +31,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import VaultList from '~/components/vaults/vault-list.vue'
-import CreateVaultForm from '~/components/vaults/create-vault-form.vue'
+import VaultList from '~/components/nbv/vaults/vault-list.vue'
+import CreateVaultForm from '~/components/nbv/vaults/create-vault-form.vue'
 
 export default {
   name: 'ManageVaults',
@@ -79,6 +91,24 @@ export default {
         this.isShowingCreateVault = false
         this.showNotification({ message: 'Vault created' })
         await this.getVaults()
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async signAndVerifyMessage () {
+      try {
+        this.showLoading()
+        const message = 'Test To Sign'
+        const response = await this.$store.$nbvStorageApi.signMessage(message, this.selectedAccount.address)
+        console.log('signMessage', response)
+        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.selectedAccount.address)
+        console.log('verifyMessage', response2)
+        if (response2.isValid) {
+          this.showNotification({ message: 'Message Signed and Verified' })
+        }
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

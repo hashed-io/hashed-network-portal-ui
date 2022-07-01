@@ -1,7 +1,7 @@
 <template lang="pug">
-q-card.q-pa-sm
+q-card.q-pa-sm(@click="goToVaultDetails")
   q-item
-    q-item-section
+    q-item-section.q-gutter-y-xs
       //- .text-subtitle2 Id:
       //-   span.text-body2.one-line.q-ml-sm {{ vaultId }}
       .row.items-center
@@ -13,47 +13,76 @@ q-card.q-pa-sm
         .text-subtitle2 Threshold:
           span.text-body2.q-ml-sm {{ threshold }}
       .text-subtitle2 Owner
-      account-item(:address="owner" flat)
+      account-item(:address="owner" flat inherit)
     q-item-section(avatar)
-      q-btn(
-        label="See details"
-        icon="summarize"
-        no-caps
-        size="sm"
-        color="secondary"
-        @click="goToVaultDetails"
-      )
+      .text-subtitle2.text-primary.hoverView Click to see details
+      //- q-btn(
+      //-   label="See details"
+      //-   no-caps
+      //-   size="md"
+      //-   color="secondary"
+      //-   @click="goToVaultDetails"
+      //- )
 </template>
 
 <script>
 import { AccountItem } from '~/components/common'
+
+/**
+ * This component show vault item info
+ */
 export default {
   name: 'VaultItem',
   components: { AccountItem },
   props: {
+    /**
+     * Vault Id
+     */
     vaultId: {
       type: String,
       default: undefined
     },
+    /**
+     * Array of vault cosigners (address values)
+     */
     cosigners: {
       type: Array,
       default: () => []
     },
+    /**
+     * Vault Description
+     */
     description: {
       type: String,
       default: undefined
     },
+    /**
+     * Vault Descriptor
+     */
     descriptors: {
       type: Object,
       default: () => {}
     },
+    /**
+     * Vault Owner
+     */
     owner: {
       type: String,
       default: undefined
     },
+    /**
+     * Vault Threshold
+     */
     threshold: {
       type: [String, Number],
       default: undefined
+    },
+    /**
+     * Offchain Statis
+     */
+    offchainStatus: {
+      type: [Object, String],
+      default: () => undefined
     }
   },
   methods: {
@@ -62,16 +91,26 @@ export default {
         vaultId: this.vaultId,
         cosigners: this.cosigners,
         description: this.description,
+        descriptors: this.descriptors,
         outputDescriptor: this.descriptors.outputDescriptor,
         changeDescriptor: this.descriptors.changeDescriptor,
         owner: this.owner,
-        threshold: this.threshold
+        threshold: this.threshold,
+        offchainStatus: this.offchainStatus
       }
       this.$router.push({
         name: 'vaultDetails',
-        params: vault
+        params: { vault: JSON.stringify(vault) }
       })
     }
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.hoverView
+  display: none
+
+.animated-item:hover .hoverView
+  display: block
+</style>

@@ -161,7 +161,7 @@ export default defineComponent({
   background-color: white
 
 .hasLink
-  color: $light
+  color: $primary
 .containerLayout
  height: 100vh
 </style>
