@@ -124,9 +124,7 @@ export default defineComponent({
     function isActive (module) {
       if (module && breadcrumbList.value.length > 0) {
         const fund = breadcrumbList.value.find(v => v.name.toLowerCase() === module.toLowerCase())
-        const isActive = !!fund
-        console.log('isActove', module, fund, isActive)
-        return isActive
+        return !!fund
       }
       return false
     }
