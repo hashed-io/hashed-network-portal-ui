@@ -80,12 +80,25 @@ const routes = [
         component: () => import('layouts/MainLayout.vue'),
         children: [
           {
-            path: 'home',
-            name: 'marketplaceHome',
-            component: () => import('pages/Error404.vue'),
+            path: '/list',
+            name: 'marketplacesList',
+            component: () => import('pages/marketplace/index.vue'),
             meta: {
               breadcrumb: [
-                { name: 'Home', icon: 'home' }
+                { name: 'Marketplace', icon: 'storefront' }
+              ],
+              app: 'marketplaces'
+            }
+          },
+          {
+            path: '/marketplaces/details',
+            name: 'marketplace-details',
+            props: true,
+            component: () => import('pages/marketplace/details-market.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Marketplace', icon: 'storefront' },
+                { name: 'Detail', icon: 'info' }
               ],
               app: 'marketplaces'
             }

@@ -1,7 +1,7 @@
-import TreasuryApi from './treasuryApi'
 import NbvStorageApi from './nbvStorageApi'
+import MarketplaceApi from './marketplaceApi'
 
 export {
-  TreasuryApi,
-  NbvStorageApi
+  NbvStorageApi,
+  MarketplaceApi
 }
