@@ -92,6 +92,15 @@ const routes = [
           }
         ]
       },
+      // Sign Test
+      {
+        path: '/signTest',
+        name: 'signTest',
+        component: () => import('pages/signTest.vue'),
+        meta: {
+          app: 'sign'
+        }
+      },
       // General not accounts page
       {
         path: 'not-accounts',

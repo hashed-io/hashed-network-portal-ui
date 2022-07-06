@@ -56,6 +56,14 @@ export default {
           to: {
             name: 'marketplaceHome'
           }
+        },
+        {
+          label: 'Sign Test',
+          icon: 'border_color',
+          key: 'sign',
+          to: {
+            name: 'signTest'
+          }
         }
       ],
       routerKeyApp: undefined

@@ -30,8 +30,10 @@
     "process": "^0.11.10",
     "quasar": "^2.7.4",
     "vue": "^3.0.0",
+    "vue-canvas-sign": "^2.0.8",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.0",
+    "vue-signature-canvas": "^1.0.1",
     "vue3-qr-reader": "^1.0.0",
     "vuex": "^4.0.1",
     "webpack": "^5.68.0"

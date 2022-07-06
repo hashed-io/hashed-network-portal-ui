@@ -11,7 +11,7 @@ import routes from './routes'
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+export default route(function ({ store }) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
@@ -27,6 +27,10 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach(async (to, from, next) => {
+    console.log('store', store.getters['polkadotWallet/isLogged'])
+    if (!store.getters['polkadotWallet/isLogged'] && to.name !== 'login') {
+      next({ name: 'login' })
+    }
     // console.log('beforeEach', to)
     if (to.name === 'root' || to.name === 'home') {
       next({ name: 'manageVaults' })

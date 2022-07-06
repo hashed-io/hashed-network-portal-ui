@@ -54,7 +54,7 @@ export const showGlobalLoading = (props) => {
   let message, color, background, type
   const defaultMessage = 'Please wait a moment...'
   const defaultColor = 'white'
-  const defaultBackground = 'gray'
+  const defaultBackground = '#263238'
   const defaultType = 'loading'
 
   if (props) {
