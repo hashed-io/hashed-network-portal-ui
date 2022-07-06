@@ -315,6 +315,20 @@ export default {
     async savePsbt (psbt) {
       try {
         this.showLoading()
+        const signers = await this.$store.$bdkApi.getListSigner({
+          descriptors: {
+            descriptor: this.paramsParent.descriptors.outputDescriptor,
+            change_descriptor: this.paramsParent.descriptors.changeDescriptor
+          },
+          psbt
+        })
+        const userXPub = await this.getXpub()
+        console.log('signers', signers, userXPub)
+        console.log('myXpub', userXPub)
+        if (!this.isValidSignature(signers, userXPub)) {
+          this.showNotification({ message: 'Please sign the psbt with a valid XPUB', color: 'negative' })
+          return
+        }
         await this.$store.$nbvStorageApi.savePsbt({
           proposalId: this.proposalId,
           signer: this.selectedAccount.address,
@@ -326,6 +340,38 @@ export default {
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    isValidSignature (signers, xpub) {
+      try {
+        let valid = false
+        signers.forEach(v => {
+          if (xpub.includes(v.xpub)) {
+            valid = true
+          }
+        })
+        return valid
+      } catch (e) {
+        console.error(e)
+        return false
+      }
+    },
+    async getXpub () {
+      try {
+        this.showLoading()
+        let userXpub
+        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
+        if (xpubId && xpubId.value) {
+          const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
+          userXpub = xpub.isEmpty ? undefined : xpub.value
+        }
+        return userXpub.toHuman()
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+        return undefined
       } finally {
         this.hideLoading()
       }

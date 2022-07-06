@@ -57,6 +57,23 @@ class BdkApi {
       throw new Error(e)
     }
   }
+
+  /**
+   * @description Gets a list of xpubs who signed a psbt
+   * @param {String} descriptors Descriptors - the psbt and wallet descriptors should be provided
+   * @param {String} psbt Change descriptor
+   */
+  async getListSigner ({ descriptors, psbt }) {
+    try {
+      const { data } = await this.request.post('/list_signers', {
+        descriptors,
+        psbt
+      })
+      return data
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
 }
 
 export default BdkApi

@@ -1,6 +1,12 @@
 
 const routes = [
   {
+    // Login
+    path: '/login',
+    name: 'login',
+    component: () => import('pages/Login.vue')
+  },
+  {
     // Portal Layout
     path: '/',
     component: () => import('layouts/PortalLayout.vue'),
@@ -85,6 +91,15 @@ const routes = [
             }
           }
         ]
+      },
+      // Sign Test
+      {
+        path: '/signTest',
+        name: 'signTest',
+        component: () => import('pages/signTest.vue'),
+        meta: {
+          app: 'sign'
+        }
       },
       // General not accounts page
       {
