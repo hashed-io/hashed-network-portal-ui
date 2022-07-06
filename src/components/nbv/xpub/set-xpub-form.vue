@@ -14,52 +14,52 @@
             data-testid="labelInput"
             data-cy="labelInput"
             v-model="label"
-            :placeholder="$t('xpub.label')"
-            :label="$t('xpub.label')"
+            :placeholder="$t('pages.nbv.xpub.label')"
+            :label="$t('pages.nbv.xpub.label')"
             outlined
             disable
           )
         .col
-          .text-body2 {{ $t('xpub.labelDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.labelDesc')  }}
      .row.q-col-gutter-x-md
         .col-7
           q-input(
             data-testid="publicKey"
             data-cy="publicKey"
             v-model="publicKey"
-            :placeholder="$t('xpub.publicKey')"
-            :label="$t('xpub.publicKey')"
+            :placeholder="$t('pages.nbv.xpub.publicKey')"
+            :label="$t('pages.nbv.xpub.publicKey')"
             outlined
             :rules="[rules.required, rules.isValidXPub]"
           )
         .col
-          .text-body2 {{ $t('xpub.pubicKeyDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.pubicKeyDesc')  }}
      .row.q-col-gutter-x-md
         .col-7
           q-input(
             data-testid="masterFingerprint"
             data-cy="masterFingerprint"
             v-model="masterFingerprint"
-            :placeholder="$t('xpub.masterFingerPrint')"
-            :label="$t('xpub.masterFingerPrint')"
+            :placeholder="$t('pages.nbv.xpub.masterFingerPrint')"
+            :label="$t('pages.nbv.xpub.masterFingerPrint')"
             :rules="[rules.required, rules.isValidFingerPrint]"
             outlined
           )
         .col
-          .text-body2 {{ $t('xpub.fingerprintDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.fingerprintDesc')  }}
      .row.q-col-gutter-x-md
         .col-7
           q-input(
             data-testid="derivationInput"
             data-cy="derivationInput"
             v-model="derivation"
-            :placeholder="$t('xpub.derivationPath')"
-            :label="$t('xpub.derivationPath')"
+            :placeholder="$t('pages.nbv.xpub.derivationPath')"
+            :label="$t('pages.nbv.xpub.derivationPath')"
             :rules="[rules.required, rules.isValidDerivationPath]"
             outlined
           )
         .col
-          .text-body2 {{ $t('xpub.derivationPathDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.derivationPathDesc')  }}
     #scanQR(v-else)
       .row.q-col-gutter-x-md
         .col-7
@@ -67,15 +67,15 @@
                 data-testid="fullXpubInput"
                 data-cy="fullXpubInput"
                 v-model="fullXpub"
-                :placeholder="$t('xpub.xpubPlaceholder')"
-                :label="$t('xpub.xpub')"
+                :placeholder="$t('pages.nbv.xpub.xpubPlaceholder')"
+                :label="$t('pages.nbv.xpub.xpub')"
                 stack-label
                 outlined
                 :rules="[rules.required, rules.isValidFullXpub]"
             )
                 template(v-slot:append)
                     q-icon.icon-btn(data-testid="openQr" data-cy="openQr" name="qr_code_scanner" @click="toggleQRScanner(true)")
-                        q-tooltip {{ $t('xpub.xpubDesc') }}
+                        q-tooltip {{ $t('pages.nbv.xpub.xpubDesc') }}
         .col
           .text-body2 {{ $t('general.xpubDesc')  }}
     q-btn.q-mt-sm(

@@ -4,8 +4,8 @@
     .text-h5 Manage Public Keys
     q-icon.q-ml-sm.icon-btn(name="help" color="primary" size="sm")
       q-tooltip.text-body2.myTooltip(:offset="[10, 10]")
-        .myTooltip {{ $t('xpub.extendedPublicKeyInfo') }}
-  .text-body2.text-weight-light.q-mb-lg {{ $t('xpub.textInfo')  }}
+        .myTooltip {{ $t('pages.nbv.xpub.extendedPublicKeyInfo') }}
+  .text-body2.text-weight-light.q-mb-lg {{ $t('pages.nbv.xpub.textInfo')  }}
   q-card(v-if="userHasXpub")
     q-item
       q-item-section

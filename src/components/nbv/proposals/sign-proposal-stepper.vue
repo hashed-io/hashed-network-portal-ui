@@ -8,7 +8,7 @@
   )
     q-step.minH(
       :name="steps.exportPsbt"
-      :title="$t('proposals.titleStep1')"
+      :title="$t('pages.nbv.proposals.titleStep1')"
       icon="qr_code"
       :done="step > steps.exportPsbt"
     )
@@ -16,10 +16,10 @@
         .col-6
           psbt-qr-viewer(v-if="psbtQR" :qrs="psbtQR")
         .col
-          .text-body2.q-mt-md {{ $t('proposals.signPsbtStep1') }}
+          .text-body2.q-mt-md {{ $t('pages.nbv.proposals.signPsbtStep1') }}
     q-step.minH(
       :name="steps.importPsbt"
-      :title="$t('proposals.titleStep2')"
+      :title="$t('pages.nbv.proposals.titleStep2')"
       icon="qr_code_scanner"
       :done="step > steps.importPsbt"
     )
@@ -27,10 +27,10 @@
         .col-7
           psbt-qr-scanner.q-pa-md(@onScanned="onPSBTScanned")
         .col
-          .text-body2.q-mt-md {{ $t('proposals.signPsbtStep2') }}
+          .text-body2.q-mt-md {{ $t('pages.nbv.proposals.signPsbtStep2') }}
     q-step.minH(
       :name="steps.finalize"
-      :title="$t('proposals.titleStep3')"
+      :title="$t('pages.nbv.proposals.titleStep3')"
       icon="settings"
       :done="step > steps.finalize"
       :disable="!canShowLastStep"
@@ -40,7 +40,7 @@
             .row.items-center.q-col-gutter-sm.q-mb-md
                 .col-6
                     q-btn.full-width(
-                        :label="$t('proposals.saveBtn')"
+                        :label="$t('pages.nbv.proposals.saveBtn')"
                         color="secondary"
                         no-caps
                         outline
@@ -49,12 +49,12 @@
                     )
                     q-tooltip(v-if="alreadySigned") You already signed
                 .col
-                    .text-body2 {{ $t('proposals.signPsbtSaveDesc') }}
+                    .text-body2 {{ $t('pages.nbv.proposals.signPsbtSaveDesc') }}
         .col
             .row.items-center.q-col-gutter-sm.q-mb-md
                 .col-6
                     q-btn.full-width(
-                        :label="$t('proposals.finalizeBtn')"
+                        :label="$t('pages.nbv.proposals.finalizeBtn')"
                         color="secondary"
                         no-caps
                         outline
@@ -63,12 +63,12 @@
                     )
                     q-tooltip(v-if="(isFinalized || isBroadcasted)") Already finalized
                 .col
-                    .text-body2 {{ $t('proposals.signPsbtFinalizeDesc') }}
+                    .text-body2 {{ $t('pages.nbv.proposals.signPsbtFinalizeDesc') }}
         .col
             .row.items-center.q-col-gutter-sm.q-mb-md
                 .col-6
                     q-btn.full-width(
-                        :label="$t('proposals.broadcastBtn')"
+                        :label="$t('pages.nbv.proposals.broadcastBtn')"
                         color="secondary"
                         no-caps
                         outline
@@ -77,7 +77,7 @@
                     )
                     q-tooltip(v-if="isBroadcasted") Already broadcasted
                 .col
-                    .text-body2 {{ $t('proposals.signPsbtBroadcastDesc') }}
+                    .text-body2 {{ $t('pages.nbv.proposals.signPsbtBroadcastDesc') }}
     template(v-slot:navigation)
       q-stepper-navigation
         .row.justify-between
