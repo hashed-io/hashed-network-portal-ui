@@ -20,6 +20,7 @@
     "@polkadot/extension-dapp": "^0.43.1",
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.14.2",
+    "@smontero/hashed-private-client-api": "^0.0.4",
     "@smontero/nbv-ur-codec": "^1.0.3",
     "axios": "^0.21.1",
     "chart.js": "^3.7.1",
@@ -35,7 +36,6 @@
     "vue-canvas-sign": "^2.0.8",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.0",
-    "vue-signature-canvas": "^1.0.1",
     "vue3-qr-reader": "^1.0.0",
     "vuex": "^4.0.1",
     "webpack": "^5.68.0"

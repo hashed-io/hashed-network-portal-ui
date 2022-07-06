@@ -6,6 +6,6 @@ export function selectedAccount ({ selectedAccount }) {
   return selectedAccount
 }
 
-export function isLogged ({ selectedAccount }) {
-  return !!selectedAccount
+export function isLoggedIn ({ selectedAccount, hashedLoggedIn }) {
+  return !!(selectedAccount && hashedLoggedIn)
 }

@@ -52,16 +52,17 @@ export default {
         this.showLoading({
           message: 'Please sign message to login with private Hashed service'
         })
-        const message = 'Hashed Login'
-        const response = await this.$store.$nbvStorageApi.signMessage(message, this.selectedAccount.address)
-        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.selectedAccount.address)
-        console.log('signMessage', response)
-        console.log('verifyMessage', response2)
-        if (response2.isValid) {
-          this.$router.replace({
+        console.log('store', this.$store)
+        const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
+        console.log('isLoggedIn', isLoggedIn)
+        if (isLoggedIn) {
+          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', isLoggedIn)
+        } else if (!isLoggedIn && this.selectedAccount) {
+          await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
+          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', true)
+          this.$router.push({
             name: 'root'
           })
-        //   showNotification({ message: 'Message Signed and Verified' })
         }
       } catch (e) {
         console.error('error', e)
