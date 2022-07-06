@@ -1,6 +1,12 @@
 
 const routes = [
   {
+    // Login
+    path: '/login',
+    name: 'login',
+    component: () => import('pages/Login.vue')
+  },
+  {
     // Portal Layout
     path: '/',
     component: () => import('layouts/PortalLayout.vue'),

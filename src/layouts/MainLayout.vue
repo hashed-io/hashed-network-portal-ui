@@ -23,7 +23,8 @@
         q-space
         q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
-          accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+          //- accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
+        q-btn(label="Logout" no-caps @click="logout")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
@@ -59,51 +60,57 @@ export default defineComponent({
   },
 
   setup () {
-    const { showNotification, showLoading, hideLoading } = useNotifications()
+    const { showNotification } = useNotifications()
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
-    const api = $store.$polkadotApi
+    // const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
-    const accounts = ref(undefined)
+    // const accounts = ref(undefined)
     const breadcrumbList = ref(undefined)
     watchEffect(() => updateBreadcrumbs($route))
 
     onMounted(async () => {
       try {
-        await connectPolkadot()
-        requestUsers()
+        // await connectPolkadot()
+        // requestUsers()
       } catch (e) {
         console.error(e)
         showNotification({ color: 'red', message: e.message || e })
       }
     })
 
-    async function connectPolkadot () {
-      try {
-        showLoading()
-      } catch (e) {
-        console.error('connectPolkadot', e)
-        showNotification({ color: 'red', message: e.message || e })
-      } finally {
-        hideLoading()
-      }
-    }
+    // async function connectPolkadot () {
+    //   try {
+    //     showLoading()
+    //   } catch (e) {
+    //     console.error('connectPolkadot', e)
+    //     showNotification({ color: 'red', message: e.message || e })
+    //   } finally {
+    //     hideLoading()
+    //   }
+    // }
 
-    async function requestUsers () {
-      try {
-        showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
-        accounts.value = await api.requestUsers()
-        $store.commit('polkadotWallet/setAvailableAccounts', accounts.value)
-        $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
-      } catch (e) {
-        console.error('requestUsers', e)
-        showNotification({ color: 'red', message: e.message || e })
-      } finally {
-        hideLoading()
-      }
+    // async function requestUsers () {
+    //   try {
+    //     showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
+    //     accounts.value = await api.requestUsers()
+    //     $store.commit('polkadotWallet/setAvailableAccounts', accounts.value)
+    //     $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
+    //   } catch (e) {
+    //     console.error('requestUsers', e)
+    //     showNotification({ color: 'red', message: e.message || e })
+    //   } finally {
+    //     hideLoading()
+    //   }
+    // }
+
+    function logout () {
+      $router.replace({
+        name: 'login'
+      })
     }
 
     function onSelectAccount (account) {
@@ -141,7 +148,8 @@ export default defineComponent({
       breadcrumbList,
       isActive,
       handlerBreadcrumb,
-      isConnectedToServer
+      isConnectedToServer,
+      logout
     }
   }
 })
