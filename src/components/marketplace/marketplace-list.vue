@@ -4,13 +4,15 @@
     .row.justify-center.q-pa-md.text-body2 {{ emptyLabel }}
   #items(v-else)
     .row.justify-start.q-px-md
-      .col-4
+      .col-12
         q-input(
           testid="label_input"
           :label="$t('pages.marketplace.searchInput.label')"
           v-model="search"
           :placeholder="$t('pages.marketplace.searchInput.placeholder')"
           autofocus
+          outlined
+          dense
         )
     #scroll-area(ref="scrollTargetRef" class="q-pa-md")
       q-infinite-scroll(
@@ -24,7 +26,7 @@
             q-spinner-dots(color="primary" size="40px")
         .row.q-col-gutter-md
           .col-3(v-for="marketplace in resultSearch" :key="marketplace.key")
-            marketplace-item(:marketplace="marketplace" @onClick="selectMarketplace")
+            marketplace-item.animated-item(:marketplace="marketplace" @onClick="selectMarketplace")
 </template>
 
 <script>

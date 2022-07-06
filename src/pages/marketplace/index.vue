@@ -12,13 +12,15 @@
       @click="modals.isShowingAddMarketplace = true"
     )
   //- Tabs
-  q-tabs.q-mt-lg(
+  q-tabs.q-mt-md(
     v-model="tab"
     :breakpoint="0"
     no-caps
     indicator-color="transparent"
     align="justify"
-    active-class="active-tab"
+    active-class="bg-secondary text-white"
+    class="bg-grey-4"
+    dense
   )
     q-tab(name="myMarketplaces" :label="$t('pages.marketplace.tabs.myMarketplaces')")
     q-tab(name="allMarketplaces" :label="$t('pages.marketplace.tabs.allMarketplaces')")
@@ -138,12 +140,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~/css/app.styl'
-.activeTab
-  border-radius: 10px 10px 0px 0px
-.normalTab
-  border-radius: 10px 10px 0px 0px
+@import '~/css/colors.styl'
 .tabPanel
-  padding: 1rem 0rem 0rem 0rem
-  background-color: $bg-body
+  padding: 0.5rem 0rem 0rem 0rem
 </style>
