@@ -54,7 +54,14 @@ export default {
   async beforeMount () {
     const accounts = await this.$store.$polkadotApi.requestUsers()
     this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
-    this.$store.commit('polkadotWallet/setSelectedAccount', accounts[0])
+    const autoLoginAccount = localStorage.getItem('autoLoginAccount')
+    let account = accounts[0]
+    if (autoLoginAccount) {
+      const findAccount = accounts.find(v => v.address === autoLoginAccount)
+      account = findAccount || account
+    }
+    console.log('address', account)
+    this.$store.commit('polkadotWallet/setSelectedAccount', account)
     this.$store.dispatch('polkadotWallet/hashedAutoLogin', {
       returnTo: this.returnTo
     })

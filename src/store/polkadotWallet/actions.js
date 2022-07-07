@@ -2,14 +2,15 @@ export const hashedLogin = async function ({ commit }, { userAddress, returnTo }
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     console.log('isLoggedIn', isLoggedIn)
-    localStorage.setItem('autoLoginAccount', userAddress)
     const to = returnTo || { name: 'root' }
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
+      localStorage.setItem('autoLoginAccount', userAddress)
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
       commit('setIsHashedLoggedIn', true)
+      localStorage.setItem('autoLoginAccount', userAddress)
       console.log('returnUrl', to)
       this.$router.push(to)
     }
@@ -32,6 +33,7 @@ export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo 
 export const hashedLogout = async function ({ commit }) {
   try {
     console.log('hashedLogout')
+    await this.$hashedPrivateApi.logout()
   } catch (error) {
     console.log('Authenticator logout error', error)
   }
