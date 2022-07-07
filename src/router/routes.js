@@ -85,7 +85,7 @@ const routes = [
             component: () => import('pages/marketplace/index.vue'),
             meta: {
               breadcrumb: [
-                { name: 'Marketplace', icon: 'storefront' }
+                { name: 'Marketplaces', icon: 'storefront' }
               ],
               app: 'marketplaces'
             }
@@ -97,7 +97,7 @@ const routes = [
             component: () => import('pages/marketplace/details-market.vue'),
             meta: {
               breadcrumb: [
-                { name: 'Marketplace', icon: 'storefront' },
+                { name: 'Marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
                 { name: 'Detail', icon: 'info' }
               ],
               app: 'marketplaces'

@@ -1,6 +1,6 @@
 <template lang="pug">
 #container
-  q-card(flat class="card-style")
+  q-card.card(flat inherit)
     q-card-section
       .row.justify-between
         .text-h5 {{market.label}}
@@ -21,7 +21,7 @@
       .row
         .col-12
           .text-subtitle2.text-weight-regular.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
-          .row.q-gutter-md(v-if="participants.length > 0 ")
+          .row.q-gutter-md(v-if="participants.length > 0")
             account-item(
               v-for="participant in participants"
               :address="participant"
@@ -70,6 +70,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-
+<style lang="stylus" scoped>
+.card
+  background: inherit
 </style>

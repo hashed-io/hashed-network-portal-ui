@@ -6,9 +6,9 @@ q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
     .text-subtitle2.text-weight-bold {{ marketplace?.value.label }}
     q-separator.q-my-sm
     .text-subtitle2.text-weight-bold {{ $t('pages.marketplace.role.administrator') }}
-    account-item(:address="marketplace?.administrator" flat shortDisplay)
+    account-item(:address="marketplace?.administrator" flat shortDisplay inherit)
     .text-subtitle2.text-weight-bold {{ $t('pages.marketplace.role.owner') }}
-    account-item(:address="marketplace?.owner" flat shortDisplay)
+    account-item(:address="marketplace?.owner" flat shortDisplay inherit)
 </template>
 
 <script>

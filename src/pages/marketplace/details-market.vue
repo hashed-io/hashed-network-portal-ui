@@ -8,14 +8,16 @@
     @submit="onSubmitApplyForm"
   )
   //- Tabs
-  q-tabs.q-mt-lg(
+  q-tabs.q-mt-md(
     v-model="tab"
     v-if="isAdmin"
     :breakpoint="0"
     no-caps
     indicator-color="transparent"
     align="justify"
-    active-class="active-tab"
+    active-class="bg-secondary text-white"
+    class="bg-grey-4"
+    dense
   )
     q-tab(:ripple="false" name="market-info" :label="$t('pages.marketplace.tabs.marketInfo')")
     q-tab(:riple="false" name="enrollment" :label="$t('pages.marketplace.tabs.enrollmentRequest')")
@@ -258,7 +260,6 @@ export default {
 @import '~/css/app.styl'
 .tabPanel
   min-height: calc(80vh - 120px);
-  background: $bg-body !important
   padding: 0px !important
 
 .bottomLineTabs

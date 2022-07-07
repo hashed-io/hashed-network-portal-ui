@@ -1,9 +1,7 @@
 <template lang="pug">
 #container
-  q-card(flat class="card-style")
-    q-card-section
-      .row.justify-between
-        .text-h5 {{market.label}}
+  q-card(flat)
+    .text-h5.q-pl-md {{market.label}}
     q-card-section
       .text-subtitle2.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
         .text-body2 {{participantsNumber}}
@@ -17,7 +15,7 @@
           .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
           account-item(
             :address="market.owner?.address"
-          )    q-separator
+          )
     q-card-section(v-if="status === 'Pending'")
       .row.justify-center.q-gutter-md
         .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
@@ -65,9 +63,7 @@
             q-btn(
               type="submit"
               color="secondary"
-              outline
               no-caps
-              unelevated
               class="q-mt-sm"
               data-cy="submit_apply_btn"
               data-testid="submit_apply_btn"

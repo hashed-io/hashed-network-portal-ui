@@ -4,7 +4,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       icon="close"
       round
       unelevated
-      color="secondary"
+      color="negative"
       v-close-popup
       size="sm"
     )
@@ -20,8 +20,6 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     )
     q-btn.float-right.q-mb-md(
       data-testid="submit_btn"
-      outline
-      unelevated
       :label="$t('pages.marketplace.createForm.button')"
       color="secondary"
       size="md"
