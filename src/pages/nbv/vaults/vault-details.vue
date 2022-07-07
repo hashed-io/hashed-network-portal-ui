@@ -169,9 +169,15 @@ export default {
   },
   beforeMount () {
     const params = this.$route.params
-    if (!params || !params.vault) this.$router.replace({ name: 'manageVaults' })
+    if (!params || !params.vault) {
+      this.$router.replace({ name: 'manageVaults' })
+      return
+    }
     const vault = JSON.parse(params.vault)
-    if (!vault || !vault.owner || !vault.vaultId) this.$router.replace({ name: 'manageVaults' })
+    if (!vault || !vault.owner || !vault.vaultId) {
+      this.$router.replace({ name: 'manageVaults' })
+      return
+    }
     this.syncData(vault)
     // this.$route.meta.breadcrumb[1].name = 'Detailsss'
   },

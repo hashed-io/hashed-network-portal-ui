@@ -52,18 +52,13 @@ export default {
         this.showLoading({
           message: 'Please sign message to login with private Hashed service'
         })
-        console.log('store', this.$store)
-        const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
-        console.log('isLoggedIn', isLoggedIn)
-        if (isLoggedIn) {
-          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', isLoggedIn)
-        } else if (!isLoggedIn && this.selectedAccount) {
-          await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', true)
-          this.$router.push({
-            name: 'root'
-          })
-        }
+        this.$store.dispatch('polkadotWallet/hashedLogin', {
+          userAddress: this.selectedAccount.address,
+          returnTo: {
+            name: this.$route.query.returnUrl,
+            query: JSON.parse(this.$route.query.returnQuery)
+          }
+        })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

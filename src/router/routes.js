@@ -80,7 +80,7 @@ const routes = [
         component: () => import('layouts/MainLayout.vue'),
         children: [
           {
-            path: '/list',
+            path: '',
             name: 'marketplacesList',
             component: () => import('pages/marketplace/index.vue'),
             meta: {
