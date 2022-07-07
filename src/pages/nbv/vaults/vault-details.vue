@@ -33,7 +33,7 @@
         )
   //- Body
   .text-subtitle2.q-mt-md Vault Id
-  .text-body2 {{ vaultId }}
+  .text-body2.one-line {{ vaultId }}
   .row
     .col
       .text-subtitle2.q-mt-md Balance

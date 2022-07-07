@@ -14,14 +14,6 @@
       outline
       @click="isShowingCreateVault = true"
     )
-    //- q-btn(
-    //-   label="Sign and verify message"
-    //-   color="warning"
-    //-   icon="message"
-    //-   no-caps
-    //-   outline
-    //-   @click="signAndVerifyMessage"
-    //- )
   vault-list.q-my-md(:vaults="vaultList")
   #modals
     q-dialog(v-model="isShowingCreateVault")

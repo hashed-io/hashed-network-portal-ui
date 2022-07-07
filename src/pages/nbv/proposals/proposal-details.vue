@@ -32,9 +32,9 @@
         )
   //- Body
   .text-subtitle2.q-mt-md Vault Id
-  .text-body2 {{ vaultId }}
+  .text-body2.one-line {{ vaultId }}
   .text-subtitle2.q-mt-md Proposal Id
-  .text-body2 {{ proposalId }}
+  .text-body2.one-line {{ proposalId }}
   .row
     .col
       .text-subtitle2.q-mt-md Description
@@ -43,25 +43,25 @@
       .text-subtitle2.q-mt-md Status
       .text-body2 {{ labelStatus }}
   .row
-    .col
+    .col-xs-6.col-sm-6.col-md-4
       .text-subtitle2.q-mt-md Threshold
       .text-body2 {{ threshold }}
-    .col
+    .col-xs-6.col-sm-6.col-md-4
       .text-subtitle2.q-mt-md Satoshi Amount
       .text-body2 {{ amount }}
-    .col
+    .col-xs-12.col-sm-12.col-md-4
       .text-subtitle2.q-mt-md Fee in Satoshi Per Virtual Byte
       .text-body2 {{ feeSatPerVb }}
   .row
     .col
       .text-subtitle2.q-mt-md To Address
-      .text-body2 {{ toAddress }}
+      .text-body2.one-line {{ toAddress }}
   .row(v-if="txId")
     .col
       .text-subtitle2.q-mt-md Tx
-      .text-body2.txLabel(@click="openTxExplorer") {{ txId }}
+      .text-body2.one-line.txLabel(@click="openTxExplorer") {{ txId }}
   .text-subtitle2.q-mt-md Proposer
-  account-item(:address="proposer")
+  account-item.full-width(:address="proposer")
   #cosigners
     .text-subtitle2.q-mt-md Cosigners
     cosigners-list(:cosigners="proposalCosigners")
