@@ -54,7 +54,7 @@ export default {
           icon: 'store',
           key: 'marketplaces',
           to: {
-            name: 'marketplaceHome'
+            name: 'marketplacesList'
           }
         },
         {

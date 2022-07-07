@@ -1,6 +1,7 @@
 export default function () {
   return {
     availableAccounts: [],
-    selectedAccount: undefined
+    selectedAccount: undefined,
+    hashedLoggedIn: false
   }
 }

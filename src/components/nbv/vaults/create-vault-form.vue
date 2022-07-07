@@ -20,7 +20,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
           :rules="[rules.required]"
         )
       .col
-        .text-body2 {{ $t('vaults.descriptionLabel')  }}
+        .text-body2 {{ $t('pages.nbv.vaults.descriptionLabel')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
       //- .col-2
       //-   q-input(
@@ -41,12 +41,12 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
           :max="7"
         )
       .col
-        .text-body2 {{ $t('vaults.cosigners')  }}
+        .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7.justify-end
         .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
       .col
-        .text-body2 {{ $t('vaults.mOfn')  }}
+        .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
     #cosigners
       .row
         .col-7
@@ -96,7 +96,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
               v-if="cosigners.length > 1"
             )
         .col
-          .text-body2 {{ $t('vaults.cosignersLabelDesc')  }}
+          .text-body2 {{ $t('pages.nbv.vaults.cosignersLabelDesc')  }}
     .q-col-gutter-md.q-my-sm
       q-toggle(data-testid="toggle-include" data-cy="toggle-include" label="Include owner as cosigner" v-model="includeOwnerAsCosigner")
     q-btn.float-right.q-mb-md(

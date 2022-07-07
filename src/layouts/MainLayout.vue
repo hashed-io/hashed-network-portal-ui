@@ -29,7 +29,7 @@
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" :to="breadcrumb.to" :class="{ 'hasLink': !!breadcrumb.to, 'cursor-pointer': breadcrumb.back }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': !!breadcrumb.to, 'text-secondary': !breadcrumb.to, 'cursor-pointer': breadcrumb.back }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
@@ -153,7 +153,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass" scoped>
+<style lang="stylus" scoped>
+@import '~/css/colors.styl'
 
 .routerItems
   border-radius: 5px
@@ -169,6 +170,8 @@ export default defineComponent({
 
 .hasLink
   color: $primary
+  text-decoration: underline
+
 .containerLayout
  height: 100vh
 </style>
