@@ -11,19 +11,20 @@ q-card.q-pa-sm.animated-item(@click="emitClick")
         .text-subtitle2 Description:
           span.text-body2.q-ml-sm {{ description }}
       .row.items-center
-        .col.min-h
+        .col-sm-12.col-md-6.min-h
           .row
             q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
             .text-subtitle2 Satoshi Amount:
               span.text-body2.q-ml-sm {{ amount }}
-        .col.min-h
+        .col-sm-12.col-md-6.min-h
           .row
             q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
             .text-subtitle2 Fee in Satoshi Per Virtual Byte:
               span.text-body2.q-ml-sm {{ feeSatPerVb }}
-      .row.items-center
+      .row.items-center.one-line
         q-icon.q-mr-md(name="currency_bitcoin" size="sm" color="secondary")
-        .text-subtitle2 To Address:
+        .col
+         .text-subtitle2.one-line To Address:
           span.text-body2.q-ml-sm {{ toAddress }}
       .text-subtitle2 Proposer
       account-item(:address="proposer" flat inherit)

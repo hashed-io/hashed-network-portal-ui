@@ -33,7 +33,7 @@
         )
   //- Body
   .text-subtitle2.q-mt-md Vault Id
-  .text-body2 {{ vaultId }}
+  .text-body2.one-line {{ vaultId }}
   .row
     .col
       .text-subtitle2.q-mt-md Balance
@@ -169,9 +169,15 @@ export default {
   },
   beforeMount () {
     const params = this.$route.params
-    if (!params || !params.vault) this.$router.replace({ name: 'manageVaults' })
+    if (!params || !params.vault) {
+      this.$router.replace({ name: 'manageVaults' })
+      return
+    }
     const vault = JSON.parse(params.vault)
-    if (!vault || !vault.owner || !vault.vaultId) this.$router.replace({ name: 'manageVaults' })
+    if (!vault || !vault.owner || !vault.vaultId) {
+      this.$router.replace({ name: 'manageVaults' })
+      return
+    }
     this.syncData(vault)
     // this.$route.meta.breadcrumb[1].name = 'Detailsss'
   },

@@ -8,7 +8,7 @@
         img.logoImg(src="~/assets/portal/logo-gradient-white.png")
        q-card.login-card.q-pa-md
         .text-h5.text-white Login
-        #polkadotLogin.q-gutter-y-md
+        #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
             .text-caption.text-white Choose an account from your polkadot extension
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
                 selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
@@ -19,6 +19,8 @@
                 color="accent"
                 no-caps
             )
+        #notPolkadotAccounts(v-else)
+          .text-caption.text-white You do not have accounts on polkadot js extension
         .text-caption.text-center.text-white.q-mt-lg OR
         #googleLogin.q-mt-lg
             q-btn.full-width.btnGoogle(
@@ -36,12 +38,44 @@ export default {
   name: 'LoginPage',
   components: { AccountsMenu, SelectedAccountBtn },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount', 'availableAccounts'])
+    ...mapGetters('polkadotWallet', ['selectedAccount', 'availableAccounts']),
+    returnTo () {
+      let to
+      if (this.$route.query.returnUrl) {
+        to = { name: this.$route.query.returnUrl }
+      }
+      if (this.$route.query.returnQuery) {
+        to = {
+          ...to,
+          query: JSON.parse(this.$route.query.returnQuery)
+        }
+      }
+      return to
+    }
   },
   async beforeMount () {
-    const accounts = await this.$store.$polkadotApi.requestUsers()
-    this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
-    this.$store.commit('polkadotWallet/setSelectedAccount', accounts[0])
+    try {
+      this.showLoading({
+        message: 'Requesting accounts from polkadot js extension'
+      })
+      const accounts = await this.$store.$polkadotApi.requestUsers()
+      this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
+      const autoLoginAccount = localStorage.getItem('autoLoginAccount')
+      let account = accounts[0]
+      if (autoLoginAccount) {
+        const findAccount = accounts.find(v => v.address === autoLoginAccount)
+        account = findAccount || account
+      }
+      this.$store.commit('polkadotWallet/setSelectedAccount', account)
+      this.$store.dispatch('polkadotWallet/hashedAutoLogin', {
+        returnTo: this.returnTo
+      })
+    } catch (e) {
+      console.error('error', e)
+      this.showNotification({ message: e.message || e, color: 'negative' })
+    } finally {
+      this.hideLoading()
+    }
   },
   methods: {
     onSelectAccount (account) {
@@ -52,18 +86,10 @@ export default {
         this.showLoading({
           message: 'Please sign message to login with private Hashed service'
         })
-        console.log('store', this.$store)
-        const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
-        console.log('isLoggedIn', isLoggedIn)
-        if (isLoggedIn) {
-          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', isLoggedIn)
-        } else if (!isLoggedIn && this.selectedAccount) {
-          await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-          this.$store.commit('polkadotWallet/setIsHashedLoggedIn', true)
-          this.$router.push({
-            name: 'root'
-          })
-        }
+        this.$store.dispatch('polkadotWallet/hashedLogin', {
+          userAddress: this.selectedAccount.address,
+          returnTo: this.returnTo
+        })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

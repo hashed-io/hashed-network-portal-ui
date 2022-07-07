@@ -1,6 +1,6 @@
 <template lang="pug">
 #container
-  q-card(flat)
+  q-card.bg-inherit(flat)
     .text-h5.q-pl-md {{market.label}}
     q-card-section
       .text-subtitle2.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
@@ -33,6 +33,7 @@
             :label="$t('pages.marketplace.applyForm.notes.label')"
             :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
             :rules="[rules.required]"
+            outlined
           )
           .row.justify-between
             div(class="q-pt-sm text-subtitle2 text-weight-regular") {{$t('pages.marketplace.applyForm.filesTitle')}}
@@ -187,7 +188,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-
-</style>
