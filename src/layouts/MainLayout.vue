@@ -5,21 +5,14 @@
       q-toolbar
         .row.q-gutter-x-sm.q-ml-md
           q-item.routerItems(
+            v-for="option in pageOptions"
             clickable
-            :to="{ name: 'manageVaults'}"
-            :class="{ 'activeRouter': isActive('Vaults')}"
+            :to="option.to"
+            :class="{ 'activeRouter': isActive(option.keyActive)}"
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label Vaults
-          q-item.routerItems(
-            clickable
-            :to="{ name: 'manageXpub'}"
-            :class="{ 'activeRouter': isActive('XPUB')}"
-            dense
-          )
-            q-item-section.q-pa-sm
-              q-item-label Extended Keys
+              q-item-label {{ option.label }}
         q-space
         q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
@@ -64,12 +57,28 @@ export default defineComponent({
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
-    // const api = $store.$polkadotApi
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
-    // const accounts = ref(undefined)
+
+    // Dynamic options for each app
+    const pageOptionsDictionary = {
+      nbv: [
+        {
+          to: { name: 'manageVaults' },
+          keyActive: 'My Vaults',
+          label: 'My Vaults'
+        },
+        {
+          to: { name: 'manageXpub' },
+          keyActive: 'Extended Keys',
+          label: 'Extended Keys'
+        }
+      ]
+    }
+
     const breadcrumbList = ref(undefined)
+    const pageOptions = ref([])
     watchEffect(() => updateBreadcrumbs($route))
 
     onMounted(async () => {
@@ -82,36 +91,8 @@ export default defineComponent({
       }
     })
 
-    // async function connectPolkadot () {
-    //   try {
-    //     showLoading()
-    //   } catch (e) {
-    //     console.error('connectPolkadot', e)
-    //     showNotification({ color: 'red', message: e.message || e })
-    //   } finally {
-    //     hideLoading()
-    //   }
-    // }
-
-    // async function requestUsers () {
-    //   try {
-    //     showLoading({ message: 'Trying to get accounts, please review polkadot{js} extension' })
-    //     accounts.value = await api.requestUsers()
-    //     $store.commit('polkadotWallet/setAvailableAccounts', accounts.value)
-    //     $store.commit('polkadotWallet/setSelectedAccount', accounts.value[0])
-    //   } catch (e) {
-    //     console.error('requestUsers', e)
-    //     showNotification({ color: 'red', message: e.message || e })
-    //   } finally {
-    //     hideLoading()
-    //   }
-    // }
-
     function logout () {
       $store.dispatch('polkadotWallet/hashedLogout')
-      // $router.replace({
-      //   name: 'login'
-      // })
     }
 
     function onSelectAccount (account) {
@@ -119,7 +100,12 @@ export default defineComponent({
     }
 
     function updateBreadcrumbs (v) {
+      // Dynamic breadcrumb
       breadcrumbList.value = v.meta.breadcrumb
+      // Dynamic options
+      if (v.meta.app) {
+        pageOptions.value = pageOptionsDictionary[v.meta.app]
+      }
     }
 
     function isActive (module) {
@@ -148,6 +134,7 @@ export default defineComponent({
       isActive,
       handlerBreadcrumb,
       isConnectedToServer,
+      pageOptions,
       logout
     }
   }
