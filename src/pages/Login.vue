@@ -8,7 +8,7 @@
         img.logoImg(src="~/assets/portal/logo-gradient-white.png")
        q-card.login-card.q-pa-md
         .text-h5.text-white Login
-        #polkadotLogin.q-gutter-y-md
+        #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
             .text-caption.text-white Choose an account from your polkadot extension
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
                 selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
@@ -19,6 +19,8 @@
                 color="accent"
                 no-caps
             )
+        #notPolkadotAccounts(v-else)
+          .text-caption.text-white You do not have accounts on polkadot js extension
         .text-caption.text-center.text-white.q-mt-lg OR
         #googleLogin.q-mt-lg
             q-btn.full-width.btnGoogle(
@@ -52,19 +54,28 @@ export default {
     }
   },
   async beforeMount () {
-    const accounts = await this.$store.$polkadotApi.requestUsers()
-    this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
-    const autoLoginAccount = localStorage.getItem('autoLoginAccount')
-    let account = accounts[0]
-    if (autoLoginAccount) {
-      const findAccount = accounts.find(v => v.address === autoLoginAccount)
-      account = findAccount || account
+    try {
+      this.showLoading({
+        message: 'Requesting accounts from polkadot js extension'
+      })
+      const accounts = await this.$store.$polkadotApi.requestUsers()
+      this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
+      const autoLoginAccount = localStorage.getItem('autoLoginAccount')
+      let account = accounts[0]
+      if (autoLoginAccount) {
+        const findAccount = accounts.find(v => v.address === autoLoginAccount)
+        account = findAccount || account
+      }
+      this.$store.commit('polkadotWallet/setSelectedAccount', account)
+      this.$store.dispatch('polkadotWallet/hashedAutoLogin', {
+        returnTo: this.returnTo
+      })
+    } catch (e) {
+      console.error('error', e)
+      this.showNotification({ message: e.message || e, color: 'negative' })
+    } finally {
+      this.hideLoading()
     }
-    console.log('address', account)
-    this.$store.commit('polkadotWallet/setSelectedAccount', account)
-    this.$store.dispatch('polkadotWallet/hashedAutoLogin', {
-      returnTo: this.returnTo
-    })
   },
   methods: {
     onSelectAccount (account) {
