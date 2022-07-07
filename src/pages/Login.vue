@@ -36,12 +36,28 @@ export default {
   name: 'LoginPage',
   components: { AccountsMenu, SelectedAccountBtn },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount', 'availableAccounts'])
+    ...mapGetters('polkadotWallet', ['selectedAccount', 'availableAccounts']),
+    returnTo () {
+      let to
+      if (this.$route.query.returnUrl) {
+        to = { name: this.$route.query.returnUrl }
+      }
+      if (this.$route.query.returnQuery) {
+        to = {
+          ...to,
+          query: JSON.parse(this.$route.query.returnQuery)
+        }
+      }
+      return to
+    }
   },
   async beforeMount () {
     const accounts = await this.$store.$polkadotApi.requestUsers()
     this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
     this.$store.commit('polkadotWallet/setSelectedAccount', accounts[0])
+    this.$store.dispatch('polkadotWallet/hashedAutoLogin', {
+      returnTo: this.returnTo
+    })
   },
   methods: {
     onSelectAccount (account) {
@@ -54,10 +70,7 @@ export default {
         })
         this.$store.dispatch('polkadotWallet/hashedLogin', {
           userAddress: this.selectedAccount.address,
-          returnTo: {
-            name: this.$route.query.returnUrl,
-            query: JSON.parse(this.$route.query.returnQuery)
-          }
+          returnTo: this.returnTo
         })
       } catch (e) {
         console.error('error', e)

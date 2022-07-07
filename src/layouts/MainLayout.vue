@@ -108,9 +108,10 @@ export default defineComponent({
     // }
 
     function logout () {
-      $router.replace({
-        name: 'login'
-      })
+      $store.dispatch('polkadotWallet/hashedLogout')
+      // $router.replace({
+      //   name: 'login'
+      // })
     }
 
     function onSelectAccount (account) {
