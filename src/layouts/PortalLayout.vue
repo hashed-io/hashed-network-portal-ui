@@ -4,8 +4,9 @@ q-layout(view="lHh lpR lFf")
         v-model="drawerLeft"
         show-if-above
         :width="225"
-        :breakpoint="800"
+        :breakpoint="900"
         class="drawerBackground"
+        @hide="updateLocalDrawer"
     )
       q-list.q-pa-md.q-gutter-sm
         .q-pa-lg.q-mt-lg
@@ -39,7 +40,7 @@ export default {
   name: 'PortalLayout',
   data () {
     return {
-      drawerLeft: true,
+      drawerLeft: false,
       optionsMenu: [
         {
           label: 'NBV',
@@ -76,8 +77,17 @@ export default {
   },
   beforeMount () {
     this.routerKeyApp = this.$route.meta.app
+    window.addEventListener('hashed-leftDrawer', (event) => {
+      this.drawerLeft = event.detail.status
+    })
+  },
+  beforeUnmount () {
+    window.removeEventListener('hashed-leftDrawer')
   },
   methods: {
+    updateLocalDrawer () {
+      localStorage.setItem('hashed-leftDrawer', false)
+    }
   }
 }
 </script>

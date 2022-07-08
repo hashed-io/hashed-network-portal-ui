@@ -14,7 +14,7 @@ q-card.q-pa-sm(@click="goToVaultDetails")
           span.text-body2.q-ml-sm {{ threshold }}
       .text-subtitle2 Owner
       account-item.full-width(:address="owner" flat inherit)
-    q-item-section(avatar)
+    q-item-section.gt-sm(avatar)
       .text-subtitle2.text-primary.hoverView Click to see details
       //- q-btn(
       //-   label="See details"
