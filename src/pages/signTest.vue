@@ -38,6 +38,7 @@ export default {
       this.$refs.canvasSign.save(v => {
         this.signImg = v
       })
+      this.viewSign()
     },
     clearSign () {
       this.$refs.canvasSign.reset()
@@ -46,7 +47,7 @@ export default {
       const b64Img = this.getBase64StringFromDataURL(this.signImg)
       console.log('signImg', this.signImg, b64Img)
       this.copyTextToClipboard(this.signImg)
-    //   window.open(this.signImg, 'blank')
+      // window.open(this.signImg, 'blank')
     },
     getBase64StringFromDataURL (dataUrl) {
       return dataUrl.replace('data:', '').replace(/^.+,/, '')

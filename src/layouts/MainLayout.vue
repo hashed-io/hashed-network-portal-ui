@@ -23,7 +23,7 @@
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': !!breadcrumb.to, 'text-secondary': !breadcrumb.to, 'cursor-pointer': breadcrumb.back }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
@@ -173,6 +173,7 @@ export default defineComponent({
 .hasLink
   color: $primary
   text-decoration: underline
+  cursor: pointer
 
 .containerLayout
  height: 100vh

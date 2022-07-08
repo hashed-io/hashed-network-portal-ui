@@ -6,7 +6,7 @@ q-layout(view="lHh lpR lFf")
         :width="225"
         :breakpoint="900"
         class="drawerBackground"
-        @hide="updateLocalDrawer"
+        @hide="updateLocalDrawer(false)"
     )
       q-list.q-pa-md.q-gutter-sm
         .q-pa-lg.q-mt-lg
@@ -77,15 +77,14 @@ export default {
   },
   beforeMount () {
     this.routerKeyApp = this.$route.meta.app
-    window.addEventListener('hashed-leftDrawer', (event) => {
-      this.drawerLeft = event.detail.status
-    })
+    window.addEventListener('hashed-leftDrawer', (event) => this.updateLocalDrawer(event.detail.status))
   },
   beforeUnmount () {
-    window.removeEventListener('hashed-leftDrawer')
+    window.removeEventListener('hashed-leftDrawer', this.updateLocalDrawer)
   },
   methods: {
-    updateLocalDrawer () {
+    updateLocalDrawer (status) {
+      this.drawerLeft = status
       localStorage.setItem('hashed-leftDrawer', false)
     }
   }
