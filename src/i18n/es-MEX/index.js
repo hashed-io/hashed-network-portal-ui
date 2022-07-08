@@ -5,8 +5,8 @@ export default {
   failed: 'Action failed',
   success: 'Action was successful',
   lang: {
-    'en-US': 'English',
-    'es-MEX': 'Spanish'
+    'en-US': 'Ingles',
+    'es-MEX': 'Español'
   },
   general: {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -49,16 +49,16 @@ export default {
         xpubPlaceholder: 'Paste or write your XPUB'
       },
       vaults: {
-        manageVaults: 'Manage Vaults',
+        manageVaults: 'Administrar Vaules',
         descriptionLabel: 'Enter a public label for this vault',
         cosigners: 'Cosigners',
         cosignersLabelDesc: 'Enter a valid public address for each cosigner',
         mOfn: 'M of N',
-        description: 'Description',
-        owner: 'Owner',
+        description: 'Descripción',
+        owner: 'Propietario',
         threshold: 'Threshold',
-        clickToSeeDetails: 'Click to see details',
-        createVault: 'Create vault'
+        clickToSeeDetails: 'Click para ver detalles',
+        createVault: 'Crear vaul'
       },
       proposals: {
         create_proposal: 'Create new proposal',

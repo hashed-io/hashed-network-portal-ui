@@ -6,16 +6,16 @@ q-card.q-pa-sm(@click="goToVaultDetails")
       //-   span.text-body2.one-line.q-ml-sm {{ vaultId }}
       .row.items-center
         q-icon.q-mr-md(name="description" size="sm" color="secondary")
-        .text-subtitle2 Description:
+        .text-subtitle2 {{ $t('pages.nbv.vaults.description') }}:
           span.text-body2.q-ml-sm {{ description }}
       .row.items-center
         q-icon.q-mr-md(name="people" size="sm" color="secondary")
-        .text-subtitle2 Threshold:
-          span.text-body2.q-ml-sm {{ threshold }}
-      .text-subtitle2 Owner
+        .text-subtitle2 {{ $t('pages.nbv.vaults.threshold') }}:
+          span.text-body2.q-ml-sm {{ threshold }}:
+      .text-subtitle2 {{ $t('pages.nbv.vaults.owner') }}:
       account-item.full-width(:address="owner" flat inherit)
     q-item-section.gt-sm(avatar)
-      .text-subtitle2.text-primary.hoverView Click to see details
+      .text-subtitle2.text-primary.hoverView {{ $t('pages.nbv.vaults.clickToSeeDetails') }}
       //- q-btn(
       //-   label="See details"
       //-   no-caps

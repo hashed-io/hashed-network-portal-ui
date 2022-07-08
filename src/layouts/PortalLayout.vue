@@ -21,16 +21,24 @@ q-layout(view="lHh lpR lFf")
             q-item-section(avatar)
                 q-icon(:name="option.icon")
             q-item-section(avatar) {{ option.label }}
-      .row.full-width.justify-around.fixed-bottom.q-mb-md
-        q-icon(
-            name="discord"
-            color="accent"
-        )
-        q-icon(
-            name="telegram"
-            color="accent"
-        )
-        i.twitterIcon.icon
+      .fixed-bottom.q-mb-md.q-px-md
+        q-btn.text-primary.full-width.q-ma-md(:label="selectedLang.label" color="white" icon-right="arrow_drop_down" no-caps)
+          q-menu(fit auto-close)
+            q-list
+              #langOption(v-for="lang in availableLanguages")
+                q-item(clickable @click="changeLanguage(lang.key)") {{ lang.label }}
+                q-separator
+
+        .row.full-width.justify-around
+          q-icon(
+              name="discord"
+              color="accent"
+          )
+          q-icon(
+              name="telegram"
+              color="accent"
+          )
+          i.twitterIcon.icon
     q-page-container
         router-view
 </template>
@@ -70,6 +78,19 @@ export default {
       routerKeyApp: undefined
     }
   },
+  computed: {
+    availableLanguages () {
+      return this.$i18n.availableLocales.map(v => {
+        return {
+          key: v,
+          label: this.$t(`lang.${v}`)
+        }
+      })
+    },
+    selectedLang () {
+      return this.availableLanguages.find(v => v.key === this.$i18n.locale)
+    }
+  },
   watch: {
     '$route' () {
       this.routerKeyApp = this.$route.meta.app
@@ -86,6 +107,10 @@ export default {
     updateLocalDrawer (status) {
       this.drawerLeft = status
       localStorage.setItem('hashed-leftDrawer', false)
+    },
+    changeLanguage (lang) {
+      this.$i18n.locale = lang
+      localStorage.setItem('hashed-langKey', lang)
     }
   }
 }
