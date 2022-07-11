@@ -3,6 +3,7 @@
   q-layout.containerLayout(view="lHh lpR lFf" container)
     q-header
       q-toolbar
+        q-btn.lt-lg(flat @click="toggleDrawer" round dense icon="menu")
         .row.q-gutter-x-sm.q-ml-md
           q-item.routerItems(
             v-for="option in pageOptions"
@@ -22,7 +23,7 @@
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': !!breadcrumb.to, 'text-secondary': !breadcrumb.to, 'cursor-pointer': breadcrumb.back }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
@@ -126,6 +127,17 @@ export default defineComponent({
       }
     }
 
+    function toggleDrawer () {
+      const currentState = localStorage.getItem('hashed-leftDrawer') || true
+      const newState = currentState !== 'true'
+      localStorage.setItem('hashed-leftDrawer', newState)
+      window.dispatchEvent(new CustomEvent('hashed-leftDrawer', {
+        detail: {
+          status: newState
+        }
+      }))
+    }
+
     return {
       availableAccounts,
       onSelectAccount,
@@ -135,6 +147,7 @@ export default defineComponent({
       handlerBreadcrumb,
       isConnectedToServer,
       pageOptions,
+      toggleDrawer,
       logout
     }
   }
@@ -143,6 +156,7 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 @import '~/css/colors.styl'
+@import '~/css/sizes.styl'
 
 .routerItems
   border-radius: 5px
@@ -159,7 +173,13 @@ export default defineComponent({
 .hasLink
   color: $primary
   text-decoration: underline
+  cursor: pointer
 
 .containerLayout
  height: 100vh
+
+@media (max-width: $breakpoint-md-min)
+  .routerItems
+    padding: 0px
+    font-size: 12px
 </style>

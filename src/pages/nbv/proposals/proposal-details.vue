@@ -186,7 +186,6 @@ export default {
   },
   beforeMount () {
     const params = this.$route.params
-
     if (params && params.parentParams && params.proposalParams) {
       const paramsParent = JSON.parse(params.parentParams)
       this.paramsParent = paramsParent
@@ -204,7 +203,7 @@ export default {
       }
       // Set router to back
       const breadcrumb = this.$route.meta.breadcrumb.map(b => {
-        if (b.name === 'Details') {
+        if (b.name === 'Vault Details') {
           return {
             ...b,
             back: false,

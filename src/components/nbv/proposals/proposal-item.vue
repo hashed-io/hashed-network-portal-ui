@@ -19,7 +19,8 @@ q-card.q-pa-sm.animated-item(@click="emitClick")
         .col-sm-12.col-md-6.min-h
           .row
             q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
-            .text-subtitle2 Fee in Satoshi Per Virtual Byte:
+            .col
+             .text-subtitle2 Fee Per Virtual Byte:
               span.text-body2.q-ml-sm {{ feeSatPerVb }}
       .row.items-center.one-line
         q-icon.q-mr-md(name="currency_bitcoin" size="sm" color="secondary")
