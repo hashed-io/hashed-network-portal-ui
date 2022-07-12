@@ -57,7 +57,10 @@ module.exports = configure(function (ctx) {
       env: {
         ...require('dotenv').config().parsed,
         APP_NAME: process.env.APP_NAME,
-        WSS: process.env.WSS
+        WSS: process.env.WSS,
+        IPFS_URL: process.env.IPFS_URL,
+        PRIVATE_URI: process.env.PRIVATE_URI,
+        BDK_SERVICES_URL: process.env.BDK_SERVICES_URL
       },
       // transpile: false,
       // publicPath: '/',
