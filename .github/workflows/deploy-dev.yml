@@ -1,0 +1,74 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build and Deploy - Develop
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ dev ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: build-deploy-dev
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup node
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version: '16.x'
+
+      # GIT Config
+      - name: Fix up git URLs
+        run: echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
+
+      # Setup quasar
+      - name: Setup Quasar environment
+        run: |
+            yarn global add @quasar/cli
+            yarn install
+
+      # Build App
+      - name: Build app
+        run: quasar build
+        env:
+          APP_NAME: 'Hashed Afloat Client'
+          WSS: 'wss://n1.hashed.systems'
+          IPFS_URL: 'https://ipfs.infura.io:5001/'
+          PRIVATE_URI: 'https://hp-gql-dev.hashed.systems/v1/graphql'
+
+      #Auth google Could SDK
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.DEV_GC_CREDENTIALS }}'            
+      
+      #Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.DEV_GC_PROJECT_ID }}
+          # service_account_key: ${{ secrets.DEV_GC_CREDENTIALS }}
+
+      
+      #Sync to Bucket
+      - name: Copy website to bucket
+        run: gsutil -m rsync -R . gs://${{ secrets.DEV_GC_BUCKET_NAME }}
+        working-directory: ./dist/spa
+      
+      #Invalidate CDN Cache
+      - name: Invalidate CDN cache
+        run: gcloud compute url-maps invalidate-cdn-cache ${{ secrets.DEV_GC_URL_MAP }} --path=/*
