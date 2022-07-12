@@ -49,7 +49,7 @@ jobs:
           WSS: 'wss://n1.hashed.systems'
           IPFS_URL: 'https://ipfs.infura.io:5001/'
           PRIVATE_URI: 'https://hp-gql-dev.hashed.systems/v1/graphql'
-
+          BDK_SERVICES_URL: 'https://bdk.hashed.systems'
       #Auth google Could SDK
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
