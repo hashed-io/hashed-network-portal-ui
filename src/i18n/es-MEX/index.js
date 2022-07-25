@@ -2,8 +2,8 @@
 // so you can safely delete all default props below
 
 export default {
-  failed: 'Action failed',
-  success: 'Action was successful',
+  failed: 'La acción a fallida',
+  success: 'La acción tuvo éxito',
   lang: {
     'en-US': 'Ingles',
     'es-MEX': 'Español'
@@ -11,23 +11,23 @@ export default {
   general: {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     loremShort: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    waitingWeb3: 'Waiting for polkadot web3 extension',
-    waitingSub: 'Waiting for changes on the chain'
+    waitingWeb3: 'Esperando la extensión de polkadot web3',
+    waitingSub: 'Esperando cambios en la cadena'
   },
   forms: {
     errors: {
-      required: 'This field is required',
-      isNotValidXpub: 'This is not a valid XPUB',
-      isNotValidFingerprint: 'This is not a valid fingerprint',
-      isNotValidDerivationPath: 'This is not a valid derivation path',
-      positiveInteger: 'This field must contain a positive integer number',
-      greaterOrEqualThan: 'The value must be greater than or equal to {value}',
-      lessOrEqualThan: 'The value must be less than or equal to {value}',
-      containAtLeastCosigners: 'This field must contain at least {value} cosigners address',
-      containLessThanCosigners: 'This field must contain at less than {value} cosigners address',
-      isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
-      isNotValidPolkadotAddress: 'Is not a valid polkadot address',
-      notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option'
+      required: 'Este campo es obligatorio',
+      isNotValidXpub: 'Este no es un XPUB válido',
+      isNotValidFingerprint: 'Esta no es una huella dactilar válida',
+      isNotValidDerivationPath: 'Esta no es una ruta de derivación válida',
+      positiveInteger: 'Este campo debe contener un número entero positivo',
+      greaterOrEqualThan: 'El valor debe ser mayor o igual a {value}',
+      lessOrEqualThan: 'El valor debe ser menor o igual a {value}',
+      containAtLeastCosigners: 'Este campo debe contener al menos la dirección de {value} cofirmantes',
+      containLessThanCosigners: 'Este campo debe contener menos de {value} direcciones de cosignatarios',
+      isNotValidMainetBTC: 'Este campo debe contener una dirección BTC válida de mainet',
+      isNotValidPolkadotAddress: 'No es una dirección de polkadot válida',
+      notOwnAccount: 'No se permite la cuenta del propietario, por favor, configúrelo en la opción "Incluir al propietario como cofirmante"'
     }
   },
   pages: {
