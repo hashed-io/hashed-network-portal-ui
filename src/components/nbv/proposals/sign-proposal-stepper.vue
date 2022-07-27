@@ -47,7 +47,7 @@
                         @click="savePsbt"
                         :disabled="!signedPsbt"
                     )
-                    q-tooltip(v-if="alreadySigned") You already signed
+                    q-tooltip(v-if="alreadySigned") {{ $t('pages.nbv.proposals.youAlreadySigned') }}
                 .col
                     .text-body2 {{ $t('pages.nbv.proposals.signPsbtSaveDesc') }}
         .col
@@ -61,7 +61,7 @@
                         @click="finalizePsbt"
                         :disabled="(!canFinalize || isFinalized || isBroadcasted)"
                     )
-                    q-tooltip(v-if="(isFinalized || isBroadcasted)") Already finalized
+                    q-tooltip(v-if="(isFinalized || isBroadcasted)") {{ $t('pages.nbv.proposals.alreadyFinalized') }}
                 .col
                     .text-body2 {{ $t('pages.nbv.proposals.signPsbtFinalizeDesc') }}
         .col
@@ -75,14 +75,14 @@
                         @click="broadcastPsbt"
                         :disabled="(!canBroadcast || isBroadcasted)"
                     )
-                    q-tooltip(v-if="isBroadcasted") Already broadcasted
+                    q-tooltip(v-if="isBroadcasted") {{ $t('pages.nbv.proposals.alreadyBroadcasted') }}
                 .col
                     .text-body2 {{ $t('pages.nbv.proposals.signPsbtBroadcastDesc') }}
     template(v-slot:navigation)
       q-stepper-navigation
         .row.justify-between
-            q-btn(:disabled="!(step > 1)" @click="$refs.stepper.previous()" flat color="primary" label="Back" class="q-ml-sm")
-            q-btn(v-if="step !== steps.finalize" @click="$refs.stepper.next()" color="primary" :label="step === 3 ? 'Finish' : 'Continue'")
+            q-btn(:disabled="!(step > 1)" @click="$refs.stepper.previous()" flat color="primary", :label="$t('general.back')" class="q-ml-sm")
+            q-btn(v-if="step !== steps.finalize" @click="$refs.stepper.next()" color="primary", :label="step === 3 ? $t('general.finish') : $t('general.continue')")
 </template>
 
 <script>

@@ -113,11 +113,11 @@ export default {
   methods: {
     isValidPolkadotAddress (v) {
       if (!v) {
-        return 'This field is required'
+        return this.$t('forms.errors.required')
       } else if (this.$store && this.$store.$polkadotApi && this.$store.$polkadotApi.isValidPolkadotAddress(v)) {
         return true
       }
-      return 'Is not a valid polkadot address'
+      return this.$t('forms.errors.isNotValidPolkadotAddress')
     }
   }
 }

@@ -8,14 +8,14 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       v-close-popup
       size="sm"
     )
-    .text-h4.q-mb-lg Create new vault
+    .text-h4.q-mb-lg {{ $t('pages.nbv.vaults.createVault') }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-input(
           data-testid="vault-name-input"
           data-cy="vault-name-input"
           outlined
-          label="Label"
+          :label="$t('pages.nvb.vaults.label')"
           v-model="description"
           :rules="[rules.required]"
         )
@@ -51,7 +51,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       .row
         .col-7
           .row.justify-between.q-mr-sm.q-mb-sm
-            .text-subtitle2 Cosigners
+            .text-subtitle2 {{ $t('pages.nbv.vaults.cosigners')  }}
             //- q-btn(
             //-   icon="add"
             //-   size="sm"
@@ -66,7 +66,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
               account-input(
                 data-testid="vault-cosigner-input-own"
                 data-cy="vault-cosigner-input-own"
-                label='Account address'
+                :label='$t('pages.nbv.vaults.accountAddress')'
                 v-model="ownerAddress"
                 outlined
                 readonly
@@ -83,7 +83,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
               account-input(
                 data-testid="vault-cosigner-input"
                 data-cy="vault-cosigner-input"
-                label='Account address'
+                :label='$t('pages.nbv.vaults.accountAddress')'
                 v-model="cosigner.address"
                 outlined
                 :rules="[rules.required, rules.isValidPolkadotAddress, rules.notOwnAccount(signer), notDuplicatedAccounts]"
@@ -102,7 +102,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
     q-btn.float-right.q-mb-md(
         data-testid="submitButton"
         data-cy="submitButton"
-        label="Create Vault"
+        :label="$t('pages.nbv.vaults.createVault')"
         color="primary"
         size="md"
         type="submit"

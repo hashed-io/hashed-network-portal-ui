@@ -9,8 +9,8 @@ q-item.no-padding(dense @click="openFile" clickable)
     )
   q-item-section
     .text-caption {{ displayName }}
-  q-item-section(avatar)
-    .text-caption.q-mr-xs 2mb
+  //- q-item-section(avatar)
+  //-   .text-caption.q-mr-xs 2mb
   slot
 </template>
 

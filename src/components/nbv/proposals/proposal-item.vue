@@ -8,26 +8,26 @@ q-card.q-pa-sm.animated-item(@click="emitClick")
         q-chip(v-bind="chipStatus")
       .row.items-center
         q-icon.q-mr-md(name="description" size="sm" color="secondary")
-        .text-subtitle2 Description:
+        .text-subtitle2 {{ $t('pages.nbv.common.description') }}:
           span.text-body2.q-ml-sm {{ description }}
       .row.items-center
         .col-sm-12.col-md-6.min-h
           .row
             q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
-            .text-subtitle2 Satoshi Amount:
+            .text-subtitle2 {{ $t('pages.nbv.common.amountInSats') }}:
               span.text-body2.q-ml-sm {{ amount }}
         .col-sm-12.col-md-6.min-h
           .row
             q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
             .col
-             .text-subtitle2 Fee Per Virtual Byte:
+             .text-subtitle2 {{ $t('pages.nbv.proposals.feePerVB'): }}
               span.text-body2.q-ml-sm {{ feeSatPerVb }}
       .row.items-center.one-line
         q-icon.q-mr-md(name="currency_bitcoin" size="sm" color="secondary")
         .col
-         .text-subtitle2.one-line To Address:
+         .text-subtitle2.one-line {{ $t('pages.nbv.proposals.toAddress') }}:
           span.text-body2.q-ml-sm {{ toAddress }}
-      .text-subtitle2 Proposer
+      .text-subtitle2 {{ $t('pages.nbv.proposals.proposer') }}
       account-item(:address="proposer" flat inherit)
 </template>
 

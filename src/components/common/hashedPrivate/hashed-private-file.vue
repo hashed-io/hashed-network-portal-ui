@@ -7,7 +7,7 @@
     class="col-6 q-my-xs"
     outlined
     color="primary"
-    placeholder="Name of the file"
+    :placeholder="$t('common.fileName')"
     :rules="rules"
     class="borderRight"
     @keyup="onTypeTagFile"

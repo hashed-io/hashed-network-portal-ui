@@ -4,7 +4,7 @@
     q-toggle(
       data-testid="toggleForm"
       data-cy="toggleForm"
-      label="Use form"
+      :label="$t('pages.nbv.xpub.useForm')"
       v-model="useForm"
     )
     #useForm.q-gutter-y-sm(v-if="useForm")
@@ -81,7 +81,7 @@
     q-btn.q-mt-sm(
       data-testid="submitButton"
       data-cy="submitButton"
-      label="Set XPUB"
+      :label="$t('pages.nbv.xpub.setXPUB')"
       color="primary"
       no-caps
       type="submit"
@@ -94,6 +94,9 @@
 import QrDecodeXpub from '~/components/nbv/decode/qr-decode-xpub'
 import { validation } from '~/mixins/validation'
 
+/**
+ * This component emit data to set xpub for an user when form is submitted
+ */
 export default {
   name: 'SetXpubForm',
   components: {

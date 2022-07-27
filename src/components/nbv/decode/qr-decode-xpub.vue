@@ -3,13 +3,13 @@ q-dialog(v-model="open")
   q-card.q-pa-md
     .row.justify-center.q-mt-md
       #error-permissions(v-if="!hasCameraPermission")
-        .text-h5.text-negative.text-center Permission not granted
+        .text-h5.text-negative.text-center {{ $t('pages.nbv.xpub.permissionNotGranted') }}
         .row.justify-center
           q-icon(name="video_camera_front" size="8em" color="primary")
-        .text-body2.text-weight-light.text-center Please allow camera permission to scan your XPUB
+        .text-body2.text-weight-light.text-center {{ $t('pages.nbv.xpub.pleaseAllowCameraPermission') }}
       #granted-permissions(v-else)
         .text-h5.q-mb-sm QR Decode
-        .text-body2.text-weight-light Please Scan your XPUB from Blue Wallet
+        .text-body2.text-weight-light {{ $t('pages.nbv.xpub.pleaseScanYourXpubFromBlueWallet') }}
         .row.justify-center.q-mt-sm
           q-spinner-puff(
             color="primary"

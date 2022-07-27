@@ -2,7 +2,7 @@
 q-dialog(v-model="openDialog" persistent)
   q-card(data-cy='cryptoDialog')
     q-card-section
-      .text-h6 Enter key to encrypt and decrypt your data
+      .text-h6 {{ $t('common.enterKeyToEncrypt') }}
     q-form(
         @submit="onSubmit"
         class="q-gutter-md"
@@ -12,7 +12,7 @@ q-dialog(v-model="openDialog" persistent)
         :value="cryptoKey"
         @update="alert"
         :type="isPwd ? 'password' : 'text'"
-        label="Insert your key"
+        :label="$t('InsertYourKey')"
         id='keyInput'
         data-cy='keyInput'
         :rules="[rules.required]"

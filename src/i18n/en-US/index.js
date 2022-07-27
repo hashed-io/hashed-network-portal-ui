@@ -12,7 +12,11 @@ export default {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     loremShort: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     waitingWeb3: 'Waiting for polkadot web3 extension',
-    waitingSub: 'Waiting for changes on the chain'
+    waitingSub: 'Waiting for changes on the chain',
+    finish: 'Finish',
+    continue: 'Continue',
+    back: 'Back',
+    refresh: 'Refresh'
   },
   forms: {
     errors: {
@@ -30,8 +34,21 @@ export default {
       notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option'
     }
   },
+  common: {
+    chooseAnAccount: 'Choose an account',
+    fileName: 'Name of the file',
+    enterKeyToEncrypt: 'Enter key to encrypt and decrypt your data',
+    insertYourKey: 'Insert your key'
+  },
   pages: {
     nbv: {
+      common: {
+        description: 'Description',
+        recipientAddress: 'Recipient address',
+        amountInSats: 'Amount in Satoshi',
+        status: 'Status',
+        Threshold: 'Threshold'
+      },
       xpub: {
         label: 'Label',
         publicKey: 'Public Key',
@@ -46,7 +63,12 @@ export default {
         derivationPathDesc: 'Contains information about a key’s depth and index',
         xpubDesc: 'Please pase or scan your XPUB from blue wallet',
         xpub: 'XPUB',
-        xpubPlaceholder: 'Paste or write your XPUB'
+        xpubPlaceholder: 'Paste or write your XPUB',
+        permissionNotGranted: 'Permission not granted',
+        pleaseAllowCameraPermission: 'Please allow camera permission to scan your XPUB',
+        pleaseScanYourXpubFromBlueWallet: 'Please Scan your XPUB from Blue Wallet',
+        useForm: 'Use form',
+        setXPUB: 'Set XPUB'
       },
       vaults: {
         manageVaults: 'Manage Vaults',
@@ -58,7 +80,11 @@ export default {
         owner: 'Owner',
         threshold: 'Threshold',
         clickToSeeDetails: 'Click to see details',
-        createVault: 'Create vault'
+        createVault: 'Create vault',
+        label: 'Label',
+        accountAddress: 'Account address',
+        thereAreNotVaultsYet: 'There are not vaults yet',
+        vaultId: 'Vault Id'
       },
       proposals: {
         create_proposal: 'Create new proposal',
@@ -75,7 +101,26 @@ export default {
         signPsbtBroadcastDesc: 'Broadcast the transaction',
         saveBtn: 'Save',
         finalizeBtn: 'Finalize',
-        broadcastBtn: 'Broadcast'
+        broadcastBtn: 'Broadcast',
+        feePerVB: 'Fee Per Virtual Byte',
+        toAddress: 'To Address',
+        proposer: 'Proposer',
+        thereAreNotProposalsYet: 'There are not proposals yet',
+        notValidPSBT: 'PSBT not valid, please try again',
+        youAlreadySigned: 'You already signed',
+        alreadyFinalized: 'Already finalized',
+        alreadyBroadcasted: 'Already broadcasted',
+        proposalDetails: 'Proposal Details',
+        signPSBT: 'Sign PSBT',
+        deleteProposal: 'Delete Proposal',
+        proposalId: 'Proposal Id',
+        tx: 'Tx',
+        finalizeTx: 'Finalize Tx',
+        broadcastTx: 'Broadcast Tx',
+        finalizing: 'Finalizing',
+        broadcasting: 'Broadcasting',
+        pending: 'Pending',
+        pleaseAwaitOffchain: 'Please await a moment, we are creating the PSBT'
         // signPsbtStep1: ''
       }
     },

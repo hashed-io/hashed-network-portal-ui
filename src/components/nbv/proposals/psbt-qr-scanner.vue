@@ -58,7 +58,7 @@ export default {
       if (!data.toUpperCase().startsWith('UR:CRYPTO-PSBT')) {
         this.qrs = []
         this.showNotification({
-          message: 'PSBT not valid, please try again',
+          message: this.$t('pages.nbv.proposals.notValidPSBT'),
           color: 'red'
         })
         return
