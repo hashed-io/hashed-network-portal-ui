@@ -1,5 +1,5 @@
 <template lang="pug">
-q-card(:flat="flat" :class="{'inherit': inherit}")
+q-card(:flat="flat" :class="{'inherit': inherit}" :bordered="bordered")
   q-item
     q-item-section(avatar)
       account-icon(:address="address" size="2em")
@@ -30,7 +30,19 @@ export default {
       type: Boolean,
       default: false
     },
+    bordered: {
+      type: Boolean,
+      default: false
+    },
+    displayNameClass: {
+      type: String,
+      default: ''
+    },
     inherit: {
+      type: Boolean,
+      default: false
+    },
+    shortDisplay: {
       type: Boolean,
       default: false
     }
@@ -46,7 +58,7 @@ export default {
       if (this.accountInfo) {
         const identity = this.accountInfo?.identity
         const localDisplay = this.availableAccounts.find(v => v.address === this.address)
-        return (identity.display) ? identity.display : localDisplay?.meta?.name || this.address
+        return (identity.display) ? identity.display : localDisplay?.meta?.name || this.getAddress(this.address)
       } return undefined
     }
   },
@@ -68,6 +80,12 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    getAddress (address) {
+      if (this.shortDisplay) {
+        return address.substr(0, 4) + '...' + address.substr(-5)
+      }
+      return address
     }
   }
 }
