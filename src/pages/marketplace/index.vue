@@ -9,18 +9,17 @@
       unelevated
       color="secondary"
       outline
-      @click="modals.isShowingAddMarketplace = true"
+      @click="onAddMarketplace"
     )
   //- Tabs
-  q-tabs.q-mt-md(
+  q-tabs.q-mt-lg(
     v-model="tab"
     :breakpoint="0"
     no-caps
-    indicator-color="transparent"
+    indicator-color="white"
     align="justify"
-    active-class="bg-secondary text-white"
-    class="bg-grey-4"
-    dense
+    class="bg-primary text-white"
+    active-class="active-tab"
   )
     q-tab(name="myMarketplaces" :label="$t('pages.marketplace.tabs.myMarketplaces')")
     q-tab(name="allMarketplaces" :label="$t('pages.marketplace.tabs.allMarketplaces')")
@@ -37,7 +36,7 @@
 </template>
 
 <script>
-// import TInput from '~/components/common/input/t-input.vue'
+import TInput from '~/components/common/input/t-input.vue'
 import CreateMarketplaceForm from '~/components/marketplace/create-marketplace-form'
 import MarketplaceList from '~/components/marketplace/marketplace-list'
 import { mapGetters } from 'vuex'
@@ -45,7 +44,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Marketplace',
   components: {
-    // TInput,
+    TInput,
     CreateMarketplaceForm,
     MarketplaceList
   },
@@ -134,13 +133,26 @@ export default {
         name: 'marketplace-details',
         query: { marketId: marketplace.id }
       })
+    },
+    async onAddMarketplace () {
+      const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
+      if (isLoggedIn) {
+        this.modals.isShowingAddMarketplace = true
+      } else {
+        this.showNotification({ message: 'You must be logged in to create a marketplace', color: 'negative' })
+      }
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '~/css/colors.styl'
+@import '~/css/app.styl'
+.activeTab
+  border-radius: 10px 10px 0px 0px
+.normalTab
+  border-radius: 10px 10px 0px 0px
 .tabPanel
-  padding: 0.5rem 0rem 0rem 0rem
+  padding: 1rem 0rem 0rem 0rem
+  background-color: $bg-body
 </style>
