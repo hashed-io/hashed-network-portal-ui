@@ -22,7 +22,8 @@ export const validation = {
         isValidMainetBTC: val => /([13][a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[ac-hj-np-zAC-HJ-NP-Z02-9]{11,71})/.test(val) || this.$t('forms.errors.isNotValidMainetBTC'),
         isValidPolkadotAddress: val => this.$store.$polkadotApi?.isValidPolkadotAddress(val) || this.$t('forms.errors.isNotValidPolkadotAddress'),
         notOwnAccount: value => val => !(value === val) || this.$t('forms.errors.notOwnAccount'),
-        greaterOrEqualThanString: value => val => val.length >= value || this.$t('forms.errors.greaterOrEqualThanString', { value })
+        greaterOrEqualThanString: value => val => val.length >= value || this.$t('forms.errors.greaterOrEqualThanString', { value }),
+        lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value })
       }
     }
   },

@@ -43,7 +43,7 @@
               v-model="form.notes"
               :label="$t('pages.marketplace.applyForm.notes.label')"
               :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
-              :rules="[rules.required,rules.greaterOrEqualThanString(25)]"
+              :rules="[rules.required,rules.lessOrEqualThanString(25)]"
             )
             //- .paragraph1.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
             //- div.qItem.q-my-lg(@click="() => {this.isCustodian = !this.isCustodian}")
