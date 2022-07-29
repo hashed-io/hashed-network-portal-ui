@@ -68,7 +68,18 @@ class BasePolkadotApi {
    * @param {*} subTrigger Function handler to query subscription
    * @returns Query response or unsubscribe function from polkadot api
    */
-  async exEntriesQuery (queryName, params, subTrigger) {
+  async exEntriesQuery (queryName, params, pagination, subTrigger) {
+    console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
+    if (!params) {
+      return this.polkadotApi.api.query[this.palletName][queryName].entries()
+    }
+    if (pagination) {
+      return this.polkadotApi.api.query[this.palletName][queryName].entriesPaged({
+        pageSize: pagination.pageSize || 10,
+        args: [...params],
+        startKey: pagination.startKey || null
+      })
+    }
     return this.polkadotApi.api.query[this.palletName][queryName].entries(...params)
   }
 
