@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item.no-padding(dense @click="openFile" clickable)
+q-item(dense @click="openFile" clickable)
   q-item-section(avatar)
     q-icon(v-if="!loading" name="file_open" color="primary")
     q-spinner(
@@ -10,7 +10,7 @@ q-item.no-padding(dense @click="openFile" clickable)
   q-item-section
     .text-caption {{ displayName }}
   q-item-section(avatar)
-    .text-caption.q-mr-xs 2mb
+    .text-caption.q-mr-xs {{getSizeInKb}}
   slot
 </template>
 
@@ -36,6 +36,15 @@ export default {
   data () {
     return {
       loading: false
+    }
+  },
+  computed: {
+    getSizeInKb () {
+      const size = this.payload.size
+      if (size < 1024) return `${this.payload.size} B`
+      if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`
+      if (size < 1073741824) return `${(size / 1048576).toFixed(2)} MB`
+      return `${(size / 1073741824).toFixed(2)} GB`
     }
   },
   methods: {
