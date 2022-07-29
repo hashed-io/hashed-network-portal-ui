@@ -8,16 +8,15 @@
     @submit="onSubmitApplyForm"
   )
   //- Tabs
-  q-tabs.q-mt-md(
+  q-tabs.q-mt-lg(
     v-model="tab"
     v-if="isAdmin"
     :breakpoint="0"
     no-caps
-    indicator-color="transparent"
+    indicator-color="white"
     align="justify"
-    active-class="bg-secondary text-white"
-    class="bg-grey-4"
-    dense
+    class="bg-primary text-white"
+    active-class="active-tab"
   )
     q-tab(:ripple="false" name="market-info" :label="$t('pages.marketplace.tabs.marketInfo')")
     q-tab(:riple="false" name="enrollment" :label="$t('pages.marketplace.tabs.enrollmentRequest')")
@@ -26,7 +25,7 @@
     q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
       market-info-card(:market="{...market, admin, owner}" :participants="participants")
     q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
-      applicants-list(:applicants="applicants" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
+      applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
 <script>
@@ -83,11 +82,14 @@ export default {
     }
   },
   watch: {
-    selectedAccount () {
+    async selectedAccount () {
       if (this.tab === 'enrollment') {
         this.tab = 'market-info'
       }
-      this.getMarketplaceInfo()
+      this.application = undefined
+      this.participants = []
+      this.applicants = []
+      await this.getMarketplaceInfo()
     }
   },
   async beforeMount () {
@@ -95,7 +97,7 @@ export default {
     this.getMarketplaceInfo()
   },
   methods: {
-    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
+    ...mapMutations('polkadotWallet', ['setIsHashedLoggedIn']),
     syncParams () {
       const queries = this.$route.query
       if (queries && queries.marketId) {
@@ -125,16 +127,20 @@ export default {
       }
     },
     async onSubmitApplyForm (form) {
-      console.log('form to apply: ', form)
       try {
         this.showLoading()
+        form = await this.shareWithAdministrator(form)
+        if (form?.custodian) {
+          form = await this.shareWithCustodian(form)
+        }
+        const { fields, custodianFields } = this.getStructureToSend(form)
         await this.$store.$marketplaceApi.applyFor({
           user: this.selectedAccount.address,
           marketId: this.marketId,
-          notes: form.notes,
-          files: form.files
+          fields,
+          custodianFields: form?.custodian ? custodianFields : undefined
         })
-        this.showNotification({ message: 'Application was submitted', color: 'positive' })
+        this.showNotification({ message: 'Application was submitted', color: 'primary' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -144,7 +150,6 @@ export default {
       }
     },
     async enrollApplicant (applicant) {
-      console.log('enrollApplicant', applicant)
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
@@ -155,7 +160,7 @@ export default {
         })
         this.showNotification({
           message: 'Application approved.',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -166,7 +171,6 @@ export default {
       }
     },
     async rejectApplicant (applicant) {
-      console.log('rejectApplicant', applicant)
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
@@ -177,7 +181,7 @@ export default {
         })
         this.showNotification({
           message: 'Application rejected. ',
-          color: 'positive'
+          color: 'primary'
         })
       } catch (e) {
         console.error('error', e)
@@ -199,57 +203,144 @@ export default {
       }
     },
     async getFromHP (applicants) {
-      const promisesNotes = []
-      const promisesFiles = []
+      const promisesFields = []
       let tmpApplicants = applicants
-      console.log('applicants', applicants)
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
-      this.setIsLoggedIn(isLogged)
-      console.log('isLogged', isLogged)
+      this.setIsHashedLoggedIn(isLogged)
       if (!isLogged) {
         await this.loginUser()
       }
       try {
-        tmpApplicants.forEach(applicant => {
-          promisesNotes.push(this.$store.$hashedPrivateApi.sharedViewByCID(applicant.notes))
-          applicant.files.forEach(file => {
-            promisesFiles.push(this.$store.$hashedPrivateApi.sharedViewByCID(file.displayName))
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          applicant.fields.forEach(privateFields => {
+            const identifier = 'File:'
+            let cid = privateFields.displayName.includes(identifier)
+              ? privateFields.cid.split(':')[0]
+              : privateFields.cid
+            if (cid.split(':').length > 1) {
+              cid = cid.split(':')[0]
+            }
+            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
           })
         })
-        const resolvedNotes = await Promise.all(promisesNotes)
-        const resolvedFiles = await Promise.all(promisesFiles)
-        console.log('resolvedNotes', resolvedNotes)
-        console.log('resolvedFiles', resolvedFiles)
-        // process data from the HP & match it with the applicants
-        tmpApplicants.forEach((applicant, index) => {
-          const notesHP = resolvedNotes[index].payload.notes
-          applicant.notes = notesHP
-          applicant.files = applicant.files.map((file, index) => {
-            const displayNameHP = resolvedFiles[index].name
-            file.displayName = displayNameHP
-            file.payload = resolvedFiles[index].payload
-            return file
+        const resolvedFields = await Promise.all(promisesFields)
+        tmpApplicants.forEach((applicant, indexApplicant) => {
+          const lengthFields = applicant.fields.length
+          applicant.fields = applicant.fields.map((file, index) => {
+            const _index = (indexApplicant * lengthFields) + index
+            const displayName = resolvedFields[_index]?.name
+            const description = resolvedFields[_index]?.description
+            const cid = resolvedFields[_index]?.cid
+            const payload = resolvedFields[_index]?.payload
+            return {
+              description,
+              displayName,
+              payload,
+              cid
+            }
           })
+          return applicant
         })
       } catch (error) {
         console.error('error', error)
         tmpApplicants = applicants
       }
-
       return tmpApplicants
     },
     async loginUser () {
       try {
         this.showLoading({ message: 'You must be logged in to submit an application' })
         await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsLoggedIn(true)
+        this.setIsHashedLoggedIn(true)
       } catch (error) {
         console.error(error)
         this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsLoggedIn(false)
+        this.setIsHashedLoggedIn(false)
       } finally {
         this.hideLoading()
       }
+    },
+    async shareWithAdministrator (form) {
+      try {
+        const promises = []
+        const hpService = this.$store.$hashedPrivateApi
+        const administratorAddress = this.admin.address
+        for (const fileElement of form.fields) {
+          const { label, file } = fileElement
+          promises.push(hpService.shareNew({
+            toUserAddress: administratorAddress,
+            name: file.name || file,
+            description: label,
+            payload: file
+          }))
+        }
+        const results = await Promise.all(promises)
+        for (const fileElement of form.fields) {
+          const { file } = fileElement
+          const result = results.shift()
+          const CID = result.sharedData.cid
+          const fileName = file.name ? file.name : 'Notes'
+          fileElement.id = result.ownedData.id
+          fileElement.value = CID + ':' + fileName
+          fileElement.description = result.sharedData.description
+        }
+      } catch (error) {
+        console.error(error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+        throw new Error('Error sharing with administrator')
+      }
+      return form
+    },
+    async shareWithCustodian (form) {
+      const { custodian, fields } = form
+      if (!custodian) {
+        return form
+      }
+      const hpService = this.$store.$hashedPrivateApi
+      const promisesFields = []
+      try {
+        for (const field of fields) {
+          const { id } = field
+          promisesFields.push(hpService.shareExisting({
+            toUserAddress: custodian,
+            originalOwnedDataId: id
+          }))
+        }
+        const results = await Promise.all(promisesFields)
+        for (const field of fields) {
+          const result = results.shift()
+          field.custodianField = result.cid + ':' + result.name
+        }
+      } catch (error) {
+        console.error('Error Sharing with Custodian', error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+        throw new Error('Error sharing with custodian')
+      }
+      return form || undefined
+    },
+    getStructureToSend (form) {
+      const { fields, custodian } = form
+      const custodianElements = []
+      const fieldsToSend = fields.map(field => {
+        const isNotes = field.description === 'Notes'
+        custodianElements.push(field.custodianField)
+        if (isNotes) {
+          return [
+            'Notes',
+            field.value
+          ]
+        }
+        const fileName = 'File:' + field.description
+        return [
+          fileName,
+          field.value
+        ]
+      })
+      const custodianFields = [
+        custodian,
+        custodianElements
+      ]
+      return { fields: fieldsToSend, custodianFields }
     }
   }
 
