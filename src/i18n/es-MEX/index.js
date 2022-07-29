@@ -27,7 +27,9 @@ export default {
       containLessThanCosigners: 'This field must contain at less than {value} cosigners address',
       isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
       isNotValidPolkadotAddress: 'Is not a valid polkadot address',
-      notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option'
+      notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option',
+      fileRequired: 'El archivo es requerido',
+      greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}'
     }
   },
   pages: {
@@ -49,7 +51,7 @@ export default {
         xpubPlaceholder: 'Paste or write your XPUB'
       },
       vaults: {
-        manageVaults: 'Administrar Vaules',
+        manageVaults: 'Administrar Baules',
         descriptionLabel: 'Enter a public label for this vault',
         cosigners: 'Cosigners',
         cosignersLabelDesc: 'Enter a valid public address for each cosigner',
@@ -58,7 +60,7 @@ export default {
         owner: 'Propietario',
         threshold: 'Threshold',
         clickToSeeDetails: 'Click para ver detalles',
-        createVault: 'Crear vaul'
+        createVault: 'Crear Baúl'
       },
       proposals: {
         create_proposal: 'Create new proposal',
@@ -81,53 +83,80 @@ export default {
     },
     marketplace: {
       marketplaceTitle: 'Marketplace',
-      addMarketplaceButton: 'Add Marketplace',
+      addMarketplaceButton: 'Añadir Marketplace',
       tabs: {
-        myMarketplaces: 'My marketplaces',
-        allMarketplaces: 'All marketplaces',
-        marketInfo: 'Market information',
-        enrollmentRequest: 'Enrollment requests'
+        myMarketplaces: 'Mis Marketplaces',
+        allMarketplaces: 'Todos los marketplaces',
+        marketInfo: 'Información del marketplace',
+        enrollmentRequest: 'Solictudes de inscripción'
       },
       details: {
-        participantsTitle: 'Participants',
-        noParticipants: 'No participants yet',
-        numberPaparticipantsTitle: 'Number of participants',
-        applicantsTitle: 'Applicants',
-        noApplicants: 'No applicants yet',
-        pending: 'Your application is under review',
-        noMarketplaces: 'No markets yet',
-        notesTitle: 'Notes',
-        filesTitle: 'Files',
-        enrollButton: 'Enroll',
-        rejectButton: 'Rejected'
+        participantsTitle: 'Participantes',
+        noParticipants: 'No hay participantes aún',
+        numberPaparticipantsTitle: 'Número de participantes',
+        applicantsTitle: 'Aplicantes',
+        noApplicants: 'No hay aplicantes aún',
+        pending: 'Tu aplicación está pendiente de aprobación',
+        noMarketplaces: 'Todavía no hay marketplaces',
+        notesTitle: 'Notas',
+        filesTitle: 'Archivos',
+        enrollButton: 'Inscribir',
+        rejectButton: 'Rechazar'
       },
       applyForm: {
-        title: 'Apply for Marketplace',
-        subtitle: 'Fill in the form to apply for the Marketplace',
-        filesTitle: 'Upload files',
-        addFilesButton: 'Add Files',
-        notes: {
-          label: 'Notes',
-          placeholder: 'Notes about your application'
+        title: 'Aplicar para unirse al marketplace',
+        subtitle: 'Llena el formulario para aplicar a este marketplace',
+        custodian: {
+          label: 'Custodio',
+          placeholder: 'Dirección del custodio',
+          infoLabel: 'Añadir un custodia de tus archivos (opcional)'
         },
-        submitButton: 'Submit'
+        filesTitle: 'Cargar archivos',
+        addFilesButton: 'Añadir archivos',
+        notes: {
+          label: 'Notas',
+          placeholder: 'Notas acerca de la solicitud'
+        },
+        submitButton: 'Enviar'
       },
       createForm: {
-        title: 'Create new marketplace',
-        label: 'Label',
-        placeholder: 'Please write a description',
-        button: 'Create marketplace'
+        title: 'Crear un nuevo Marketplace',
+        label: 'Etiqueta',
+        placeholder: 'Escriba una descripción para el marketplace',
+        button: 'Crear una nueva tienda'
       },
       searchInput: {
-        label: 'Search',
-        placeholder: 'Please write a keyword'
+        label: 'Buscar',
+        placeholder: 'Escribe una búsqueda'
       },
       role: {
-        administrator: 'Administrator',
-        owner: 'Owner'
+        administrator: 'Administrador',
+        owner: 'Propietario'
       },
       applicants: {
-        title: 'Applicants'
+        title: 'Aplicantes'
+      },
+      privacy: {
+        title: 'Playground de solución de privacidad',
+        uploadSection: {
+          title: 'Subir archivo',
+          fileInput: 'Seleccionar archivo',
+          custodian: 'Dirección del custodio',
+          shareFile: 'Compartir archivo con otra dirección'
+        },
+        downloadSection: {
+          title: 'Descargar archivo',
+          cidInput: 'Descargar archivo por CID o ID',
+          isShareData: '¿Los datos son compartidos?'
+        },
+        buttons: {
+          save: 'Guardar',
+          clear: 'Limpiar',
+          download: 'Descargar',
+          openFile: 'Abrir archivo'
+        },
+        query: 'Petición: ',
+        response: 'Respuesta: '
       }
     }
   }
