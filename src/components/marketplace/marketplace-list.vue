@@ -5,14 +5,12 @@
   #items(v-else)
     .row.justify-start.q-px-md
       .col-12
-        q-input(
+        t-input(
           testid="label_input"
           :label="$t('pages.marketplace.searchInput.label')"
           v-model="search"
           :placeholder="$t('pages.marketplace.searchInput.placeholder')"
           autofocus
-          outlined
-          dense
         )
     #scroll-area(ref="scrollTargetRef" class="q-pa-md")
       q-infinite-scroll(
