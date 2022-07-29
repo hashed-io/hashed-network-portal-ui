@@ -75,6 +75,23 @@ export default defineComponent({
           keyActive: 'Extended Keys',
           label: 'Extended Keys'
         }
+      ],
+      marketplaces: [
+        {
+          to: { name: 'marketplacesList' },
+          keyActive: 'Marketplaces',
+          label: 'Marketplaces'
+        },
+        {
+          to: { name: 'custodian' },
+          keyActive: 'Custodian',
+          label: 'Custodian'
+        },
+        {
+          to: { name: 'privacy' },
+          keyActive: 'Privacy',
+          label: 'Privacy'
+        }
       ]
     }
 
@@ -105,6 +122,7 @@ export default defineComponent({
       breadcrumbList.value = v.meta.breadcrumb
       // Dynamic options
       if (v.meta.app) {
+        console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }
