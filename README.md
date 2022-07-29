@@ -1,6 +1,10 @@
-# Hashed template quasar vue 3 (hashed-template-quasar-vue3)
+# Hashed Portal
 
-This is a template developed by HASHED
+## See Storybook documentation
+```bash
+yarn
+yarn storybook
+```
 
 ## Install the dependencies
 ```bash
