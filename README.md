@@ -29,7 +29,7 @@ quasar build
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
-### Userflow guide
+### Userflow guide for NBV
 1. Create XPUB
 	1. BW - Go to add
 	2. BW - Add Vault (Create, Let Start)
