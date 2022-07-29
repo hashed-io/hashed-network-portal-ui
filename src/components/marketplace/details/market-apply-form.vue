@@ -1,84 +1,112 @@
 <template lang="pug">
 #container
-  q-card.bg-inherit(flat)
-    .text-h5.q-pl-md {{market.label}}
+  q-card(flat class="bg-white")
     q-card-section
-      .text-subtitle2.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
-        .text-body2 {{participantsNumber}}
-      .row.q-col-gutter-md
-        .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
-          account-item(
-            :address="market.admin?.address"
-          )
-        .col-6.q-pb-md
-          .text-subtitle2.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
-          account-item(
-            :address="market.owner?.address"
-          )
+      .row.justify-center
+        .text-h5 {{market.label}}
+    q-card-section
+      .row.text-center.q-pb-md
+        .col-6
+          .fund_title.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
+            .headline2 {{participantsNumber}}
+        .col-6
+          .row.q-col-gutter-md
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
+              account-item(
+                class="q-mt-md"
+                :address="market.admin?.address"
+                shortDisplay
+              )
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
+              account-item(
+                class="q-mt-md"
+                :address="market.owner?.address"
+                shortDisplay
+              )
     q-card-section(v-if="status === 'Pending'")
       .row.justify-center.q-gutter-md
         .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
-    q-card-section(v-else)
-      .text-h6(v-if="!isLoggedIn") Please login to apply for this market.
-      .container(v-else)
-        q-form(ref="applyForm" @submit="onSubmit")
-          .text-subtitle1 {{$t('pages.marketplace.applyForm.title')}}
-          .text-subtitle2.text-weight-regular(class="q-pb-md") {{$t('pages.marketplace.applyForm.subtitle')}}
-          q-input(
-            data-cy="notes_input"
-            testid="notes_input"
-            class="q-mt-md"
-            v-model="form.notes"
-            :label="$t('pages.marketplace.applyForm.notes.label')"
-            :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
-            :rules="[rules.required]"
-            outlined
-          )
-          .row.justify-between
-            div(class="q-pt-sm text-subtitle2 text-weight-regular") {{$t('pages.marketplace.applyForm.filesTitle')}}
-            q-btn.q-mr-sm.q-mb-md(outline no-caps color="secondary" unelevated @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
-          .container(v-for="(file, index, key) in form.files" :key="index")
-            .row
-              hashed-private-file(
-                class="col-11"
-                v-model="form.files[index]"
-                :index="index"
-                :administrator-address="market.admin?.address"
-                @onDelete="onDeleteFile"
-                :rules="[rules.required]"
-                showDelete
+  div(v-if="status !== 'Pending'" class="q-py-md")
+    .headline4(v-if="!isLoggedIn") Please login to apply for this market.
+    .container(v-else)
+      .headline3.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
+      .row.justify-center
+        .col-11
+          q-form(ref="applyForm" @submit="onSubmit")
+            t-input(
+              required
+              data-cy="notes_input"
+              testid="notes_input"
+              class="q-mt-md"
+              v-model="form.notes"
+              :label="$t('pages.marketplace.applyForm.notes.label')"
+              :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
+              :rules="[rules.required,rules.greaterOrEqualThanString(25)]"
+            )
+            //- .paragraph1.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
+            //- div.qItem.q-my-lg(@click="() => {this.isCustodian = !this.isCustodian}")
+            //-   .row.justify-between.q-gutter-md
+            q-toggle(@toggle = "() => {this.isCustodian = !this.isCustodian}" v-model="isCustodian" color="primary" :label="$t('pages.marketplace.applyForm.custodian.infoLabel')")
+            account-input(
+              v-if="isCustodian"
+              v-model="custodianAddress"
+              data-cy="custodian_input"
+              testid="custodian_input"
+              class="q-mt-md"
+              :label="$t('pages.marketplace.applyForm.custodian.label')"
+              outlined
+              :rules="[rules.isValidPolkadotAddress]"
+            )
+            .row.justify-between
+              div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
+              div
+                q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" outline @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
+            .container(v-for="(file, index, key) in form.files" :key="index")
+              .row
+                hashed-private-file(
+                  class="col-11"
+                  v-model="form.files[index]"
+                  :index="index"
+                  :administrator-address="market.admin?.address"
+                  @onDelete="onDeleteFile"
+                  :rules="[rules.required, rules.greaterOrEqualThanString(6)]"
+                  showDelete
+                  )
+                q-icon(
+                  rounded
+                  class="col-1 q-pb-md cursor-pointer"
+                  size="1.5rem"
+                  name="delete"
+                  label="delete file"
+                  color="red"
+                  @click="onDeleteFile(index)"
+                  data-cy="delete_file"
+                  data-testid="delete_file"
                 )
-              q-icon(
+            .row.justify-center.q-px-sm
+              q-btn(
+                type="submit"
+                color="primary"
                 rounded
-                class="col-1 q-pb-md cursor-pointer"
-                size="1.5rem"
-                name="delete"
-                label="delete file"
-                color="red"
-                @click="onDeleteFile(index)"
-                data-cy="delete_file"
-                data-testid="delete_file"
-              )
-          .row.justify-end.q-px-sm
-            q-btn(
-              type="submit"
-              color="secondary"
-              no-caps
-              class="q-mt-sm"
-              data-cy="submit_apply_btn"
-              data-testid="submit_apply_btn"
-            ) {{ $t('pages.marketplace.applyForm.submitButton') }}
+                no-caps
+                unelevated
+                class="q-mt-sm btn-lg"
+                data-cy="submit_apply_btn"
+                data-testid="submit_apply_btn"
+              ) {{ $t('pages.marketplace.applyForm.submitButton') }}
 </template>
 
 <script>
 import AccountItem from '~/components/common/account-item.vue'
+import AccountInput from '~/components/common/account-input.vue'
 import { validation } from '~/mixins/validation'
 import HashedPrivateFile from '~/components/common/hashedPrivate/hashed-private-file.vue'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'MarketApplyForm',
-  components: { AccountItem, HashedPrivateFile },
+  components: { AccountItem, HashedPrivateFile, AccountInput },
   mixins: [validation],
   props: {
     /**
@@ -111,6 +139,8 @@ export default {
   emits: ['submit'],
   data () {
     return {
+      isCustodian: false,
+      custodianAddress: undefined,
       form: {
         notes: undefined,
         files: [
@@ -125,40 +155,16 @@ export default {
   computed: {
     ...mapGetters('polkadotWallet', ['isLoggedIn', 'selectedAccount'])
   },
-  watch: {
-    'selectedAccount.address': {
-      async handler () {
-        const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
-        if (!isLoggedIn) {
-          // await this.loginUser()
-        }
-      }
-    }
-  },
   methods: {
     ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     onSubmit () {
       this.$refs.applyForm.validate().then(async () => {
-        const files = this.form.files.map(file => {
-          console.log(file)
-          const cid = file.files[0].value.split(':')[0]
-          return {
-            displayName: cid,
-            cid: file.files[0].value
-          }
-        })
-        const hpNotes = await this.$store.$hashedPrivateApi.shareNew({
-          toUserAddress: this.market.admin?.address,
-          name: 'Notes',
-          description: 'Notes',
-          payload: {
-            notes: this.form.notes
-          }
-        })
         const data = {
-          notes: hpNotes.sharedData.cid,
-          files
+          custodian: this.isCustodian ? this.custodianAddress : undefined,
+          fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
         }
+        console.log('data', data)
+        // console.log('data submitted', data)
         this.$emit('submit', data)
       })
     },
@@ -188,3 +194,6 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+</style>
