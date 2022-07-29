@@ -102,6 +102,29 @@ const routes = [
               ],
               app: 'marketplaces'
             }
+          },
+          // Custodian page
+          {
+            path: '/custody',
+            name: 'custodian',
+            component: () => import('pages/marketplace/custodian/index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Custodian', icon: 'shield' }
+              ],
+              app: 'marketplaces'
+            }
+          },
+          {
+            path: '/privacy',
+            name: 'privacy',
+            component: () => import('pages/marketplace/privacy/Index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'Privacy', icon: 'home' }
+              ],
+              app: 'marketplaces'
+            }
           }
         ]
       },
