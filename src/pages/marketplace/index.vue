@@ -154,5 +154,5 @@ export default {
   border-radius: 10px 10px 0px 0px
 .tabPanel
   padding: 1rem 0rem 0rem 0rem
-  background-color: $bg-body
+  background-color: $grayLigth
 </style>

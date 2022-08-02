@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '~/css/colors.styl'
+@import '~/css/app.styl'
 
 #container
   background: transparent linear-gradient(147deg, var(--unnamed-color-290266) 0%, #150133 100%) 0% 0% no-repeat padding-box

@@ -118,7 +118,7 @@ export default {
 
 // TO DO - Icons SVG Component
 <style lang="stylus">
-@import '~/css/colors.styl'
+@import '~/css/app.styl'
 .drawerBackground
    background: transparent linear-gradient(147deg, var(--unnamed-color-290266) 0%, #150133 100%) 0% 0% no-repeat padding-box
    background: transparent linear-gradient(147deg, #290266 0%, #150133 100%) 0% 0% no-repeat padding-box
