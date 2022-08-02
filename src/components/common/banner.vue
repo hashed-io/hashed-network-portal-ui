@@ -21,7 +21,7 @@ export default {
       default: undefined
     },
     /**
-     * Switch to show spinner, error or success icon
+     * Switch to show loading, error or success icon
      */
     status: {
       type: String,

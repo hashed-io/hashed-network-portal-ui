@@ -1,6 +1,6 @@
 <template lang="pug">
 #container
-  q-card(flat class="bg-white")
+  q-card.bg-inherit(flat)
     q-card-section
       .row.justify-center
         .text-h5 {{market.label}}
@@ -25,9 +25,9 @@
                 :address="market.owner?.address"
                 shortDisplay
               )
-    q-card-section(v-if="status === 'Pending'")
-      .row.justify-center.q-gutter-md
-        .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
+    //- q-card-section(v-if="status === 'Pending'")
+    //-   .row.justify-center.q-gutter-md
+    //-     .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
   div(v-if="status !== 'Pending'" class="q-py-md")
     .headline4(v-if="!isLoggedIn") Please login to apply for this market.
     .container(v-else)
