@@ -23,7 +23,8 @@ export const validation = {
         isValidPolkadotAddress: val => this.$store.$polkadotApi?.isValidPolkadotAddress(val) || this.$t('forms.errors.isNotValidPolkadotAddress'),
         notOwnAccount: value => val => !(value === val) || this.$t('forms.errors.notOwnAccount'),
         greaterOrEqualThanString: value => val => val.length >= value || this.$t('forms.errors.greaterOrEqualThanString', { value }),
-        lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value })
+        lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value }),
+        notEqual: value => val => !(value === val) || this.$t('forms.errors.notEqual')
       }
     }
   },
