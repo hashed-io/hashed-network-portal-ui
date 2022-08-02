@@ -4,12 +4,14 @@
 </template>
 <script>
 import ApplicantsList from 'src/components/marketplace/applicants-list.vue'
+import { authentication } from 'src/mixins/authentication'
 import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'CustodianIndex',
   components: {
     ApplicantsList
   },
+  mixins: [authentication],
   data () {
     return {
       applicants: undefined,
@@ -99,20 +101,20 @@ export default {
         tmpApplicants = applicants
       }
       return tmpApplicants
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsHashedLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsHashedLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     }
+    // async loginUser () {
+    //   try {
+    //     this.showLoading({ message: 'You must be logged in to submit an application' })
+    //     await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
+    //     this.setIsHashedLoggedIn(true)
+    //   } catch (error) {
+    //     console.error(error)
+    //     this.showNotification({ message: error.message || error, color: 'negative' })
+    //     this.setIsHashedLoggedIn(false)
+    //   } finally {
+    //     this.hideLoading()
+    //   }
+    // }
   }
 }
 </script>

@@ -34,7 +34,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
 import ApplicantsList from '~/components/marketplace/applicants-list.vue'
-
+import { authentication } from '~/mixins/authentication'
 export default {
   name: 'DetailsMarket',
   components: {
@@ -43,6 +43,7 @@ export default {
     MarketApplyForm,
     ApplicantsList
   },
+  mixins: [authentication],
   data () {
     return {
       tab: 'market-info',
@@ -204,12 +205,7 @@ export default {
     },
     async getFromHP (applicants) {
       const promisesFields = []
-      let tmpApplicants = applicants
-      const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
-      this.setIsHashedLoggedIn(isLogged)
-      if (!isLogged) {
-        await this.loginUser()
-      }
+      const tmpApplicants = applicants
       try {
         tmpApplicants.forEach((applicant, indexApplicant) => {
           applicant.fields.forEach(privateFields => {
@@ -243,23 +239,25 @@ export default {
         })
       } catch (error) {
         console.error('error', error)
-        tmpApplicants = applicants
+        this.showNotification({ message: error.message || error, color: 'negative' })
+        // tmpApplicants = applicants
       }
+      console.log('tmpApplicants!!!! ', tmpApplicants)
       return tmpApplicants
     },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsHashedLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsHashedLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
-    },
+    // async loginUser () {
+    //   try {
+    //     this.showLoading({ message: 'You must be logged in to submit an application' })
+    //     await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
+    //     this.setIsHashedLoggedIn(true)
+    //   } catch (error) {
+    //     console.error(error)
+    //     this.showNotification({ message: error.message || error, color: 'negative' })
+    //     this.setIsHashedLoggedIn(false)
+    //   } finally {
+    //     this.hideLoading()
+    //   }
+    // },
     async shareWithAdministrator (form) {
       try {
         const promises = []
@@ -267,9 +265,18 @@ export default {
         const administratorAddress = this.admin.address
         for (const fileElement of form.fields) {
           const { label, file } = fileElement
+          let fileName
+          if (file?.name) {
+            const fileNameSplit = file.name.split('.')
+            const filename = fileNameSplit[0]
+            const ext = fileNameSplit[fileNameSplit.length - 1]
+            fileName = file.name > 25 ? filename.substring(0, 20) + ext : file.name
+          } else {
+            fileName = file
+          }
           promises.push(hpService.shareNew({
             toUserAddress: administratorAddress,
-            name: file.name || file,
+            name: fileName,
             description: label,
             payload: file
           }))
