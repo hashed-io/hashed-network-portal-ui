@@ -2,7 +2,7 @@
 .row.q-col-gutter-xs
   .col-12
     .text-subtitle2 {{label}}
-  q-input(
+  h-input(
     v-model="tagFile"
     class="col-6 q-my-xs borderRight"
     outlined
