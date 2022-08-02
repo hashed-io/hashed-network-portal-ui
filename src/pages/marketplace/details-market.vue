@@ -1,5 +1,15 @@
 <template lang="pug">
 #container(v-if="market")
+  banner(
+    v-if="statusApplication === 'Pending'"
+    :message="$t('pages.marketplace.details.pending')"
+    status="loading"
+  )
+  banner(
+    v-if="statusApplication === 'Rejected'"
+    :message="`Marketplace's admin replied: ${application.feedback}`"
+    status="error"
+  )
   market-apply-form(
     v-if="!isEnrolled && !isAdmin && market && admin"
     :market="{...market, admin, owner}"
@@ -34,6 +44,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
 import ApplicantsList from '~/components/marketplace/applicants-list.vue'
+import { Banner } from '~/components/common'
 
 export default {
   name: 'DetailsMarket',
@@ -41,7 +52,8 @@ export default {
     AccountItem,
     MarketInfoCard,
     MarketApplyForm,
-    ApplicantsList
+    ApplicantsList,
+    Banner
   },
   data () {
     return {
@@ -134,12 +146,22 @@ export default {
           form = await this.shareWithCustodian(form)
         }
         const { fields, custodianFields } = this.getStructureToSend(form)
-        await this.$store.$marketplaceApi.applyFor({
+        const propsToSubmit = {
           user: this.selectedAccount.address,
           marketId: this.marketId,
           fields,
           custodianFields: form?.custodian ? custodianFields : undefined
-        })
+        }
+        // debugger
+        if (this.statusApplication === 'Rejected') {
+          await this.$store.$marketplaceApi.reapplyFor({
+            ...propsToSubmit
+          })
+        } else {
+          await this.$store.$marketplaceApi.applyFor({
+            ...propsToSubmit
+          })
+        }
         this.showNotification({ message: 'Application was submitted', color: 'primary' })
       } catch (e) {
         console.error('error', e)
@@ -156,6 +178,7 @@ export default {
           user: this.selectedAccount.address,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
+          feedback: applicant.feedback,
           approved: true
         })
         this.showNotification({
@@ -177,7 +200,8 @@ export default {
           user: this.selectedAccount.address,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
-          approved: false
+          approved: false,
+          feedback: applicant.feedback
         })
         this.showNotification({
           message: 'Application rejected. ',
