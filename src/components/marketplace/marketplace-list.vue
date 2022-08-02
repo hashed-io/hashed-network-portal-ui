@@ -5,7 +5,7 @@
   #items(v-else)
     .row.justify-start.q-px-md
       .col-12
-        t-input(
+        h-input(
           testid="label_input"
           :label="$t('pages.marketplace.searchInput.label')"
           v-model="search"

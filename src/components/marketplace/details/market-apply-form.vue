@@ -35,7 +35,7 @@
       .row.justify-center
         .col-11
           q-form(ref="applyForm" @submit="onSubmit")
-            t-input(
+            h-input(
               required
               data-cy="notes_input"
               testid="notes_input"
@@ -71,7 +71,7 @@
                   :index="index"
                   :administrator-address="market.admin?.address"
                   @onDelete="onDeleteFile"
-                  :rules="[rules.required, rules.greaterOrEqualThanString(6)]"
+                  :rules="[rules.required, rules.greaterOrEqualThanString(6), rules.lessOrEqualThanString(25)]"
                   showDelete
                   )
                 q-icon(
@@ -103,11 +103,12 @@ import AccountItem from '~/components/common/account-item.vue'
 import AccountInput from '~/components/common/account-input.vue'
 import { validation } from '~/mixins/validation'
 import HashedPrivateFile from '~/components/common/hashedPrivate/hashed-private-file.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authentication } from '~/mixins/authentication'
 export default {
   name: 'MarketApplyForm',
   components: { AccountItem, HashedPrivateFile, AccountInput },
-  mixins: [validation],
+  mixins: [validation, authentication],
   props: {
     /**
      * This props contains the market information to display [Required]
@@ -156,7 +157,6 @@ export default {
     ...mapGetters('polkadotWallet', ['isLoggedIn', 'selectedAccount'])
   },
   methods: {
-    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     onSubmit () {
       this.$refs.applyForm.validate().then(async () => {
         const data = {
@@ -177,19 +177,6 @@ export default {
     async onDeleteFile (index) {
       console.log(index)
       this.form.files.splice(index, 1)
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     }
   }
 }
