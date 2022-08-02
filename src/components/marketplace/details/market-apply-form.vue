@@ -57,7 +57,7 @@
               class="q-mt-md"
               :label="$t('pages.marketplace.applyForm.custodian.label')"
               outlined
-              :rules="[rules.isValidPolkadotAddress]"
+              :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address)]"
             )
             .row.justify-between
               div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
