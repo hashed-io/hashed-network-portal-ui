@@ -64,7 +64,9 @@ export default {
       market: undefined,
       application: undefined,
       participants: [],
-      applicants: []
+      applicants: [],
+      // With Extension
+      maxLengthPrivateService: 20
     }
   },
   computed: {
@@ -127,8 +129,13 @@ export default {
         const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
-        const applicantsHP = await this.getFromHP(applicants)
-        this.applicants = applicantsHP
+        try {
+          const applicantsHP = await this.getFromHP(JSON.parse(JSON.stringify(applicants)))
+          this.applicants = applicantsHP
+        } catch (error) {
+          this.applicants = applicants
+          console.error('Error: ', error)
+        }
         this.participants = participants
         await this.getApplication()
         this.market = market
@@ -230,59 +237,43 @@ export default {
     },
     async getFromHP (applicants) {
       const promisesFields = []
-      const tmpApplicants = applicants
-      try {
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          applicant.fields.forEach(privateFields => {
-            const identifier = 'File:'
-            let cid = privateFields.displayName.includes(identifier)
-              ? privateFields.cid.split(':')[0]
-              : privateFields.cid
-            if (cid.split(':').length > 1) {
-              cid = cid.split(':')[0]
-            }
-            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
-          })
+      applicants.forEach((applicant, indexApplicant) => {
+        const applicantFields = applicant.fields
+        applicantFields.forEach(privateFields => {
+          const identifier = 'File:'
+          let cid = privateFields.displayName.includes(identifier)
+            ? privateFields.cid.split(':')[0]
+            : privateFields.cid
+          if (cid.split(':').length > 1) {
+            cid = cid.split(':')[0]
+          }
+          promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
         })
-        const resolvedFields = await Promise.all(promisesFields)
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          const lengthFields = applicant.fields.length
-          applicant.fields = applicant.fields.map((file, index) => {
-            const _index = (indexApplicant * lengthFields) + index
-            const displayName = resolvedFields[_index]?.name
-            const description = resolvedFields[_index]?.description
-            const cid = resolvedFields[_index]?.cid
-            const payload = resolvedFields[_index]?.payload
-            return {
-              description,
-              displayName,
-              payload,
-              cid
-            }
-          })
-          return applicant
+      })
+      const _resolvedFields = await Promise.all(promisesFields)
+      let counter = 0
+      const tmpApplicants = applicants.map((applicant, indexApplicant) => {
+        // const lengthFields = applicant.fields.length
+        const tmpFields = applicant.fields
+        applicant.fields = tmpFields.map((file, index) => {
+          const displayName = _resolvedFields[counter].name
+          const description = _resolvedFields[counter].description
+          const cid = _resolvedFields[counter].cid
+          const payload = _resolvedFields[counter].payload
+          counter++
+          return {
+            description,
+            displayName,
+            payload,
+            cid
+          }
         })
-      } catch (error) {
-        console.error('error', error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        // tmpApplicants = applicants
-      }
-      console.log('tmpApplicants!!!! ', tmpApplicants)
+        console.log('applicant.fields', applicant.fields)
+        return applicant
+      })
+
       return tmpApplicants
     },
-    // async loginUser () {
-    //   try {
-    //     this.showLoading({ message: 'You must be logged in to submit an application' })
-    //     await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-    //     this.setIsHashedLoggedIn(true)
-    //   } catch (error) {
-    //     console.error(error)
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //     this.setIsHashedLoggedIn(false)
-    //   } finally {
-    //     this.hideLoading()
-    //   }
-    // },
     async shareWithAdministrator (form) {
       try {
         const promises = []
@@ -293,12 +284,16 @@ export default {
           let fileName
           if (file?.name) {
             const fileNameSplit = file.name.split('.')
-            const filename = fileNameSplit[0]
-            const ext = fileNameSplit[fileNameSplit.length - 1]
-            fileName = file.name > 25 ? filename.substring(0, 20) + ext : file.name
-          } else {
+            console.log('fileNameSplit', fileNameSplit)
+            const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
+            const ext = fileNameSplit[1]
+            fileName = filename + '.' + ext
+          } else if (file && typeof file === 'string') {
+            // if file.name is undefined, it means that the file is a note (String)
             fileName = file
           }
+          console.log('fileName To Send', fileName)
+          console.log('fileElement', fileElement)
           promises.push(hpService.shareNew({
             toUserAddress: administratorAddress,
             name: fileName,
@@ -324,6 +319,7 @@ export default {
       return form
     },
     async shareWithCustodian (form) {
+      const notesIdentifier = 'Notes'
       const { custodian, fields } = form
       if (!custodian) {
         return form
@@ -341,7 +337,11 @@ export default {
         const results = await Promise.all(promisesFields)
         for (const field of fields) {
           const result = results.shift()
-          field.custodianField = result.cid + ':' + result.name
+          if (result.description === 'Notes') {
+            field.custodianField = result.cid + ':' + notesIdentifier
+          } else {
+            field.custodianField = result.cid + ':' + result.name
+          }
         }
       } catch (error) {
         console.error('Error Sharing with Custodian', error)
