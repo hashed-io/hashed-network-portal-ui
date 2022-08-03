@@ -1,32 +1,31 @@
 <template lang="pug">
 #container
-  q-card(flat bordered class="card-style")
-    q-card-section
-      .row.justify-center
-        .text-h5 {{market.label}}
-    q-card-section
-      .row.text-center
-        .col-6
-          .fund_title.text-weight-regular.q-my-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}
-            .headline2 {{participants.length}}
-        .col-6
-          .row.q-col-gutter-md
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.admin?.address"
-                shortDisplay
-              )
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.owner?.address"
-                shortDisplay
-              )
+  q-card-section
+    .row.justify-center
+      .text-h5 {{market.label}}
+  q-card-section
+    .row.text-center
+      .col-6
+        .text-subtitle1.text-weight-regular.q-my-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}
+          .headline2 {{participants.length}}
+      .col-6
+        .row.q-col-gutter-md
+          .col-6.q-pb-md
+            .text-subtitle1.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
+            account-item(
+              class="q-mt-md"
+              :address="market.admin?.address"
+              shortDisplay
+            )
+          .col-6.q-pb-md
+            .text-subtitle1.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
+            account-item(
+              class="q-mt-md"
+              :address="market.owner?.address"
+              shortDisplay
+            )
   .row.text-center.q-pa-md
-    .headline4.text-weight-regular.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
+    .text-subtitle1.text-weight-regular.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
     .col-12
       div(v-if="participants.length > 0 ")
         .row(v-for="participant in participants")

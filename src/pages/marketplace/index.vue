@@ -25,9 +25,9 @@
     q-tab(name="allMarketplaces" :label="$t('pages.marketplace.tabs.allMarketplaces')")
 
   q-tab-panels(v-model="tab")
-    q-tab-panel(name="myMarketplaces" class="tabPanel")
+    q-tab-panel(name="myMarketplaces" class="tabPanel bg-inherit")
       marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace")
-    q-tab-panel(name="allMarketplaces" class="tabPanel")
+    q-tab-panel(name="allMarketplaces" class="tabPanel bg-inherit")
       marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
