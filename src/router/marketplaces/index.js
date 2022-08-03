@@ -48,6 +48,17 @@ const routes = {
         ],
         app: 'marketplaces'
       }
+    },
+    {
+      path: '/Tax-credits',
+      name: 'TaxCredits',
+      component: () => import('pages/marketplace/TaxCredits/Index.vue'),
+      meta: {
+        breadcrumb: [
+          { name: 'Tax Credits', icon: 'article' }
+        ],
+        app: 'marketplaces'
+      }
     }
   ]
 }
