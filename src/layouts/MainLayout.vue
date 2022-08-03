@@ -173,8 +173,7 @@ export default defineComponent({
 </script>
 
 <style lang="stylus" scoped>
-@import '~/css/colors.styl'
-@import '~/css/sizes.styl'
+@import '~/css/app.styl'
 
 .routerItems
   border-radius: 5px

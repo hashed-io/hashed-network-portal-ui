@@ -75,16 +75,17 @@
 </template>
 
 <script>
+import { authentication } from '~/mixins/authentication'
 import { validation } from '~/mixins/validation'
 import AccountInput from '~/components/common/account-input.vue'
 import { defineComponent } from 'vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 export default defineComponent({
   name: 'PageIndex',
   components: {
     AccountInput
   },
-  mixins: [validation],
+  mixins: [validation, authentication],
   data () {
     return {
       isChecked: false,
@@ -129,7 +130,7 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
+    // ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     async uploadFile () {
       if (this.isLoggedIn && this.selectedAccount) {
         const hpApi = this.$store.$hashedPrivateApi
@@ -234,19 +235,6 @@ export default defineComponent({
       this.getUploadResponse.description = undefined
       this.getUploadResponse.payload = undefined
       this.getUploadResponse.type = undefined
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     }
   }
 })

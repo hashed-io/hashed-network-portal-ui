@@ -9,7 +9,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       size="sm"
     )
     .text-h4.q-mb-lg {{ $t('pages.marketplace.createForm.title') }}
-    q-input(
+    h-input(
       testid="label_input"
       :label="$t('pages.marketplace.createForm.label')"
       v-model="label"

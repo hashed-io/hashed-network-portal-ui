@@ -4,12 +4,14 @@
 </template>
 <script>
 import ApplicantsList from 'src/components/marketplace/applicants-list.vue'
+import { authentication } from 'src/mixins/authentication'
 import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'CustodianIndex',
   components: {
     ApplicantsList
   },
+  mixins: [authentication],
   data () {
     return {
       applicants: undefined,
@@ -42,7 +44,6 @@ export default {
         const response = await this.$store.$marketplaceApi.getApplicationsByCustodian({
           account: this.selectedAccount.address
         })
-        console.log('response ----------------------- ', response)
         const applicantsHP = await this.getFromHP(response)
         this.applicants = applicantsHP
       } catch (error) {
@@ -55,63 +56,44 @@ export default {
     async getFromHP (applicants) {
       console.log('applicants', applicants)
       const promisesFields = []
-      let tmpApplicants = applicants
+      const tmpApplicants = applicants
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
       this.setIsHashedLoggedIn(isLogged)
       if (!isLogged) {
         await this.loginUser()
       }
-      try {
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          applicant.fields.forEach(privateFields => {
-            const identifier = 'File:'
-            let cid = privateFields.displayName.includes(identifier)
-              ? privateFields.custodianCid.split(':')[0]
-              : privateFields.custodianCid
-            if (cid.split(':').length > 1) {
-              cid = cid.split(':')[0]
-            }
-            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
-          })
+      tmpApplicants.forEach((applicant, indexApplicant) => {
+        applicant.fields.forEach(privateFields => {
+          const identifier = 'File:'
+          let cid = privateFields.displayName.includes(identifier)
+            ? privateFields.custodianCid.split(':')[0]
+            : privateFields.custodianCid
+          if (cid.split(':').length > 1) {
+            cid = cid.split(':')[0]
+          }
+          promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
         })
-        const resolvedFields = await Promise.all(promisesFields)
-        console.log('resolvedNotes', resolvedFields)
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          const lengthFields = applicant.fields.length
-          applicant.fields = applicant.fields.map((file, index) => {
-            const _index = (indexApplicant * lengthFields) + index
-            // console.log('Resolved Fields', resolvedFields[_index])
-            const displayName = resolvedFields[_index]?.name
-            const description = resolvedFields[_index]?.description
-            const cid = resolvedFields[_index]?.custodianCid
-            const payload = resolvedFields[_index]?.payload
-            return {
-              description,
-              displayName,
-              payload,
-              cid
-            }
-          })
-          return applicant
+      })
+      const resolvedFields = await Promise.all(promisesFields)
+      let counter = 0
+      tmpApplicants.forEach((applicant, indexApplicant) => {
+        // const lengthFields = applicant.fields.length
+        applicant.fields = applicant.fields.map((file, index) => {
+          const displayName = resolvedFields[counter]?.name
+          const description = resolvedFields[counter]?.description
+          const cid = resolvedFields[counter]?.custodianCid
+          const payload = resolvedFields[counter]?.payload
+          counter++
+          return {
+            description,
+            displayName,
+            payload,
+            cid
+          }
         })
-      } catch (error) {
-        console.error('error', error)
-        tmpApplicants = applicants
-      }
+        return applicant
+      })
       return tmpApplicants
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsHashedLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsHashedLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     }
   }
 }

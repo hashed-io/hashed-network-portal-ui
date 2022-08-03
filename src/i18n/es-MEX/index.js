@@ -30,7 +30,8 @@ export default {
       notOwnAccount: 'No se permite la cuenta del propietario, por favor, configúrelo en la opción "Incluir al propietario como cofirmante"',
       fileRequired: 'El archivo es requerido',
       greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}',
-      lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}'
+      lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}',
+      notEqual: 'El valor no debe ser igual al propietario'
     }
   },
   pages: {

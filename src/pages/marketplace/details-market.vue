@@ -1,22 +1,45 @@
 <template lang="pug">
 #container(v-if="market")
-  banner(
-    v-if="statusApplication === 'Pending'"
-    :message="$t('pages.marketplace.details.pending')"
-    status="loading"
-  )
-  banner(
-    v-if="statusApplication === 'Rejected'"
-    :message="`Marketplace's admin replied: ${application.feedback}`"
-    status="error"
-  )
-  market-apply-form(
-    v-if="!isEnrolled && !isAdmin && market && admin"
-    :market="{...market, admin, owner}"
-    :status="statusApplication"
-    :participantsNumber="participants?.length"
-    @submit="onSubmitApplyForm"
-  )
+  div.bg-inherit(v-if="!isEnrolled && !isAdmin && market && admin")
+    q-card-section
+      .row.justify-center
+        .text-h5 {{market.label}}
+    q-card-section
+      .row.text-center.q-pb-md
+        .col-6
+          .fund_title.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
+            .headline2 {{participants.length}}
+        .col-6
+          .row.q-col-gutter-md
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
+              account-item(
+                class="q-mt-md"
+                :address="admin?.address"
+                shortDisplay
+              )
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
+              account-item(
+                class="q-mt-md"
+                :address="owner?.address"
+                shortDisplay
+              )
+      banner(
+        v-if="statusApplication === 'Pending'"
+        :message="$t('pages.marketplace.details.pending')"
+        status="loading"
+      )
+      banner(
+        v-if="statusApplication === 'Rejected'"
+        :message="`Marketplace's admin replied: ${application.feedback}`"
+        status="error"
+      )
+      market-apply-form(
+        :market="{...market, admin, owner}"
+        :status="statusApplication"
+        @submit="onSubmitApplyForm"
+      )
   //- Tabs
   q-tabs.q-mt-lg(
     v-model="tab"
@@ -32,9 +55,9 @@
     q-tab(:riple="false" name="enrollment" :label="$t('pages.marketplace.tabs.enrollmentRequest')")
 
   q-tab-panels(v-model="tab" keep-alive)
-    q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
+    q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel bg-inherit")
       market-info-card(:market="{...market, admin, owner}" :participants="participants")
-    q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
+    q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel bg-inherit")
       applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
@@ -44,6 +67,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import MarketInfoCard from '~/components/marketplace/details/market-info-card.vue'
 import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
 import ApplicantsList from '~/components/marketplace/applicants-list.vue'
+import { authentication } from '~/mixins/authentication'
 import { Banner } from '~/components/common'
 
 export default {
@@ -55,6 +79,7 @@ export default {
     ApplicantsList,
     Banner
   },
+  mixins: [authentication],
   data () {
     return {
       tab: 'market-info',
@@ -62,7 +87,9 @@ export default {
       market: undefined,
       application: undefined,
       participants: [],
-      applicants: []
+      applicants: [],
+      // With Extension
+      maxLengthPrivateService: 20
     }
   },
   computed: {
@@ -125,8 +152,13 @@ export default {
         const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
-        const applicantsHP = await this.getFromHP(applicants)
-        this.applicants = applicantsHP
+        try {
+          const applicantsHP = await this.getFromHP(JSON.parse(JSON.stringify(applicants)))
+          this.applicants = applicantsHP
+        } catch (error) {
+          this.applicants = applicants
+          console.error('Error: ', error)
+        }
         this.participants = participants
         await this.getApplication()
         this.market = market
@@ -228,61 +260,42 @@ export default {
     },
     async getFromHP (applicants) {
       const promisesFields = []
-      let tmpApplicants = applicants
-      const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
-      this.setIsHashedLoggedIn(isLogged)
-      if (!isLogged) {
-        await this.loginUser()
-      }
-      try {
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          applicant.fields.forEach(privateFields => {
-            const identifier = 'File:'
-            let cid = privateFields.displayName.includes(identifier)
-              ? privateFields.cid.split(':')[0]
-              : privateFields.cid
-            if (cid.split(':').length > 1) {
-              cid = cid.split(':')[0]
-            }
-            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
-          })
+      applicants.forEach((applicant, indexApplicant) => {
+        const applicantFields = applicant.fields
+        applicantFields.forEach(privateFields => {
+          const identifier = 'File:'
+          let cid = privateFields.displayName.includes(identifier)
+            ? privateFields.cid.split(':')[0]
+            : privateFields.cid
+          if (cid.split(':').length > 1) {
+            cid = cid.split(':')[0]
+          }
+          promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
         })
-        const resolvedFields = await Promise.all(promisesFields)
-        tmpApplicants.forEach((applicant, indexApplicant) => {
-          const lengthFields = applicant.fields.length
-          applicant.fields = applicant.fields.map((file, index) => {
-            const _index = (indexApplicant * lengthFields) + index
-            const displayName = resolvedFields[_index]?.name
-            const description = resolvedFields[_index]?.description
-            const cid = resolvedFields[_index]?.cid
-            const payload = resolvedFields[_index]?.payload
-            return {
-              description,
-              displayName,
-              payload,
-              cid
-            }
-          })
-          return applicant
+      })
+      const _resolvedFields = await Promise.all(promisesFields)
+      let counter = 0
+      const tmpApplicants = applicants.map((applicant, indexApplicant) => {
+        // const lengthFields = applicant.fields.length
+        const tmpFields = applicant.fields
+        applicant.fields = tmpFields.map((file, index) => {
+          const displayName = _resolvedFields[counter].name
+          const description = _resolvedFields[counter].description
+          const cid = _resolvedFields[counter].cid
+          const payload = _resolvedFields[counter].payload
+          counter++
+          return {
+            description,
+            displayName,
+            payload,
+            cid
+          }
         })
-      } catch (error) {
-        console.error('error', error)
-        tmpApplicants = applicants
-      }
+        console.log('applicant.fields', applicant.fields)
+        return applicant
+      })
+
       return tmpApplicants
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsHashedLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsHashedLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     },
     async shareWithAdministrator (form) {
       try {
@@ -291,9 +304,22 @@ export default {
         const administratorAddress = this.admin.address
         for (const fileElement of form.fields) {
           const { label, file } = fileElement
+          let fileName
+          if (file?.name) {
+            const fileNameSplit = file.name.split('.')
+            console.log('fileNameSplit', fileNameSplit)
+            const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
+            const ext = fileNameSplit[1]
+            fileName = filename + '.' + ext
+          } else if (file && typeof file === 'string') {
+            // if file.name is undefined, it means that the file is a note (String)
+            fileName = file
+          }
+          console.log('fileName To Send', fileName)
+          console.log('fileElement', fileElement)
           promises.push(hpService.shareNew({
             toUserAddress: administratorAddress,
-            name: file.name || file,
+            name: fileName,
             description: label,
             payload: file
           }))
@@ -316,6 +342,7 @@ export default {
       return form
     },
     async shareWithCustodian (form) {
+      const notesIdentifier = 'Notes'
       const { custodian, fields } = form
       if (!custodian) {
         return form
@@ -333,7 +360,11 @@ export default {
         const results = await Promise.all(promisesFields)
         for (const field of fields) {
           const result = results.shift()
-          field.custodianField = result.cid + ':' + result.name
+          if (result.description === 'Notes') {
+            field.custodianField = result.cid + ':' + notesIdentifier
+          } else {
+            field.custodianField = result.cid + ':' + result.name
+          }
         }
       } catch (error) {
         console.error('Error Sharing with Custodian', error)

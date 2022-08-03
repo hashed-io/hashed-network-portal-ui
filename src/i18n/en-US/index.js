@@ -30,8 +30,8 @@ export default {
       notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option',
       fileRequired: 'This field is required',
       greaterOrEqualThanString: 'The length must be greater than or equal to {value}',
-      lessOrEqualThanString: 'The length must be less than or equal to {value}'
-
+      lessOrEqualThanString: 'The length must be less than or equal to {value}',
+      notEqual: 'The value must be different to the Owner address'
     }
   },
   pages: {

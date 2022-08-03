@@ -1,41 +1,13 @@
 <template lang="pug">
 #container
-  q-card.bg-inherit(flat)
-    q-card-section
-      .row.justify-center
-        .text-h5 {{market.label}}
-    q-card-section
-      .row.text-center.q-pb-md
-        .col-6
-          .fund_title.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
-            .headline2 {{participantsNumber}}
-        .col-6
-          .row.q-col-gutter-md
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.admin?.address"
-                shortDisplay
-              )
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.owner?.address"
-                shortDisplay
-              )
-    //- q-card-section(v-if="status === 'Pending'")
-    //-   .row.justify-center.q-gutter-md
-    //-     .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
   div(v-if="status !== 'Pending'" class="q-py-md")
     .headline4(v-if="!isLoggedIn") Please login to apply for this market.
     .container(v-else)
-      .headline3.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
       .row.justify-center
         .col-11
+          .text-subtitle1.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
           q-form(ref="applyForm" @submit="onSubmit")
-            t-input(
+            h-input(
               required
               data-cy="notes_input"
               testid="notes_input"
@@ -57,7 +29,7 @@
               class="q-mt-md"
               :label="$t('pages.marketplace.applyForm.custodian.label')"
               outlined
-              :rules="[rules.isValidPolkadotAddress]"
+              :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address)]"
             )
             .row.justify-between
               div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
@@ -71,7 +43,7 @@
                   :index="index"
                   :administrator-address="market.admin?.address"
                   @onDelete="onDeleteFile"
-                  :rules="[rules.required, rules.greaterOrEqualThanString(6)]"
+                  :rules="[rules.required, rules.greaterOrEqualThanString(6), rules.lessOrEqualThanString(25)]"
                   showDelete
                   )
                 q-icon(
@@ -103,11 +75,12 @@ import AccountItem from '~/components/common/account-item.vue'
 import AccountInput from '~/components/common/account-input.vue'
 import { validation } from '~/mixins/validation'
 import HashedPrivateFile from '~/components/common/hashedPrivate/hashed-private-file.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
+import { authentication } from '~/mixins/authentication'
 export default {
   name: 'MarketApplyForm',
   components: { AccountItem, HashedPrivateFile, AccountInput },
-  mixins: [validation],
+  mixins: [validation, authentication],
   props: {
     /**
      * This props contains the market information to display [Required]
@@ -116,15 +89,6 @@ export default {
     market: {
       type: Object,
       required: true
-    },
-    /**
-     * This props contains the number of participats to display [Required]
-     * @type {Object}
-     */
-    participantsNumber: {
-      type: Number,
-      required: true,
-      default: () => 0
     },
     /**
      * This props contains the status of the application [Required]
@@ -156,7 +120,6 @@ export default {
     ...mapGetters('polkadotWallet', ['isLoggedIn', 'selectedAccount'])
   },
   methods: {
-    ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     onSubmit () {
       this.$refs.applyForm.validate().then(async () => {
         const data = {
@@ -177,19 +140,6 @@ export default {
     async onDeleteFile (index) {
       console.log(index)
       this.form.files.splice(index, 1)
-    },
-    async loginUser () {
-      try {
-        this.showLoading({ message: 'You must be logged in to submit an application' })
-        await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
-        this.setIsLoggedIn(true)
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-        this.setIsLoggedIn(false)
-      } finally {
-        this.hideLoading()
-      }
     }
   }
 }

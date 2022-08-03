@@ -122,7 +122,7 @@ export default {
       const notesIdentifier = 'Notes'
       const fileIdentifier = 'description'
       const notesField = this.fields.find(field => field[fileIdentifier] === notesIdentifier)
-      return (notesField && typeof notesField.payload === 'object') ? notesField.payload.notes : notesField.payload
+      return (notesField && typeof notesField.payload === 'object') ? notesField?.payload?.notes : notesField?.payload
     },
     getFiles () {
       return this.fields.filter(field => field.payload instanceof File)
