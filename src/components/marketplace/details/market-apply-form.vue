@@ -1,39 +1,11 @@
 <template lang="pug">
 #container
-  q-card.bg-inherit(flat)
-    q-card-section
-      .row.justify-center
-        .text-h5 {{market.label}}
-    q-card-section
-      .row.text-center.q-pb-md
-        .col-6
-          .fund_title.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
-            .headline2 {{participantsNumber}}
-        .col-6
-          .row.q-col-gutter-md
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.admin?.address"
-                shortDisplay
-              )
-            .col-6.q-pb-md
-              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
-              account-item(
-                class="q-mt-md"
-                :address="market.owner?.address"
-                shortDisplay
-              )
-    //- q-card-section(v-if="status === 'Pending'")
-    //-   .row.justify-center.q-gutter-md
-    //-     .text-subtitle2 {{$t('pages.marketplace.details.pending')}}
   div(v-if="status !== 'Pending'" class="q-py-md")
     .headline4(v-if="!isLoggedIn") Please login to apply for this market.
     .container(v-else)
-      .headline3.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
       .row.justify-center
         .col-11
+          .text-subtitle1.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
           q-form(ref="applyForm" @submit="onSubmit")
             h-input(
               required
@@ -117,15 +89,6 @@ export default {
     market: {
       type: Object,
       required: true
-    },
-    /**
-     * This props contains the number of participats to display [Required]
-     * @type {Object}
-     */
-    participantsNumber: {
-      type: Number,
-      required: true,
-      default: () => 0
     },
     /**
      * This props contains the status of the application [Required]

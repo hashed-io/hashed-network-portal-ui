@@ -1,22 +1,45 @@
 <template lang="pug">
 #container(v-if="market")
-  banner(
-    v-if="statusApplication === 'Pending'"
-    :message="$t('pages.marketplace.details.pending')"
-    status="loading"
-  )
-  banner(
-    v-if="statusApplication === 'Rejected'"
-    :message="`Marketplace's admin replied: ${application.feedback}`"
-    status="error"
-  )
-  market-apply-form(
-    v-if="!isEnrolled && !isAdmin && market && admin"
-    :market="{...market, admin, owner}"
-    :status="statusApplication"
-    :participantsNumber="participants?.length"
-    @submit="onSubmitApplyForm"
-  )
+  div.bg-inherit(v-if="!isEnrolled && !isAdmin && market && admin")
+    q-card-section
+      .row.justify-center
+        .text-h5 {{market.label}}
+    q-card-section
+      .row.text-center.q-pb-md
+        .col-6
+          .fund_title.text-weight-regular.q-py-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}:
+            .headline2 {{participants.length}}
+        .col-6
+          .row.q-col-gutter-md
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.administrator') }}
+              account-item(
+                class="q-mt-md"
+                :address="admin?.address"
+                shortDisplay
+              )
+            .col-6.q-pb-md
+              .fund_title.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
+              account-item(
+                class="q-mt-md"
+                :address="owner?.address"
+                shortDisplay
+              )
+      banner(
+        v-if="statusApplication === 'Pending'"
+        :message="$t('pages.marketplace.details.pending')"
+        status="loading"
+      )
+      banner(
+        v-if="statusApplication === 'Rejected'"
+        :message="`Marketplace's admin replied: ${application.feedback}`"
+        status="error"
+      )
+      market-apply-form(
+        :market="{...market, admin, owner}"
+        :status="statusApplication"
+        @submit="onSubmitApplyForm"
+      )
   //- Tabs
   q-tabs.q-mt-lg(
     v-model="tab"
@@ -32,9 +55,9 @@
     q-tab(:riple="false" name="enrollment" :label="$t('pages.marketplace.tabs.enrollmentRequest')")
 
   q-tab-panels(v-model="tab" keep-alive)
-    q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel")
+    q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel bg-inherit")
       market-info-card(:market="{...market, admin, owner}" :participants="participants")
-    q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel")
+    q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel bg-inherit")
       applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
 
