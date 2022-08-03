@@ -2,9 +2,11 @@
 #container.q-pa-sm
   #applicantDetails(v-if="applicants.length > 0")
     q-card.q-my-md(v-for="applicant in applicants")
-      applicant-expander-item(v-bind="applicant" @onEnroll="onEnrollApplicant" @onReject="onRejectApplicant")
+      applicant-expander-item(v-bind="{...applicant, showActions}" @onEnroll="onEnrollApplicant" @onReject="onRejectApplicant")
   #applicantDetailsEmpty(v-else)
-    .text-body2.q-py-lg {{$t('pages.marketplace.details.noApplicants')}}
+    q-card(bordered flat)
+      q-card-section
+        .text-h5.q-py-lg {{$t('pages.marketplace.details.noApplicants')}}
 </template>
 
 <script>
@@ -20,6 +22,10 @@ export default {
     applicants: {
       type: Array,
       default: () => []
+    },
+    showActions: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['onEnrollApplicant', 'onRejectApplicant'],

@@ -27,7 +27,11 @@ export default {
       containLessThanCosigners: 'This field must contain at less than {value} cosigners address',
       isNotValidMainetBTC: 'This field must contain a valid mainet BTC address',
       isNotValidPolkadotAddress: 'Is not a valid polkadot address',
-      notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option'
+      notOwnAccount: 'Not owner account allowed, please set this on "Include owner as cosigner" option',
+      fileRequired: 'This field is required',
+      greaterOrEqualThanString: 'The length must be greater than or equal to {value}',
+      lessOrEqualThanString: 'The length must be less than or equal to {value}'
+
     }
   },
   pages: {
@@ -104,6 +108,11 @@ export default {
       applyForm: {
         title: 'Apply for Marketplace',
         subtitle: 'Fill in the form to apply for the Marketplace',
+        custodian: {
+          label: 'Custodian',
+          placeholder: 'Custodian address',
+          infoLabel: 'Add a third-party custodian (optional)'
+        },
         filesTitle: 'Upload files',
         addFilesButton: 'Add Files',
         notes: {
@@ -128,6 +137,28 @@ export default {
       },
       applicants: {
         title: 'Applicants'
+      },
+      privacy: {
+        title: 'Privacy solution playground',
+        uploadSection: {
+          title: 'Upload file',
+          fileInput: 'Choose file',
+          custodian: 'Address of the custodian',
+          shareFile: 'Share file with other addresses'
+        },
+        downloadSection: {
+          title: 'Download file',
+          cidInput: 'Download file by CID or ID',
+          isShareData: 'The data is shared?'
+        },
+        buttons: {
+          save: 'Save',
+          clear: 'Clear',
+          download: 'Download',
+          openFile: 'Open file'
+        },
+        query: 'Query: ',
+        response: 'Response: '
       }
     }
   }

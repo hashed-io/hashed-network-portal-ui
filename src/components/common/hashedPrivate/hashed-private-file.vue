@@ -4,12 +4,11 @@
     .text-subtitle2 {{label}}
   q-input(
     v-model="tagFile"
-    class="col-6 q-my-xs"
+    class="col-6 q-my-xs borderRight"
     outlined
     color="primary"
     placeholder="Name of the file"
     :rules="rules"
-    class="borderRight"
     @keyup="onTypeTagFile"
     data-cy="name_file"
     testid="name_file"
@@ -78,6 +77,7 @@ export default {
       initWithString: false,
       typeCid: null,
       files: [],
+      file: undefined,
       displayNames: undefined,
       tagFile: undefined,
       labelFile: undefined,
@@ -126,46 +126,13 @@ export default {
   },
   methods: {
     async updateModel (e) {
-      this.loading = true
+      this.file = e
       console.log('Update model', e)
-      try {
-        const promises = []
-        if (!this.administratorAddress || !this.tagFile) {
-          throw new Error('Administrator address is not defined')
-        }
-        const hpService = this.$store.$hashedPrivateApi
-        promises.push(hpService.shareNew({
-          toUserAddress: this.administratorAddress,
-          name: e.name,
-          description: this.tagFile,
-          payload: e
-        }))
-        console.log('Promises', promises)
-        const results = await Promise.all(promises)
-        console.log('Results', results[0])
-        const CID = results[0].sharedData.cid
-        // const label = results[0].sharedData.name
-        const description = results[0].sharedData.description
-        const resultWithName = {
-          display: description,
-          value: CID + ':' + e.name
-        }
-        this.files = [resultWithName]
-        const data = {
-          label: description,
-          files: this.files
-        }
-        this.loading = false
-        this.state.loaded = true
-        console.log('Update model', data)
-        this.$emit('update:modelValue', JSON.parse(JSON.stringify(data)))
-      } catch (e) {
-        this.showNotification({ message: e.message || e, color: 'negative' })
-        console.error(e)
-        this.loading = false
-      } finally {
-        await this.$forceUpdate()
+      const data = {
+        label: this.tagFile,
+        file: e
       }
+      this.$emit('update:modelValue', data)
     },
     validFile (file) {
       console.log('Valid file', file, typeof file)
@@ -177,12 +144,7 @@ export default {
     onTypeTagFile () {
       const data = {
         label: this.tagFile,
-        files: [
-          {
-            display: this.files[0]?.display || undefined,
-            value: this.files[0]?.value || undefined
-          }
-        ]
+        file: this.file
       }
 
       this.$emit('update:modelValue', JSON.parse(JSON.stringify(data)))
