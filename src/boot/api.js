@@ -1,6 +1,6 @@
 /* eslint-disable dot-notation */
 import PolkadotApi from '~/services/polkadotApi'
-import { NbvStorageApi, MarketplaceApi } from '~/services/polkadot-pallets'
+import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
@@ -17,6 +17,8 @@ export default async ({ app, store }) => {
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
     const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
     const marketplaceApi = new MarketplaceApi(api, showGlobalLoading)
+    const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
+    const uniquesApi = new UniquesApi(api, showGlobalLoading)
     // Connect Hashed private service
     hideGlobalLoading()
     showGlobalLoading({
@@ -35,6 +37,8 @@ export default async ({ app, store }) => {
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi
     store['$marketplaceApi'] = marketplaceApi
+    store['$fruniquesApi'] = fruniquesApi
+    store['$uniquesApi'] = uniquesApi
     store['$bdkApi'] = bdkApi
     store['$hashedPrivateApi'] = hashedPrivateApi
     store['$connectedToServer'] = true
