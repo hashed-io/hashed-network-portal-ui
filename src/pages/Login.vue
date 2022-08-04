@@ -53,7 +53,7 @@ export default {
   mounted () {
     // eslint-disable-next-line no-undef
     google.accounts.id.initialize({
-      client_id: '518573655847-qbtbogn8jr77m3p5q7rot2m29vrurkhb.apps.googleusercontent.com',
+      client_id: process.env.GOOGLE_CLIENT_ID,
       callback: this.onSignIn
     })
     // eslint-disable-next-line no-undef
