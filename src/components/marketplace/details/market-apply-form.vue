@@ -20,7 +20,12 @@
             //- .paragraph1.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
             //- div.qItem.q-my-lg(@click="() => {this.isCustodian = !this.isCustodian}")
             //-   .row.justify-between.q-gutter-md
-            q-toggle(@toggle = "() => {this.isCustodian = !this.isCustodian}" v-model="isCustodian" color="primary" :label="$t('pages.marketplace.applyForm.custodian.infoLabel')")
+            q-toggle(
+              @toggle="() => {this.isCustodian = !this.isCustodian}"
+              v-model="isCustodian"
+              color="primary"
+              :label="$t('pages.marketplace.applyForm.custodian.infoLabel')"
+            )
             account-input(
               v-if="isCustodian"
               v-model="custodianAddress"
@@ -29,7 +34,7 @@
               class="q-mt-md"
               :label="$t('pages.marketplace.applyForm.custodian.label')"
               outlined
-              :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address)]"
+              :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address), rules.notEqual(selectedAccount.address)]"
             )
             .row.justify-between
               div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}

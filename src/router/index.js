@@ -28,7 +28,10 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
-    if (!store.getters['polkadotWallet/isLoggedIn'] && to.name !== 'login') {
+    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['googleAuth/isLogged']
+    console.log(isAuthenticated, 'Authenticated')
+
+    if (!isAuthenticated && to.name !== 'login') {
       next({
         name: 'login',
         query: {
