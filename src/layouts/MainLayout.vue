@@ -91,6 +91,11 @@ export default defineComponent({
           to: { name: 'privacy' },
           keyActive: 'Privacy',
           label: 'Privacy'
+        },
+        {
+          to: { name: 'TaxCredits' },
+          keyActive: 'Tax Credits',
+          label: 'Tax Credits'
         }
       ]
     }
