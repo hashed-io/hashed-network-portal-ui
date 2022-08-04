@@ -29,7 +29,7 @@
 <script>
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import { mapGetters } from 'vuex'
-import Jwt from '../../utils/Jwt'
+import Jwt from '~/utils/Jwt'
 
 export default {
   name: 'LoginPage',
