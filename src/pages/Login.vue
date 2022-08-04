@@ -112,8 +112,10 @@ export default {
     },
     onSignIn ({ credential }) {
       if (credential) {
-        const account = Jwt.decodeJwt(credential)
+        const account = Jwt.decodeToken(credential)
+        console.log({ account })
         this.$store.commit('googleAuth/setAccount', account)
+        this.$router.push({ name: 'root' })
       }
     }
   }

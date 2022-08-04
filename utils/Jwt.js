@@ -1,7 +1,7 @@
-import * as jose from 'jose'
+import { decodeJwt } from 'jose'
 
 export default class Jwt {
-  static decodeJwt (token) {
-    return jose.decodeJwt(token)
+  static decodeToken (token) {
+    return decodeJwt(token)
   }
 }
