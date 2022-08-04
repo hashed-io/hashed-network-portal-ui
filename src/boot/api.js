@@ -3,6 +3,7 @@ import PolkadotApi from '~/services/polkadotApi'
 import { NbvStorageApi, MarketplaceApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
+import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
 
 export default async ({ app, store }) => {
@@ -32,11 +33,21 @@ export default async ({ app, store }) => {
     })
     await hashedPrivateApi.connect()
     console.log('Hashed Private connected', hashedPrivateApi)
+
+    // Hashed Confidential Docs
+    const hashedConfidentialDocs = new ConfidentialDocs({
+      ipfsURL: process.env.IPFS_URL,
+      chainURI: process.env.WSS,
+      appName: process.env.APP_NAME,
+      faucet: undefined
+    })
+
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi
     store['$marketplaceApi'] = marketplaceApi
     store['$bdkApi'] = bdkApi
     store['$hashedPrivateApi'] = hashedPrivateApi
+    store['$hcd'] = hashedConfidentialDocs
     store['$connectedToServer'] = true
   } catch (e) {
     store['$connectedToServer'] = false
