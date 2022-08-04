@@ -60,7 +60,8 @@ module.exports = configure(function (ctx) {
         WSS: process.env.WSS,
         IPFS_URL: process.env.IPFS_URL,
         PRIVATE_URI: process.env.PRIVATE_URI,
-        BDK_SERVICES_URL: process.env.BDK_SERVICES_URL
+        BDK_SERVICES_URL: process.env.BDK_SERVICES_URL,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
       },
       // transpile: false,
       // publicPath: '/',

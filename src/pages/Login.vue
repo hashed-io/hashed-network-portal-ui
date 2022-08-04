@@ -23,16 +23,13 @@
           .text-caption.text-white You do not have accounts on polkadot js extension
         .text-caption.text-center.text-white.q-mt-lg OR
         #googleLogin.q-mt-lg
-            q-btn.full-width.btnGoogle(
-              no-caps
-              label="Login with google"
-              disabled
-            )
+          #google-signin-btn.flex.justify-center(class="g-signin2")
 </template>
 
 <script>
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import { mapGetters } from 'vuex'
+import Jwt from '~/utils/Jwt'
 
 export default {
   name: 'LoginPage',
@@ -52,6 +49,22 @@ export default {
       }
       return to
     }
+  },
+  mounted () {
+    // eslint-disable-next-line no-undef
+    google.accounts.id.initialize({
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      callback: this.onSignIn
+    })
+    // eslint-disable-next-line no-undef
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-btn'),
+      {
+        theme: 'filled_black',
+        size: 'large',
+        width: '300'
+      }
+    )
   },
   async beforeMount () {
     try {
@@ -95,6 +108,14 @@ export default {
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
+      }
+    },
+    onSignIn ({ credential }) {
+      if (credential) {
+        const account = Jwt.decodeToken(credential)
+        console.log({ account })
+        this.$store.commit('googleAuth/setAccount', account)
+        this.$router.push({ name: 'root' })
       }
     }
   }
