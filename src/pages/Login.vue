@@ -27,7 +27,7 @@
   #modals
     q-dialog(v-model="showHCDPasswordModal" persistent)
       q-card.modalSize.q-pa-md.bg-white
-        password-confidential-docs(v-model="hcdPassword" v-bind="hcdPasswordProps" @onSubmit="onPasswordSet")
+        password-confidential-docs(v-bind="hcdPasswordProps" @onSubmit="onPasswordSet")
 </template>
 
 <script>
@@ -130,20 +130,13 @@ export default {
           ssoProvider: 'Google',
           ssoUserId: account.sub,
           ssoImage: account.picture,
-          displayName: account.name
+          displayName: account.name,
+          ssoAccount: account
         }
         this.showHCDPasswordModal = true
-        // const hcgResponse = await this.$store.$hcd.login({
-        //   ssoProvider: 'google',
-        //   ssoUserId: account.sub,
-        //   password: '1234'
-        // })
-        // console.log('hcgResponse', hcgResponse)
-        // this.$store.commit('googleAuth/setAccount', account)
-        // this.$router.push({ name: 'root' })
       }
     },
-    async onPasswordSet ({ password, ssoUserId, ssoProvider }) {
+    async onPasswordSet ({ password, ssoUserId, ssoProvider, ssoImage, ssoAccount }) {
       try {
         this.showLoading({
           message: 'Login through Hashed Confidential Documents'
@@ -155,6 +148,12 @@ export default {
           password
         })
         console.log('hcgResponse', hcgResponse)
+        this.$store.commit('hashedConfidentialDocs/setAccount', {
+          ssoProvider,
+          ssoUserId,
+          ssoImage,
+          ssoAccount
+        })
         this.$router.push({ name: 'hcd' })
       } catch (e) {
         console.error('error', e)

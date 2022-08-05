@@ -14,7 +14,8 @@
           label="Password"
           type="password"
           outlined
-          :rules="[rules.required, rules.greaterOrEqualThanString(8)]"
+          :rules="[rules.required, rules.password]"
+          lazy-rules
         )
         .row.q-mt-sm.reverse.q-col-gutter-sm
           .col
@@ -58,6 +59,10 @@ export default {
     displayName: {
       type: String,
       default: undefined
+    },
+    ssoAccount: {
+      type: Object,
+      default: () => undefined
     }
   },
   emits: ['onSubmit'],
@@ -71,7 +76,9 @@ export default {
       const data = {
         password: this.password,
         ssoProvider: this.ssoProvider,
-        ssoUserId: this.ssoUserId
+        ssoUserId: this.ssoUserId,
+        ssoImage: this.ssoImage,
+        ssoAccount: this.ssoAccount
       }
       this.$emit('onSubmit', data)
     }

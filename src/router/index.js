@@ -28,7 +28,7 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
-    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['googleAuth/isLogged']
+    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['hashedConfidentialDocs/isLogged']
     console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {

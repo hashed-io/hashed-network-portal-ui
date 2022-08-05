@@ -31,7 +31,8 @@ export default {
       fileRequired: 'This field is required',
       greaterOrEqualThanString: 'The length must be greater than or equal to {value}',
       lessOrEqualThanString: 'The length must be less than or equal to {value}',
-      notEqual: 'The value must be different to the Owner address'
+      notEqual: 'The value must be different to the Owner address',
+      password: 'The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character'
     }
   },
   pages: {
