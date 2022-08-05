@@ -4,6 +4,8 @@ import { NbvStorageApi, MarketplaceApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
+import { Keyring } from '@polkadot/api'
+import { LocalAccountFaucet, BalancesApi } from '@smontero/hashed-confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
 
 export default async ({ app, store }) => {
@@ -35,11 +37,18 @@ export default async ({ app, store }) => {
     console.log('Hashed Private connected', hashedPrivateApi)
 
     // Hashed Confidential Docs
+    const keyring = new Keyring()
+    const faucet = new LocalAccountFaucet({
+      balancesApi: new BalancesApi(api, () => {}),
+      signer: keyring.addFromUri('//Alice', {}, 'sr25519'),
+      amount: 1000000000
+    })
+
     const hashedConfidentialDocs = new ConfidentialDocs({
       ipfsURL: process.env.IPFS_URL,
       chainURI: process.env.WSS,
       appName: process.env.APP_NAME,
-      faucet: undefined
+      faucet
     })
 
     store['$polkadotApi'] = api
