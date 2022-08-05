@@ -39,7 +39,7 @@ export default async ({ app, store }) => {
     // Hashed Confidential Docs
     const keyring = new Keyring()
     const faucet = new LocalAccountFaucet({
-      balancesApi: new BalancesApi(api, () => {}),
+      balancesApi: new BalancesApi(api.api, () => {}),
       signer: keyring.addFromUri('//Alice', {}, 'sr25519'),
       amount: 1000000000
     })
