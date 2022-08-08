@@ -141,7 +141,6 @@ export default {
         this.showLoading({
           message: 'Login through Hashed Confidential Documents'
         })
-        console.log('onPasswordSet', password)
         const hcgResponse = await this.$store.$hcd.login({
           ssoProvider,
           ssoUserId,
