@@ -7,21 +7,21 @@
        .row.justify-center.q-mb-md
         img.logoImg(src="~/assets/portal/logo-gradient-white.png")
        q-card.login-card.q-pa-md
-        .text-h5.text-white Login
+        .text-h5.text-white {{ $t('login.login') }}
         #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
-            .text-caption.text-white Choose an account from your polkadot extension
+            .text-caption.text-white {{ $t('login.chooseAnAccount') }}
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
                 selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
                 accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
             q-btn.full-width.text-primary(
-                label="Login"
+                :label="$t('login.login')"
                 @click="login"
                 color="accent"
                 no-caps
             )
         #notPolkadotAccounts(v-else)
-          .text-caption.text-white You do not have accounts on polkadot js extension
-        .text-caption.text-center.text-white.q-mt-lg OR
+          .text-caption.text-white {{ $t('login.notHaveAccounts') }}
+        .text-caption.text-center.text-white.q-mt-lg.text-uppercase {{ $t('login.or') }}
         #googleLogin.q-mt-lg
           #google-signin-btn.flex.justify-center(class="g-signin2")
 </template>
@@ -60,6 +60,8 @@ export default {
     google.accounts.id.renderButton(
       document.getElementById('google-signin-btn'),
       {
+        locale: this.$i18n.locale,
+        text: this.$t('login.signinWithGoogle'),
         theme: 'filled_black',
         size: 'large',
         width: '300'

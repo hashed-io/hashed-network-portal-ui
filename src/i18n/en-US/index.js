@@ -14,6 +14,13 @@ export default {
     waitingWeb3: 'Waiting for polkadot web3 extension',
     waitingSub: 'Waiting for changes on the chain'
   },
+  login: {
+    login: 'Login',
+    chooseAnAccount: 'Choose an account from your polkadot extension',
+    notHaveAccounts: 'You do not have accounts on polkadot js extension',
+    or: 'or',
+    signinWithGoogle: 'Sign in with Google'
+  },
   forms: {
     errors: {
       required: 'This field is required',

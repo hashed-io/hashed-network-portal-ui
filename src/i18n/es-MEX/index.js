@@ -14,6 +14,13 @@ export default {
     waitingWeb3: 'Esperando la extensión de polkadot web3',
     waitingSub: 'Esperando cambios en la cadena'
   },
+  login: {
+    login: 'Iniciar Sesión',
+    chooseAnAccount: 'Elija una cuenta de su extensión de polkadot',
+    notHaveAccounts: 'ene cuentas en la exten',
+    or: 'O',
+    signinWithGoogle: 'Acceder con Google'
+  },
   forms: {
     errors: {
       required: 'Este campo es obligatorio',
