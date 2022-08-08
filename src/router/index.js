@@ -43,7 +43,25 @@ export default route(function ({ store }) {
     // console.log('beforeEach', to)
     if (to.name === 'root' || to.name === 'home') {
       next({ name: 'manageVaults' })
-    } else next()
+    } else {
+      // Validation by Apps
+      const app = to.meta.app
+      // eslint-disable-next-line no-undef-init
+      let loginType = undefined
+      if (store.getters['polkadotWallet/isLoggedIn']) {
+        loginType = 'polkadotjs'
+      }
+      if (store.getters['hashedConfidentialDocs/isLogged']) {
+        loginType = 'hcd'
+      }
+      // debugger
+
+      if (app === 'hcd' && loginType === 'polkadotjs') {
+        next({ name: 'nbv' })
+      } else if ((app === 'nbv' || app === 'marketplaces') && loginType === 'hcd') {
+        next({ name: 'hcd' })
+      } else next()
+    }
   })
 
   return Router

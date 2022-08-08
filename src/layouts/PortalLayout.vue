@@ -12,12 +12,13 @@ q-layout(view="lHh lpR lFf")
         .q-pa-lg.q-mt-lg
             q-img(src="~/assets/portal/logo-gradient-white.png")
         q-item(
-            v-for="option in optionsMenu"
+            v-for="option in optionsMenuByApp"
             clickable
             v-ripple
             :to="option.to"
             :class="{ 'activeRouter': routerKeyApp === option.key, 'defaultRouter': routerKeyApp !== option.key }"
         )
+            //- v-if="(option.login === loginType || !option.login)"
             q-item-section(avatar)
                 q-icon(:name="option.icon")
             q-item-section(avatar) {{ option.label }}
@@ -56,7 +57,8 @@ export default {
           key: 'nbv',
           to: {
             name: 'manageVaults'
-          }
+          },
+          login: 'polkadotjs'
         },
         {
           label: 'Marketplaces',
@@ -64,7 +66,8 @@ export default {
           key: 'marketplaces',
           to: {
             name: 'marketplacesList'
-          }
+          },
+          login: 'polkadotjs'
         },
         {
           label: 'Sign Test',
@@ -72,7 +75,17 @@ export default {
           key: 'sign',
           to: {
             name: 'signTest'
-          }
+          },
+          login: 'polkadotjs'
+        },
+        {
+          label: 'HCD',
+          icon: 'storage',
+          key: 'hcd',
+          to: {
+            name: 'hcd'
+          },
+          login: 'hcd'
         }
       ],
       routerKeyApp: undefined
@@ -89,6 +102,21 @@ export default {
     },
     selectedLang () {
       return this.availableLanguages.find(v => v.key === this.$i18n.locale)
+    },
+    loginType () {
+      if (this.$store.getters['polkadotWallet/isLoggedIn']) {
+        return 'polkadotjs'
+      }
+      if (this.$store.getters['hashedConfidentialDocs/isLogged']) {
+        return 'hcd'
+      }
+      return undefined
+    },
+    optionsMenuByApp () {
+      if (this.loginType) {
+        return this.optionsMenu.filter(v => v.login === this.loginType)
+      }
+      return this.optionsMenu
     }
   },
   watch: {

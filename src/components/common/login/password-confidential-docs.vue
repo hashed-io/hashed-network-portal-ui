@@ -16,6 +16,7 @@
           outlined
           :rules="[rules.required, rules.password]"
           lazy-rules
+          autofocus
         )
         .row.q-mt-sm.reverse.q-col-gutter-sm
           .col
