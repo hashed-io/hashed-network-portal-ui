@@ -17,6 +17,14 @@ class ConfidentialDocs {
     return this._hcd.login({ ssoProvider, ssoUserId, password })
   }
 
+  logout () {
+    return this._hcd.logout()
+  }
+
+  getPolkadotAddress () {
+    return this._hcd.address()
+  }
+
   addOwnedData ({ name, description, payload }) {
     return this._hcd.ownedData().add({
       name,
