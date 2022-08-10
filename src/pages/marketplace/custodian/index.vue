@@ -60,7 +60,7 @@ export default {
         return applicant.fields[0].custodianCid !== null
       })
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
-      this.setIsLoggedIn(isLogged)
+      this.setIsHashedLoggedIn(isLogged)
       if (!isLogged) {
         await this.loginUser()
       }
