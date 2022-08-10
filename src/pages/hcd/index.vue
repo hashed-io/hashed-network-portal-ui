@@ -1,117 +1,104 @@
 <template lang="pug">
 #container
-  //-   .text-subtitle1.q-ml-sm HCD
   .text-body2.q-ma-sm My polkadot address: {{ polkadotAddress }}
+  .row
+    q-btn(
+      label="Add document"
+      color="primary"
+      icon="add"
+      no-caps
+      outline
+      @click="vaults.isShowingDocumentForm = true"
+    )
   .row.full-width.q-gutter-x-sm
     .col
       q-card.q-pa-md
-       .text-subtitle1 Add document
-       q-form.q-gutter-sm(@submit="addDoc")
-        q-input(
-          label="Name"
-          v-model="form.name"
-          outlined
-          :rules="[rules.required]"
-        )
-        q-input(
-          label="Description"
-          v-model="form.description"
-          outlined
-          :rules="[rules.required]"
-        )
-        q-file(
-          v-model="form.payload"
-          outlined
-          label="Payload"
-          :rules="[rules.required]"
-        )
-        q-toggle(
-          label="Share with other user"
-          v-model="form.isShared"
-        )
+        search-document-form(@onSubmit="searchDoc")
         q-slide-transition
-            account-input(
-                label="Polkadot address to share"
-                v-model="form.toUserAddress"
-                outlined
-                :rules="[rules.required]"
-                v-if="form.isShared"
-            )
-        .row
-            q-btn(
-              label="Add"
-              no-caps
-              color="primary"
-              type="submit"
-            )
+          #response.q-pa-sm.bg-grey(v-show="searchResponse")
+            .text-caption {{ searchResponse }}
+            q-btn.float-right(dense no-caps label="See Document" @click="openFile" color="secondary")
+  q-card#documentsList.q-mt-md
+    q-tabs.bg-primary.text-grey(v-model="listTabs" align="justify" indicator-color="accent" active-color="white")
+      q-tab(name="myDocs" label="My documents" no-caps)
+      q-tab(name="myShared" label="My shared documents" no-caps)
+      q-tab(name="sharedWithMe" label="Shared with me" no-caps)
+    q-tab-panels(v-model="listTabs" animated)
+      q-tab-panel(name="myDocs")
+        documents-list(
+          :documents="myDocsList"
+          @onRemoveDocument="removeDocument"
+          @onEditDocument="showEditDocument"
+          @onShareDocument="showShareDocument"
+        )
+      q-tab-panel(name="myShared")
+        documents-list(
+          :documents="mySharedDocsList"
+        )
+      q-tab-panel(name="sharedWithMe")
+        documents-list(
+          :documents="sharedWithMeDocsList"
+          @onRemoveDocument="v => removeDocument(v, true)"
+          @onEditDocument="v => showEditDocument(v, true)"
+          @onShareDocument="v => showShareDocument(v, true)"
+        )
+  #modals
+    q-dialog(v-modal="modals.isShowingDocumentForm")
+      q-card.q-pa-md
+        add-document-form(@onSubmit="addDoc")
         q-slide-transition
           #response.q-pa-sm.bg-grey(v-show="addResponse")
             .text-caption {{ addResponse }}
-    .col
-       q-card.q-pa-md
-         .text-subtitle1 Search document
-         q-form.q-gutter-sm(@submit="searchDoc")
-            q-input(
-              label="CID"
-              v-model="cid"
-              outlined
-              :rules="[rules.required]"
-            )
-            .row
-             q-btn(
-               label="Search document"
-               no-caps
-               color="primary"
-               type="submit"
-             )
-            q-slide-transition
-              #response.q-pa-sm.bg-grey(v-show="searchResponse")
-                .text-caption {{ searchResponse }}
-                q-btn.float-right(dense no-caps label="See Document" @click="openFile" color="secondary")
 </template>
 
 <script>
-import { validation } from '~/mixins/validation'
-import AccountInput from '~/components/common/account-input.vue'
+import AddDocumentForm from '~/components/hcd/add-document-form'
+import SearchDocumentForm from '~/components/hcd/search-document-form'
+import DocumentsList from '~/components/hcd/documents-list'
 export default {
   name: 'HashedConfidentialDocument',
-  components: { AccountInput },
-  mixins: [validation],
+  components: { AddDocumentForm, SearchDocumentForm, DocumentsList },
   data () {
     return {
-      form: {
-        name: undefined,
-        description: undefined,
-        payload: undefined,
-        isShared: false,
-        toUserAddress: undefined
-      },
       addResponse: undefined,
-      cid: 'QmdgoVCDTtoEwnZR6J5e2dLnzYTc6qsFfRoyuiXRquNBKh',
       searchResponse: undefined,
-      polkadotAddress: undefined
+      polkadotAddress: undefined,
+      listTabs: 'myDocs',
+      myDocsList: [],
+      mySharedDocsList: [],
+      sharedWithMeDocsList: [],
+      modals: {
+        isShowingDocumentForm: false
+      }
     }
   },
   async mounted () {
     this.polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
+    this.updateAllList()
   },
   methods: {
-    async addDoc () {
+    updateAllList () {
+      this.loadMyDocuments()
+      this.loadMySharedDocuments()
+      this.loadSharedWithMeDocuments()
+    },
+    async addDoc (form) {
       try {
-        console.log('addDocs', this.form)
+        console.log('addDocs', form)
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
-        if (this.form.isShared) {
+        if (form.isShared) {
           this.addResponse = await this.$store.$hcd.shareData({
-            ...this.form
+            ...form
           })
         } else {
           this.addResponse = await this.$store.$hcd.addOwnedData({
-            ...this.form
+            ...form
           })
         }
-        /// "QmdgoVCDTtoEwnZR6J5e2dLnzYTc6qsFfRoyuiXRquNBKh"
+        this.loadMyDocuments()
+        this.loadMySharedDocuments()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -120,16 +107,16 @@ export default {
         this.hideLoading()
       }
     },
-    async searchDoc () {
+    async searchDoc (cid) {
       try {
         console.log('searchDoc', this.cid)
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
-        this.searchResponse = await this.$store.$hcd.viewOwnedDataByCID(this.cid)
+        this.searchResponse = await this.$store.$hcd.viewOwnedDataByCID(cid)
       } catch (e) {
         try {
-          this.searchResponse = await this.$store.$hcd.viewSharedDataByCID(this.cid)
+          this.searchResponse = await this.$store.$hcd.viewSharedDataByCID(cid)
         } catch (e) {
           console.error('error', e)
           this.showNotification({ message: e.message || e, color: 'negative' })
@@ -142,6 +129,62 @@ export default {
     openFile () {
       console.log('openFile', this.searchResponse)
       window.open(URL.createObjectURL(this.searchResponse.payload), '_blank')
+    },
+    async loadMyDocuments () {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        const list = await this.$store.$hcd.getMyDocuments({ address: this.polkadotAddress })
+        this.myDocsList = list.map(v => { return { ...v, isOwner: true } })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async loadMySharedDocuments () {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        const list = await this.$store.$hcd.getMySharedDocuments({ address: this.polkadotAddress })
+        this.mySharedDocsList = list.map(v => { return { ...v, isShared: true } })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async loadSharedWithMeDocuments () {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        const list = await this.$store.$hcd.getSharedWithMeDocuments({ address: this.polkadotAddress })
+        this.sharedWithMeDocsList = list.map(v => { return { ...v, isSharedWithMe: true } })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async removeDocument (cid, shared) {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        await this.$store.$hcd.removeDoc({ cid, shared })
+        this.updateAllList()
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
     }
   }
 }
@@ -152,4 +195,5 @@ export default {
   max-width: 100%
   width: 100%
   overflow: auto
+  margin-top: 10px
 </style>

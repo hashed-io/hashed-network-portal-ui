@@ -25,16 +25,21 @@ export default async ({ app, store }) => {
     showGlobalLoading({
       message: 'Connecting with Hashed Private Server'
     })
-    const hashedPrivateApi = new HashedPrivateApi({
-      ipfsURL: process.env.IPFS_URL,
-      privateURI: process.env.PRIVATE_URI,
-      signFn: async (address, message) => {
-        const { signature } = await marketplaceApi.signMessage(message, address)
-        return signature
-      }
-    })
-    await hashedPrivateApi.connect()
-    console.log('Hashed Private connected', hashedPrivateApi)
+    try {
+      const hashedPrivateApi = new HashedPrivateApi({
+        ipfsURL: process.env.IPFS_URL,
+        privateURI: process.env.PRIVATE_URI,
+        signFn: async (address, message) => {
+          const { signature } = await marketplaceApi.signMessage(message, address)
+          return signature
+        }
+      })
+      await hashedPrivateApi.connect()
+      store['$hashedPrivateApi'] = hashedPrivateApi
+      console.log('Hashed Private connected', hashedPrivateApi)
+    } catch (e) {
+      console.error(e)
+    }
 
     // Hashed Confidential Docs
     const keyring = new Keyring()
@@ -55,7 +60,6 @@ export default async ({ app, store }) => {
     store['$nbvStorageApi'] = nbvStorageApi
     store['$marketplaceApi'] = marketplaceApi
     store['$bdkApi'] = bdkApi
-    store['$hashedPrivateApi'] = hashedPrivateApi
     store['$hcd'] = hashedConfidentialDocs
     store['$connectedToServer'] = true
   } catch (e) {

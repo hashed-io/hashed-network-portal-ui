@@ -20,7 +20,7 @@
     "@polkadot/extension-dapp": "^0.43.1",
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.14.2",
-    "@smontero/hashed-confidential-docs": "0.0.17",
+    "@smontero/hashed-confidential-docs": "^0.0.18",
     "@smontero/hashed-private-client-api": "^0.0.5",
     "@smontero/nbv-ur-codec": "^1.0.3",
     "axios": "^0.21.1",

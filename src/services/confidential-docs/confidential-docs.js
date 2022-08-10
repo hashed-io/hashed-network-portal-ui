@@ -49,6 +49,25 @@ class ConfidentialDocs {
   viewSharedDataByCID (cid) {
     return this._hcd.sharedData().viewByCID(cid)
   }
+
+  getMyDocuments ({ address, subTrigger }) {
+    return this._hcd.ownedData().getOwnedDocs(address, subTrigger)
+  }
+
+  getMySharedDocuments ({ address, subTrigger }) {
+    return this._hcd.sharedData().getSharedDocs(address, subTrigger)
+  }
+
+  getSharedWithMeDocuments ({ address, subTrigger }) {
+    return this._hcd.sharedData().getSharedWithMeDocs(address, subTrigger)
+  }
+
+  removeDoc ({ cid, shared }) {
+    if (shared) {
+      return this._hcd.ownedData().remove(cid)
+    }
+    return this._hcd.sharedData().remove(cid)
+  }
 }
 
 export default ConfidentialDocs

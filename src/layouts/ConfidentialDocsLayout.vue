@@ -113,6 +113,13 @@ export default defineComponent({
           label: 'Privacy'
         }
       ]
+      // hcd: [
+      //   {
+      //     // to: { name: 'manageVaults' },
+      //     keyActive: 'Hashed Confidential Documents',
+      //     label: 'Documents'
+      //   }
+      // ]
     }
 
     const breadcrumbList = ref(undefined)
