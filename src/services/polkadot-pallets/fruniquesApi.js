@@ -4,8 +4,9 @@ class FruniquesApi extends BasePolkadotApi {
     super(polkadotApi, 'fruniques', notify)
   }
 
-  createWithAttributes ({ classId, instanceId, numericValue, admin, attributes }, subTrigger) {
-    return this.exTx('createWithAttributes', [classId, instanceId, numericValue, admin, attributes], subTrigger)
+  createWithAttributes ({ user, classId, instanceId, numericValue, admin, attributes }, subTrigger) {
+    console.log('createWithAttributes', { classId, instanceId, numericValue, admin, attributes })
+    return this.callTx('createWithAttributes', user, [classId, instanceId, numericValue, admin, attributes], subTrigger)
   }
 }
 export default FruniquesApi

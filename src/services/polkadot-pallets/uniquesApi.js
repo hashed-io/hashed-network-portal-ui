@@ -30,5 +30,64 @@ class UniquesApi extends BasePolkadotApi {
     })
     return response
   }
+
+  async getUniquesByAddress ({ address }) {
+    const allIds = await this.exEntriesQuery('classAccount', [address])
+    console.log('allIds', allIds)
+    const map = this.mapEntries(allIds)
+    const classesIdArray = map.map(v => {
+      return v.id[1]
+    })
+    const classData = await this.getClassInfoByClassesId({ classesIds: classesIdArray })
+    const classAttributes = await this.getAttributesByClassesId({ classesIds: classesIdArray })
+    console.log('classAttributes', classAttributes)
+    const uniquesList = classAttributes.map((attributes, index) => {
+      classData[index].attributes = attributes
+      return {
+        ...classData[index]
+      }
+    })
+
+    return uniquesList
+  }
+
+  /**
+   *
+   * @param {ClassesId} Array of classesId
+   * @returns Array class data in array
+   */
+  async getClassInfoByClassesId ({ classesIds }) {
+    console.log('classesIds', classesIds)
+    const classData = await this.exMultiQuery('class', classesIds)
+    const classDataReadable = classData.map((v, index) => {
+      return {
+        classId: classesIds[index],
+        ...v.toHuman()
+      }
+    })
+    return classDataReadable
+  }
+
+  async getAttributesByClassesId ({ classesIds, instanceId = 0 }) {
+    const attributePromise = []
+    for (const classId of classesIds) {
+      const query = this.exEntriesQuery('attribute', [classId, instanceId])
+      attributePromise.push(query)
+    }
+    const attributesRaw = await Promise.all(attributePromise)
+
+    const uniquesList = attributesRaw.map(attribute => {
+      const attributeData = attribute.map(property => {
+        const labelIndex = 2
+        const valueIndex = 0
+        return {
+          attribute: property[0].toHuman()[labelIndex],
+          value: property[1].toHuman()[valueIndex]
+        }
+      })
+      return attributeData
+    })
+    return uniquesList
+  }
 }
 export default UniquesApi
