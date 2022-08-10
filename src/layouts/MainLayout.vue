@@ -93,9 +93,9 @@ export default defineComponent({
           label: 'Privacy'
         },
         {
-          to: { name: 'TaxCredits' },
-          keyActive: 'Tax Credits',
-          label: 'Tax Credits'
+          to: { name: 'NFTs' },
+          keyActive: 'NFTs Collections',
+          label: 'NFTs Collections'
         }
       ]
     }
