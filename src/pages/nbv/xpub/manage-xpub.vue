@@ -1,7 +1,7 @@
 <template lang="pug">
 #container
   .row.items-center.q-mb-md
-    .text-h5 Manage Public Keys
+    .text-h5 {{ $t('pages.nbv.xpub.managePublicKeys') }}
     q-icon.q-ml-sm.icon-btn(name="help" color="primary" size="sm")
       q-tooltip.text-body2.myTooltip(:offset="[10, 10]")
         .myTooltip {{ $t('pages.nbv.xpub.extendedPublicKeyInfo') }}
@@ -18,7 +18,7 @@
           color="negative"
           @click="removeXpub"
         )
-          q-tooltip Remove your XPUB
+          q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
   set-xpub-form(v-else :userAddress="selectedAccount.address" @onSubmitted="setXpub")
 </template>
 
@@ -110,7 +110,7 @@ export default {
           XPUB: payload.XPUB
         })
         // console.log('setXpub', response)
-        this.showNotification({ message: 'Your XPUB was added' })
+        this.showNotification({ message: this.$t('pages.nbv.xbub.yourXpubWasAdded') })
         this.getXpub()
         // this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
@@ -124,7 +124,7 @@ export default {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.removeXpub({ user: this.selectedAccount.address })
-        this.showNotification({ message: 'Your XPUB was removed' })
+        this.showNotification({ message: this.$t('pages.nbv.xbub.yourXpubWasRemoved') })
         // this.showLoading({ message: this.$t('general.waitingSub') })
         this.getXpub()
       } catch (e) {

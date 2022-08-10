@@ -164,7 +164,7 @@ export default defineComponent({
           }
         }
       } else {
-        this.showNotification({ message: 'You need to be logged in to upload a file', color: 'negative' })
+        this.showNotification({ message: this.$t('pages.marketplace.actions.loggedDownloadFile'), color: 'negative' })
       }
     },
     async downloadFile () {
@@ -181,7 +181,7 @@ export default defineComponent({
           console.error('download File', error)
           this.showNotification({ message: error.message || error, color: 'negative' })
         }
-      } else if (!this.isLoggedIn) { this.showNotification({ message: 'You need to be logged in to download a file', color: 'negative' }) }
+      } else if (!this.isLoggedIn) { this.showNotification({ message: this.$t('pages.marketplace.actions.loggedDownloadFile'), color: 'negative' }) }
     },
     openFile () {
       if (this.getUploadResponse.payload && this.getUploadResponse.payload instanceof File) {

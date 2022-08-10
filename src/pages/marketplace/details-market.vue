@@ -194,7 +194,7 @@ export default {
             ...propsToSubmit
           })
         }
-        this.showNotification({ message: 'Application was submitted', color: 'primary' })
+        this.showNotification({ message: this.$t('pages.marketplace.details.applicationWasSubmitted'), color: 'primary' })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -214,7 +214,7 @@ export default {
           approved: true
         })
         this.showNotification({
-          message: 'Application approved.',
+          message: this.$t('pages.marketplace.details.applicationApproved'),
           color: 'primary'
         })
       } catch (e) {
@@ -236,7 +236,7 @@ export default {
           feedback: applicant.feedback
         })
         this.showNotification({
-          message: 'Application rejected. ',
+          message: this.$t('pages.marketplace.details.applicationRejected'),
           color: 'primary'
         })
       } catch (e) {
