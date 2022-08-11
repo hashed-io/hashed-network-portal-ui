@@ -1,8 +1,9 @@
 import { HashedPrivate } from '@smontero/hashed-private-client-api'
 class HashedPrivateApi {
-  constructor ({ ipfsURL, privateURI, signFn }) {
+  constructor ({ ipfsURL, privateURI, signFn, ipfsAuthHeader }) {
     this.ipfsURL = ipfsURL
     this.privateURI = privateURI
+    this.ipfsAuthHeader = ipfsAuthHeader
     this.signFn = signFn
     this.api = undefined
   }
@@ -16,6 +17,7 @@ class HashedPrivateApi {
       this.api = new HashedPrivate({
         ipfsURL: this.ipfsURL,
         privateURI: this.privateURI,
+        ipfsAuthHeader: this.ipfsAuthHeader,
         signFn: this.signFn
       })
       console.log('HP connected', this.api)
