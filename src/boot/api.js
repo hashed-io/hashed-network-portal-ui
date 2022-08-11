@@ -23,6 +23,7 @@ export default async ({ app, store }) => {
     const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
     const uniquesApi = new UniquesApi(api, showGlobalLoading)
     // Connect Hashed private service
+    const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
     hideGlobalLoading()
     showGlobalLoading({
       message: 'Connecting with Hashed Private Server'
@@ -30,7 +31,7 @@ export default async ({ app, store }) => {
     try {
       const hashedPrivateApi = new HashedPrivateApi({
         ipfsURL: process.env.IPFS_URL,
-        ipfsAuthHeader: `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`,
+        ipfsAuthHeader,
         privateURI: process.env.PRIVATE_URI,
         signFn: async (address, message) => {
           const { signature } = await marketplaceApi.signMessage(message, address)
@@ -48,11 +49,9 @@ export default async ({ app, store }) => {
     const keyring = new Keyring()
     const faucet = new LocalAccountFaucet({
       balancesApi: new BalancesApi(api.api, () => {}),
-      signer: keyring.addFromUri('//Alice', {}, 'sr25519'),
+      signer: keyring.addFromUri(process.env.SIGNER, {}, 'sr25519'),
       amount: 1000000000
     })
-
-    const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
 
     const hashedConfidentialDocs = new ConfidentialDocs({
       ipfsURL: process.env.IPFS_URL,

@@ -27,6 +27,9 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    openFile (payload) {
+      window.open(URL.createObjectURL(payload), '_blank')
     }
   }
 }
