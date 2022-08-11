@@ -2254,21 +2254,21 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@smontero/generated-key-cipher-providers@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@smontero/generated-key-cipher-providers/-/generated-key-cipher-providers-0.0.5.tgz#940d7a6c1e1b6d444a55ece535846974d45d9ff4"
-  integrity sha512-liMI8L1WNdCihT6gmmEkXdXViXO612rowXNI31NqRNu7nOMIJEbZwPDdqEGSrRSlmftZIRIRH7fX94MdBJ/X4w==
+"@smontero/generated-key-cipher-providers@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@smontero/generated-key-cipher-providers/-/generated-key-cipher-providers-0.0.6.tgz#846677a756f69f78535d0e8375172da79f42f697"
+  integrity sha512-Yv492MsV3QcqAUN3LAuKh5JV0k0W/3lGwDPCCpkIXYSiSTzFvD66n3KtZItzHAMJOFJXSic2PVDG8WoBKF0keQ==
   dependencies:
     "@smontero/hashed-crypto" "0.0.8"
 
-"@smontero/hashed-confidential-docs@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.0.18.tgz#8f0194fc10df451aecb608488a4440c7b9a11da6"
-  integrity sha512-12n08BaF+CJ2X5TkZBpRw0iG9BRQMtZWgouyly6PSmj8oGnXEB6GHacD19/oNKFziiPEVSvc9pot1HaIZJoqcg==
+"@smontero/hashed-confidential-docs@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.0.20.tgz#317d70b247abf1d192abada97b0a57f5595e1ecf"
+  integrity sha512-4X1GaGjzh7YAm9RdfF+jU+lxFzkbDVFPJW2LTcfb9f4hdtc+gHMPpTuOVHQhIEZ3dCsc53vvuzjy9VcJfgpi3Q==
   dependencies:
     "@polkadot/api" "^8.1.1"
     "@polkadot/extension-dapp" "^0.43.1"
-    "@smontero/generated-key-cipher-providers" "0.0.5"
+    "@smontero/generated-key-cipher-providers" "0.0.6"
     "@smontero/hashed-crypto" "^0.0.8"
     ipfs-http-client "^55.0.0"
     it-all "^1.0.6"

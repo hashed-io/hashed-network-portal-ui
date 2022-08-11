@@ -49,8 +49,11 @@ export default async ({ app, store }) => {
       amount: 1000000000
     })
 
+    const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
+    console.log('ipfsAuthHeader', ipfsAuthHeader)
     const hashedConfidentialDocs = new ConfidentialDocs({
       ipfsURL: process.env.IPFS_URL,
+      ipfsAuthHeader,
       chainURI: process.env.WSS,
       appName: process.env.APP_NAME,
       faucet
