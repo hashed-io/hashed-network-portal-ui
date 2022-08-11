@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item.bg-grey-4(clickable="false")
+q-item.bg-grey-4(:clickable="false")
     q-item-section
       q-item-label.text-bold {{ name }}
       q-item-label.text-caption {{ description }}
@@ -7,12 +7,14 @@ q-item.bg-grey-4(clickable="false")
       q-item-label.text-caption(v-if="isShared") To: {{ to }}
     q-item-section(avatar)
       .row.q-gutter-sm
-        q-icon.icon-btn(v-if="canRemove" name="delete" color="negative" size="sm" @click="onRemoveClick")
-          q-tooltip Remove
+        q-icon.icon-btn(name="download" color="info" size="sm" @click="onDownloadClick")
+          q-tooltip Download file
         q-icon.icon-btn(v-if="canEditMetadata" name="edit" color="positive" size="sm" @click="onEditClick")
           q-tooltip Edit metadata
         q-icon.icon-btn(v-if="canShare" name="share" color="positive" size="sm" @click="onShareClick")
           q-tooltip Share with other user
+        q-icon.icon-btn(v-if="canRemove" name="delete" color="negative" size="sm" @click="onRemoveClick")
+          q-tooltip Remove
 </template>
 
 <script>
@@ -60,7 +62,7 @@ export default {
       default: false
     }
   },
-  emits: ['onRemove', 'onEdit', 'onShare'],
+  emits: ['onRemove', 'onEdit', 'onShare', 'onDownload'],
   computed: {
     canRemove () {
       return !!(this.isOwner || this.isSharedWithMe)
@@ -73,14 +75,25 @@ export default {
     }
   },
   methods: {
+    onDownloadClick () {
+      this.$emit('onDownload', this.cid)
+    },
     onRemoveClick () {
       this.$emit('onRemove', this.cid)
     },
     onEditClick () {
-      this.$emit('onEdit', this.cid)
+      this.$emit('onEdit', {
+        name: this.name,
+        description: this.description,
+        cid: this.cid
+      })
     },
     onShareClick () {
-      this.$emit('onShare', this.cid)
+      this.$emit('onShare', {
+        name: this.name,
+        description: this.description,
+        cid: this.cid
+      })
     }
   }
 }

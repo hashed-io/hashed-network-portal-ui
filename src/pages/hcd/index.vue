@@ -1,23 +1,23 @@
 <template lang="pug">
 #container
   .text-body2.q-ma-sm My polkadot address: {{ polkadotAddress }}
-  .row
+  .row.reverse.q-my-sm
     q-btn(
       label="Add document"
       color="primary"
       icon="add"
       no-caps
       outline
-      @click="vaults.isShowingDocumentForm = true"
+      @click="modals.isShowingDocumentForm = true"
     )
-  .row.full-width.q-gutter-x-sm
-    .col
-      q-card.q-pa-md
-        search-document-form(@onSubmit="searchDoc")
-        q-slide-transition
-          #response.q-pa-sm.bg-grey(v-show="searchResponse")
-            .text-caption {{ searchResponse }}
-            q-btn.float-right(dense no-caps label="See Document" @click="openFile" color="secondary")
+  //- .row.full-width.q-gutter-x-sm
+  //-   .col
+  //-     q-card.q-pa-md
+  //-       search-document-form(@onSubmit="searchDoc")
+  //-       q-slide-transition
+  //-         #response.q-pa-sm.bg-grey(v-show="searchResponse")
+  //-           .text-caption {{ searchResponse }}
+  //-           q-btn.float-right(dense no-caps label="See Document" @click="openFile" color="secondary")
   q-card#documentsList.q-mt-md
     q-tabs.bg-primary.text-grey(v-model="listTabs" align="justify" indicator-color="accent" active-color="white")
       q-tab(name="myDocs" label="My documents" no-caps)
@@ -30,10 +30,12 @@
           @onRemoveDocument="removeDocument"
           @onEditDocument="showEditDocument"
           @onShareDocument="showShareDocument"
+          @onDownloadDocument="downloadDocument"
         )
       q-tab-panel(name="myShared")
         documents-list(
           :documents="mySharedDocsList"
+          @onDownloadDocument="downloadDocument"
         )
       q-tab-panel(name="sharedWithMe")
         documents-list(
@@ -41,11 +43,12 @@
           @onRemoveDocument="v => removeDocument(v, true)"
           @onEditDocument="v => showEditDocument(v, true)"
           @onShareDocument="v => showShareDocument(v, true)"
+          @onDownloadDocument="downloadDocument"
         )
   #modals
-    q-dialog(v-modal="modals.isShowingDocumentForm")
+    q-dialog(v-model="modals.isShowingDocumentForm" @hide="addResponse = undefined")
       q-card.q-pa-md
-        add-document-form(@onSubmit="addDoc")
+        add-document-form(@onSubmit="addDoc" @onEditSubmitted="editMetadata" v-bind="documentFormProps")
         q-slide-transition
           #response.q-pa-sm.bg-grey(v-show="addResponse")
             .text-caption {{ addResponse }}
@@ -69,7 +72,8 @@ export default {
       sharedWithMeDocsList: [],
       modals: {
         isShowingDocumentForm: false
-      }
+      },
+      documentFormProps: undefined
     }
   },
   async mounted () {
@@ -97,6 +101,7 @@ export default {
             ...form
           })
         }
+        this.showNotification({ message: 'Document added successfully' })
         this.loadMyDocuments()
         this.loadMySharedDocuments()
       } catch (e) {
@@ -113,22 +118,18 @@ export default {
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
-        this.searchResponse = await this.$store.$hcd.viewOwnedDataByCID(cid)
+        return this.$store.$hcd.viewOwnedDataByCID(cid)
       } catch (e) {
         try {
-          this.searchResponse = await this.$store.$hcd.viewSharedDataByCID(cid)
+          return this.$store.$hcd.viewSharedDataByCID(cid)
         } catch (e) {
           console.error('error', e)
           this.showNotification({ message: e.message || e, color: 'negative' })
-          this.searchResponse = undefined
+          throw new Error(e)
         }
       } finally {
         this.hideLoading()
       }
-    },
-    openFile () {
-      console.log('openFile', this.searchResponse)
-      window.open(URL.createObjectURL(this.searchResponse.payload), '_blank')
     },
     async loadMyDocuments () {
       try {
@@ -178,7 +179,64 @@ export default {
           message: 'Waiting for Hashed Confidential Documents'
         })
         await this.$store.$hcd.removeDoc({ cid, shared })
+        this.showNotification({ message: 'Document removed successfully' })
         this.updateAllList()
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async editMetadata ({ cid, name, description }, shared) {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        await this.$store.$hcd.updateMetadata({ cid, name, description, shared })
+        this.showNotification({ message: 'Metadata edited successfully' })
+        this.updateAllList()
+        this.modals.isShowingDocumentForm = false
+        this.documentFormProps = undefined
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    showEditDocument (document, shared) {
+      this.documentFormProps = {
+        document,
+        shared
+      }
+      this.modals.isShowingDocumentForm = true
+    },
+    async showShareDocument (document, shared) {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        const payload = await this.searchDoc(document.cid)
+        this.documentFormProps = {
+          payload,
+          shared
+        }
+        this.modals.isShowingDocumentForm = true
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async downloadDocument (cid) {
+      try {
+        this.showLoading({
+          message: 'Waiting for Hashed Confidential Documents'
+        })
+        const { payload } = await this.searchDoc(cid)
+        this.openFile(payload)
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

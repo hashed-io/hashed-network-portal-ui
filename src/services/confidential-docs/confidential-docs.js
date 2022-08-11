@@ -65,9 +65,16 @@ class ConfidentialDocs {
 
   removeDoc ({ cid, shared }) {
     if (shared) {
-      return this._hcd.ownedData().remove(cid)
+      return this._hcd.sharedData().remove(cid)
     }
-    return this._hcd.sharedData().remove(cid)
+    return this._hcd.ownedData().remove(cid)
+  }
+
+  updateMetadata ({ cid, name, description, shared }) {
+    if (shared) {
+      return this._hcd.sharedData().updateMetadata({ cid, name, description })
+    }
+    return this._hcd.ownedData().updateMetadata({ cid, name, description })
   }
 }
 
