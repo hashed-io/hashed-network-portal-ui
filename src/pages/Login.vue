@@ -24,16 +24,28 @@
         .text-caption.text-center.text-white.q-mt-lg OR
         #googleLogin.q-mt-lg
           #google-signin-btn.flex.justify-center(class="g-signin2")
+  #modals
+    q-dialog(v-model="showHCDPasswordModal" persistent)
+      q-card.modalSize.q-pa-md.bg-white
+        password-confidential-docs(v-bind="hcdPasswordProps" @onSubmit="onPasswordSet")
 </template>
 
 <script>
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
+import PasswordConfidentialDocs from '~/components/common/login/password-confidential-docs'
 import { mapGetters } from 'vuex'
 import Jwt from '~/utils/Jwt'
 
 export default {
   name: 'LoginPage',
-  components: { AccountsMenu, SelectedAccountBtn },
+  components: { AccountsMenu, SelectedAccountBtn, PasswordConfidentialDocs },
+  data () {
+    return {
+      hcdPasswordProps: {},
+      hcdPassword: undefined,
+      showHCDPasswordModal: false
+    }
+  },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount', 'availableAccounts']),
     returnTo () {
@@ -54,7 +66,7 @@ export default {
     // eslint-disable-next-line no-undef
     google.accounts.id.initialize({
       client_id: process.env.GOOGLE_CLIENT_ID,
-      callback: this.onSignIn
+      callback: this.onGoogleSignIn
     })
     // eslint-disable-next-line no-undef
     google.accounts.id.renderButton(
@@ -110,12 +122,43 @@ export default {
         this.hideLoading()
       }
     },
-    onSignIn ({ credential }) {
+    async onGoogleSignIn (response) {
+      const { credential } = response
       if (credential) {
         const account = Jwt.decodeToken(credential)
-        console.log({ account })
-        this.$store.commit('googleAuth/setAccount', account)
-        this.$router.push({ name: 'root' })
+        this.hcdPasswordProps = {
+          ssoProvider: 'Google',
+          ssoUserId: account.sub,
+          ssoImage: account.picture,
+          displayName: account.name,
+          ssoAccount: account
+        }
+        this.showHCDPasswordModal = true
+      }
+    },
+    async onPasswordSet ({ password, ssoUserId, ssoProvider, ssoImage, ssoAccount }) {
+      try {
+        this.showLoading({
+          message: 'Login through Hashed Confidential Documents'
+        })
+        const hcgResponse = await this.$store.$hcd.login({
+          ssoProvider,
+          ssoUserId,
+          password
+        })
+        console.log('hcgResponse', hcgResponse)
+        this.$store.commit('hashedConfidentialDocs/setAccount', {
+          ssoProvider,
+          ssoUserId,
+          ssoImage,
+          ssoAccount
+        })
+        this.$router.push({ name: 'hcd' })
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     }
   }
