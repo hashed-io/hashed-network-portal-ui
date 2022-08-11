@@ -26,6 +26,7 @@ export default async ({ app, store }) => {
     })
     const hashedPrivateApi = new HashedPrivateApi({
       ipfsURL: process.env.IPFS_URL,
+      ipfsAuthHeader: `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`,
       privateURI: process.env.PRIVATE_URI,
       signFn: async (address, message) => {
         const { signature } = await marketplaceApi.signMessage(message, address)
