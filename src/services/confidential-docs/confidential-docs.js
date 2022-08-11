@@ -2,12 +2,13 @@
 import { HashedConfidentialDocs } from '@smontero/hashed-confidential-docs'
 
 class ConfidentialDocs {
-  constructor ({ ipfsURL, chainURI, appName, faucet }) {
+  constructor ({ ipfsURL, chainURI, appName, faucet, ipfsAuthHeader }) {
     const hcd = new HashedConfidentialDocs({
       ipfsURL,
       chainURI,
       appName,
-      faucet
+      faucet,
+      ipfsAuthHeader
     })
     console.log('hcd', hcd)
     this._hcd = hcd
