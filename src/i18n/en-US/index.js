@@ -134,7 +134,9 @@ export default {
       },
       role: {
         administrator: 'Administrator',
-        owner: 'Owner'
+        owner: 'Owner',
+        issuer: 'Issuer',
+        freezer: 'Freezer'
       },
       applicants: {
         title: 'Applicants'
@@ -160,6 +162,32 @@ export default {
         },
         query: 'Query: ',
         response: 'Response: '
+      },
+      taxCredits: {
+        createFormTitle: 'Create new Unique',
+        title: 'NFT collections',
+        emptyList: 'No tax credits yet',
+        details: {
+          title: 'Details Unique {class}',
+          frozen: 'Frozen',
+          active: 'Active'
+        },
+        labels: {
+          attributeLabel: 'Attribute',
+          isFile: 'Upload file'
+        },
+        placeholders: {
+          label: 'Label',
+          value: 'Value'
+        },
+        buttons: {
+          addAttribute: 'Add attribute',
+          createUnique: 'Create unique',
+          removeAttribute: 'Remove attribute'
+        },
+        messages: {
+          uniqueCreated: 'Unique created'
+        }
       }
     }
   }

@@ -133,7 +133,9 @@ export default {
       },
       role: {
         administrator: 'Administrador',
-        owner: 'Propietario'
+        owner: 'Propietario',
+        issuer: 'Emisor',
+        freezer: 'Congelador'
       },
       applicants: {
         title: 'Aplicantes'
@@ -159,6 +161,34 @@ export default {
         },
         query: 'Petición: ',
         response: 'Respuesta: '
+      },
+      taxCredits: {
+        createForm: 'Create new Unique',
+        title: 'Lista de créditos de impuestos',
+        emptyList: 'No hay créditos de impuestos aún',
+        details: {
+          title: 'Detalles unique {class}',
+          frozen: 'Frozen',
+          active: 'Active'
+
+        },
+        labels: {
+          attributeLabel: 'Atributo',
+          isFile: 'Cargar Archivo'
+
+        },
+        placeholders: {
+          label: 'Etiqueta',
+          value: 'Valor'
+        },
+        buttons: {
+          addAttribute: 'Añadir atributo',
+          createUnique: 'Crear unique',
+          removeAttribute: 'Eliminar atributo'
+        },
+        messages: {
+          uniqueCreated: 'Unique creado'
+        }
       }
     }
   }

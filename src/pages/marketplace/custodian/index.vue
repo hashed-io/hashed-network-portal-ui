@@ -56,7 +56,9 @@ export default {
     async getFromHP (applicants) {
       console.log('applicants', applicants)
       const promisesFields = []
-      const tmpApplicants = applicants
+      const tmpApplicants = applicants.filter(applicant => {
+        return applicant.fields[0].custodianCid !== null
+      })
       const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
       this.setIsHashedLoggedIn(isLogged)
       if (!isLogged) {
@@ -68,20 +70,21 @@ export default {
           let cid = privateFields.displayName.includes(identifier)
             ? privateFields.custodianCid.split(':')[0]
             : privateFields.custodianCid
-          if (cid.split(':').length > 1) {
-            cid = cid.split(':')[0]
+          if (cid) {
+            if (cid.split(':').length > 1) {
+              cid = cid.split(':')[0]
+            }
+            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
           }
-          promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
         })
       })
       const resolvedFields = await Promise.all(promisesFields)
       let counter = 0
       tmpApplicants.forEach((applicant, indexApplicant) => {
-        // const lengthFields = applicant.fields.length
         applicant.fields = applicant.fields.map((file, index) => {
+          const cid = resolvedFields[counter]?.custodianCid
           const displayName = resolvedFields[counter]?.name
           const description = resolvedFields[counter]?.description
-          const cid = resolvedFields[counter]?.custodianCid
           const payload = resolvedFields[counter]?.payload
           counter++
           return {
