@@ -24,7 +24,9 @@ export const validation = {
         notOwnAccount: value => val => !(value === val) || this.$t('forms.errors.notOwnAccount'),
         greaterOrEqualThanString: value => val => val.length >= value || this.$t('forms.errors.greaterOrEqualThanString', { value }),
         lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value }),
-        notEqual: value => val => !(value === val) || this.$t('forms.errors.notEqual')
+        notEqual: value => val => !(value === val) || this.$t('forms.errors.notEqual'),
+        // eslint-disable-next-line no-useless-escape
+        password: value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#\$%\^&\*])(?=.{8,})/.test(value) || this.$t('forms.errors.password')
       }
     }
   },

@@ -34,6 +34,7 @@ export const hashedLogout = async function ({ commit }) {
   try {
     console.log('hashedLogout')
     await this.$hashedPrivateApi.logout()
+    commit('setIsHashedLoggedIn', false)
   } catch (error) {
     console.log('Authenticator logout error', error)
   }
