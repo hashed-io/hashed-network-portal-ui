@@ -1,5 +1,13 @@
 # Hashed Portal
 
+## Quick Start
+```bash
+cp .env.example .env
+npm install --global @quasar/cli
+npm install
+quasar dev
+```
+
 ## See Storybook documentation
 ```bash
 yarn
