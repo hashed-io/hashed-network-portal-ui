@@ -1,7 +1,7 @@
 <template lang="pug">
 #documentsList
   #empty(v-if="!documents || documents.length === 0")
-    .text-body2.text-center There are not documents yet
+    .text-body2.text-center {{ $t('pages.hcd.documents.thereAreNotDocumentsYet') }}
   #list.q-gutter-y-sm(v-else)
     document-item(
       v-for="doc in documents"

@@ -3,18 +3,18 @@ q-item.bg-grey-4(:clickable="false")
     q-item-section
       q-item-label.text-bold {{ name }}
       q-item-label.text-caption {{ description }}
-      q-item-label.text-caption(v-if="isSharedWithMe") From: {{ from }}
-      q-item-label.text-caption(v-if="isShared") To: {{ to }}
+      q-item-label.text-caption(v-if="isSharedWithMe") {{ $t('pages.hcd.documents.from') }}: {{ from }}
+      q-item-label.text-caption(v-if="isShared") {{ $t('pages.hcd.documents.to') }}: {{ to }}
     q-item-section(avatar)
       .row.q-gutter-sm
         q-icon.icon-btn(name="download" color="info" size="sm" @click="onDownloadClick")
-          q-tooltip Download file
+          q-tooltip {{ $t('pages.hcd.documents.downloadFile') }}
         q-icon.icon-btn(v-if="canEditMetadata" name="edit" color="positive" size="sm" @click="onEditClick")
-          q-tooltip Edit metadata
+          q-tooltip {{ $t('pages.hcd.documents.editMetadata') }}
         q-icon.icon-btn(v-if="canShare" name="share" color="positive" size="sm" @click="onShareClick")
-          q-tooltip Share with other user
+          q-tooltip {{ $t('pages.hcd.documents.shareWithOtherUser') }}
         q-icon.icon-btn(v-if="canRemove" name="delete" color="negative" size="sm" @click="onRemoveClick")
-          q-tooltip Remove
+          q-tooltip {{ $t('pages.hcd.documents.remove') }}
 </template>
 
 <script>
