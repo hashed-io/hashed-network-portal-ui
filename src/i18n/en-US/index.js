@@ -14,6 +14,13 @@ export default {
     waitingWeb3: 'Waiting for polkadot web3 extension',
     waitingSub: 'Waiting for changes on the chain'
   },
+  breadcrumb: {
+    confidentialDocuments: 'Hashed Confidential Documents'
+  },
+  layouts: {
+    polkadotAddress: 'Polkadot Address',
+    logout: 'Logout'
+  },
   forms: {
     errors: {
       required: 'This field is required',
@@ -188,6 +195,34 @@ export default {
         messages: {
           uniqueCreated: 'Unique created'
         }
+      }
+    },
+    hcd: {
+      documents: {
+        addDocument: 'Add document',
+        myDocuments: 'My documents',
+        mySharedDocuments: 'My shared documents',
+        sharedWithMe: 'Shared with me',
+        name: 'Name',
+        description: 'Description',
+        file: 'File',
+        shareWithOtherUser: 'Share with other user',
+        polkadotAddressToShare: 'Polkadot address to share',
+        saveDocument: 'Save document',
+        shareDocument: 'Share document',
+        editDocumentMetadata: 'Edit document metadata',
+        thereAreNotDocumentsYet: 'There are not documents yet',
+        from: 'From',
+        to: 'To',
+        downloadFile: 'Download file',
+        editMetadata: 'Edit metadata',
+        remove: 'Remove',
+        loadingMessage: 'Waiting for Hashed Confidential Documents',
+        successSharedMessage: 'Document shared successfully',
+        successEditedMetadataMessage: 'Metadata edited successfully',
+        successRemovedMessage: 'Document removed successfully',
+        successAddedMessage: 'Document added successfully',
+        documents: 'Documents'
       }
     }
   }

@@ -1,8 +1,9 @@
 <template lang="pug">
 #container
-  .row.reverse.q-my-sm
+  .row.justify-between.q-mb-md
+    .text-h5 {{ $t('pages.hcd.documents.documents') }}
     q-btn(
-      label="Add document"
+      :label="$t('pages.hcd.documents.addDocument')"
       color="primary"
       icon="add"
       no-caps
@@ -19,9 +20,21 @@
   //-           q-btn.float-right(dense no-caps label="See Document" @click="openFile" color="secondary")
   q-card#documentsList.q-mt-md
     q-tabs.bg-primary.text-grey(v-model="listTabs" align="justify" indicator-color="accent" active-color="white")
-      q-tab(name="myDocs" label="My documents" no-caps)
-      q-tab(name="myShared" label="My shared documents" no-caps)
-      q-tab(name="sharedWithMe" label="Shared with me" no-caps)
+      q-tab(
+        name="myDocs"
+        :label="$t('pages.hcd.documents.myDocuments')"
+        no-caps
+      )
+      q-tab(
+        name="myShared"
+        :label="$t('pages.hcd.documents.mySharedDocuments')"
+        no-caps
+      )
+      q-tab(
+        name="sharedWithMe"
+        :label="$t('pages.hcd.documents.sharedWithMe')"
+        no-caps
+      )
     q-tab-panels(v-model="listTabs" animated)
       q-tab-panel(name="myDocs")
         documents-list(
@@ -90,19 +103,19 @@ export default {
     async addDoc (form) {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         let message
         if (form.isShared) {
           this.addResponse = await this.$store.$hcd.shareData({
             ...form
           })
-          message = 'Document shared successfully'
+          message = this.$t('pages.hcd.documents.successSharedMessage')
         } else {
           this.addResponse = await this.$store.$hcd.addOwnedData({
             ...form
           })
-          message = 'Document added successfully'
+          message = this.$t('pages.hcd.documents.successAddedMessage')
         }
         this.showNotification({ message })
         this.modals.isShowingDocumentForm = false
@@ -120,7 +133,7 @@ export default {
       try {
         console.log('searchDoc', this.cid)
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const payload = await this.$store.$hcd.viewOwnedDataByCID(cid)
         return payload
@@ -140,7 +153,7 @@ export default {
     async loadMyDocuments () {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const list = await this.$store.$hcd.getMyDocuments({ address: this.polkadotAddress })
         this.myDocsList = list.map(v => { return { ...v, isOwner: true } })
@@ -154,7 +167,7 @@ export default {
     async loadMySharedDocuments () {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const list = await this.$store.$hcd.getMySharedDocuments({ address: this.polkadotAddress })
         this.mySharedDocsList = list.map(v => { return { ...v, isShared: true } })
@@ -168,7 +181,7 @@ export default {
     async loadSharedWithMeDocuments () {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const list = await this.$store.$hcd.getSharedWithMeDocuments({ address: this.polkadotAddress })
         this.sharedWithMeDocsList = list.map(v => { return { ...v, isSharedWithMe: true } })
@@ -182,10 +195,10 @@ export default {
     async removeDocument (cid, shared) {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         await this.$store.$hcd.removeDoc({ cid, shared })
-        this.showNotification({ message: 'Document removed successfully' })
+        this.showNotification({ message: this.$t('pages.hcd.documents.successRemovedMessage') })
         this.updateAllList()
       } catch (e) {
         console.error('error', e)
@@ -197,10 +210,10 @@ export default {
     async editMetadata ({ cid, name, description, shared }) {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         await this.$store.$hcd.updateMetadata({ cid, name, description, shared })
-        this.showNotification({ message: 'Metadata edited successfully' })
+        this.showNotification({ message: this.$t('pages.hcd.documents.successEditedMetadataMessage') })
         this.updateAllList()
         this.modals.isShowingDocumentForm = false
         this.documentFormProps = undefined
@@ -231,7 +244,7 @@ export default {
     async showShareDocument (document, shared) {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const response = await this.searchDoc(document.cid)
         const { name, description, payload, cid } = response
@@ -254,7 +267,7 @@ export default {
     async downloadDocument (cid) {
       try {
         this.showLoading({
-          message: 'Waiting for Hashed Confidential Documents'
+          message: this.$t('pages.hcd.documents.loadingMessage')
         })
         const { payload } = await this.searchDoc(cid)
         this.openFile(payload)

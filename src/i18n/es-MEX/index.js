@@ -14,6 +14,13 @@ export default {
     waitingWeb3: 'Esperando la extensión de polkadot web3',
     waitingSub: 'Esperando cambios en la cadena'
   },
+  breadcrumb: {
+    confidentialDocuments: 'Documentos confidenciales'
+  },
+  layouts: {
+    polkadotAddress: 'Dirección de Polkadot',
+    logout: 'Salir'
+  },
   forms: {
     errors: {
       required: 'Este campo es obligatorio',
@@ -189,6 +196,34 @@ export default {
         messages: {
           uniqueCreated: 'Unique creado'
         }
+      }
+    },
+    hcd: {
+      documents: {
+        addDocument: 'Añadir documento',
+        myDocuments: 'Mis documentos',
+        mySharedDocuments: 'Mis documentos compartidos',
+        sharedWithMe: 'Compartidos conmigo',
+        name: 'Nombre',
+        description: 'Descripción',
+        file: 'Archivo',
+        shareWithOtherUser: 'Compartir con otro usuario',
+        polkadotAddressToShare: 'Direccion de polkadot a la que se compartira',
+        saveDocument: 'Guardar documento',
+        shareDocument: 'Compartir documento',
+        editDocumentMetadata: 'Editar el matadata del documento',
+        thereAreNotDocumentsYet: 'Aun no hay documentos',
+        from: 'De',
+        to: 'Para',
+        downloadFile: 'Descargar archivo',
+        editMetadata: 'Editar metadata',
+        remove: 'Remover',
+        loadingMessage: 'Esperando la respuesta de documentos confidenciales',
+        successSharedMessage: 'Documento compartido exitosamente.',
+        successEditedMetadataMessage: 'Metadata fue editada exitosamente.',
+        successRemovedMessage: 'Documento removido exitosamente.',
+        successAddedMessage: 'Documento agregado exitosamente.',
+        documents: 'Documentos'
       }
     }
   }

@@ -28,7 +28,7 @@ const routes = [
             component: () => import('pages/hcd/index.vue'),
             meta: {
               breadcrumb: [
-                { name: 'Hashed Confidential Documents', icon: 'storage' }
+                { name: 'confidentialDocuments', icon: 'storage' }
               ],
               app: 'hcd'
             }

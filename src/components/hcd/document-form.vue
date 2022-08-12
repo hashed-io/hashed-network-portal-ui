@@ -1,18 +1,18 @@
 <template lang="pug">
 #container
-    .text-subtitle1(v-if="isSharing") Share document
-    .text-subtitle1(v-else-if="isEditing") Edit document metadata
-    .text-subtitle1(v-else-if="isAdding") Add document
+    .text-subtitle1(v-if="isSharing") {{ $t('pages.hcd.documents.shareDocument') }}
+    .text-subtitle1(v-else-if="isEditing") {{ $t('pages.hcd.documents.editDocumentMetadata') }}
+    .text-subtitle1(v-else-if="isAdding") {{ $t('pages.hcd.documents.addDocument') }}
     q-form.q-gutter-sm(@submit="onSubmit")
         q-input(
-          label="Name"
+          :label="$t('pages.hcd.documents.name')"
           v-model="form.name"
           outlined
           :rules="[rules.required]"
           :readonly="isSharing"
         )
         q-input(
-          label="Description"
+          :label="$t('pages.hcd.documents.description')"
           v-model="form.description"
           outlined
           :rules="[rules.required]"
@@ -21,19 +21,19 @@
         q-file(
           v-model="form.payload"
           outlined
-          label="Payload"
+          :label="$t('pages.hcd.documents.file')"
           :rules="[rules.required]"
           v-if="!isEditing"
           :readonly="isSharing"
         )
         q-toggle(
-          label="Share with other user"
+          :label="$t('pages.hcd.documents.shareWithOtherUser')"
           v-model="form.isShared"
           v-if="!isEditing && !isSharing"
         )
         q-slide-transition
             account-input(
-              label="Polkadot address to share"
+              :label="$t('pages.hcd.documents.polkadotAddressToShare')"
               v-model="form.toUserAddress"
               outlined
               :rules="[rules.required]"
@@ -104,13 +104,13 @@ export default {
   computed: {
     submitBtnLabel () {
       if (this.isAdding) {
-        return 'Add document'
+        return this.$t('pages.hcd.documents.addDocument')
       } else if (this.isEditing) {
-        return 'Save document'
+        return this.$t('pages.hcd.documents.saveDocument')
       } else if (this.isSharing) {
-        return 'Share document'
+        return this.$t('pages.hcd.documents.shareDocument')
       }
-      return 'Add'
+      return ''
     }
   },
   mounted () {

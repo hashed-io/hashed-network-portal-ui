@@ -13,25 +13,25 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ option.label }}
+              q-item-label {{ $t(option.label) }}
         q-space
         q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
-        q-btn(no-caps)
+        q-btn.no-padding(no-caps)
           SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
           q-menu
             q-list
               q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
                 q-item-section
-                  q-item-label Polkadot address
+                  q-item-label {{ $t('layouts.polkadotAddress') }}
                   q-item-label {{ ssoAccountInfo.polkadotAddress }}
           //- accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        q-btn(label="Logout" no-caps @click="logout")
+        q-btn(:label="$t('layouts.logout')" no-caps @click="logout")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
@@ -47,6 +47,7 @@ import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+// import { useI18n } from 'vue-i18n'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
@@ -68,6 +69,7 @@ export default defineComponent({
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
+    // const { t } = useI18n({})
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
@@ -120,14 +122,14 @@ export default defineComponent({
           keyActive: 'Privacy',
           label: 'Privacy'
         }
+      ],
+      hcd: [
+        {
+          to: { name: 'hcd' },
+          keyActive: 'confidentialDocuments',
+          label: 'pages.hcd.documents.documents'
+        }
       ]
-      // hcd: [
-      //   {
-      //     // to: { name: 'manageVaults' },
-      //     keyActive: 'Hashed Confidential Documents',
-      //     label: 'Documents'
-      //   }
-      // ]
     }
 
     const breadcrumbList = ref(undefined)
