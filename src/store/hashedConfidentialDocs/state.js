@@ -3,6 +3,7 @@ export default function () {
     ssoProvider: undefined,
     ssoUserId: undefined,
     ssoImage: undefined,
-    ssoAccount: undefined
+    ssoAccount: undefined,
+    polkadotAddress: undefined
   }
 }

@@ -17,7 +17,14 @@
         q-space
         q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
-        SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+        q-btn(no-caps)
+          SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+          q-menu
+            q-list
+              q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
+                q-item-section
+                  q-item-label Polkadot address
+                  q-item-label {{ ssoAccountInfo.polkadotAddress }}
           //- accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
         q-btn(label="Logout" no-caps @click="logout")
         //- q-toolbar-title.q-ml-md Hashed Template App
@@ -57,7 +64,7 @@ export default defineComponent({
   },
 
   setup () {
-    const { showNotification } = useNotifications()
+    const { showNotification, copyTextToClipboard } = useNotifications()
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
@@ -68,7 +75,8 @@ export default defineComponent({
       if ($store.getters['hashedConfidentialDocs/isLogged']) {
         return {
           displayName: $store.getters['hashedConfidentialDocs/accountInfo'].given_name,
-          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture
+          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture,
+          polkadotAddress: $store.getters['hashedConfidentialDocs/polkadotAddress']
         }
       }
       return undefined
@@ -196,7 +204,8 @@ export default defineComponent({
       toggleDrawer,
       logout,
       loginType,
-      ssoAccountInfo
+      ssoAccountInfo,
+      copyTextToClipboard
     }
   }
 })

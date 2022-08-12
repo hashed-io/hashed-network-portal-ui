@@ -1,6 +1,5 @@
 <template lang="pug">
 #container
-  .text-body2.q-ma-sm My polkadot address: {{ polkadotAddress }}
   .row.reverse.q-my-sm
     q-btn(
       label="Add document"
@@ -8,7 +7,7 @@
       icon="add"
       no-caps
       outline
-      @click="modals.isShowingDocumentForm = true"
+      @click="showAddDocument"
     )
   //- .row.full-width.q-gutter-x-sm
   //-   .col
@@ -42,30 +41,30 @@
           :documents="sharedWithMeDocsList"
           @onRemoveDocument="v => removeDocument(v, true)"
           @onEditDocument="v => showEditDocument(v, true)"
-          @onShareDocument="v => showShareDocument(v, true)"
           @onDownloadDocument="downloadDocument"
         )
   #modals
     q-dialog(v-model="modals.isShowingDocumentForm" @hide="addResponse = undefined")
-      q-card.q-pa-md
-        add-document-form(@onSubmit="addDoc" @onEditSubmitted="editMetadata" v-bind="documentFormProps")
+      q-card.q-pa-lg.modalSize
+        document-form(@onAddSubmitted="addDoc" @onShareSubmitted="addDoc" @onEditSubmitted="editMetadata" v-bind="documentFormProps")
         q-slide-transition
           #response.q-pa-sm.bg-grey(v-show="addResponse")
             .text-caption {{ addResponse }}
 </template>
 
 <script>
-import AddDocumentForm from '~/components/hcd/add-document-form'
+import DocumentForm from '~/components/hcd/document-form'
 import SearchDocumentForm from '~/components/hcd/search-document-form'
 import DocumentsList from '~/components/hcd/documents-list'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'HashedConfidentialDocument',
-  components: { AddDocumentForm, SearchDocumentForm, DocumentsList },
+  components: { DocumentForm, SearchDocumentForm, DocumentsList },
   data () {
     return {
       addResponse: undefined,
       searchResponse: undefined,
-      polkadotAddress: undefined,
       listTabs: 'myDocs',
       myDocsList: [],
       mySharedDocsList: [],
@@ -76,8 +75,10 @@ export default {
       documentFormProps: undefined
     }
   },
+  computed: {
+    ...mapGetters('hashedConfidentialDocs', ['polkadotAddress'])
+  },
   async mounted () {
-    this.polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
     this.updateAllList()
   },
   methods: {
@@ -88,20 +89,23 @@ export default {
     },
     async addDoc (form) {
       try {
-        console.log('addDocs', form)
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
+        let message
         if (form.isShared) {
           this.addResponse = await this.$store.$hcd.shareData({
             ...form
           })
+          message = 'Document shared successfully'
         } else {
           this.addResponse = await this.$store.$hcd.addOwnedData({
             ...form
           })
+          message = 'Document added successfully'
         }
-        this.showNotification({ message: 'Document added successfully' })
+        this.showNotification({ message })
+        this.modals.isShowingDocumentForm = false
         this.loadMyDocuments()
         this.loadMySharedDocuments()
       } catch (e) {
@@ -118,10 +122,12 @@ export default {
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
-        return this.$store.$hcd.viewOwnedDataByCID(cid)
+        const payload = await this.$store.$hcd.viewOwnedDataByCID(cid)
+        return payload
       } catch (e) {
         try {
-          return this.$store.$hcd.viewSharedDataByCID(cid)
+          const payload = await this.$store.$hcd.viewSharedDataByCID(cid)
+          return payload
         } catch (e) {
           console.error('error', e)
           this.showNotification({ message: e.message || e, color: 'negative' })
@@ -188,7 +194,7 @@ export default {
         this.hideLoading()
       }
     },
-    async editMetadata ({ cid, name, description }, shared) {
+    async editMetadata ({ cid, name, description, shared }) {
       try {
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
@@ -206,9 +212,19 @@ export default {
       }
     },
     showEditDocument (document, shared) {
+      const { name, description, cid } = document
       this.documentFormProps = {
-        document,
+        name,
+        description,
+        cid,
+        isEditing: true,
         shared
+      }
+      this.modals.isShowingDocumentForm = true
+    },
+    showAddDocument () {
+      this.documentFormProps = {
+        isAdding: true
       }
       this.modals.isShowingDocumentForm = true
     },
@@ -217,9 +233,14 @@ export default {
         this.showLoading({
           message: 'Waiting for Hashed Confidential Documents'
         })
-        const payload = await this.searchDoc(document.cid)
+        const response = await this.searchDoc(document.cid)
+        const { name, description, payload, cid } = response
         this.documentFormProps = {
+          name,
+          description,
           payload,
+          cid,
+          isSharing: true,
           shared
         }
         this.modals.isShowingDocumentForm = true

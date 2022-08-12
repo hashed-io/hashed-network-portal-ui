@@ -6,6 +6,8 @@
         img(:src="profilePicture")
     q-item-section
         q-item-label(lines="1") {{ displayName }}
+    q-item-section(avatar)
+        q-icon.q-ml-sm(name="arrow_drop_down" color="white")
 </template>
 
 <script>
