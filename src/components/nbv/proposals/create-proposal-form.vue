@@ -13,7 +13,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         q-input(
           data-testid="description"
           outlined
-          label="Description"
+          :label="$t('pages.nbv.proposals.descripion')"
           v-model="description"
           :rules="[rules.required]"
         )
@@ -24,7 +24,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         q-input(
           data-testid="recipient"
           outlined
-          label="Recipient address"
+          :label="$t('pages.nbv.proposals.recipientAddress ')"
           v-model="recipientAddress"
           :rules="[rules.required, rules.isValidMainetBTC]"
         )
@@ -35,7 +35,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         q-input(
           data-testid="amount"
           outlined
-          label="Amount in Satoshi"
+          :label="$t('pages.nbv.proposals.amountInSatoshi')"
           v-model="amountInSats"
           :rules="[rules.required, rules.positiveInteger, rules.lessOrEqualThan(currentBalance || 0), rules.greaterOrEqualThan(546)]"
         )
@@ -43,7 +43,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         .text-body2 {{ $t('pages.nbv.proposals.amountDesc')  }}
     q-btn.float-right.q-mb-md(
         data-testid="submitButton"
-        label="Create Proposal"
+        :label="$t('pages.nbv.proposals.createProposal')"
         color="primary"
         size="md"
         type="submit"

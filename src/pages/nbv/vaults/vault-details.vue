@@ -12,7 +12,6 @@
     .row.q-gutter-x-sm
       #exportDescriptor.no-padding.q-ma-none
         q-btn(
-          label=""
           :label="$t('pages.nbv.vaults.exportDescriptor')"
           color="secondary"
           icon="qr_code"
@@ -83,7 +82,6 @@
     .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
     #btnCreateProposal
       q-btn(
-        label=""
         :label="$t('pages.nbv.proposals.createProposal')"
         icon="add"
         color="secondary"

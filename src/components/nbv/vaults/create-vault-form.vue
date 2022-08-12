@@ -238,7 +238,7 @@ export default {
     notDuplicatedAccounts (account) {
       const exist = this.cosigners.filter(e => e.address === account)
       if (exist && exist.length > 1) {
-        return 'This account is duplicated'
+        return this.$t('pages.nbv.vaults.accountDuplicated')
       } return true
     }
   }
