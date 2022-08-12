@@ -13,7 +13,7 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ option.label }}
+              q-item-label {{ $t(option.label) }}
         q-space
         q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
@@ -47,6 +47,7 @@ import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+// import { useI18n } from 'vue-i18n'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
@@ -68,6 +69,7 @@ export default defineComponent({
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
+    // const { t } = useI18n({})
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
@@ -125,7 +127,7 @@ export default defineComponent({
         {
           to: { name: 'hcd' },
           keyActive: 'confidentialDocuments',
-          label: this.$t('pages.hcd.documents')
+          label: 'pages.hcd.documents.documents'
         }
       ]
     }
