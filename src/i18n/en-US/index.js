@@ -106,7 +106,8 @@ export default {
         outputDescriptor: 'Output Descriptor',
         vaultsBalanceMustBeGreaterThanZero: 'The vault\'s balance must be greater than 0',
         descriptorQr: 'Descriptor QR',
-        creatingDescriptor: 'Please await a moment, we are creating the descriptor'
+        creatingDescriptor: 'Please await a moment, we are creating the descriptor',
+        accountDuplicated: 'This account is duplicated'
       },
       proposals: {
         create_proposal: 'Create new proposal',
@@ -145,7 +146,10 @@ export default {
         pending: 'Pending',
         signThePsbtWithValidXPUB: 'Please sign the psbt with a valid XPUB',
         psbtSavedSuccessfully: 'PSBT saved successfully',
-        creatingPSBT: 'Please await a moment, we are creating the PSBT'
+        creatingPSBT: 'Please await a moment, we are creating the PSBT',
+        description: 'Description',
+        recipientAddress: 'Recipient address',
+        amountInSatoshi: 'Amount in Satoshi'
         // signPsbtStep1: ''
       },
       list: {

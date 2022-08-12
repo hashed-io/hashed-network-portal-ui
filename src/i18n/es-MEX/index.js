@@ -105,7 +105,9 @@ export default {
         refreshReceiveAddress: 'Actualizar la dirección de recepción',
         outputDescriptor: 'Descriptor de salida',
         vaultsBalanceMustBeGreaterThanZero: 'El balance de la baúl debe ser mayor que 0',
-        descriptorQr: 'QR del descriptor'
+        descriptorQr: 'QR del descriptor',
+        creatingDescriptor: 'Por favor, espere un momento, estamos creando el descriptor',
+        accountDuplicated: 'Esta cuenta está duplicada'
       },
       proposals: {
         create_proposal: 'Crear una nueva propuesta',
@@ -144,7 +146,10 @@ export default {
         pending: 'Pendiente',
         signThePsbtWithValidXPUB: 'Por favor, firme el PSBT con un XPUB válido',
         psbtSavedSuccessfully: 'PSBT guardado con éxito',
-        creatingPSBT: 'Por favor, espere un momento, estamos creando el PSBT'
+        creatingPSBT: 'Por favor, espere un momento, estamos creando el PSBT',
+        description: 'Descripción',
+        recipientAddress: 'Recipient address',
+        amountInSatoshi: 'Cantidad en Satoshi'
         // signPsbtStep1: ''
       },
       list: {
