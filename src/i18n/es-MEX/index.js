@@ -38,7 +38,8 @@ export default {
       fileRequired: 'El archivo es requerido',
       greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}',
       lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}',
-      notEqual: 'El valor no debe ser igual al propietario'
+      notEqual: 'El valor no debe ser igual al propietario',
+      betweenString: 'El valor debe estar entre {min} y {max} caracteres'
     }
   },
   pages: {
