@@ -146,12 +146,14 @@ export default {
           ssoUserId,
           password
         })
+        const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
         console.log('hcgResponse', hcgResponse)
         this.$store.commit('hashedConfidentialDocs/setAccount', {
           ssoProvider,
           ssoUserId,
           ssoImage,
-          ssoAccount
+          ssoAccount,
+          polkadotAddress
         })
         this.$router.push({ name: 'hcd' })
       } catch (e) {

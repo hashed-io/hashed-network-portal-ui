@@ -1,6 +1,5 @@
 <template lang="pug">
 #container
-  .text-body2.q-ma-sm My polkadot address: {{ polkadotAddress }}
   .row.reverse.q-my-sm
     q-btn(
       label="Add document"
@@ -57,6 +56,8 @@
 import DocumentForm from '~/components/hcd/document-form'
 import SearchDocumentForm from '~/components/hcd/search-document-form'
 import DocumentsList from '~/components/hcd/documents-list'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'HashedConfidentialDocument',
   components: { DocumentForm, SearchDocumentForm, DocumentsList },
@@ -64,7 +65,6 @@ export default {
     return {
       addResponse: undefined,
       searchResponse: undefined,
-      polkadotAddress: undefined,
       listTabs: 'myDocs',
       myDocsList: [],
       mySharedDocsList: [],
@@ -75,8 +75,10 @@ export default {
       documentFormProps: undefined
     }
   },
+  computed: {
+    ...mapGetters('hashedConfidentialDocs', ['polkadotAddress'])
+  },
   async mounted () {
-    this.polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
     this.updateAllList()
   },
   methods: {
