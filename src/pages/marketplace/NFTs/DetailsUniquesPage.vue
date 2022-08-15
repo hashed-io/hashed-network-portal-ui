@@ -20,7 +20,7 @@
           :label="$t('pages.marketplace.taxCredits.details.user')"
         )
       div.q-py-sm
-        .text-subtitle2 {{ 'Number of items' }}
+        .text-subtitle2 {{ $t('pages.marketplace.taxCredits.details.numberItems') }}
         div {{ uniqueData.items }}
     .col-6
       div.q-py-sm
@@ -36,23 +36,30 @@
           :label="$t('pages.marketplace.taxCredits.details.user')"
         )
       div.q-py-sm.text-right
-        .text-subtitle2 {{ 'Number of Metadata' }}
+        .text-subtitle2 {{ $t('pages.marketplace.taxCredits.details.numberMetadata') }}
         div {{ uniqueData.itemMetadatas }}
   #Attributes
     q-table(
       :rows="getAttributes"
+      :columns="getColumnsi18n"
       class="bg-inherit"
       dense
       :separator="'none'"
       flat
       hide-pagination
     ).q-my-xl
-    //- .row.justify-between.q-col-gutter-md(v-for="attribute in getAttributes")
-    //-   .text-left.q-py-xl {{ attribute.attribute }}
-    //-   .text-right.q-py-xl {{ attribute.value }}
-
-  //- #RawData
-  //-   pre {{uniqueData}}
+      template(v-slot:body-cell="props")
+        q-td(:props="props")
+          q-chip(
+            v-if="props.value.includes(fileIdentifier)"
+            clickable
+            @click="downloadFile(props.value)"
+            icon-right="download"
+            text-color="white"
+            color="primary"
+          ).animated-item.text-bold
+            | {{ $t('pages.marketplace.taxCredits.details.file') }}
+          div(v-else).text-subtitle2 {{ props.value }}
 
 </template>
 <script>
@@ -66,17 +73,40 @@ export default {
   props: {
     unique: {
       type: String,
-      default: undefined
+      default: ''
     }
   },
   data () {
     return {
-      uniqueData: undefined
+      uniqueData: [],
+      fileIdentifier: 'File:',
+      columns: [
+      ]
     }
   },
   computed: {
     getAttributes () {
-      return this.uniqueData.attributes.filter(attribute => attribute.attribute !== '$num_value')
+      return this.uniqueData?.attributes?.filter(attribute => attribute.attribute !== '$num_value')
+    },
+    getColumnsi18n () {
+      return [
+        {
+          name: 'attribute',
+          label: this.$t('pages.marketplace.taxCredits.details.attribute'),
+          value: 'attribute',
+          field: row => row.attribute,
+          align: 'left',
+          width: '50%'
+        },
+        {
+          name: 'value',
+          label: this.$t('pages.marketplace.taxCredits.details.value'),
+          field: row => row.value,
+          value: 'value',
+          align: 'right',
+          width: '50%'
+        }
+      ]
     }
   },
   created () {
@@ -84,10 +114,27 @@ export default {
       this.$router.push({
         name: 'NFTs'
       })
+    } else {
+      this.uniqueData = JSON.parse(this.unique)
     }
-    this.uniqueData = JSON.parse(this.unique)
   },
   methods: {
+    async downloadFile (file) {
+      try {
+        this.showLoading({ message: this.$t('pages.marketplace.taxCredits.details.downloading') })
+        const CID = file.split(this.fileIdentifier)[1]
+        const response = await this.$store.$hashedPrivateApi.sharedViewByCID(CID)
+        const blob = new Blob([response.payload], { type: response.payload.type })
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        window.open(link.href)
+      } catch (e) {
+        console.log(e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    }
   }
 }
 </script>
