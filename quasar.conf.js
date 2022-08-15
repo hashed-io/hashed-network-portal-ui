@@ -59,9 +59,12 @@ module.exports = configure(function (ctx) {
         APP_NAME: process.env.APP_NAME,
         WSS: process.env.WSS,
         IPFS_URL: process.env.IPFS_URL,
+        IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
+        IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
         PRIVATE_URI: process.env.PRIVATE_URI,
         BDK_SERVICES_URL: process.env.BDK_SERVICES_URL,
-        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        SIGNER: process.env.SIGNER
       },
       // transpile: false,
       // publicPath: '/',

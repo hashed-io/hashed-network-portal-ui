@@ -21,7 +21,7 @@ div
 
 <script>
 export default {
-  name: 'Tinput',
+  name: 'HInput',
   props: {
     /**
          * The value of the input

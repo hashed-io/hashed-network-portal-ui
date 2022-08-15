@@ -10,6 +10,7 @@
         :rules="rules"
         :disable="disable"
         :readonly="readonly"
+        :autofocus="autofocus"
     )
         template(v-slot:prepend)
             account-icon.q-mt-sm(:address="value" size="40px")
@@ -70,6 +71,13 @@ export default {
      * Readonly input option
      */
     readonly: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Autofocus input option
+     */
+    autofocus: {
       type: Boolean,
       default: false
     }

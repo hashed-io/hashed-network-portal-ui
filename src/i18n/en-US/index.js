@@ -22,6 +22,13 @@ export default {
     signinWithGoogle: 'Sign in with Google',
     logout: 'Logout'
   },
+  breadcrumb: {
+    confidentialDocuments: 'Hashed Confidential Documents'
+  },
+  layouts: {
+    polkadotAddress: 'Polkadot Address',
+    logout: 'Logout'
+  },
   forms: {
     errors: {
       required: 'This field is required',
@@ -39,7 +46,8 @@ export default {
       fileRequired: 'This field is required',
       greaterOrEqualThanString: 'The length must be greater than or equal to {value}',
       lessOrEqualThanString: 'The length must be less than or equal to {value}',
-      notEqual: 'The value must be different to the Owner address'
+      notEqual: 'The value must be different to the Owner address',
+      password: 'The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character'
     }
   },
   pages: {
@@ -227,7 +235,9 @@ export default {
       },
       role: {
         administrator: 'Administrator',
-        owner: 'Owner'
+        owner: 'Owner',
+        issuer: 'Issuer',
+        freezer: 'Freezer'
       },
       applicants: {
         title: 'Applicants',
@@ -265,6 +275,60 @@ export default {
       },
       actions: {
         loggedDownloadFile: 'You need to be logged in to download a file'
+      },
+      taxCredits: {
+        createFormTitle: 'Create new Unique',
+        title: 'NFT collections',
+        emptyList: 'No tax credits yet',
+        details: {
+          title: 'Details Unique {class}',
+          frozen: 'Frozen',
+          active: 'Active'
+        },
+        labels: {
+          attributeLabel: 'Attribute',
+          isFile: 'Upload file'
+        },
+        placeholders: {
+          label: 'Label',
+          value: 'Value'
+        },
+        buttons: {
+          addAttribute: 'Add attribute',
+          createUnique: 'Create unique',
+          removeAttribute: 'Remove attribute'
+        },
+        messages: {
+          uniqueCreated: 'Unique created'
+        }
+      }
+    },
+    hcd: {
+      documents: {
+        addDocument: 'Add document',
+        myDocuments: 'My documents',
+        mySharedDocuments: 'My shared documents',
+        sharedWithMe: 'Shared with me',
+        name: 'Name',
+        description: 'Description',
+        file: 'File',
+        shareWithOtherUser: 'Share with other user',
+        polkadotAddressToShare: 'Polkadot address to share',
+        saveDocument: 'Save document',
+        shareDocument: 'Share document',
+        editDocumentMetadata: 'Edit document metadata',
+        thereAreNotDocumentsYet: 'There are not documents yet',
+        from: 'From',
+        to: 'To',
+        downloadFile: 'Download file',
+        editMetadata: 'Edit metadata',
+        remove: 'Remove',
+        loadingMessage: 'Waiting for Hashed Confidential Documents',
+        successSharedMessage: 'Document shared successfully',
+        successEditedMetadataMessage: 'Metadata edited successfully',
+        successRemovedMessage: 'Document removed successfully',
+        successAddedMessage: 'Document added successfully',
+        documents: 'Documents'
       }
     },
     sign: {

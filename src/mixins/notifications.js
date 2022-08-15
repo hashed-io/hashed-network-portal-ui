@@ -27,6 +27,9 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       }
+    },
+    openFile (payload) {
+      window.open(URL.createObjectURL(payload), '_blank')
     }
   }
 }
@@ -103,9 +106,21 @@ export function useNotifications () {
   const showLoading = showGlobalLoading
   const hideLoading = hideGlobalLoading
 
+  function copyTextToClipboard (data) {
+    try {
+      navigator.clipboard.writeText(data).then(e => {
+        this.showNotification({ message: 'Text copied to clipboard' })
+      })
+    } catch (e) {
+      console.error('error', e)
+      this.showNotification({ message: e.message || e, color: 'negative' })
+    }
+  }
+
   return {
     showNotification,
     showLoading,
-    hideLoading
+    hideLoading,
+    copyTextToClipboard
   }
 }

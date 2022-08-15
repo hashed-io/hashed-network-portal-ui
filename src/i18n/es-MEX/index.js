@@ -22,6 +22,13 @@ export default {
     signinWithGoogle: 'Acceder con Google',
     logout: 'Cerrar sesión'
   },
+  breadcrumb: {
+    confidentialDocuments: 'Documentos confidenciales'
+  },
+  layouts: {
+    polkadotAddress: 'Dirección de Polkadot',
+    logout: 'Salir'
+  },
   forms: {
     errors: {
       required: 'Este campo es obligatorio',
@@ -232,7 +239,9 @@ export default {
       },
       role: {
         administrator: 'Administrador',
-        owner: 'Propietario'
+        owner: 'Propietario',
+        issuer: 'Emisor',
+        freezer: 'Congelador'
       },
       applicants: {
         title: 'Aplicantes',
@@ -270,6 +279,62 @@ export default {
       },
       actions: {
         loggedDownloadFile: 'Debe iniciar sesión para descargar un archivo'
+      },
+      taxCredits: {
+        createForm: 'Create new Unique',
+        title: 'Lista de créditos de impuestos',
+        emptyList: 'No hay créditos de impuestos aún',
+        details: {
+          title: 'Detalles unique {class}',
+          frozen: 'Frozen',
+          active: 'Active'
+
+        },
+        labels: {
+          attributeLabel: 'Atributo',
+          isFile: 'Cargar Archivo'
+
+        },
+        placeholders: {
+          label: 'Etiqueta',
+          value: 'Valor'
+        },
+        buttons: {
+          addAttribute: 'Añadir atributo',
+          createUnique: 'Crear unique',
+          removeAttribute: 'Eliminar atributo'
+        },
+        messages: {
+          uniqueCreated: 'Unique creado'
+        }
+      }
+    },
+    hcd: {
+      documents: {
+        addDocument: 'Añadir documento',
+        myDocuments: 'Mis documentos',
+        mySharedDocuments: 'Mis documentos compartidos',
+        sharedWithMe: 'Compartidos conmigo',
+        name: 'Nombre',
+        description: 'Descripción',
+        file: 'Archivo',
+        shareWithOtherUser: 'Compartir con otro usuario',
+        polkadotAddressToShare: 'Direccion de polkadot a la que se compartira',
+        saveDocument: 'Guardar documento',
+        shareDocument: 'Compartir documento',
+        editDocumentMetadata: 'Editar el matadata del documento',
+        thereAreNotDocumentsYet: 'Aun no hay documentos',
+        from: 'De',
+        to: 'Para',
+        downloadFile: 'Descargar archivo',
+        editMetadata: 'Editar metadata',
+        remove: 'Remover',
+        loadingMessage: 'Esperando la respuesta de documentos confidenciales',
+        successSharedMessage: 'Documento compartido exitosamente.',
+        successEditedMetadataMessage: 'Metadata fue editada exitosamente.',
+        successRemovedMessage: 'Documento removido exitosamente.',
+        successAddedMessage: 'Documento agregado exitosamente.',
+        documents: 'Documentos'
       }
     },
     sign: {

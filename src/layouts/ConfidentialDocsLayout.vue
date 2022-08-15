@@ -13,17 +13,25 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ option.label }}
+              q-item-label {{ $t(option.label) }}
         q-space
-        q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
+        q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
+        q-btn.no-padding(no-caps)
+          SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+          q-menu
+            q-list
+              q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
+                q-item-section
+                  q-item-label {{ $t('layouts.polkadotAddress') }}
+                  q-item-label {{ ssoAccountInfo.polkadotAddress }}
           //- accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        q-btn(:label="$t('login.logout')" no-caps @click="logout")
+        q-btn(:label="$t('layouts.logout')" no-caps @click="logout")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`pages.${app}.breadcrumbs.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
@@ -39,30 +47,50 @@ import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+// import { useI18n } from 'vue-i18n'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
-import { useI18n } from 'vue-i18n'
+import SSOAccountItem from '~/components/common/login/sso-account-item'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
-  name: 'MainLayout',
+  name: 'ConfidentialDocsLayout',
 
   components: {
     AccountsMenu,
     SelectedAccountBtn,
     NotAccounts,
-    NotConnected
+    NotConnected,
+    SSOAccountItem
   },
 
   setup () {
-    const { showNotification } = useNotifications()
+    const { showNotification, copyTextToClipboard } = useNotifications()
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
+    // const { t } = useI18n({})
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
-    const { t } = useI18n()
+    const ssoAccountInfo = computed(() => {
+      if ($store.getters['hashedConfidentialDocs/isLogged']) {
+        return {
+          displayName: $store.getters['hashedConfidentialDocs/accountInfo'].given_name,
+          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture,
+          polkadotAddress: $store.getters['hashedConfidentialDocs/polkadotAddress']
+        }
+      }
+      return undefined
+    })
+    const loginType = computed(() => {
+      if ($store.getters['polkadotWallet/isLoggedIn']) {
+        return 'polkadotjs'
+      } else if ($store.getters['hashedConfidentialDocs/isLogged']) {
+        return 'hcd'
+      }
+      return undefined
+    })
 
     // Dynamic options for each app
     const pageOptionsDictionary = {
@@ -70,39 +98,40 @@ export default defineComponent({
         {
           to: { name: 'manageVaults' },
           keyActive: 'My Vaults',
-          label: t('pages.nbv.mainOptions.myVaults')
+          label: 'My Vaults'
         },
         {
           to: { name: 'manageXpub' },
           keyActive: 'Extended Keys',
-          label: t('pages.nbv.mainOptions.extendedKeys')
+          label: 'Extended Keys'
         }
       ],
-      marketplace: [
+      marketplaces: [
         {
           to: { name: 'marketplacesList' },
           keyActive: 'Marketplaces',
-          label: t('pages.marketplace.mainOptions.marketplaces')
+          label: 'Marketplaces'
         },
         {
           to: { name: 'custodian' },
           keyActive: 'Custodian',
-          label: t('pages.marketplace.mainOptions.custodian')
+          label: 'Custodian'
         },
         {
           to: { name: 'privacy' },
           keyActive: 'Privacy',
-          label: t('pages.marketplace.mainOptions.privacy')
-        },
+          label: 'Privacy'
+        }
+      ],
+      hcd: [
         {
-          to: { name: 'NFTs' },
-          keyActive: 'NFTs Collections',
-          label: 'NFTs Collections'
+          to: { name: 'hcd' },
+          keyActive: 'confidentialDocuments',
+          label: 'pages.hcd.documents.documents'
         }
       ]
     }
 
-    const app = ref(undefined)
     const breadcrumbList = ref(undefined)
     const pageOptions = ref([])
     watchEffect(() => updateBreadcrumbs($route))
@@ -119,6 +148,7 @@ export default defineComponent({
 
     function logout () {
       $store.dispatch('polkadotWallet/hashedLogout')
+      $store.dispatch('hashedConfidentialDocs/logout')
     }
 
     function onSelectAccount (account) {
@@ -130,7 +160,6 @@ export default defineComponent({
       breadcrumbList.value = v.meta.breadcrumb
       // Dynamic options
       if (v.meta.app) {
-        app.value = v.meta.app
         console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
@@ -176,7 +205,9 @@ export default defineComponent({
       pageOptions,
       toggleDrawer,
       logout,
-      app
+      loginType,
+      ssoAccountInfo,
+      copyTextToClipboard
     }
   }
 })

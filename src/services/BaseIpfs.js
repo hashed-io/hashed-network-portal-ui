@@ -6,7 +6,16 @@ import mime from 'mime-types'
 
 class BaseIpfs {
   constructor () {
-    this.client = create(new URL(process.env.IPFS_URL))
+    const auth = 'Basic ' + Buffer.from(process.env.IPFS_PROJECT_ID + ':' + process.env.IPFS_PROJECT_SECRET).toString('base64')
+    // this.client = create(new URL(process.env.IPFS_URL))
+    this.client = create({
+      host: process.env.IPFS_URL,
+      port: 5001,
+      protocol: 'https',
+      headers: {
+        authorization: auth
+      }
+    })
   }
 
   async store (payload) {

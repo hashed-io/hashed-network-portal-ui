@@ -16,6 +16,25 @@ const routes = [
     children: [
       NvbRoutes,
       MarketPlacesRoutes,
+      // Hashed Confidential Documents
+      {
+        path: '/hcd',
+        name: 'root_hcd',
+        component: () => import('layouts/ConfidentialDocsLayout'),
+        children: [
+          {
+            path: '',
+            name: 'hcd',
+            component: () => import('pages/hcd/index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'confidentialDocuments', icon: 'storage' }
+              ],
+              app: 'hcd'
+            }
+          }
+        ]
+      },
       // Sign Test
       {
         path: '/signTest',
