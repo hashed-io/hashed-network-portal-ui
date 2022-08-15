@@ -176,7 +176,8 @@ export default {
       mainOptions: {
         marketplaces: 'Marketplaces',
         custodian: 'Custodian',
-        privacy: 'Privacy'
+        privacy: 'Privacy',
+        nftCollections: 'NFT Collections'
       },
       breadcrumbs: {
         marketplaces: 'Marketplaces',

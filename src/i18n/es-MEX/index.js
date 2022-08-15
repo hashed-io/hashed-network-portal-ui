@@ -180,7 +180,8 @@ export default {
       mainOptions: {
         marketplaces: 'Mercados',
         custodian: 'Custodios',
-        privacy: 'Privacidad'
+        privacy: 'Privacidad',
+        nftCollections: 'Colecciones NFT'
       },
       breadcrumbs: {
         marketplaces: 'Mercados',
