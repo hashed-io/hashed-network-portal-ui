@@ -47,7 +47,8 @@ export default {
       greaterOrEqualThanString: 'The length must be greater than or equal to {value}',
       lessOrEqualThanString: 'The length must be less than or equal to {value}',
       notEqual: 'The value must be different to the Owner address',
-      password: 'The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character'
+      password: 'The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character',
+      betweenString: 'The length must be between {min} and {max} letters'
     }
   },
   pages: {
@@ -175,13 +176,16 @@ export default {
       mainOptions: {
         marketplaces: 'Marketplaces',
         custodian: 'Custodian',
-        privacy: 'Privacy'
+        privacy: 'Privacy',
+        nftCollections: 'NFT Collections'
       },
       breadcrumbs: {
         marketplaces: 'Marketplaces',
         detail: 'Detail',
         custodian: 'Custodian',
-        privacy: 'Privacy'
+        privacy: 'Privacy',
+        NFTCollections: 'NFT Collections',
+        create: 'Create'
       },
       tabs: {
         myMarketplaces: 'My marketplaces',
@@ -282,8 +286,16 @@ export default {
         emptyList: 'No tax credits yet',
         details: {
           title: 'Details Unique {class}',
+          admin: 'Administator',
+          user: 'User',
           frozen: 'Frozen',
-          active: 'Active'
+          active: 'Active',
+          attribute: 'Attribute',
+          value: 'Value',
+          file: 'File',
+          downloading: 'Downloading file',
+          numberItems: 'Number of items',
+          numberMetadata: 'Number of metadata'
         },
         labels: {
           attributeLabel: 'Attribute',

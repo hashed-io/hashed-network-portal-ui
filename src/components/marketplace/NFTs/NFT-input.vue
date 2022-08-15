@@ -5,7 +5,7 @@
       .row
         .col-6
           h-input(
-            :rules="[...rulesLabel]"
+            :rules="[...rulesLabel, isFile ? rules.betweenLengthString(5, 20) : rules.betweenLengthString(1, 100)]"
             v-model="labelComponent"
             :label="$t('pages.marketplace.taxCredits.labels.attributeLabel')"
             :placeholder="$t('pages.marketplace.taxCredits.placeholders.label')"
@@ -17,6 +17,7 @@
             v-if="isFile"
             outlined
             dense
+            counter
             v-model="valueComponent"
             :label="$t('pages.marketplace.taxCredits.placeholders.value')"
             :filled="false"
@@ -58,10 +59,13 @@
       )
 </template>
 <script>
+import { validation } from '~/mixins/validation'
+
 export default {
   name: 'NFTInput',
   components: {
   },
+  mixins: [validation],
   props: {
     /**
      * Label of the attribute

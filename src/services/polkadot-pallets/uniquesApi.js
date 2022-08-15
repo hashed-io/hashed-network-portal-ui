@@ -89,5 +89,15 @@ class UniquesApi extends BasePolkadotApi {
     })
     return uniquesList
   }
+
+  async getLastClassId () {
+    let classesIds = await this.exEntriesQuery('class', [])
+    classesIds = this.mapEntries(classesIds)
+    const mapClasses = classesIds.map(v => {
+      return parseInt(v.id)
+    })
+    const lastClassId = Math.max(...mapClasses)
+    return lastClassId
+  }
 }
 export default UniquesApi

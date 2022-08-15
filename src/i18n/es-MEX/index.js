@@ -46,7 +46,8 @@ export default {
       fileRequired: 'El archivo es requerido',
       greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}',
       lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}',
-      notEqual: 'El valor no debe ser igual al propietario'
+      notEqual: 'El valor no debe ser igual al propietario',
+      betweenString: 'El valor debe estar entre {min} y {max} caracteres'
     }
   },
   pages: {
@@ -179,13 +180,16 @@ export default {
       mainOptions: {
         marketplaces: 'Mercados',
         custodian: 'Custodios',
-        privacy: 'Privacidad'
+        privacy: 'Privacidad',
+        nftCollections: 'Colecciones NFT'
       },
       breadcrumbs: {
         marketplaces: 'Mercados',
         detail: 'Detalles',
         custodian: 'Custodios',
-        privacy: 'Privacidad'
+        privacy: 'Privacidad',
+        NFTCollections: 'Colecciones NFT',
+        create: 'Crear'
       },
       tabs: {
         myMarketplaces: 'Mis Marketplaces',
@@ -281,14 +285,21 @@ export default {
         loggedDownloadFile: 'Debe iniciar sesión para descargar un archivo'
       },
       taxCredits: {
-        createForm: 'Create new Unique',
+        createForm: 'Crear nuevo Unique',
         title: 'Lista de créditos de impuestos',
         emptyList: 'No hay créditos de impuestos aún',
         details: {
           title: 'Detalles unique {class}',
-          frozen: 'Frozen',
-          active: 'Active'
-
+          admin: 'Administrador',
+          user: 'Usuario',
+          frozen: 'Congelado',
+          active: 'Activo',
+          attribute: 'Atributo',
+          value: 'Valor',
+          file: 'Archivo',
+          downloading: 'Descargando archivo',
+          numberItems: 'Número de elementos',
+          numberMetadata: 'Número de metadatos'
         },
         labels: {
           attributeLabel: 'Atributo',

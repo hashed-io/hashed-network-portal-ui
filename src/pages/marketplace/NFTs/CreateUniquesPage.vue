@@ -40,12 +40,16 @@ export default {
               attributesToUpload.push(attribute)
             }
           })
-          const attributesWithPrivateService = await this.uploadToPrivateService(attributesToUpload)
-          console.log('attributesWithPrivateService', attributesWithPrivateService)
+          await this.uploadToPrivateService({
+            attributes: attributesToUpload,
+            addressToShare: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
+          })
         }
+        // TODO: Remove classID when the last changes will be done [classId, instanceId]
+        const lastClassId = await this.$store.$uniquesApi.getLastClassId() + 1
         await this.$store.$fruniquesApi.createWithAttributes({
           user: this.selectedAccount.address,
-          classId: 6,
+          classId: lastClassId,
           instanceId: parseInt(this.instance),
           numericValue: 0,
           admin: { Id: this.selectedAccount.address },
@@ -62,10 +66,10 @@ export default {
         this.hideLoading()
       }
     },
-    async uploadToPrivateService (attributes) {
+    async uploadToPrivateService ({ attributes, addressToShare }) {
+      console.log('uploadToPrivateService', attributes, addressToShare)
       const promises = []
       const privateService = this.$store.$hashedPrivateApi
-      const administratorAddress = '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
       try {
         let fileName
         for (const attribute of attributes) {
@@ -75,9 +79,9 @@ export default {
           const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
           const ext = fileNameSplit[1]
           fileName = filename + '.' + ext
-          console.log({ administratorAddress, fileName, label, file })
+          console.log({ addressToShare, fileName, label, file })
           promises.push(privateService.shareNew({
-            toUserAddress: administratorAddress,
+            toUserAddress: addressToShare,
             name: fileName,
             description: label,
             payload: file
@@ -87,11 +91,12 @@ export default {
         for (const attribute of attributes) {
           const result = results.shift()
           const CID = result.sharedData.cid
-          attribute[1] = {
-            id: result.ownedData.id,
-            value: 'File:' + CID,
-            description: result.sharedData.description
-          }
+          attribute[1] = 'File:' + CID
+          // attribute[1] = {
+          //   id: result.ownedData.id,
+          //   value: 'File:' + CID,
+          //   description: result.sharedData.description
+          // }
         }
         console.log('uploadToPrivateService', attributes)
         return attributes
