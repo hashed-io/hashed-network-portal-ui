@@ -186,7 +186,9 @@ export default {
         marketplaces: 'Mercados',
         detail: 'Detalles',
         custodian: 'Custodios',
-        privacy: 'Privacidad'
+        privacy: 'Privacidad',
+        NFTCollections: 'Colecciones NFT',
+        create: 'Crear'
       },
       tabs: {
         myMarketplaces: 'Mis Marketplaces',
@@ -287,9 +289,14 @@ export default {
         emptyList: 'No hay créditos de impuestos aún',
         details: {
           title: 'Detalles unique {class}',
-          frozen: 'Frozen',
-          active: 'Active'
-
+          frozen: 'Congelado',
+          active: 'Activo',
+          attribute: 'Atributo',
+          value: 'Valor',
+          file: 'Archivo',
+          downloading: 'Descargando archivo',
+          numberItems: 'Número de elementos',
+          numberMetadata: 'Número de metadatos'
         },
         labels: {
           attributeLabel: 'Atributo',

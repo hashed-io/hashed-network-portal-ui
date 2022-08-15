@@ -182,7 +182,9 @@ export default {
         marketplaces: 'Marketplaces',
         detail: 'Detail',
         custodian: 'Custodian',
-        privacy: 'Privacy'
+        privacy: 'Privacy',
+        NFTCollections: 'NFT Collections',
+        create: 'Create'
       },
       tabs: {
         myMarketplaces: 'My marketplaces',
@@ -284,7 +286,13 @@ export default {
         details: {
           title: 'Details Unique {class}',
           frozen: 'Frozen',
-          active: 'Active'
+          active: 'Active',
+          attribute: 'Attribute',
+          value: 'Value',
+          file: 'File',
+          downloading: 'Downloading file',
+          numberItems: 'Number of items',
+          numberMetadata: 'Number of metadata'
         },
         labels: {
           attributeLabel: 'Attribute',
