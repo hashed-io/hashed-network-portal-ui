@@ -285,11 +285,13 @@ export default {
         loggedDownloadFile: 'Debe iniciar sesión para descargar un archivo'
       },
       taxCredits: {
-        createForm: 'Create new Unique',
+        createForm: 'Crear nuevo Unique',
         title: 'Lista de créditos de impuestos',
         emptyList: 'No hay créditos de impuestos aún',
         details: {
           title: 'Detalles unique {class}',
+          admin: 'Administrador',
+          user: 'Usuario',
           frozen: 'Congelado',
           active: 'Activo',
           attribute: 'Atributo',

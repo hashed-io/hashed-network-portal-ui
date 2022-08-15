@@ -286,6 +286,8 @@ export default {
         emptyList: 'No tax credits yet',
         details: {
           title: 'Details Unique {class}',
+          admin: 'Administator',
+          user: 'User',
           frozen: 'Frozen',
           active: 'Active',
           attribute: 'Attribute',
