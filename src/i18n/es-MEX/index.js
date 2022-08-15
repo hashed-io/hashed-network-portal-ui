@@ -235,7 +235,11 @@ export default {
         owner: 'Propietario'
       },
       applicants: {
-        title: 'Aplicantes'
+        title: 'Aplicantes',
+        feedback: 'Feedback'
+      },
+      custodian: {
+        gettingApplicationsWhereYouAreCustodian: 'Getting applications where you are custodian'
       },
       privacy: {
         title: 'Playground de solución de privacidad',
@@ -243,7 +247,8 @@ export default {
           title: 'Subir archivo',
           fileInput: 'Seleccionar archivo',
           custodian: 'Dirección del custodio',
-          shareFile: 'Compartir archivo con otra dirección'
+          shareFile: 'Compartir archivo con otra dirección',
+          noFileToOpen: 'No hay archivo para abrir'
         },
         downloadSection: {
           title: 'Descargar archivo',

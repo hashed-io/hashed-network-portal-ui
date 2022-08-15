@@ -230,7 +230,11 @@ export default {
         owner: 'Owner'
       },
       applicants: {
-        title: 'Applicants'
+        title: 'Applicants',
+        feedback: 'Feedback'
+      },
+      custodian: {
+        gettingApplicationsWhereYouAreCustodian: 'Getting applications where you are custodian'
       },
       privacy: {
         title: 'Privacy solution playground',
@@ -238,7 +242,8 @@ export default {
           title: 'Upload file',
           fileInput: 'Choose file',
           custodian: 'Address of the custodian',
-          shareFile: 'Share file with other addresses'
+          shareFile: 'Share file with other addresses',
+          noFileToOpen: 'No file to open'
         },
         downloadSection: {
           title: 'Download file',
