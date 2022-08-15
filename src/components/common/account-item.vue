@@ -34,14 +34,13 @@ export default {
       type: Boolean,
       default: false
     },
-    displayNameClass: {
-      type: String,
-      default: ''
-    },
     inherit: {
       type: Boolean,
       default: false
     },
+    /**
+     * Flag to show short address
+     */
     shortDisplay: {
       type: Boolean,
       default: false

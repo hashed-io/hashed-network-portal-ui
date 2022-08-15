@@ -1,5 +1,5 @@
 <template lang="pug">
-q-banner.text-white(rounded :class="{ 'bg-red': error, 'bg-warning': loading, 'bg-primary': normal }")
+q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loading, 'bg-primary': normal }")
     template(v-slot:avatar v-if="status")
       q-spinner-tail(v-if="loading" color="white" size="md")
       q-icon(v-else-if="error" name="notification_important" color="white" size="md")
@@ -18,7 +18,7 @@ export default {
      */
     message: {
       type: String,
-      default: undefined
+      default: 'Banner message'
     },
     /**
      * Switch to show loading, error or success icon
@@ -38,9 +38,6 @@ export default {
     normal () {
       return !!(!this.status || this.status.toLowerCase() === '')
     }
-  },
-  mounted () {
-    console.log('mounted', this.status, this.message)
   }
 }
 </script>
