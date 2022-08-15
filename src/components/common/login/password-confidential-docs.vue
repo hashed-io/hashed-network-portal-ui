@@ -17,6 +17,7 @@
           :rules="[rules.required, rules.password]"
           lazy-rules
           autofocus
+          data-testid="passwordInput"
         )
         .row.q-mt-sm.reverse.q-col-gutter-sm
           .col
@@ -25,6 +26,7 @@
               color="primary"
               no-caps
               type="submit"
+              data-testid="loginBtn"
             )
           .col
             q-btn.full-width(
@@ -39,28 +41,43 @@
 import { validation } from '~/mixins/validation'
 
 /**
- * Form to get password used to HCD
+ * Form to write password used to HCD
  */
 export default {
   name: 'PasswordConfidentialDocs',
   mixins: [validation],
   props: {
+    /**
+     * SSO Provider name
+     */
     ssoProvider: {
       type: String,
       default: undefined
     },
+    /**
+     * SSO unique user id
+     */
     ssoUserId: {
       type: String,
       default: undefined
     },
+    /**
+     * SSO URL for image profile
+     */
     ssoImage: {
       type: String,
       default: undefined
     },
+    /**
+     * SSO user display name
+     */
     displayName: {
       type: String,
       default: undefined
     },
+    /**
+     * SSO general account info
+     */
     ssoAccount: {
       type: Object,
       default: () => undefined
@@ -81,6 +98,9 @@ export default {
         ssoImage: this.ssoImage,
         ssoAccount: this.ssoAccount
       }
+      /**
+       * When password is submitted
+       */
       this.$emit('onSubmit', data)
     }
   }
