@@ -17,6 +17,9 @@ export default {
       type: String,
       default: undefined
     },
+    /**
+     * Icon size
+     */
     size: {
       type: String,
       default: '2px'
