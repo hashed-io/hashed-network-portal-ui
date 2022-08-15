@@ -1,14 +1,22 @@
 import PasswordConfidentialDocs from '~/components/common/login/password-confidential-docs.vue'
 import { userEvent, within } from '@storybook/testing-library'
 import { action } from '@storybook/addon-actions'
+// import { expect, jest } from '@storybook/jest'
+import { expect } from '@storybook/jest'
 
 export default {
   title: 'Common/Login/PasswordConfidentialDocs',
   component: PasswordConfidentialDocs,
   argTypes: {
-    selectAccount: { action: action('selectAccount') }
+    onSubmitted: { action: action('onSubmitted') }
   }
 }
+
+// const methods = {
+//   onSubmitted: action('onSubmitted')
+// }
+
+// const spyOnSubmitted = jest.spyOn(methods, 'onSubmitted')
 
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
@@ -18,11 +26,9 @@ const Template = (args) => ({
     // Story args can be spread into the returned object
     return { args }
   },
-  methods: {
-    submit: action('onSubmit')
-  },
+  // methods,
   // Then, the spread values can be accessed directly in the template
-  template: '<passwordConfidentialDocs v-bind="args" @onSubmit="submit"/>'
+  template: '<passwordConfidentialDocs v-bind="args" @onSubmit="args.onSubmitted"/>'
 })
 
 export const Base = Template.bind({})
@@ -37,7 +43,8 @@ Base.args = {
 Base.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const passwordInput = canvas.getByTestId('passwordInput')
-  console.log('passwordInput', passwordInput)
   await userEvent.type(passwordInput, 'P4sswordT3st!')
   await userEvent.click(canvas.getByTestId('loginBtn'))
+  await expect(args.onSubmitted).toHaveBeenCalledTimes(1)
+  // await expect(spyOnSubmitted).toHaveBeenCalledTimes(1)
 }
