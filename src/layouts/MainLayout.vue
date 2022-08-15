@@ -13,7 +13,7 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ option.label }}
+              q-item-label {{ $t(option.label) }}
         q-space
         q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
@@ -42,7 +42,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
@@ -62,7 +62,7 @@ export default defineComponent({
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
-    const { t } = useI18n()
+    // const { t } = useI18n()
 
     // Dynamic options for each app
     const pageOptionsDictionary = {
@@ -70,34 +70,34 @@ export default defineComponent({
         {
           to: { name: 'manageVaults' },
           keyActive: 'My Vaults',
-          label: t('pages.nbv.mainOptions.myVaults')
+          label: 'pages.nbv.mainOptions.myVaults'
         },
         {
           to: { name: 'manageXpub' },
           keyActive: 'Extended Keys',
-          label: t('pages.nbv.mainOptions.extendedKeys')
+          label: 'pages.nbv.mainOptions.extendedKeys'
         }
       ],
       marketplace: [
         {
           to: { name: 'marketplacesList' },
           keyActive: 'Marketplaces',
-          label: t('pages.marketplace.mainOptions.marketplaces')
+          label: 'pages.marketplace.mainOptions.marketplaces'
         },
         {
           to: { name: 'custodian' },
           keyActive: 'Custodian',
-          label: t('pages.marketplace.mainOptions.custodian')
+          label: 'pages.marketplace.mainOptions.custodian'
         },
         {
           to: { name: 'privacy' },
           keyActive: 'Privacy',
-          label: t('pages.marketplace.mainOptions.privacy')
+          label: 'pages.marketplace.mainOptions.privacy'
         },
         {
           to: { name: 'NFTs' },
-          keyActive: 'NFTs Collections',
-          label: 'NFTs Collections'
+          keyActive: 'NFTCollections',
+          label: 'pages.marketplace.mainOptions.nftCollections'
         }
       ]
     }
