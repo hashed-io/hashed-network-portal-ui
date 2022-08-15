@@ -5,14 +5,14 @@
   //- Action Btn
   q-page-sticky(position="bottom-right" :offset="[18, 18]")
     q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") Refresh
+      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   //- Header
   .row.justify-between.q-mb-md
-    .text-h5 Proposal Details
+    .text-h5 {{ $t('pages.nbv.proposals.proposalDetails') }}
     .row.q-gutter-x-sm(v-if="!isBroadcasted")
       #signPSBT
         q-btn(
-          label="Sign PSBT"
+          :label="$t('pages.nbv.proposals.signPSBT')"
           color="secondary"
           icon="qr_code"
           no-caps
@@ -23,7 +23,7 @@
         q-tooltip(v-if="isOffchainError") {{ validationMessage }}
       #DeleteProposal(v-if="canRemove")
         q-btn(
-          label="Delete Proposal"
+          :label="$t('pages.nbv.proposals.deleteProposal')"
           color="negative"
           icon="delete"
           no-caps
@@ -31,39 +31,39 @@
           @click="removeProposal"
         )
   //- Body
-  .text-subtitle2.q-mt-md Vault Id
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
   .text-body2.one-line {{ vaultId }}
-  .text-subtitle2.q-mt-md Proposal Id
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.proposalId') }}d
   .text-body2.one-line {{ proposalId }}
   .row
     .col
-      .text-subtitle2.q-mt-md Description
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.description') }}
       .text-body2 {{ description }}
     .col
-      .text-subtitle2.q-mt-md Status
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
       .text-body2 {{ labelStatus }}
   .row
     .col-xs-6.col-sm-6.col-md-4
-      .text-subtitle2.q-mt-md Threshold
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
       .text-body2 {{ threshold }}
     .col-xs-6.col-sm-6.col-md-4
-      .text-subtitle2.q-mt-md Satoshi Amount
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
       .text-body2 {{ amount }}
     .col-xs-12.col-sm-12.col-md-4
-      .text-subtitle2.q-mt-md Fee in Satoshi Per Virtual Byte
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
       .text-body2 {{ feeSatPerVb }}
   .row
     .col
-      .text-subtitle2.q-mt-md To Address
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.toAddress') }}
       .text-body2.one-line {{ toAddress }}
   .row(v-if="txId")
     .col
-      .text-subtitle2.q-mt-md Tx
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
       .text-body2.one-line.txLabel(@click="openTxExplorer") {{ txId }}
-  .text-subtitle2.q-mt-md Proposer
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
   account-item.full-width(:address="proposer")
   #cosigners
-    .text-subtitle2.q-mt-md Cosigners
+    .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.cosigners') }}
     cosigners-list(:cosigners="proposalCosigners")
   #modals
     q-dialog(v-model="isShowingSignPsbt")
@@ -119,20 +119,20 @@ export default {
       switch (this.labelStatus) {
       case 'Pending':
         if (this.canFinalize) {
-          return 'Finalize Txx'
+          return this.$t('pages.nbv.proposals.finalizeTxx')
         }
-        return 'Sign Psbt'
+        return this.$t('pages.nbv.proposals.signPSBT')
       case 'Finalized':
-        return 'Broadcast Tx'
+        return this.$t('pages.nbv.proposals.broadcastTx')
       default:
-        return 'Sign Psbt'
+        return this.$t('pages.nbv.proposals.signPSBT')
       }
     },
     labelStatus () {
       if (this.status && this.status.ReadyToFinalize === true) {
-        return 'Finalizing'
+        return this.$t('pages.nbv.proposals.finalizing')
       } else if (this.status && this.status.ReadyToFinalize === false) {
-        return 'Broadcasting'
+        return this.$t('pages.nbv.proposals.broadcasting')
       }
       return this.status
     },
@@ -160,7 +160,7 @@ export default {
     validationMessage () {
       if (this.offchainStatus) {
         if (this.offchainStatus.status && this.offchainMessage.status === 'pending') {
-          return 'Pending'
+          return this.$t('pages.nbv.proposals.pending')
         } else if (this.offchainMessage.message) {
           return this.offchainMessage.message
         }
@@ -235,7 +235,7 @@ export default {
           signer: this.selectedAccount.address
         })
         this.isShowingSignPsbt = false
-        this.showNotification({ message: 'Broadcasting' })
+        this.showNotification({ message: this.$t('pages.nbv.proposals.broadcasting') })
         this.updateProposal()
       } catch (e) {
         console.error('error', e)
@@ -297,7 +297,7 @@ export default {
     },
     async updateProposal () {
       try {
-        this.showLoading({ message: 'Updating proposal' })
+        this.showLoading({ message: this.$t('pages.nbv.proposals.updatingProposal') })
         const proposal = await this.$store.$nbvStorageApi.getProposalsById({ Ids: [this.proposalId] })
         this.syncData({
           ...proposal[0].toHuman(),
@@ -325,7 +325,7 @@ export default {
         console.log('signers', signers, userXPub)
         console.log('myXpub', userXPub)
         if (!this.isValidSignature(signers, userXPub)) {
-          this.showNotification({ message: 'Please sign the psbt with a valid XPUB', color: 'negative' })
+          this.showNotification({ message: this.$t('pages.nbv.proposals.signThePsbtWithValidXPUB'), color: 'negative' })
           return
         }
         await this.$store.$nbvStorageApi.savePsbt({
@@ -334,7 +334,7 @@ export default {
           psbt
         })
         this.isShowingSignPsbt = false
-        this.showNotification({ message: 'PSBT saved successfully' })
+        this.showNotification({ message: this.$t('pages.nbv.proposals.psbtSavedSuccessfully') })
         this.updateProposal()
       } catch (e) {
         console.error('error', e)
@@ -383,7 +383,7 @@ export default {
         }
       } else if (offchainStatus.toLowerCase() === 'pending') {
         this.offchainMessage = {
-          message: 'Please await a moment, we are creating the PSBT',
+          message: this.$t('pages.nbv.proposals.creatingPSBT'),
           status: 'loading'
         }
       } else if (offchainStatus.toLowerCase() === 'valid') {

@@ -4,7 +4,7 @@
     q-toggle(
       data-testid="toggleForm"
       data-cy="toggleForm"
-      label="Use form"
+      :label="$t('pages.nbv.xpub.useForm')"
       v-model="useForm"
     )
     #useForm.q-gutter-y-sm(v-if="useForm")
@@ -77,11 +77,11 @@
                     q-icon.icon-btn(data-testid="openQr" data-cy="openQr" name="qr_code_scanner" @click="toggleQRScanner(true)")
                         q-tooltip {{ $t('pages.nbv.xpub.xpubDesc') }}
         .col
-          .text-body2 {{ $t('general.xpubDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.xpubDesc')  }}
     q-btn.q-mt-sm(
       data-testid="submitButton"
       data-cy="submitButton"
-      label="Set XPUB"
+      :label="$t('pages.nbv.xpub.setXpub')"
       color="primary"
       no-caps
       type="submit"

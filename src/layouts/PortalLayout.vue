@@ -21,7 +21,7 @@ q-layout(view="lHh lpR lFf")
             //- v-if="(option.login === loginType || !option.login)"
             q-item-section(avatar)
                 q-icon(:name="option.icon")
-            q-item-section(avatar) {{ option.label }}
+            q-item-section(avatar) {{ $t(option.label) }}
       .fixed-bottom.q-mb-md.q-px-md
         q-btn.text-primary.full-width.q-ma-md(:label="selectedLang.label" color="white" icon-right="arrow_drop_down" no-caps)
           q-menu(fit auto-close)
@@ -52,7 +52,7 @@ export default {
       drawerLeft: false,
       optionsMenu: [
         {
-          label: 'NBV',
+          label: 'pages.nbv.appName',
           icon: 'currency_bitcoin',
           key: 'nbv',
           to: {
@@ -61,16 +61,16 @@ export default {
           login: 'polkadotjs'
         },
         {
-          label: 'Marketplaces',
+          label: 'pages.marketplace.appName',
           icon: 'store',
-          key: 'marketplaces',
+          key: 'marketplace',
           to: {
             name: 'marketplacesList'
           },
           login: 'polkadotjs'
         },
         {
-          label: 'Sign Test',
+          label: 'pages.sign.appName',
           icon: 'border_color',
           key: 'sign',
           to: {

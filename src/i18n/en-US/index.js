@@ -14,6 +14,14 @@ export default {
     waitingWeb3: 'Waiting for polkadot web3 extension',
     waitingSub: 'Waiting for changes on the chain'
   },
+  login: {
+    login: 'Login',
+    chooseAnAccount: 'Choose an account from your polkadot extension',
+    notHaveAccounts: 'You do not have accounts on polkadot js extension',
+    or: 'or',
+    signinWithGoogle: 'Sign in with Google',
+    logout: 'Logout'
+  },
   breadcrumb: {
     confidentialDocuments: 'Hashed Confidential Documents'
   },
@@ -45,6 +53,17 @@ export default {
   },
   pages: {
     nbv: {
+      appName: 'NBV',
+      mainOptions: {
+        myVaults: 'My Vaults',
+        extendedKeys: 'Extended Keys'
+      },
+      breadcrumbs: {
+        myVaults: 'My Vaults',
+        vaultDetails: 'Vault Details',
+        proposalDetails: 'Proposal Details',
+        extendedKeys: 'Extended Keys'
+      },
       xpub: {
         label: 'Label',
         publicKey: 'Public Key',
@@ -59,7 +78,13 @@ export default {
         derivationPathDesc: 'Contains information about a key’s depth and index',
         xpubDesc: 'Please pase or scan your XPUB from blue wallet',
         xpub: 'XPUB',
-        xpubPlaceholder: 'Paste or write your XPUB'
+        xpubPlaceholder: 'Paste or write your XPUB',
+        managePublicKeys: 'Manage Public Keys',
+        removeYourXpub: 'Remove your XPUB',
+        setXpub: 'Set XPUB',
+        useForm: 'Use Form',
+        yourXpubWasAdded: 'Your XPUB was added',
+        yourXpubWasRemoved: 'Your XPUB was removed'
       },
       vaults: {
         manageVaults: 'Manage Vaults',
@@ -71,7 +96,27 @@ export default {
         owner: 'Owner',
         threshold: 'Threshold',
         clickToSeeDetails: 'Click to see details',
-        createVault: 'Create vault'
+        createVault: 'Create vault',
+        createNewVault: 'Create new vault',
+        label: 'Label',
+        accountAddress: 'Account address',
+        includeOwnerAsCosigner: 'Include owner as cosigner',
+        vaultCreated: 'Vault created',
+        messageSignedAndVerified: 'Message Signed and Verified',
+        deleteVault: 'Delete vault',
+        vaultDetails: 'Vault Details',
+        exportDescriptor: 'Export descriptor',
+        pending: 'Pending',
+        vaultId: 'Vault Id',
+        balance: 'Balance',
+        receiveAddress: 'Receive Address',
+        getReceiveAddress: 'Get receive address',
+        refreshReceiveAddress: 'Refresh receive address',
+        outputDescriptor: 'Output Descriptor',
+        vaultsBalanceMustBeGreaterThanZero: 'The vault\'s balance must be greater than 0',
+        descriptorQr: 'Descriptor QR',
+        creatingDescriptor: 'Please await a moment, we are creating the descriptor',
+        accountDuplicated: 'This account is duplicated'
       },
       proposals: {
         create_proposal: 'Create new proposal',
@@ -88,13 +133,57 @@ export default {
         signPsbtBroadcastDesc: 'Broadcast the transaction',
         saveBtn: 'Save',
         finalizeBtn: 'Finalize',
-        broadcastBtn: 'Broadcast'
+        broadcastBtn: 'Broadcast',
+        proposals: 'Proposals',
+        createProposal: 'Create proposal',
+        updatingProposal: 'Updating proposal',
+        proposalCreated: 'Proposal created',
+        proposalDetails: 'Proposal Details',
+        signPSBT: 'Sign PSBT',
+        deleteProposal: 'Delete Proposal',
+        proposalId: 'Proposal Id',
+        status: 'Status',
+        satoshiAmount: 'Satoshi Amount',
+        feeInSatoshiPerVirtualByte: 'Fee in Satoshi Per Virtual Byte',
+        toAddress: 'To Address',
+        tx: 'Tx',
+        Proposer: 'Proposer',
+        finalizeTxx: 'Finalize Txx',
+        broadcastTx: 'Broadcast Tx',
+        finalizing: 'Finalizing',
+        broadcasting: 'Broadcasting',
+        pending: 'Pending',
+        signThePsbtWithValidXPUB: 'Please sign the psbt with a valid XPUB',
+        psbtSavedSuccessfully: 'PSBT saved successfully',
+        creatingPSBT: 'Please await a moment, we are creating the PSBT',
+        description: 'Description',
+        recipientAddress: 'Recipient address',
+        amountInSatoshi: 'Amount in Satoshi'
         // signPsbtStep1: ''
+      },
+      list: {
+        thereAreNotVaultsYet: 'There Are Not Vaults Yet'
+      },
+      actions: {
+        refresh: 'refresh',
+        copyToClipboard: 'Copy to clipboard'
       }
     },
     marketplace: {
+      appName: 'Marketplace',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Add Marketplace',
+      mainOptions: {
+        marketplaces: 'Marketplaces',
+        custodian: 'Custodian',
+        privacy: 'Privacy'
+      },
+      breadcrumbs: {
+        marketplaces: 'Marketplaces',
+        detail: 'Detail',
+        custodian: 'Custodian',
+        privacy: 'Privacy'
+      },
       tabs: {
         myMarketplaces: 'My marketplaces',
         allMarketplaces: 'All marketplaces',
@@ -112,7 +201,10 @@ export default {
         notesTitle: 'Notes',
         filesTitle: 'Files',
         enrollButton: 'Enroll',
-        rejectButton: 'Rejected'
+        rejectButton: 'Rejected',
+        applicationWasSubmitted: 'Application was submitted',
+        applicationApproved: 'Application approved',
+        applicationRejected: 'Application rejected'
       },
       applyForm: {
         title: 'Apply for Marketplace',
@@ -134,7 +226,9 @@ export default {
         title: 'Create new marketplace',
         label: 'Label',
         placeholder: 'Please write a description',
-        button: 'Create marketplace'
+        button: 'Create marketplace',
+        marketplacecreatedSuccessfully: 'Marketplace created successfully',
+        loggedToCreate: 'You must be logged in to create a marketplace'
       },
       searchInput: {
         label: 'Search',
@@ -147,7 +241,11 @@ export default {
         freezer: 'Freezer'
       },
       applicants: {
-        title: 'Applicants'
+        title: 'Applicants',
+        feedback: 'Feedback'
+      },
+      custodian: {
+        gettingApplicationsWhereYouAreCustodian: 'Getting applications where you are custodian'
       },
       privacy: {
         title: 'Privacy solution playground',
@@ -155,7 +253,8 @@ export default {
           title: 'Upload file',
           fileInput: 'Choose file',
           custodian: 'Address of the custodian',
-          shareFile: 'Share file with other addresses'
+          shareFile: 'Share file with other addresses',
+          noFileToOpen: 'No file to open'
         },
         downloadSection: {
           title: 'Download file',
@@ -170,6 +269,13 @@ export default {
         },
         query: 'Query: ',
         response: 'Response: '
+      },
+      list: {
+        youDontHaveMarketplacesYet: 'You don\'t have marketplaces yet',
+        marketplacesHaveNotYetBeenCreated: 'Marketplaces have not yet been created'
+      },
+      actions: {
+        loggedDownloadFile: 'You need to be logged in to download a file'
       },
       taxCredits: {
         createFormTitle: 'Create new Unique',
@@ -225,6 +331,9 @@ export default {
         successAddedMessage: 'Document added successfully',
         documents: 'Documents'
       }
+    },
+    sign: {
+      appName: 'Sign Test'
     }
   }
 }
