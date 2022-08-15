@@ -40,7 +40,7 @@ export default {
     ...mapMutations('polkadotWallet', ['setIsHashedLoggedIn']),
     async getApplications () {
       try {
-        this.showLoading({ message: 'Getting applications where you are custodian' })
+        this.showLoading({ message: this.$t('pages.marketplace.custodian.gettingApplicationsWhereYouAreCustodian') })
         const response = await this.$store.$marketplaceApi.getApplicationsByCustodian({
           account: this.selectedAccount.address
         })

@@ -9,9 +9,9 @@ const routes = {
       component: () => import('pages/marketplace/index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Marketplaces', icon: 'storefront' }
+          { name: 'marketplaces', icon: 'storefront' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -21,10 +21,10 @@ const routes = {
       component: () => import('pages/marketplace/details-market.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
-          { name: 'Detail', icon: 'info' }
+          { name: 'marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
+          { name: 'detail', icon: 'info' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -33,9 +33,9 @@ const routes = {
       component: () => import('pages/marketplace/custodian/index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Custodian', icon: 'shield' }
+          { name: 'custodian', icon: 'shield' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -44,9 +44,9 @@ const routes = {
       component: () => import('pages/marketplace/privacy/Index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Privacy', icon: 'home' }
+          { name: 'privacy', icon: 'home' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {

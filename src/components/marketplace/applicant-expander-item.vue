@@ -33,7 +33,7 @@ q-expansion-item(group="applicants")
     #feedback
       q-input.q-mt-md(
         v-if="showActions && status !== 'Approved'"
-        label="Feedback"
+        :label="$t('pages.marketplace.applicants.feedback')"
         v-model="feedback"
         autogrow
         outlined

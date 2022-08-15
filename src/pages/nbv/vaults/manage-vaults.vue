@@ -3,7 +3,7 @@
   //- Action Btn
   q-page-sticky(position="bottom-right" :offset="[18, 18]")
     q-btn(fab icon="refresh" color="secondary" @click="getVaults")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") Refresh
+      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   .row.justify-between.q-mb-md
     .text-h5 {{ $t('pages.nbv.vaults.manageVaults') }}
     q-btn(
@@ -81,7 +81,7 @@ export default {
           user: this.selectedAccount.address
         })
         this.isShowingCreateVault = false
-        this.showNotification({ message: 'Vault created' })
+        this.showNotification({ message: this.$('pages.nbv.vaults.vaultCreated') })
         await this.getVaults()
       } catch (e) {
         console.error('error', e)
@@ -99,7 +99,7 @@ export default {
         const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.selectedAccount.address)
         console.log('verifyMessage', response2)
         if (response2.isValid) {
-          this.showNotification({ message: 'Message Signed and Verified' })
+          this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })
         }
       } catch (e) {
         console.error('error', e)

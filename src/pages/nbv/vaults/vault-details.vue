@@ -5,14 +5,14 @@
   //- Action Btn
   q-page-sticky(position="bottom-right" :offset="[18, 18]")
     q-btn(fab icon="refresh" color="secondary" @click="updateVault")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") Refresh
+      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   //- Header
   .row.justify-between.q-mb-md
-    .text-h5 Vault Details
+    .text-h5 {{ $t('pages.nbv.vaults.vaultDetails') }}
     .row.q-gutter-x-sm
       #exportDescriptor.no-padding.q-ma-none
         q-btn(
-          label="Export descriptor"
+          :label="$t('pages.nbv.vaults.exportDescriptor')"
           color="secondary"
           icon="qr_code"
           no-caps
@@ -20,10 +20,10 @@
           @click="exportVault"
           :disabled="!outputDescriptor"
         )
-        q-tooltip(v-if="!outputDescriptor") Pending
+        q-tooltip(v-if="!outputDescriptor") {{ $t('pages.nbv.vaults.pending') }}
       #deleteVault
         q-btn(
-          label="Delete vault"
+          :label="$t('pages.nbv.vaults.deleteVault')"
           color="negative"
           icon="delete"
           no-caps
@@ -32,46 +32,46 @@
           v-if="iAmOwner"
         )
   //- Body
-  .text-subtitle2.q-mt-md Vault Id
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
   .text-body2.one-line {{ vaultId }}
   .row
     .col
-      .text-subtitle2.q-mt-md Balance
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
       .row
         q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
         .text-body2 {{ balance || 0 }} Sats
     .col
-      .text-subtitle2.q-mt-md Description
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.description') }}
       .text-body2 {{ description }}
     .col
-      .text-subtitle2.q-mt-md Threshold
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
       .text-body2 {{ threshold }}
-  .text-subtitle2.q-mt-md Owner
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.owner') }}
   account-item(:address="owner")
-  .text-subtitle2.q-mt-md Cosigners
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
   .q-gutter-sm(v-for="cosigner in cosigners")
     account-item.q-mt-md(:address="cosigner")
-  .text-subtitle2.q-mt-md(v-if="outputDescriptor") Receive Address
+  .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.receiveAddress') }}
   q-card.q-pa-xs(v-if="outputDescriptor")
     q-item
       q-item-section.no-padding(v-if="vaultAddress")
         q-item-label.text-body2(lines="1") {{ vaultAddress }}
       q-item-section.no-padding(avatar)
         q-btn(
-          :label="!vaultAddress ? 'Get receive address' : 'Refresh receive address'"
+          :label="!vaultAddress ? $t('pages.nbv.vaults.getReceiveAddress') : $t('pages.nbv.vaults.refreshReceiveAddress') "
           size="sm"
           no-caps
           color="secondary"
           @click="getReceiveAddress"
         )
-  .text-subtitle2.q-mt-md(v-if="outputDescriptor") Output Descriptor
+  .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.outputDescriptor') }}
   q-card.q-pa-xs(v-if="outputDescriptor")
     q-item
       q-item-section
         q-item-label.text-body2(lines="1") {{ outputDescriptor }}
       q-item-section.no-padding(avatar)
         q-btn(
-          label="Copy to clipboard"
+          :label="$t('pages.nbv.actions.copyToClipboard')"
           size="sm"
           no-caps
           color="secondary"
@@ -79,10 +79,10 @@
         )
   //- Proposals
   #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
-    .text-subtitle2.q-mt-md Proposals
+    .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
     #btnCreateProposal
       q-btn(
-        label="Create proposal"
+        :label="$t('pages.nbv.proposals.createProposal')"
         icon="add"
         color="secondary"
         no-caps
@@ -90,7 +90,7 @@
         @click="isShowingCreateProposal = true"
         :disabled="!balance || balance <= 0"
       )
-      q-tooltip(v-if="!balance || balance <= 0") The vault's balance must be greater than 0
+      q-tooltip(v-if="!balance || balance <= 0") {{ $t('pages.nbv.vaults.vaultsBalanceMustBeGreaterThanZero') }}
   proposals-list(:proposals="proposalsList" @onProposalSelected="goToProposalDetails")
   #modals
     q-dialog(v-model="isShowingCreateProposal" persistent)
@@ -98,11 +98,11 @@
         create-proposal-form(@submittedForm="createNewProposal" :currentBalance="balance")
     q-dialog(v-model="isShowingVaultQR")
       q-card.modalQrSize.q-pa-sm
-        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm Descriptor QR
+        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.descriptorQr') }}
         div.qrContainer(v-html="vaultQR")
         q-btn.full-width.q-mx-md(
           icon="content_copy"
-          label="Copy text to clipboard"
+          :label="$t('pages.nbv.actions.copyToClipboard')"
           flat
           size="md"
           no-caps
@@ -184,7 +184,7 @@ export default {
   methods: {
     async updateVault () {
       try {
-        this.showLoading({ message: 'Updating proposal' })
+        this.showLoading({ message: this.$t('pages.nbv.proposals.updatingProposal') })
         const vault = await this.$store.$nbvStorageApi.getVaultsById({ Ids: [this.vaultId] })
         this.syncData({
           ...vault[0].toHuman(),
@@ -290,7 +290,7 @@ export default {
           description: payload.description
         })
         this.isShowingCreateProposal = false
-        this.showNotification({ message: 'Proposal created' })
+        this.showNotification({ message: this.$t('pages.nbv.proposals.proposalCreated') })
         this.getProposals()
       } catch (e) {
         console.error('error', e)
@@ -350,7 +350,7 @@ export default {
         }
       } else if (offchainStatus.toLowerCase() === 'pending') {
         this.offchainMessage = {
-          message: 'Please await a moment, we are creating the descriptor',
+          message: this.$('pages.nbv.vaults.creatingDescriptor'),
           status: 'loading'
         }
       } else if (offchainStatus.toLowerCase() === 'valid') {

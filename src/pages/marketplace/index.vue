@@ -26,9 +26,9 @@
 
   q-tab-panels(v-model="tab")
     q-tab-panel(name="myMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace")
+      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" :emptyLabel="$t('pages.marketplace.list.youDontHaveMarketplacesYet')" @selectedMarketplace="onSelectMarketplace")
     q-tab-panel(name="allMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
+      marketplace-list(:marketplaces="allMarketplaces" :emptyLabel="$t('pages.marketplace.list.marketplacesHaveNotYetBeenCreated')" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
       q-card.modalSize
@@ -119,7 +119,7 @@ export default {
         if (this.tab !== 'myMarketplaces') {
           this.tab = 'myMarketplaces'
         }
-        this.showNotification({ message: 'Marketplace created successfully' })
+        this.showNotification({ message: this.$t('pages.marketplace.createForm.marketplacecreatedSuccessfully') })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -139,7 +139,7 @@ export default {
       if (isLoggedIn) {
         this.modals.isShowingAddMarketplace = true
       } else {
-        this.showNotification({ message: 'You must be logged in to create a marketplace', color: 'negative' })
+        this.showNotification({ message: this.$t('pages.marketplace.createForm.loggedToCreate'), color: 'negative' })
       }
     }
   }

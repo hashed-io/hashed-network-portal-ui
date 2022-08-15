@@ -10,7 +10,7 @@ const routes = {
       component: () => import('src/pages/nbv/vaults/manage-vaults.vue'),
       meta: {
         breadcrumb: [
-          { name: 'My Vaults', icon: 'storage' }
+          { name: 'myVaults', icon: 'storage' }
         ],
         app: 'nbv'
       }
@@ -22,7 +22,7 @@ const routes = {
       component: () => import('pages/nbv/xpub/manage-xpub.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Extended Keys', icon: 'key' }
+          { name: 'extendedKeys', icon: 'key' }
         ],
         app: 'nbv'
       }
@@ -35,8 +35,8 @@ const routes = {
       component: () => import('pages/nbv/vaults/vault-details.vue'),
       meta: {
         breadcrumb: [
-          { name: 'My Vaults', icon: 'storage', to: { name: 'manageVaults' } },
-          { name: 'Vault Details', icon: 'summarize' }
+          { name: 'myVaults', icon: 'storage', to: { name: 'manageVaults' } },
+          { name: 'vaultDetails', icon: 'summarize' }
         ],
         app: 'nbv'
       }
@@ -49,9 +49,9 @@ const routes = {
       component: () => import('src/pages/nbv/proposals/proposal-details.vue'),
       meta: {
         breadcrumb: [
-          { name: 'My Vaults', icon: 'storage', to: { name: 'manageVaults' } },
-          { name: 'Vault Details', icon: 'summarize', back: true },
-          { name: 'Proposal Details', icon: 'history_edu' }
+          { name: 'myVaults', icon: 'storage', to: { name: 'manageVaults' } },
+          { name: 'vaultDetails', icon: 'summarize', back: true },
+          { name: 'proposalDetails', icon: 'history_edu' }
         ],
         app: 'nbv'
       }
