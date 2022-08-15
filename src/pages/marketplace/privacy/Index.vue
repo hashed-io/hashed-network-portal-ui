@@ -195,7 +195,7 @@ export default defineComponent({
         link.click()
         document.body.removeChild(link)
       } else {
-        this.showNotification({ message: 'No file to open', color: 'negative' })
+        this.showNotification({ message: this.$t('pages.marketplace.privacy.uploadSection.noFileToOpen'), color: 'negative' })
       }
     },
     matchDataViewByCID (response) {
