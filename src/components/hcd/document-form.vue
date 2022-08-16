@@ -10,6 +10,7 @@
           outlined
           :rules="[rules.required]"
           :readonly="isSharing"
+          data-testid="nameInput"
         )
         q-input(
           :label="$t('pages.hcd.documents.description')"
@@ -17,6 +18,7 @@
           outlined
           :rules="[rules.required]"
           :readonly="isSharing"
+          data-testid="descriptionInput"
         )
         q-file(
           v-model="form.payload"
@@ -25,11 +27,13 @@
           :rules="[rules.required]"
           v-if="!isEditing"
           :readonly="isSharing"
+          data-testid="fileInput"
         )
         q-toggle(
           :label="$t('pages.hcd.documents.shareWithOtherUser')"
           v-model="form.isShared"
           v-if="!isEditing && !isSharing"
+          data-testid="shareToggleInput"
         )
         q-slide-transition
             account-input(
@@ -39,6 +43,7 @@
               :rules="[rules.required]"
               v-if="form.isShared"
               :autofocus="isSharing"
+              data-testid="accountInput"
             )
         .row.reverse
             q-btn(
@@ -46,43 +51,72 @@
               no-caps
               color="primary"
               type="submit"
+              data-testid="submitBtn"
             )
 </template>
 
 <script>
 import { validation } from '~/mixins/validation'
+
+/**
+ * This form handles the cases to add, edit and share documents
+ */
 export default {
   name: 'DocumentForm',
   mixins: [validation],
   props: {
+    /**
+     * Name
+     */
     name: {
       type: String,
       default: undefined
     },
+    /**
+     * Description
+     */
     description: {
       type: String,
       default: undefined
     },
+    /**
+     * CID
+     */
     cid: {
       type: String,
       default: undefined
     },
+    /**
+     * Payload or document file
+     */
     payload: {
       type: Object,
       default: () => undefined
     },
+    /**
+     * Flat to indicate is editing
+     */
     isEditing: {
       type: Boolean,
       default: () => false
     },
+    /**
+     * Flat to indicate is adding
+     */
     isAdding: {
       type: Boolean,
       default: () => false
     },
+    /**
+     * Flat to indicate is sharing
+     */
     isSharing: {
       type: Boolean,
       default: () => false
     },
+    /**
+     * Flat to indicate is editing a shared document
+     */
     shared: {
       type: Boolean,
       default: () => false
@@ -129,6 +163,9 @@ export default {
   methods: {
     onSubmit () {
       if (this.isEditing) {
+        /**
+         * Called when a request to edit document is passed
+         */
         this.$emit('onEditSubmitted', {
           name: this.form.name,
           description: this.form.description,
@@ -136,6 +173,9 @@ export default {
           shared: this.shared
         })
       } else if (this.isSharing) {
+        /**
+         * Called when a request to share document is passed
+         */
         this.$emit('onShareSubmitted', {
           name: this.form.name,
           description: this.form.description,
@@ -144,6 +184,9 @@ export default {
           toUserAddress: this.form.toUserAddress
         })
       } else if (this.isAdding) {
+        /**
+         * Called when a request to add document is passed
+         */
         this.$emit('onAddSubmitted', {
           name: this.form.name,
           description: this.form.description,
