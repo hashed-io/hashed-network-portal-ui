@@ -80,6 +80,6 @@ EditDocument.play = async ({ args, canvasElement }) => {
 
   await userEvent.click(canvas.getByTestId('submitBtn'))
 
-  await expect(args.onAddSubmitted).toHaveBeenCalledTimes(1)
+  await expect(args.onEditSubmitted).toHaveBeenCalledTimes(1)
   // await expect(args.onAddSubmitted).toHaveBeenCalledTimes(1)
 }
