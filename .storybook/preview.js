@@ -19,6 +19,13 @@ import polkadotWallet from '../src/store/polkadotWallet'
 import notifications from '~/mixins/notifications'
 import { Notify, Loading } from 'quasar'
 
+import TInput from '~/components/common/input/t-input.vue'
+import HInput from '~/components/common/input/h-input.vue'
+import AccountInput from '~/components/common/account-input.vue'
+app.component('TInput', TInput)
+app.component('HInput', HInput)
+app.component('AccountInput', AccountInput)
+
 const store = createStore({
   modules: {
     polkadotWallet
