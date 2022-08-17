@@ -1,17 +1,21 @@
 import DocumentForm from '~/components/hcd/document-form'
 import { userEvent, within } from '@storybook/testing-library'
-import { action } from '@storybook/addon-actions'
+// import { action } from '@storybook/addon-actions'
 import { expect } from '@storybook/jest'
 
 export default {
   title: 'HCD/DocumentForm',
   component: DocumentForm,
   argTypes: {
-    onShareSubmitted: { action: action('onShareSubmitted') },
-    onEditSubmitted: { action: action('onEditSubmitted') },
-    onAddSubmitted: { action: action('onAddSubmitted') }
+    // onShareSubmitted: (val) => {
+    //   // action('onShareSubmitted').call()
+    //   return val
+    // },
+    // onEditSubmitted: { action: action('onEditSubmitted') },
+    // onAddSubmitted: { action: action('onAddSubmitted') }
   }
 }
+
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
   components: { DocumentForm },
@@ -48,6 +52,18 @@ EditDocument.args = {
   shared: false
 }
 
+export const ShareDocument = Template.bind({})
+ShareDocument.args = {
+  name: 'Old document name',
+  description: 'This is my old document description',
+  cid: 'a45asd654ads',
+  payload: new File(['file test'], 'testFile.pdf', { type: 'file/pdf' }),
+  isEditing: false,
+  isAdding: false,
+  isSharing: true,
+  shared: false
+}
+
 AddDocument.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const nameInput = canvas.getByTestId('nameInput')
@@ -69,9 +85,6 @@ EditDocument.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const nameInput = canvas.getByTestId('nameInput')
   const descriptionInput = canvas.getByTestId('descriptionInput')
-  // const shareToggleInput = canvas.getByTestId('shareToggleInput')
-  // const accountInput = canvas.getByTestId('accountInput')
-  // const submitBtn = canvas.getByTestId('submitBtn')
 
   await userEvent.clear(nameInput)
   await userEvent.type(nameInput, 'This is a new name to test')
@@ -81,5 +94,14 @@ EditDocument.play = async ({ args, canvasElement }) => {
   await userEvent.click(canvas.getByTestId('submitBtn'))
 
   await expect(args.onEditSubmitted).toHaveBeenCalledTimes(1)
-  // await expect(args.onAddSubmitted).toHaveBeenCalledTimes(1)
+}
+
+ShareDocument.play = async ({ args, canvasElement }) => {
+  const canvas = within(canvasElement)
+  setTimeout(async () => {
+    await expect(canvas.getByTestId('accInput')).toBeInTheDocument()
+    await userEvent.type(canvas.getByTestId('accInput'), '5HmrDB399VYxWyaz3HYsVxMt4oWMAvNd7r2DQ2FUGYSjub4V')
+    await userEvent.click(canvas.getByTestId('submitBtn'))
+    await expect(args.onShareSubmitted).toHaveBeenCalledTimes(1)
+  }, 200)
 }

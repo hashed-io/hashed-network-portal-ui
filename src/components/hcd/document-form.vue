@@ -40,10 +40,10 @@
               :label="$t('pages.hcd.documents.polkadotAddressToShare')"
               v-model="form.toUserAddress"
               outlined
-              :rules="[rules.required]"
+              :rules="[rules.required, rules.isValidPolkadotAddress]"
               v-if="form.isShared"
               :autofocus="isSharing"
-              data-testid="accountInput"
+              localTestId="accInput"
             )
         .row.reverse
             q-btn(

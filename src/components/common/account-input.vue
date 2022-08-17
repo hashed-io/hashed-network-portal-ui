@@ -3,7 +3,6 @@
     q-input(
         data-cy="account_input"
         testid="account_input"
-        data-testid="account_input"
         :label="label"
         v-model="value"
         :outlined="outlined"
@@ -11,6 +10,7 @@
         :disable="disable"
         :readonly="readonly"
         :autofocus="autofocus"
+        :data-testid="localTestId"
     )
         template(v-slot:prepend)
             account-icon.q-mt-sm(:address="value" size="40px")
@@ -80,6 +80,10 @@ export default {
     autofocus: {
       type: Boolean,
       default: false
+    },
+    localTestId: {
+      type: String,
+      default: 'account_input'
     }
   },
   emits: ['update:modelValue'],
