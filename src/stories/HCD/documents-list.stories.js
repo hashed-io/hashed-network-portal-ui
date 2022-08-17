@@ -89,3 +89,9 @@ ListingItems.play = async ({ args, canvasElement }) => {
   await userEvent.click(removeBtn)
   await expect(args.onRemoveDocument).toHaveBeenCalledTimes(1)
 }
+
+ListEmpty.play = async ({ args, canvasElement }) => {
+  const canvas = within(canvasElement)
+  const emptyLabel = canvas.getByTestId('emptyLabel')
+  await expect(emptyLabel).toBeInTheDocument()
+}
