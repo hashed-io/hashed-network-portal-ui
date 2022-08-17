@@ -125,20 +125,46 @@ export default {
       }
     },
     async onGoogleSignIn (response) {
-      const { credential } = response
-      if (credential) {
-        const account = Jwt.decodeToken(credential)
-        this.hcdPasswordProps = {
-          ssoProvider: 'Google',
-          ssoUserId: account.sub,
-          ssoImage: account.picture,
-          displayName: account.name,
-          ssoAccount: account
+      try {
+        this.showLoading({
+          message: 'Login through Hashed Confidential Documents'
+        })
+        const { credential } = response
+        if (credential) {
+          const account = Jwt.decodeToken(credential)
+          this.hcdPasswordProps = {
+            ssoProvider: 'Google',
+            ssoUserId: account.sub,
+            ssoImage: account.picture,
+            displayName: account.name,
+            ssoAccount: account
+          }
+          // this.showHCDPasswordModal = true
+          const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
+            ssoProvider: 'Google',
+            ssoUserId: account.sub,
+            email: account.email,
+            clientId: process.env.GOOGLE_CLIENT_ID
+          })
+          const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
+          console.log('hcgResponse', hcgResponse)
+          this.$store.commit('hashedConfidentialDocs/setAccount', {
+            ssoProvider: 'Google',
+            ssoUserId: account.sub,
+            ssoImage: account.picture,
+            ssoAccount: account,
+            polkadotAddress
+          })
+          this.$router.push({ name: 'hcd' })
         }
-        this.showHCDPasswordModal = true
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     },
-    async onPasswordSet ({ password, ssoUserId, ssoProvider, ssoImage, ssoAccount }) {
+    async onPasswordSet ({ email, ssoUserId, ssoProvider, ssoImage, ssoAccount }) {
       try {
         this.showLoading({
           message: 'Login through Hashed Confidential Documents'
@@ -146,7 +172,7 @@ export default {
         const hcgResponse = await this.$store.$hcd.login({
           ssoProvider,
           ssoUserId,
-          password
+          email
         })
         const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
         console.log('hcgResponse', hcgResponse)
