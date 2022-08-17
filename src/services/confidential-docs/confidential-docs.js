@@ -1,21 +1,60 @@
 // See HashedConfidentialDocs on https://github.com/hashed-io/hashed-confidential-docs-client-api
-import { HashedConfidentialDocs } from '@smontero/hashed-confidential-docs'
+import {
+  HashedConfidentialDocs,
+  GoogleDrive,
+  Google,
+  GoogleVaultAuthProvider,
+  Polkadot,
+  LocalAccountFaucet,
+  BalancesApi
+} from '@smontero/hashed-confidential-docs'
+import { Keyring } from '@polkadot/api'
 
 class ConfidentialDocs {
-  constructor ({ ipfsURL, chainURI, appName, faucet, ipfsAuthHeader }) {
-    const hcd = new HashedConfidentialDocs({
-      ipfsURL,
-      chainURI,
-      appName,
-      faucet,
-      ipfsAuthHeader
+  constructor ({ ipfsURL, chainURI, appName, signer, ipfsAuthHeader }) {
+    this._polkadot = new Polkadot({ wss: chainURI, appName })
+    this._ipfsURL = ipfsURL
+    this._signer = signer
+    this._ipfsAuthHeader = ipfsAuthHeader
+  }
+
+  async init () {
+    await this._polkadot.connect()
+
+    const keyring = new Keyring()
+    const faucet = new LocalAccountFaucet({
+      balancesApi: new BalancesApi(this._polkadot._api, () => {}),
+      signer: keyring.addFromUri(this._signer, {}, 'sr25519'),
+      amount: 1000000000
     })
-    console.log('hcd', hcd)
+
+    const hcd = new HashedConfidentialDocs({
+      ipfsURL: this._ipfsURL,
+      polkadot: this._polkadot,
+      faucet,
+      ipfsAuthHeader: this._ipfsAuthHeader
+    })
+
     this._hcd = hcd
   }
 
-  login ({ ssoProvider, ssoUserId, password }) {
-    return this._hcd.login({ ssoProvider, ssoUserId, password })
+  async ssoGoogleLogin ({ ssoProvider, ssoUserId, email, clientId }) {
+    const googleDrive = new GoogleDrive(new Google({
+      // eslint-disable-next-line no-undef
+      gapi,
+      clientId
+    }))
+
+    const vaultAuthProvider = new GoogleVaultAuthProvider({
+      authName: ssoProvider,
+      userId: ssoUserId,
+      email: email,
+      googleDrive
+    })
+
+    await vaultAuthProvider.init()
+
+    return this._hcd.login(vaultAuthProvider)
   }
 
   logout () {
