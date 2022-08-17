@@ -15,10 +15,15 @@
 
 <script>
 import DocumentItem from '~/components/hcd/document-item'
+
+/**
+ * This component show a list using DocumentItem and handles actions emitted by children
+ */
 export default {
   name: 'DocumentsList',
   components: { DocumentItem },
   props: {
+    /** Array of documents, please see DocumentItem reference */
     documents: {
       type: Array,
       default: () => []
@@ -27,15 +32,27 @@ export default {
   emits: ['onRemoveDocument', 'onEditDocument', 'onShareDocument', 'onDownloadDocument'],
   methods: {
     onRemoveDocument (cid) {
+      /**
+       * Emitted when a children item is clicked on remove
+       */
       this.$emit('onRemoveDocument', cid)
     },
     onEditDocument (document) {
+      /**
+       * Emitted when a children item is clicked on edit
+       */
       this.$emit('onEditDocument', document)
     },
     onShareDocument (cid) {
+      /**
+       * Emitted when a children item is clicked on share
+       */
       this.$emit('onShareDocument', cid)
     },
     onDownloadDocument (cid) {
+      /**
+       * Emitted when a children item is clicked on download
+       */
       this.$emit('onDownloadDocument', cid)
     }
   }
