@@ -1,33 +1,33 @@
 <template lang="pug">
 q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
-    q-btn.float-right(
-      icon="close"
-      round
-      unelevated
-      color="secondary"
-      v-close-popup
-      size="sm"
-    )
-    .text-h4.q-mb-lg {{ $t('pages.marketplace.createForm.title') }}
-    h-input(
-      testid="label_input"
-      :label="$t('pages.marketplace.createForm.label')"
-      v-model="label"
-      outlined
-      :rules="[rules.required]"
-      :placeholder="$t('pages.marketplace.createForm.placeholder')"
-      autofocus
-    )
-    q-btn.float-right.q-mb-md(
-      data-testid="submit_btn"
-      outline
-      unelevated
-      :label="$t('pages.marketplace.createForm.button')"
-      color="secondary"
-      size="md"
-      type="submit"
-      no-caps
-    )
+  q-btn.float-right(
+    icon="close"
+    round
+    unelevated
+    color="secondary"
+    v-close-popup
+    size="sm"
+  )
+  .text-h4.q-mb-lg {{ $t('pages.marketplace.createForm.title') }}
+  h-input(
+    testid="label_input"
+    :label="$t('pages.marketplace.createForm.label')"
+    v-model="label"
+    outlined
+    :rules="[rules.required]"
+    :placeholder="$t('pages.marketplace.createForm.placeholder')"
+    autofocus
+  )
+  q-btn.float-right.q-mb-md(
+    data-testid="submit_btn"
+    outline
+    unelevated
+    :label="$t('pages.marketplace.createForm.button')"
+    color="secondary"
+    size="md"
+    type="submit"
+    no-caps
+  )
 </template>
 
 <script>

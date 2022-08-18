@@ -139,7 +139,6 @@ export default {
   methods: {
     enroll () {
       const data = {
-        id: this.id,
         address: this.address,
         notes: this.getNotes,
         files: this.getFiles,
@@ -152,7 +151,6 @@ export default {
     },
     reject () {
       const data = {
-        id: this.id,
         address: this.address,
         notes: this.getNotes,
         files: this.getFiles,

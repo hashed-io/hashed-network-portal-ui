@@ -1,5 +1,9 @@
 <template lang="pug">
-q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
+q-card(
+  v-ripple
+  @click="onClicked"
+  data-testid="marketplaceItem"
+  ).q-pa-sm.container.card-btn.animated-item
   .row.justify-center
     q-icon(name="store" size="4em" color="primary")
   #labels
@@ -26,16 +30,15 @@ export default {
       default: undefined
     }
   },
-  emits: ['onClick'],
+  emits: ['onClickItem'],
   methods: {
-    onClick () {
+    onClicked () {
       const marketplace = {
         id: this.marketplace.id,
         label: this.marketplace.value.label,
         administrator: this.marketplace.administrator
       }
-      console.log(marketplace)
-      this.$emit('onClick', marketplace)
+      this.$emit('onClickItem', marketplace)
     }
   }
 }
