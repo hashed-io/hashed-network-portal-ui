@@ -6,7 +6,7 @@ import '@quasar/extras/animate/fadeInRight.css'
 import '@quasar/extras/animate/fadeOutRight.css'
 
 import 'quasar/dist/quasar.css'
-import '../src/css/app.styl'
+import '~/css/app.styl'
 import { app } from '@storybook/vue3'
 import { Quasar } from 'quasar'
 import Vuex from 'vuex'
@@ -55,12 +55,14 @@ console.log('store on storybook', store)
 
 // API INSTANCES
 import PolkadotApi from '~/services/polkadotApi.js'
-import { NbvStorageApi } from '~/services/polkadot-pallets'
+import { NbvStorageApi, MarketplaceApi } from '~/services/polkadot-pallets'
 const api = new PolkadotApi('wss://n1.hashed.systems')
 api.connect().then(() => {
   const nbvStorageApi = new NbvStorageApi(api)
+  const marketplaceApi = new MarketplaceApi(api)
   store['$polkadotApi'] = api
   store['$nbvStorageApi'] = nbvStorageApi
+  store['$marketplaceApi'] = marketplaceApi
 })
 
 
