@@ -140,6 +140,7 @@ export default {
             ssoAccount: account
           }
           // this.showHCDPasswordModal = true
+          // this.hideLoading()
           const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
             ssoProvider: 'Google',
             ssoUserId: account.sub,
@@ -149,7 +150,7 @@ export default {
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
           console.log('hcgResponse', hcgResponse)
           this.$store.commit('hashedConfidentialDocs/setAccount', {
-            ssoProvider: 'Google',
+            ssoProvider: 'google',
             ssoUserId: account.sub,
             ssoImage: account.picture,
             ssoAccount: account,
