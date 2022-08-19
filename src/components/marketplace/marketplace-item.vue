@@ -25,6 +25,9 @@ export default {
   name: 'MarketplaceItem',
   components: { AccountItem },
   props: {
+    /**
+     * The data of the marketplace. This is retrieved from the Hashed Chain
+     */
     marketplace: {
       type: Object,
       default: undefined
@@ -38,6 +41,9 @@ export default {
         label: this.marketplace.value.label,
         administrator: this.marketplace.administrator
       }
+      /*
+       *  Emit the event to the parent component when the item is clicked
+       */
       this.$emit('onClickItem', marketplace)
     }
   }

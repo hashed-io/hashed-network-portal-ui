@@ -24,10 +24,16 @@ export default {
   name: 'ApplicantsList',
   components: { ApplicantExpanderItem },
   props: {
+    /**
+     * Array with the data of the applicants
+     */
     applicants: {
       type: Array,
       default: () => []
     },
+    /*
+     *  Prop used to show the actions button in the applicant item [Enroll, reject]
+     */
     showActions: {
       type: Boolean,
       default: false

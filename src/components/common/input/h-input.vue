@@ -14,7 +14,7 @@ div
     :mask="mask"
     :fill-mask="fillMask"
     :hint='hint'
-    :data-testid="testid"
+    data-testid="HInput"
   )
     slot(name='append' class="centerIcon")
 </template>

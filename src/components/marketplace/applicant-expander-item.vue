@@ -2,7 +2,7 @@
 q-expansion-item(group="applicants")
   template(v-slot:header)
     .row.full-width.justify-between
-      account-item(:address="address" flat inherit)
+      account-item(:address="address" flat inherit data-testid="accountItem")
       .row
         q-chip(
           v-if="marketId"
@@ -10,6 +10,7 @@ q-expansion-item(group="applicants")
           color="primary"
           :label="marketLabel"
           class="q-mt-md text-white"
+          data-testid="marketLabelChip"
         )
         q-chip(
           v-if="!marketId"
@@ -17,18 +18,19 @@ q-expansion-item(group="applicants")
           size="md"
           :color="getColor"
           class="q-mt-md text-white"
+          data-testid="statusChip"
         )
   #body.q-pa-sm
     .text-subtitle2.text-weight-regular.q-pb-md {{ $t('pages.marketplace.details.notesTitle') }}:
     #notes.q-px-sm
-      .text-body2 {{ getNotes }}
+      .text-body2(data-testid="notes") {{ getNotes }}
     q-separator(inset).q-my-sm
     .text-subtitle2.text-weight-regular.q-pb-md {{ $t('pages.marketplace.details.filesTitle') }}:
     #files.q-px-sm
       .row.q-col-gutter-xs
         .col-6(v-for="file in getFiles")
           q-card.card-btn(bordered no-shadow v-ripple)
-            file-item(v-bind="file")
+            file-item(v-bind="file" data-testid="fileItem")
               //- q-tooltip Click to open file
     #feedback
       q-input.q-mt-md(
@@ -37,6 +39,7 @@ q-expansion-item(group="applicants")
         v-model="feedback"
         autogrow
         outlined
+        data-testid="feedbackInput"
       )
     .row.q-mt-sm.justify-end.q-gutter-x-sm
       q-btn(
@@ -48,6 +51,7 @@ q-expansion-item(group="applicants")
         no-caps
         @click="enroll"
         :disabled="!haveFeedback"
+        data-testid="enrollButton"
       )
       q-btn(
         v-if="status !== 'Rejected' && status !== 'Approved' && showActions"
@@ -59,6 +63,7 @@ q-expansion-item(group="applicants")
         no-caps
         @click="reject"
         :disabled="!haveFeedback"
+        data-testid="rejectButton"
       )
   slot
 </template>
@@ -73,26 +78,40 @@ export default {
   name: 'ApplicantExpanderItem',
   components: { AccountItem, FileItem },
   props: {
-    id: {
-      type: String,
-      default: undefined
-    },
+    /**
+     * The substrate address of the applicant
+     *
+     */
     address: {
       type: String,
       default: undefined
     },
+    /**
+     * The information about the applications.
+     * Includes files, notes.
+     */
     fields: {
       type: Array,
       default: () => []
     },
+    /**
+     * The status of the application  (Approved, Rejected, Pending)
+     */
     status: {
       type: String,
       default: undefined
     },
+    /**
+     * Prop to hide or show the buttons [Enroll, Reject]
+     *
+     */
     showActions: {
       type: Boolean,
       default: false
     },
+    /**
+     * The hash of the marketplace
+     */
     marketId: {
       type: String,
       default: undefined

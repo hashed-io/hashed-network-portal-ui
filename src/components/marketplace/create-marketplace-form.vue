@@ -39,7 +39,7 @@ import { validation } from '~/mixins/validation'
 export default {
   name: 'CreateMarketplaceForm',
   mixins: [validation],
-  emits: ['submittedForm'],
+  emits: ['onSubmittedForm'],
   data () {
     return {
       label: undefined
@@ -54,7 +54,7 @@ export default {
         /**
          * This event is emitted when the form is filled and submitted
          */
-        this.$emit('submittedForm', data)
+        this.$emit('onSubmittedForm', data)
       } catch (e) {
         console.error('submitProposal', e)
       }
