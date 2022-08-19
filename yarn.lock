@@ -2641,10 +2641,10 @@
   dependencies:
     "@smontero/hashed-crypto" "0.0.8"
 
-"@smontero/hashed-confidential-docs@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.1.3.tgz#f13ea2e7200c0cf0a59b44fbddbe3b9377656627"
-  integrity sha512-wPZ/OYuvw6nkvSgTJp3oUb2a7+U4p0mdXnpJF4BAffXz8r8FVaEPawWTCfEhNFjuf6bjjBR74gAfq6cnth5T6Q==
+"@smontero/hashed-confidential-docs@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.1.4.tgz#b6b30ac8cb4d496c11519dcffe65ed30eddd88aa"
+  integrity sha512-ett1/ZswL6tdsXxKMAHP4/+K9fidAdsDTxa3PSZigx8Af8r5nxdjhUHRZviF6TWLF/Wkm4x8iO64ZY+TSPsQcQ==
   dependencies:
     "@polkadot/api" "^8.1.1"
     "@polkadot/extension-dapp" "^0.43.1"
