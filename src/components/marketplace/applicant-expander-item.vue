@@ -150,7 +150,7 @@ export default {
       return !!this.feedback
     }
   },
-  async created () {
+  async mounted () {
     if (this.marketId) {
       this.marketLabel = await this.getMarketplaceLabel(this.marketId)
     }
@@ -181,10 +181,10 @@ export default {
       this.$emit('onReject', data)
     },
     async getMarketplaceLabel (marketId) {
-      const market = await this.$store.$marketplaceApi?.getMarketplaceById({
+      const market = await this.$store?.$marketplaceApi?.getMarketplaceById({
         marketId
       })
-      return market.label
+      return market?.label
     }
   }
 }
