@@ -158,7 +158,10 @@ export default {
         }
       } catch (e) {
         console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        // failed calling method: list of google client:drive.files, with params:{ "q": "name = 'hcd.metadata'", "spaces": "appDataFolder" }, error: { "error": "access_denied" }
+        let message = e.message || e
+        message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
+        this.showNotification({ message, color: 'negative' })
       } finally {
         this.hideLoading()
       }
