@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item(dense @click="openFile" clickable)
+q-item(dense @click="openFile" clickable data-testid="fileElement")
   q-item-section(avatar)
     q-icon(v-if="!loading" name="file_open" color="primary")
     q-spinner(
@@ -8,9 +8,9 @@ q-item(dense @click="openFile" clickable)
       size="sm"
     )
   q-item-section
-    .text-caption {{ displayName }}
+    .text-caption(data-testid="displayName") {{ displayName }}
   q-item-section(avatar)
-    .text-caption.q-mr-xs {{getSizeInKb}}
+    .text-caption.q-mr-xs(data-testid="fileSize") {{getSizeInKb}}
   slot
 </template>
 

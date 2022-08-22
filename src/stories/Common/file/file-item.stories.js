@@ -1,7 +1,7 @@
+import { expect } from '@storybook/jest'
 import FileItem from '~/components/common/file/file-item.vue'
-import { within } from '@storybook/testing-library'
-// import { expect } from '@storybook/jest'
-import asset from '../../../assets/portal/logo-gradient-white.png'
+import { within, userEvent } from '@storybook/testing-library'
+import asset from '../../../assets/portal/luhnLights.png'
 export default {
   title: 'Common/FileItem',
   component: FileItem
@@ -18,15 +18,20 @@ const Template = (args) => ({
   // Then, the spread values can be accessed directly in the template
   template: '<FileItem v-bind="args" />'
 })
-
+const file = new File([asset], 'image.png', { type: 'image/png' })
 export const FileElement = Template.bind({})
 FileElement.args = {
   cid: 'QmPrjgMKdNbeq3aHFaapwgQY5CJsA9UoZWtayo2QZ9TZPz',
-  displayName: 'kycDocument.pdf',
-  payload: new File([asset], 'kycDocument.pdf', { type: 'image/png' })
+  displayName: 'image.png',
+  payload: file
 }
 
 FileElement.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
-  console.log(canvas)
+  const fileElement = canvas.getByTestId('fileElement')
+  await userEvent.click(fileElement)
+  const displayName = canvas.getByTestId('displayName')
+  await expect(displayName).toBeInTheDocument()
+  const fileSize = canvas.getByTestId('fileSize')
+  await expect(fileSize).toBeInTheDocument()
 }
