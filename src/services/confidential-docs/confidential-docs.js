@@ -8,6 +8,7 @@ import {
   LocalAccountFaucet,
   BalancesApi
 } from '@smontero/hashed-confidential-docs'
+// } from '../../../../hashed-confidential-docs-client-api/src/index'
 import { Keyring } from '@polkadot/api'
 
 class ConfidentialDocs {
