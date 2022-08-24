@@ -1,6 +1,5 @@
 const webpackConfig = require('../webpack-config.js')
 const path = require('path');
-const webpack = require('webpack');
 module.exports = {
   "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
   "addons": ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
@@ -13,20 +12,10 @@ module.exports = {
     builder: "webpack5"
   },
   "webpackFinal": async(cfg, {configType}) => {
-    cfg.plugins.push(
-      new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-      })
-    );
     cfg.module.rules.push({
       test: /\.(styl|stylus)$/,
       use: ['style-loader', 'css-loader', 'stylus-loader'],
     });
-    cfg.plugins.push(
-      new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-      })
-    );
     cfg = webpackConfig(cfg)
     // cfg.plugins.push(
     //   new ESLintPlugin(options)

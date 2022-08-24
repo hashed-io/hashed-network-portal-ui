@@ -34,7 +34,7 @@ Item.args = {
 Item.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const item = canvas.getByTestId('marketplaceItem')
-  await userEvent.click(item)
   await expect(item).toBeInTheDocument()
+  await userEvent.click(item)
   await expect(args.onClickItem).toHaveBeenCalledTimes(1)
 }

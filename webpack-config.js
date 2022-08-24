@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 // const ESLintPlugin = require('eslint-webpack-plugin')
 // const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
@@ -32,7 +33,11 @@ module.exports = (cfg) => {
   // cfg.plugins.push(
   //   new NodePolyfillPlugin()
   // )
-
+  cfg.plugins.push(
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
+    })
+  )
   cfg.module.rules.push({
     enforce: 'pre',
     // test: /\.(js|vue)$/,

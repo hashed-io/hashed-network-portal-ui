@@ -14,7 +14,7 @@ div
     :mask="mask"
     :fill-mask="fillMask"
     :hint='hint'
-    data-testid="HInput"
+    :data-testid="testid"
   )
     slot(name='append' class="centerIcon")
 </template>
@@ -47,7 +47,7 @@ export default {
     // eslint-disable-next-line vue/prop-name-casing
     testid: {
       type: String,
-      default: ''
+      default: 'Hinput'
     },
     /**
          * The rules of the input
