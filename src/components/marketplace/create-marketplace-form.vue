@@ -10,7 +10,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
   )
   .text-h4.q-mb-lg {{ $t('pages.marketplace.createForm.title') }}
   h-input(
-    testid="label_input"
+    data-testid
     :label="$t('pages.marketplace.createForm.label')"
     v-model="label"
     outlined

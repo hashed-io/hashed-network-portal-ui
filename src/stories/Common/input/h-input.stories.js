@@ -37,6 +37,7 @@ BaseInput.args = {
   rules: [val => !!val || 'Value required'],
   hint: 'Example hint',
   placeholder: 'Placeholder example',
+  testid: 'HInput',
   type: 'text',
   debounce: 0,
   autofocus: false,
