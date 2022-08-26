@@ -1,5 +1,9 @@
 <template lang="pug">
-q-card.q-pa-sm.container.card-btn(v-ripple @click="onClick")
+q-card(
+  v-ripple
+  @click="onClicked"
+  data-testid="marketplaceItem"
+  ).q-pa-sm.container.card-btn.animated-item
   .row.justify-center
     q-icon(name="store" size="4em" color="primary")
   #labels
@@ -21,21 +25,26 @@ export default {
   name: 'MarketplaceItem',
   components: { AccountItem },
   props: {
+    /**
+     * The data of the marketplace. This is retrieved from the Hashed Chain
+     */
     marketplace: {
       type: Object,
       default: undefined
     }
   },
-  emits: ['onClick'],
+  emits: ['onClickItem'],
   methods: {
-    onClick () {
+    onClicked () {
       const marketplace = {
         id: this.marketplace.id,
         label: this.marketplace.value.label,
         administrator: this.marketplace.administrator
       }
-      console.log(marketplace)
-      this.$emit('onClick', marketplace)
+      /*
+       *  Emit the event to the parent component when the item is clicked
+       */
+      this.$emit('onClickItem', marketplace)
     }
   }
 }

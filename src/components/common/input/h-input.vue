@@ -47,7 +47,7 @@ export default {
     // eslint-disable-next-line vue/prop-name-casing
     testid: {
       type: String,
-      default: ''
+      default: 'HInput'
     },
     /**
          * The rules of the input

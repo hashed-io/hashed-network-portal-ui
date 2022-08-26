@@ -26,13 +26,13 @@
 
   q-tab-panels(v-model="tab")
     q-tab-panel(name="myMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" :emptyLabel="$t('pages.marketplace.list.youDontHaveMarketplacesYet')" @selectedMarketplace="onSelectMarketplace")
+      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" :emptyLabel="$t('pages.marketplace.list.youDontHaveMarketplacesYet')" @onSelectedMarketplace="onSelectMarketplace")
     q-tab-panel(name="allMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:marketplaces="allMarketplaces" :emptyLabel="$t('pages.marketplace.list.marketplacesHaveNotYetBeenCreated')" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
+      marketplace-list(:marketplaces="allMarketplaces" :emptyLabel="$t('pages.marketplace.list.marketplacesHaveNotYetBeenCreated')" @onSelectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
       q-card.modalSize
-        create-marketplace-form(@submittedForm="createMarketplace")
+        create-marketplace-form(@onSubmittedForm="createMarketplace")
 </template>
 
 <script>
