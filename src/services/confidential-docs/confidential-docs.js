@@ -4,6 +4,7 @@ import {
   GoogleDrive,
   Google,
   GoogleVaultAuthProvider,
+  NativeVaultAuthProvider,
   Polkadot,
   LocalAccountFaucet,
   BalancesApi
@@ -51,6 +52,20 @@ class ConfidentialDocs {
       userId: ssoUserId,
       email: email,
       googleDrive
+    })
+
+    await vaultAuthProvider.init()
+
+    return this._hcd.login(vaultAuthProvider)
+  }
+
+  async nativeLogin ({ accountMetadata }) {
+    const injector = await this._polkadot.getInjector(accountMetadata.address)
+    console.log('decrypter: ', injector)
+    const vaultAuthProvider = new NativeVaultAuthProvider({
+      authName: 'native',
+      accountMetadata,
+      decrypter: injector.decrypter
     })
 
     await vaultAuthProvider.init()

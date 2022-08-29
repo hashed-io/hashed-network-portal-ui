@@ -89,6 +89,23 @@ export default {
       this.$store.commit('polkadotWallet/setAvailableAccounts', accounts)
       const autoLoginAccount = localStorage.getItem('autoLoginAccount')
       let account = accounts[0]
+      const injector = await this.$store.$polkadotApi.injector(account.address)
+      console.log('injector: ', injector)
+      await this.$store.$hcd.nativeLogin({
+        accountMetadata: account
+      })
+      await this.$store.$hcd.logout()
+      await this.$store.$hcd.nativeLogin({
+        accountMetadata: account
+      })
+      const payload = await this.$store.$hcd.addOwnedData({
+        name: 'test',
+        description: 'test desc',
+        payload: { prop1: 'asd', prop2: 2 }
+      })
+      console.log('payload', payload)
+      const storedPayload = await this.$store.$hcd.viewOwnedDataByCID(payload.cid)
+      console.log('stored payload', storedPayload)
       if (autoLoginAccount) {
         const findAccount = accounts.find(v => v.address === autoLoginAccount)
         account = findAccount || account

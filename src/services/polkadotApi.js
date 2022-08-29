@@ -101,6 +101,11 @@ class PolkadotApi {
     })
   }
 
+  async injector (address) {
+    await web3Enable(process.env.APP_NAME)
+    return await web3FromAddress(address)
+  }
+
   /**
    * @name verifyMessage
    * @description Verify a message
