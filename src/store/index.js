@@ -2,7 +2,7 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 
 // import example from './module-example'
-import ualWallet from './ualWallet'
+import profile from './profile'
 import polkadotWallet from './polkadotWallet'
 import hcdWallet from './hcdWallet'
 
@@ -18,8 +18,7 @@ import hcdWallet from './hcdWallet'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      // example
-      ualWallet,
+      profile,
       polkadotWallet,
       hcdWallet
     },
