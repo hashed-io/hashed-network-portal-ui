@@ -89,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('hashedConfidentialDocs', ['polkadotAddress'])
+    ...mapGetters('hcdWallet', ['polkadotAddress'])
   },
   async mounted () {
     this.updateAllList()

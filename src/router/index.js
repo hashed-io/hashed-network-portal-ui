@@ -28,7 +28,7 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
-    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['hashedConfidentialDocs/isLogged']
+    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['hcdWallet/isLogged']
     console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
@@ -51,7 +51,7 @@ export default route(function ({ store }) {
       if (store.getters['polkadotWallet/isLoggedIn']) {
         loginType = 'polkadotjs'
       }
-      if (store.getters['hashedConfidentialDocs/isLogged']) {
+      if (store.getters['hcdWallet/isLogged']) {
         loginType = 'hcd'
       }
       // debugger

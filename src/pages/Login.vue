@@ -149,7 +149,7 @@ export default {
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
           console.log('hcgResponse', hcgResponse)
-          this.$store.commit('hashedConfidentialDocs/setAccount', {
+          this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,
             ssoImage: account.picture,
@@ -177,7 +177,7 @@ export default {
         })
         const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
         console.log('hcgResponse', hcgResponse)
-        this.$store.commit('hashedConfidentialDocs/setAccount', {
+        this.$store.commit('hcdWallet/setAccount', {
           ssoProvider,
           ssoUserId,
           ssoImage,

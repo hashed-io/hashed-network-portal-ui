@@ -39,6 +39,10 @@ class ConfidentialDocs {
     this._hcd = hcd
   }
 
+  getPolkadotApi () {
+    return this._polkadot
+  }
+
   async ssoGoogleLogin ({ ssoProvider, ssoUserId, email, clientId }) {
     const googleDrive = new GoogleDrive(new Google({
       // eslint-disable-next-line no-undef

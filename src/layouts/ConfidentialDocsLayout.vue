@@ -74,11 +74,11 @@ export default defineComponent({
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
     const ssoAccountInfo = computed(() => {
-      if ($store.getters['hashedConfidentialDocs/isLogged']) {
+      if ($store.getters['hcdWallet/isLogged']) {
         return {
-          displayName: $store.getters['hashedConfidentialDocs/accountInfo'].given_name,
-          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture,
-          polkadotAddress: $store.getters['hashedConfidentialDocs/polkadotAddress']
+          displayName: $store.getters['hcdWallet/accountInfo'].given_name,
+          profilePicture: $store.getters['hcdWallet/accountInfo'].picture,
+          polkadotAddress: $store.getters['hcdWallet/polkadotAddress']
         }
       }
       return undefined
@@ -86,7 +86,7 @@ export default defineComponent({
     const loginType = computed(() => {
       if ($store.getters['polkadotWallet/isLoggedIn']) {
         return 'polkadotjs'
-      } else if ($store.getters['hashedConfidentialDocs/isLogged']) {
+      } else if ($store.getters['hcdWallet/isLogged']) {
         return 'hcd'
       }
       return undefined
@@ -148,7 +148,7 @@ export default defineComponent({
 
     function logout () {
       $store.dispatch('polkadotWallet/hashedLogout')
-      $store.dispatch('hashedConfidentialDocs/logout')
+      $store.dispatch('hcdWallet/logout')
     }
 
     function onSelectAccount (account) {

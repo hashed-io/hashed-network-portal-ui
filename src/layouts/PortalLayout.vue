@@ -108,7 +108,7 @@ export default {
       if (this.$store.getters['polkadotWallet/isLoggedIn']) {
         return 'polkadotjs'
       }
-      if (this.$store.getters['hashedConfidentialDocs/isLogged']) {
+      if (this.$store.getters['hcdWallet/isLogged']) {
         return 'hcd'
       }
       return undefined
