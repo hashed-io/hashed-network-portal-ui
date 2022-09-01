@@ -58,7 +58,8 @@ export default {
           to: {
             name: 'manageVaults'
           },
-          login: 'polkadotjs'
+          // login: 'polkadotjs'
+          login: 'hcd'
         },
         {
           label: 'pages.marketplace.appName',

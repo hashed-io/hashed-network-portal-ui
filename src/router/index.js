@@ -58,7 +58,8 @@ export default route(function ({ store }) {
 
       if (app === 'hcd' && loginType === 'polkadotjs') {
         next({ name: 'nbv' })
-      } else if ((app === 'nbv' || app === 'marketplaces') && loginType === 'hcd') {
+      // } else if ((app === 'nbv' || app === 'marketplaces') && loginType === 'hcd') {
+      } else if ((app === 'marketplaces') && loginType === 'hcd') {
         next({ name: 'hcd' })
       } else next()
     }
