@@ -149,7 +149,8 @@ export default {
       try {
         this.showLoading()
         const market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
-        const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
+        const palletId = this.$store.$marketplaceApi.palletId
+        const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ palletId, marketId: this.marketId })
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
         try {
