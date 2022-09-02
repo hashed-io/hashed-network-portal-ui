@@ -97,12 +97,12 @@ export default defineComponent({
       nbv: [
         {
           to: { name: 'manageVaults' },
-          keyActive: 'My Vaults',
+          keyActive: 'myVaults',
           label: 'My Vaults'
         },
         {
           to: { name: 'manageXpub' },
-          keyActive: 'Extended Keys',
+          keyActive: 'extendedKeys',
           label: 'Extended Keys'
         }
       ],

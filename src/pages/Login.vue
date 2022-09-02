@@ -156,6 +156,12 @@ export default {
             ssoAccount: account,
             polkadotAddress
           })
+          this.$store.commit('profile/setProfile', {
+            loginType: 'hcd',
+            polkadotAddress,
+            profilePicture: account.picture,
+            profileName: account.given_name
+          }, { root: true })
           this.$router.push({ name: 'hcd' })
         }
       } catch (e) {

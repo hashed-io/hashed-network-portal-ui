@@ -142,9 +142,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount']),
+    // ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress']),
     iAmOwner () {
-      return this.selectedAccount.address === this.owner
+      return this.polkadotAddress === this.owner
     },
     isOffchainError () {
       return !!(this.offchainMessage && this.offchainMessage.status === 'error')
@@ -231,7 +232,7 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.removeVault({
           id: this.vaultId,
-          user: this.selectedAccount.address
+          user: this.polkadotAddress
         })
         this.$router.replace({
           name: 'manageVaults'
@@ -284,7 +285,7 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.createProposal({
           vaultId: this.vaultId,
-          signer: this.selectedAccount.address,
+          signer: this.polkadotAddress,
           recipientAddress: payload.recipientAddress,
           satoshiAmount: payload.amountInSats,
           description: payload.description

@@ -19,7 +19,7 @@
           @click="removeXpub"
         )
           q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
-  set-xpub-form(v-else :userAddress="selectedAccount.address" @onSubmitted="setXpub")
+  set-xpub-form(v-else :userAddress="polkadotAddress" @onSubmitted="setXpub")
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress']),
     userHasXpub () {
       return !!this.userXpub
     }
@@ -62,7 +63,7 @@ export default {
       try {
         this.showLoading()
         this.xpubUnsub = await this.$store.$nbvStorageApi.getXpubByUser(
-          this.selectedAccount.address,
+          this.polkadotAddress,
           e => {
             this.getXpub(e)
           }
@@ -89,7 +90,7 @@ export default {
       try {
         this.showLoading()
         this.userXpub = undefined
-        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
+        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.polkadotAddress)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value
@@ -106,7 +107,7 @@ export default {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         console.log('setXpub', payload)
         await this.$store.$nbvStorageApi.submitXPUB({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           XPUB: payload.XPUB
         })
         // console.log('setXpub', response)
@@ -123,7 +124,7 @@ export default {
     async removeXpub () {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        await this.$store.$nbvStorageApi.removeXpub({ user: this.selectedAccount.address })
+        await this.$store.$nbvStorageApi.removeXpub({ user: this.polkadotAddress })
         this.showNotification({ message: this.$t('pages.nbv.xbub.yourXpubWasRemoved') })
         // this.showLoading({ message: this.$t('general.waitingSub') })
         this.getXpub()

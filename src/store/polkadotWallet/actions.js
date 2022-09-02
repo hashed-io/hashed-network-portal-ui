@@ -1,17 +1,24 @@
 export const hashedLogin = async function ({ commit }, { userAddress, returnTo }) {
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
-    console.log('isLoggedIn', isLoggedIn)
     const to = returnTo || { name: 'root' }
+    console.log('store', this)
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
+      commit('profile/setProfile', {
+        loginType: 'PolkadotJS',
+        polkadotAddress: userAddress
+      }, { root: true })
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
       commit('setIsHashedLoggedIn', true)
       localStorage.setItem('autoLoginAccount', userAddress)
-      console.log('returnUrl', to)
+      commit('profile/setProfile', {
+        loginType: 'PolkadotJS',
+        polkadotAddress: userAddress
+      }, { root: true })
       this.$router.push(to)
     }
   } catch (e) {
@@ -32,9 +39,9 @@ export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo 
 
 export const hashedLogout = async function ({ commit }) {
   try {
-    console.log('hashedLogout')
     await this.$hashedPrivateApi.logout()
     commit('setIsHashedLoggedIn', false)
+    commit('profile/cleanProfile', undefined, { root: true })
   } catch (error) {
     console.log('Authenticator logout error', error)
   }

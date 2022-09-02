@@ -23,7 +23,10 @@ export default {
     logout: 'Logout'
   },
   breadcrumb: {
-    confidentialDocuments: 'Hashed Confidential Documents'
+    confidentialDocuments: 'Hashed Confidential Documents',
+    myVaults: 'My Vaults',
+    extendedKeys: 'Extended Keys',
+    vaultDetails: 'Vault Details'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',

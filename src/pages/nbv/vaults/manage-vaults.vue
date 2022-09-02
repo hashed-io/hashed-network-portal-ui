@@ -18,7 +18,7 @@
   #modals
     q-dialog(v-model="isShowingCreateVault")
       q-card.modalSize
-        create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
+        create-vault-form(@submittedForm="createNewVault" :signer="polkadotAddress")
 </template>
 
 <script>
@@ -36,10 +36,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    // ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   watch: {
-    selectedAccount () {
+    polkadotAddress () {
       this.getVaults()
     }
   },
@@ -51,7 +52,7 @@ export default {
       try {
         this.showLoading()
         const vaultsId = await this.$store.$nbvStorageApi.getVaultsByUser({
-          user: this.selectedAccount.address
+          user: this.polkadotAddress
         })
         if (!vaultsId.isEmpty) {
           const Ids = vaultsId.toJSON()
@@ -78,10 +79,10 @@ export default {
         // console.log('createNewVault', data)
         await this.$store.$nbvStorageApi.createVault({
           ...data,
-          user: this.selectedAccount.address
+          user: this.polkadotAddress
         })
         this.isShowingCreateVault = false
-        this.showNotification({ message: this.$('pages.nbv.vaults.vaultCreated') })
+        this.showNotification({ message: this.$t('pages.nbv.vaults.vaultCreated') })
         await this.getVaults()
       } catch (e) {
         console.error('error', e)
@@ -94,9 +95,9 @@ export default {
       try {
         this.showLoading()
         const message = 'Test To Sign'
-        const response = await this.$store.$nbvStorageApi.signMessage(message, this.selectedAccount.address)
+        const response = await this.$store.$nbvStorageApi.signMessage(message, this.polkadotAddress)
         console.log('signMessage', response)
-        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.selectedAccount.address)
+        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.polkadotAddress)
         console.log('verifyMessage', response2)
         if (response2.isValid) {
           this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })

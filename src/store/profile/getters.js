@@ -1,5 +1,5 @@
-export function isLogged ({ profileName, loginType, profilePicture }) {
-  return !!(polkadotAddress && profileName && loginType && profilePicture)
+export function isLogged ({ profileName, loginType, polkadotAddress }) {
+  return !!(polkadotAddress && profileName && loginType)
 }
 
 export function profileInfo (state) {

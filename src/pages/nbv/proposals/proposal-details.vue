@@ -114,7 +114,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount']),
+    // ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress']),
     labelActionBtn () {
       switch (this.labelStatus) {
       case 'Pending':
@@ -149,7 +150,7 @@ export default {
     },
     canRemove () {
       let canRemove = false
-      if (this.proposer === this.selectedAccount.address && this.status === 'Pending') {
+      if (this.proposer === this.polkadotAddress && this.status === 'Pending') {
         canRemove = true
       }
       return canRemove
@@ -181,7 +182,7 @@ export default {
       return !!(this.labelStatus === 'Finalized')
     },
     alreadySigned () {
-      return !!this.signedPsbts.find(v => v.signer === this.selectedAccount.address)
+      return !!this.signedPsbts.find(v => v.signer === this.polkadotAddress)
     }
   },
   beforeMount () {
@@ -232,7 +233,7 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.broadcastPsbt({
           proposalId: this.proposalId,
-          signer: this.selectedAccount.address
+          signer: this.polkadotAddress
         })
         this.isShowingSignPsbt = false
         this.showNotification({ message: this.$t('pages.nbv.proposals.broadcasting') })
@@ -249,7 +250,7 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.finalizePsbt({
           proposalId: this.proposalId,
-          signer: this.selectedAccount.address
+          signer: this.polkadotAddress
         })
         this.isShowingSignPsbt = false
         this.showNotification({ message: 'Finalized' })
@@ -266,7 +267,7 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.removeProposal({
           proposalId: this.proposalId,
-          signer: this.selectedAccount.address
+          signer: this.polkadotAddress
         })
         this.$router.replace({
           name: 'vaultDetails',
@@ -330,7 +331,7 @@ export default {
         }
         await this.$store.$nbvStorageApi.savePsbt({
           proposalId: this.proposalId,
-          signer: this.selectedAccount.address,
+          signer: this.polkadotAddress,
           psbt
         })
         this.isShowingSignPsbt = false
@@ -361,7 +362,7 @@ export default {
       try {
         this.showLoading()
         let userXpub
-        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.selectedAccount.address)
+        const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.polkadotAddress)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           userXpub = xpub.isEmpty ? undefined : xpub.value
