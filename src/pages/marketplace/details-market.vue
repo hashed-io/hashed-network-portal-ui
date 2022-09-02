@@ -36,9 +36,9 @@
         status="error"
       )
       market-apply-form(
+        v-if="statusApplication !== 'Pending'"
         :market="{...market, admin, owner}"
-        :status="statusApplication"
-        @submit="onSubmitApplyForm"
+        @onSubmitApplyForm="onSubmitApplyForm"
       )
   //- Tabs
   q-tabs.q-mt-lg(
