@@ -4,10 +4,19 @@ import { Rbac } from '../polkadot-pallets'
 // import participants from '~/services/const/participants'
 // import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
-  constructor (polkadotApi, notify) {
+  constructor (polkadotApi, notify, palletId) {
     super(polkadotApi, 'gatedMarketplace', notify)
     this.RBAC = new Rbac(polkadotApi)
-    this.palletId = process.env.GATED_MARKETPLACE_ID
+    this.palletId = palletId
+  }
+
+  /**
+   * Method to set the palletId
+   * @name setPalletId
+   * @param {string} palletId The id of the pallet on the RBAC pallet
+   */
+  setPalletId (palletId) {
+    this.palletId = palletId
   }
 
   /**

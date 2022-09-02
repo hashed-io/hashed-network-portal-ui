@@ -17,7 +17,8 @@ export default async ({ app, store }) => {
     console.log('PolkadotApiCreated', api)
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
     const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
-    const marketplaceApi = new MarketplaceApi(api, showGlobalLoading)
+    const palletId = process.env.GATED_MARKETPLACE_ID
+    const marketplaceApi = new MarketplaceApi(api, showGlobalLoading, palletId)
     const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
     const uniquesApi = new UniquesApi(api, showGlobalLoading)
     // Connect Hashed private service
