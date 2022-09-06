@@ -9,3 +9,7 @@ export function profileInfo (state) {
 export function polkadotAddress ({ polkadotAddress }) {
   return polkadotAddress
 }
+
+export function loginType ({ loginType }) {
+  return loginType
+}

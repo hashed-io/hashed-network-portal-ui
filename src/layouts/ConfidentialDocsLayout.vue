@@ -15,10 +15,10 @@
             q-item-section.q-pa-sm
               q-item-label {{ $t(option.label) }}
         q-space
-        q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-        q-btn.no-padding(no-caps)
-          SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+        q-btn.q-mr-md(v-if="loginType === 'polkadotjs'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(v-bind="polkadotUserInfo")
+        q-btn.no-padding(no-caps v-if="loginType === 'hcd'")
+          SSOAccountItem( v-bind="ssoAccountInfo")
           q-menu
             q-list
               q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
@@ -83,13 +83,17 @@ export default defineComponent({
       }
       return undefined
     })
-    const loginType = computed(() => {
+    const polkadotUserInfo = computed(() => {
       if ($store.getters['polkadotWallet/isLoggedIn']) {
-        return 'polkadotjs'
-      } else if ($store.getters['hcdWallet/isLogged']) {
-        return 'hcd'
+        return {
+          username: $store.getters['profile/profileInfo'].profileName,
+          address: $store.getters['profile/profileInfo'].polkadotAddress
+        }
       }
       return undefined
+    })
+    const loginType = computed(() => {
+      return $store.getters['profile/loginType']
     })
 
     // Dynamic options for each app
@@ -146,10 +150,10 @@ export default defineComponent({
       }
     })
 
-    function logout () {
+    async function logout () {
       $store.dispatch('hcdWallet/logout')
       $store.dispatch('polkadotWallet/hashedLogout')
-      $router.push({ name: 'login' })
+      await $router.push({ name: 'login' })
       $store.commit('profile/cleanProfile')
     }
 
@@ -209,7 +213,8 @@ export default defineComponent({
       logout,
       loginType,
       ssoAccountInfo,
-      copyTextToClipboard
+      copyTextToClipboard,
+      polkadotUserInfo
     }
   }
 })

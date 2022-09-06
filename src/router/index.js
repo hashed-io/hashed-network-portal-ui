@@ -28,7 +28,7 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
-    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['hcdWallet/isLogged']
+    const isAuthenticated = store.getters['profile/isLogged']
     console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
@@ -46,15 +46,7 @@ export default route(function ({ store }) {
     } else {
       // Validation by Apps
       const app = to.meta.app
-      // eslint-disable-next-line no-undef-init
-      let loginType = undefined
-      if (store.getters['polkadotWallet/isLoggedIn']) {
-        loginType = 'polkadotjs'
-      }
-      if (store.getters['hcdWallet/isLogged']) {
-        loginType = 'hcd'
-      }
-      // debugger
+      const loginType = store.getters['profile/loginType']
 
       if (app === 'hcd' && loginType === 'polkadotjs') {
         next({ name: 'nbv' })

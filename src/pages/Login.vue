@@ -11,7 +11,7 @@
         #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
             .text-caption.text-white {{ $t('login.chooseAnAccount') }}
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-                selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
+                selected-account-btn.full-width(:username="selectedAccount.meta.name" :address="selectedAccount.address" :isSelector="true")
                 accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
             q-btn.full-width.text-primary(
                 :label="$t('login.login')"
@@ -115,6 +115,8 @@ export default {
         })
         this.$store.dispatch('polkadotWallet/hashedLogin', {
           userAddress: this.selectedAccount.address,
+          meta: this.selectedAccount.meta,
+          type: this.selectedAccount.type,
           returnTo: this.returnTo
         })
       } catch (e) {

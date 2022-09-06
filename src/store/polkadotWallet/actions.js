@@ -1,4 +1,4 @@
-export const hashedLogin = async function ({ commit }, { userAddress, returnTo }) {
+export const hashedLogin = async function ({ commit }, { userAddress, meta, returnTo }) {
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     const to = returnTo || { name: 'root' }
@@ -7,8 +7,9 @@ export const hashedLogin = async function ({ commit }, { userAddress, returnTo }
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
       commit('profile/setProfile', {
-        loginType: 'PolkadotJS',
-        polkadotAddress: userAddress
+        loginType: 'polkadotjs',
+        polkadotAddress: userAddress,
+        profileName: meta.name
       }, { root: true })
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
@@ -16,8 +17,9 @@ export const hashedLogin = async function ({ commit }, { userAddress, returnTo }
       commit('setIsHashedLoggedIn', true)
       localStorage.setItem('autoLoginAccount', userAddress)
       commit('profile/setProfile', {
-        loginType: 'PolkadotJS',
-        polkadotAddress: userAddress
+        loginType: 'polkadotjs',
+        polkadotAddress: userAddress,
+        profileName: meta.name
       }, { root: true })
       this.$router.push(to)
     }

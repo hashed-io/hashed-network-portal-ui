@@ -19,28 +19,21 @@ class BasePolkadotApi {
    * @returns tx response from polkadot api
    */
   async callTx (extrinsicName, signer, params) {
-    console.log('callingTX', this.polkadotApi)
-    return this.polkadotApi.callTx({
-      palletName: this.palletName,
-      extrinsicName,
-      params
-      // txResponseHandler,
+    await this.polkadotApi.setWeb3Signer(signer)
+    console.log('callTx params', params)
+    let unsub
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (params) {
+          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+        } else {
+          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
+        }
+      } catch (e) {
+        reject(e)
+      }
     })
-    // await this.polkadotApi.setWeb3Signer(signer)
-    // console.log('callTx params', params)
-    // let unsub
-    // // eslint-disable-next-line no-async-promise-executor
-    // return new Promise(async (resolve, reject) => {
-    //   try {
-    //     if (params) {
-    //       unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
-    //     } else {
-    //       unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
-    //     }
-    //   } catch (e) {
-    //     reject(e)
-    //   }
-    // })
   }
 
   /**

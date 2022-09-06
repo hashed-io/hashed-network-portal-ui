@@ -63,7 +63,8 @@ class ConfidentialDocs {
   }
 
   logout () {
-    return this._hcd.logout()
+    this._hcd.logout()
+    this._polkadot.setWallet()
   }
 
   getPolkadotAddress () {

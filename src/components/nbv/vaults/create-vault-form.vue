@@ -182,7 +182,7 @@ export default {
     }
   },
   mounted () {
-    this.thresholdRange.max = 7
+    this.thresholdRange.max = 2
     this.ownerAddress = this.signer
   },
   methods: {

@@ -59,7 +59,7 @@ export default {
             name: 'manageVaults'
           },
           // login: 'polkadotjs'
-          login: 'hcd'
+          login: 'all'
         },
         {
           label: 'pages.marketplace.appName',
@@ -115,7 +115,7 @@ export default {
     },
     optionsMenuByApp () {
       if (this.loginType) {
-        return this.optionsMenu.filter(v => v.login === this.loginType)
+        return this.optionsMenu.filter(v => (v.login === this.loginType || v.login === 'all'))
       }
       return this.optionsMenu
     }
