@@ -169,18 +169,22 @@ export default {
     }
   },
   beforeMount () {
-    const params = this.$route.params
-    if (!params || !params.vault) {
-      this.$router.replace({ name: 'manageVaults' })
-      return
+    try {
+      const params = this.$route.params
+      if (!params || !params.vault) {
+        this.$router.replace({ name: 'manageVaults' })
+        return
+      }
+      const vault = JSON.parse(params.vault)
+      if (!vault || !vault.owner || !vault.vaultId) {
+        this.$router.replace({ name: 'manageVaults' })
+        return
+      }
+      this.syncData(vault)
+      // this.$route.meta.breadcrumb[1].name = 'Detailsss'
+    } catch (e) {
+      this.showNotification({ message: e.message || e, color: 'negative' })
     }
-    const vault = JSON.parse(params.vault)
-    if (!vault || !vault.owner || !vault.vaultId) {
-      this.$router.replace({ name: 'manageVaults' })
-      return
-    }
-    this.syncData(vault)
-    // this.$route.meta.breadcrumb[1].name = 'Detailsss'
   },
   methods: {
     async updateVault () {
@@ -351,7 +355,7 @@ export default {
         }
       } else if (offchainStatus.toLowerCase() === 'pending') {
         this.offchainMessage = {
-          message: this.$('pages.nbv.vaults.creatingDescriptor'),
+          message: this.$t('pages.nbv.vaults.creatingDescriptor'),
           status: 'loading'
         }
       } else if (offchainStatus.toLowerCase() === 'valid') {

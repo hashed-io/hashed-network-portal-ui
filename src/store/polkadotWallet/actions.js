@@ -41,10 +41,9 @@ export const hashedLogout = async function ({ commit }) {
   try {
     await this.$hashedPrivateApi.logout()
     commit('setIsHashedLoggedIn', false)
-    commit('profile/cleanProfile', undefined, { root: true })
   } catch (error) {
     console.log('Authenticator logout error', error)
   }
   localStorage.removeItem('autoLoginAccount')
-  this.$router.push({ name: 'login' })
+  // this.$router.push({ name: 'login' })
 }

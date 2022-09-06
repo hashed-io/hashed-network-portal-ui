@@ -39,11 +39,6 @@ export default {
     // ...mapGetters('polkadotWallet', ['selectedAccount']),
     ...mapGetters('profile', ['polkadotAddress'])
   },
-  watch: {
-    polkadotAddress () {
-      this.getVaults()
-    }
-  },
   async mounted () {
     this.getVaults()
   },

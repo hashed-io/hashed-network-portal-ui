@@ -147,8 +147,10 @@ export default defineComponent({
     })
 
     function logout () {
-      $store.dispatch('polkadotWallet/hashedLogout')
       $store.dispatch('hcdWallet/logout')
+      $store.dispatch('polkadotWallet/hashedLogout')
+      $router.push({ name: 'login' })
+      $store.commit('profile/cleanProfile')
     }
 
     function onSelectAccount (account) {

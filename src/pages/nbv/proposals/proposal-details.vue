@@ -186,39 +186,43 @@ export default {
     }
   },
   beforeMount () {
-    const params = this.$route.params
-    if (params && params.parentParams && params.proposalParams) {
-      const paramsParent = JSON.parse(params.parentParams)
-      this.paramsParent = paramsParent
-      this.cosigners = paramsParent.cosigners
-      this.threshold = paramsParent.threshold
-      // console.log('paramsParent', paramsParent)
-      const proposal = JSON.parse(params.proposalParams)
-      if (proposal && proposal.vaultId) {
-        // this.proposal = proposal
-        this.syncData(proposal)
-      } else {
-        this.$router.replace({
-          name: 'manageVaults'
-        })
-      }
-      // Set router to back
-      const breadcrumb = this.$route.meta.breadcrumb.map(b => {
-        if (b.name === 'Vault Details') {
-          return {
-            ...b,
-            back: false,
-            to: {
-              name: 'vaultDetails',
-              params: { vault: JSON.stringify(paramsParent) }
+    try {
+      const params = this.$route.params
+      if (params && params.parentParams && params.proposalParams) {
+        const paramsParent = JSON.parse(params.parentParams)
+        this.paramsParent = paramsParent
+        this.cosigners = paramsParent.cosigners
+        this.threshold = paramsParent.threshold
+        // console.log('paramsParent', paramsParent)
+        const proposal = JSON.parse(params.proposalParams)
+        if (proposal && proposal.vaultId) {
+          // this.proposal = proposal
+          this.syncData(proposal)
+        } else {
+          this.$router.replace({
+            name: 'manageVaults'
+          })
+        }
+        // Set router to back
+        const breadcrumb = this.$route.meta.breadcrumb.map(b => {
+          if (b.name === 'Vault Details') {
+            return {
+              ...b,
+              back: false,
+              to: {
+                name: 'vaultDetails',
+                params: { vault: JSON.stringify(paramsParent) }
+              }
             }
           }
-        }
-        return b
-      })
-      this.$route.meta.breadcrumb = breadcrumb
-    } else {
-      this.$router.replace({ name: 'manageVaults' })
+          return b
+        })
+        this.$route.meta.breadcrumb = breadcrumb
+      } else {
+        this.$router.replace({ name: 'manageVaults' })
+      }
+    } catch (e) {
+      this.showNotification({ message: e.message || e, color: 'negative' })
     }
   },
   methods: {
@@ -281,7 +285,7 @@ export default {
       }
     },
     syncData (proposal) {
-      // console.log('proposal syncData', proposal)
+      console.log('proposal syncData', proposal)
       this.vaultId = proposal.vaultId
       this.proposalId = proposal.proposalId
       this.toAddress = proposal.toAddress

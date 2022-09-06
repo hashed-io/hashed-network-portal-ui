@@ -39,6 +39,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
           snap
           :min="minCosigners"
           :max="7"
+          debounce="500"
         )
       .col
         .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
