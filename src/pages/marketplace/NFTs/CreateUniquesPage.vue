@@ -79,7 +79,6 @@ export default {
           const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
           const ext = fileNameSplit[1]
           fileName = filename + '.' + ext
-          console.log({ addressToShare, fileName, label, file })
           promises.push(privateService.shareNew({
             toUserAddress: addressToShare,
             name: fileName,

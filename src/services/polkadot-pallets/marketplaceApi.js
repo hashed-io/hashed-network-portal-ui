@@ -1,10 +1,22 @@
 import BasePolkadotApi from '~/services/basePolkadotApi'
+import { Rbac } from '../polkadot-pallets'
 // import markets from '~/services/const/allMarkets'
 // import participants from '~/services/const/participants'
 // import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
-  constructor (polkadotApi, notify) {
+  constructor (polkadotApi, notify, palletId) {
     super(polkadotApi, 'gatedMarketplace', notify)
+    this.RBAC = new Rbac(polkadotApi)
+    this.palletId = palletId
+  }
+
+  /**
+   * Method to set the palletId
+   * @name setPalletId
+   * @param {string} palletId The id of the pallet on the RBAC pallet
+   */
+  setPalletId (palletId) {
+    this.palletId = palletId
   }
 
   /**
@@ -31,12 +43,17 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getAuthoritiesByMarketplace ({ marketId, authTypes }, subTrigger) {
-    const authorities = await this.exEntriesQuery('authoritiesByMarketplace', [marketId])
-    const map = this.mapEntries(authorities)
-    const authMap = map.map(m => {
+    const authorities = await this.RBAC.exEntriesQuery('usersByScope', [this.palletId, marketId])
+    const mapAuthorities = this.mapEntries(authorities)
+    const rolesIds = mapAuthorities.map(auth => {
+      return auth.id[2]
+    })
+    const roles = await this.RBAC.exMultiQuery('roles', rolesIds)
+    const rolesHuman = roles.map(role => role.toHuman())
+    const authMap = mapAuthorities.map((m, index) => {
       return {
-        id: m.id[0],
-        type: m.id[1],
+        id: m.id[1],
+        type: rolesHuman[index], // Owner
         address: m.value[0]
       }
     })
@@ -63,9 +80,13 @@ class MarketplaceApi extends BasePolkadotApi {
       promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
     })
     const marketDetails = await Promise.all(promises)
+    const adminTag = 'Admin'
+    const ownerTag = 'Owner'
     allMarketplaces.map((market, i) => {
-      market.administrator = marketDetails[i][0].address
-      market.owner = marketDetails[i][1].address
+      const admin = marketDetails[i].find(({ type }) => type === adminTag)
+      const owner = marketDetails[i].find(({ type }) => type === ownerTag)
+      market.administrator = admin.address
+      market.owner = owner.address
       return market
     })
     return allMarketplaces
@@ -104,16 +125,24 @@ class MarketplaceApi extends BasePolkadotApi {
     // 4 filter all the applications by approved status
     const marketplacesIds = applicationsReadable.filter(v => v.value.status === 'Approved').map(v => v.marketId)
     // 5 Execute Query to retrieve the marketplaces By Authority [Admin flow]
-    const authorities = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
+    // const authorities = await this.exEntriesQuery('marketplacesByAuthority', [accountId])
+    const authorities = await this.RBAC.exEntriesQuery('rolesByUser', [accountId, this.palletId], subTrigger)
     const mapAuthorities = this.mapEntries(authorities)
     // 6 map mapAuthorities to array of authorities readable
     const authoritiesMap = mapAuthorities.map(v => {
-      return v.id[1]
+      return v.id[2]
     })
     // 7 Join all the from the admin flow & when the user is applicant
     const marketplacesIdJoined = marketplacesIds.concat(authoritiesMap)
+    // Remove duplicated marketplaces ids
+    const uniquesMarketplaces = []
+    marketplacesIdJoined.forEach((market) => {
+      if (!uniquesMarketplaces.includes(market)) {
+        uniquesMarketplaces.push(market)
+      }
+    })
     // 8 get marketplaces details
-    const marketplaces = await this.exMultiQuery('marketplaces', marketplacesIdJoined)
+    const marketplaces = await this.exMultiQuery('marketplaces', uniquesMarketplaces)
     // 9 map marketplaces details toHuman
     const marketLabels = marketplaces.map((v, index) => {
       return v.toHuman()
@@ -132,12 +161,16 @@ class MarketplaceApi extends BasePolkadotApi {
     })
     const marketDetails = await Promise.all(promises)
     // 12 Map marketplaces details
+    const adminTag = 'Admin'
+    const ownerTag = 'Owner'
     return marketInfo.map((market, i) => {
+      const admin = marketDetails[i].find(({ type }) => type === adminTag)
+      const owner = marketDetails[i].find(({ type }) => type === ownerTag)
       return {
         ...market,
         value: { label: market.label },
-        administrator: marketDetails[i][0].address,
-        owner: marketDetails[i][1].address
+        administrator: admin?.address,
+        owner: owner?.address
       }
     })
   }
