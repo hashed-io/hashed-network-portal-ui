@@ -19,6 +19,7 @@
     "@jmgayosso/test-btn": "^1.0.1",
     "@polkadot/api": "^8.1.1",
     "@polkadot/extension-dapp": "^0.43.1",
+    "@polkadot/ui-shared": "^2.9.8",
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.14.2",
     "@smontero/hashed-confidential-docs": "^0.1.8",
