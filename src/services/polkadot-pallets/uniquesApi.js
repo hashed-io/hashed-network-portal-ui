@@ -96,7 +96,7 @@ class UniquesApi extends BasePolkadotApi {
     const mapClasses = classesIds.map(v => {
       return parseInt(v.id)
     })
-    const lastClassId = Math.max(...mapClasses)
+    const lastClassId = mapClasses.length > 0 ? Math.max(...mapClasses) : -1
     return lastClassId
   }
 }
