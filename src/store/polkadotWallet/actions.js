@@ -11,6 +11,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
         polkadotAddress: userAddress,
         profileName: meta.name
       }, { root: true })
+      this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
@@ -21,6 +22,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
         polkadotAddress: userAddress,
         profileName: meta.name
       }, { root: true })
+      this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)
     }
   } catch (e) {
@@ -42,6 +44,7 @@ export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo 
 export const hashedLogout = async function ({ commit }) {
   try {
     await this.$hashedPrivateApi.logout()
+    this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
   } catch (error) {
     console.log('Authenticator logout error', error)

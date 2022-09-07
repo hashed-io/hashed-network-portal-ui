@@ -7,7 +7,8 @@ import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
 
-const { NbvStorageApi } = require('../../../nbv-client-api')
+// const { NbvStorageApi } = require('../../../nbv-client-api')
+import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
 export default async ({ app, store }) => {
   try {
