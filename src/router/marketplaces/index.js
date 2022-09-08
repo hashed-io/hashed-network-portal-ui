@@ -50,17 +50,6 @@ const routes = {
       }
     },
     {
-      path: '/afloat-library',
-      name: 'afloat',
-      component: () => import('pages/marketplace/afloat-example/index.vue'),
-      meta: {
-        breadcrumb: [
-          { name: 'afloat', icon: 'home' }
-        ],
-        app: 'marketplace'
-      }
-    },
-    {
       path: '/NFTs',
       name: 'NFTs',
       component: () => import('pages/marketplace/NFTs/Index.vue'),

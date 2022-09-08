@@ -132,6 +132,10 @@ export default defineComponent({
           to: { name: 'hcd' },
           keyActive: 'confidentialDocuments',
           label: 'pages.hcd.documents.documents'
+        }, {
+          to: { name: 'afloat' },
+          keyActive: 'Afloat Api',
+          label: 'pages.afloat.documents.documents'
         }
       ]
     }
