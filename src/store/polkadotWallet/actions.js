@@ -12,6 +12,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
         profileName: meta.name
       }, { root: true })
       this.$nbvStorageApi.setSigner(userAddress)
+      this.$marketplaceApi.setSigner(userAddress)
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
