@@ -1,10 +1,14 @@
 /* eslint-disable dot-notation */
 import PolkadotApi from '~/services/polkadotApi'
-import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
+import { MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
+// import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
+
+// const { NbvStorageApi } = require('../../../nbv-client-api')
+import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
 export default async ({ app, store }) => {
   try {
@@ -16,7 +20,7 @@ export default async ({ app, store }) => {
     await api.connect()
     console.log('PolkadotApiCreated', api)
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
-    const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
+    // const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
     const palletId = process.env.GATED_MARKETPLACE_ID
     const marketplaceApi = new MarketplaceApi(api, showGlobalLoading, palletId)
     const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
@@ -54,6 +58,10 @@ export default async ({ app, store }) => {
     })
 
     await hashedConfidentialDocs.init()
+
+    console.log('NBVStorageApi', NbvStorageApi)
+    console.log('polkadotApi', hashedConfidentialDocs.getPolkadotApi())
+    const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
 
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi

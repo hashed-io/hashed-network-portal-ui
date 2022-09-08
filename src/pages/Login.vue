@@ -11,7 +11,7 @@
         #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
             .text-caption.text-white {{ $t('login.chooseAnAccount') }}
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-                selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
+                selected-account-btn.full-width(:username="selectedAccount.meta.name" :address="selectedAccount.address" :isSelector="true")
                 accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
             q-btn.full-width.text-primary(
                 :label="$t('login.login')"
@@ -115,6 +115,8 @@ export default {
         })
         this.$store.dispatch('polkadotWallet/hashedLogin', {
           userAddress: this.selectedAccount.address,
+          meta: this.selectedAccount.meta,
+          type: this.selectedAccount.type,
           returnTo: this.returnTo
         })
       } catch (e) {
@@ -149,13 +151,19 @@ export default {
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
           console.log('hcgResponse', hcgResponse)
-          this.$store.commit('hashedConfidentialDocs/setAccount', {
+          this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,
             ssoImage: account.picture,
             ssoAccount: account,
             polkadotAddress
           })
+          this.$store.commit('profile/setProfile', {
+            loginType: 'hcd',
+            polkadotAddress,
+            profilePicture: account.picture,
+            profileName: account.given_name
+          }, { root: true })
           this.$router.push({ name: 'hcd' })
         }
       } catch (e) {
@@ -177,7 +185,7 @@ export default {
         })
         const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
         console.log('hcgResponse', hcgResponse)
-        this.$store.commit('hashedConfidentialDocs/setAccount', {
+        this.$store.commit('hcdWallet/setAccount', {
           ssoProvider,
           ssoUserId,
           ssoImage,

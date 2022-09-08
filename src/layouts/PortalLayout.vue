@@ -58,7 +58,8 @@ export default {
           to: {
             name: 'manageVaults'
           },
-          login: 'polkadotjs'
+          // login: 'polkadotjs'
+          login: 'all'
         },
         {
           label: 'pages.marketplace.appName',
@@ -107,14 +108,14 @@ export default {
       if (this.$store.getters['polkadotWallet/isLoggedIn']) {
         return 'polkadotjs'
       }
-      if (this.$store.getters['hashedConfidentialDocs/isLogged']) {
+      if (this.$store.getters['hcdWallet/isLogged']) {
         return 'hcd'
       }
       return undefined
     },
     optionsMenuByApp () {
       if (this.loginType) {
-        return this.optionsMenu.filter(v => v.login === this.loginType)
+        return this.optionsMenu.filter(v => (v.login === this.loginType || v.login === 'all'))
       }
       return this.optionsMenu
     }
