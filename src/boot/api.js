@@ -5,7 +5,7 @@ import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
-
+// const { NbvStorageApi } = require('')
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({

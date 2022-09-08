@@ -100,21 +100,53 @@ ApplyFormFailure.play = async ({ args, canvasElement }) => {
   await userEvent.click(custodianToggle)
 
   const custodian = canvas.getByTestId('account_input')
-  await userEvent.clear(custodian)
+  await userEvent.type(custodian, '')
 
   const addFilesButton = canvas.getByTestId('add_files_button')
   await expect(addFilesButton).toBeInTheDocument()
-
-  const filenameInput = canvas.getAllByTestId('filename')[1]
-  await userEvent.clear(filenameInput)
-
-  const fileInput = canvas.getAllByTestId('qFile')[0]
-  await userEvent.clear(fileInput)
 
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await userEvent.click(submitButton)
 }
 
+export const ApplyFormManyFiles = Template.bind({})
+ApplyFormManyFiles.args = {
+  market: {
+    admin: { address: '5DNuoeTbCuV23bLiyVpQTFZ1aSShuEyhSZjHxj5bugRNSu8S' },
+    owner: { address: '5DNuoeTbCuV23bLiyVpQTFZ1aSShuEyhSZjHxj5bugRNSu8S' }
+  }
+}
+ApplyFormManyFiles.play = async ({ args, canvasElement }) => {
+  const canvas = within(canvasElement)
+
+  const notesInput = await canvas.getByTestId('notes_input')
+  await userEvent.type(notesInput, 'Lorem ipsum', { delay: 1 })
+
+  const addFilesButton = canvas.getByTestId('add_files_button')
+  await expect(addFilesButton).toBeInTheDocument()
+  await userEvent.click(addFilesButton)
+
+  const filenameInputs = canvas.getAllByTestId('filename')
+  await expect(filenameInputs.length).toBe(4)
+
+  const filenames = canvas.getAllByTestId('filename')
+  const fileInputs = canvas.getAllByTestId('qFile')
+  const filenameInput = filenames[1]
+  const fileInput = fileInputs[0]
+
+  await userEvent.type(filenameInput, 'File 1')
+
+  const file = new File([asset], 'testFile.pdf', { type: 'file/pdf' })
+  await userEvent.upload(fileInput, file)
+
+  const filenameInput2 = filenames[3]
+  const fileInput2 = fileInputs[1]
+
+  await userEvent.type(filenameInput2, 'File 2')
+
+  const file2 = new File([asset], 'testFile.pdf', { type: 'file/pdf' })
+  await userEvent.upload(fileInput2, file2)
+}
 // export const MarketplaceFormFailed = Template.bind({})
 // MarketplaceFormFailed.args = {
 // }
