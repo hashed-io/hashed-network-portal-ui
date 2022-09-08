@@ -62,7 +62,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    // ...mapGetters('polkadotWallet', ['selectedAccount'])
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   watch: {
     selectedAccount (account) {
@@ -96,7 +97,7 @@ export default {
     async getMyMarketplaces () {
       try {
         this.showLoading()
-        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
+        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.polkadotAddress })
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -110,8 +111,8 @@ export default {
         console.log('createMarketplace', marketplace)
         this.modals.isShowingAddMarketplace = false
         await this.$store.$marketplaceApi.createMarketplace({
-          admin: this.selectedAccount.address,
-          user: this.selectedAccount.address,
+          admin: this.polkadotAddress,
+          user: this.polkadotAddress,
           label: marketplace.label
         })
         this.getMyMarketplaces()
