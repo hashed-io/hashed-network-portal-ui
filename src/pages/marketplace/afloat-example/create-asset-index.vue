@@ -1,6 +1,6 @@
 <template lang='pug'>
 #container
-  .text-h5.q-pb-lg {{$t('pages.marketplace.taxCredits.createFormTitle')}}
+  .text-h5.q-pb-lg {{$t('pages.hcd.afloat.createAsset')}}
   q-card(flat)
     q-card-section
       pre {{attributes}}
@@ -24,17 +24,45 @@
         //-   @onRemoveAttribute="onRemoveAttribute"
         //- )
         template(v-for="(attribute, index) in attributes" :key="index")
-          .row.q-col-gutter-md
-            .col-4
+          .row.q-col-gutter-md.q-py-md
+            .col-3
               h-input(
                   v-model="attributes[index].label"
                   dense
                 )
-            .col-4
+            .col-5
               h-input(
-                  v-model="attributes[index].value"
-                  dense
-                )
+                v-if="attributes[index].state === 'plain' && !attributes[index].isFile"
+                v-model="attributes[index].value"
+                dense
+              )
+              h-input(
+                v-if="attributes[index].state === 'ipfs' && !attributes[index].isFile"
+                v-model="attributes[index].value"
+                dense
+              )
+              q-file(
+                v-if="attributes[index].state === 'ipfs' && attributes[index].isFile"
+                v-model="attributes[index].value"
+                dense
+                outlined
+              )
+              q-toggle(
+                v-if="attributes[index].state === 'ipfs'"
+                v-model="attributes[index].isFile"
+                color="secondary"
+                :label="$t('pages.marketplace.taxCredits.labels.isFile')"
+                unchecked-icon="text_fields"
+                checked-icon="attach_file"
+                left-label
+              )
+              q-option-group(
+                v-model="attributes[index].state"
+                :options="options"
+                color="primary"
+                inline
+                dense
+              )
             .col-4
               q-btn(
                 @click="onRemoveAttribute(index)"
@@ -48,7 +76,8 @@
           color='primary'
           icon="add"
           rounded
-          no-caps)
+          no-caps
+        )
         q-btn(
           @click="callExtrinsic"
         )
@@ -68,7 +97,25 @@ export default {
       attributes: [
         {
           label: undefined,
-          value: undefined
+          value: undefined,
+          state: 'plain',
+          isFile: false
+        }
+      ],
+      options: [
+        {
+          label: 'IPFS',
+          value: 'ipfs'
+        },
+        {
+          label: 'Plaintext',
+          value: 'plain',
+          disable: false
+        },
+        {
+          label: 'Confidential documents',
+          value: 'hcd',
+          disable: true
         }
       ]
 
@@ -80,7 +127,7 @@ export default {
       try {
         this.showLoading()
         await this.$store.$afloatApi.createAsset({
-          collectionId: 251,
+          collectionId: undefined,
           assetId: 0,
           uniquesPublicAttributes: {
             title: 'My tax credit'
@@ -94,12 +141,12 @@ export default {
             }
           },
           encryptoThenSaveToIPFS: {
-            data: {
-              ssn121212: '12313123'
-            },
-            files: {
-              filename112: 'File121212'
-            }
+            // data: {
+            //   ssn121212: '12313123'
+            // },
+            // files: {
+            //   filename112: 'File121212'
+            // }
           }
         })
       } catch (error) {
@@ -119,23 +166,33 @@ export default {
     onAddAttribute () {
       this.attributes.push({
         label: undefined,
-        value: undefined
+        value: undefined,
+        state: 'plain',
+        isFile: false
       })
     },
+    // async onSubmitTaxCredit () {
+    //   const isValid = await this.$refs.taxCreditForm.validate()
+    //   if (isValid) {
+    //     let containFile = false
+    //     const processedData = this.attributes.map(attribute => {
+    //       if (attribute.value instanceof File) {
+    //         containFile = true
+    //       }
+    //       return [
+    //         attribute.label,
+    //         attribute.value
+    //       ]
+    //     })
+    //     this.$emit('onSubmitTax', processedData, containFile)
+    //   }
+    // }
     async onSubmitTaxCredit () {
       const isValid = await this.$refs.taxCreditForm.validate()
       if (isValid) {
-        let containFile = false
-        const processedData = this.attributes.map(attribute => {
-          if (attribute.value instanceof File) {
-            containFile = true
-          }
-          return [
-            attribute.label,
-            attribute.value
-          ]
+        this.attributes.forEach(attributes => {
+
         })
-        this.$emit('onSubmitTax', processedData, containFile)
       }
     }
   }

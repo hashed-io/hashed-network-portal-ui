@@ -34,14 +34,25 @@ const routes = [
             }
           },
           {
-            path: '/afloat-library',
-            name: 'afloat',
-            component: () => import('pages/marketplace/afloat-example/index.vue'),
+            path: '/afloat-library/create-asset',
+            name: 'create-asset',
+            component: () => import('pages/marketplace/afloat-example/create-asset-index.vue'),
             meta: {
               breadcrumb: [
-                { name: 'afloat', icon: 'home' }
+                { name: 'createAsset', icon: 'home' }
               ],
-              app: 'marketplace'
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/afloat-library/get-all-assets',
+            name: 'get-all-assets',
+            component: () => import('pages/marketplace/afloat-example/get-asset-index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'getAllAssets', icon: 'home' }
+              ],
+              app: 'hcd'
             }
           }
         ]
