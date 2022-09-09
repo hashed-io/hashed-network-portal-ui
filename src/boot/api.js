@@ -10,6 +10,9 @@ import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/
 // const { NbvStorageApi } = require('../../../nbv-client-api')
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
+// const { AfloatApi } = require('../../../afloat-client-api')
+import { AfloatApi } from '@jmgayosso/afloat-client'
+console.log('AfloatApi', AfloatApi)
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -62,7 +65,15 @@ export default async ({ app, store }) => {
     console.log('NBVStorageApi', NbvStorageApi)
     console.log('polkadotApi', hashedConfidentialDocs.getPolkadotApi())
     const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
-
+    const afloatApi = new AfloatApi({
+      polkadotApi: hashedConfidentialDocs.getPolkadotApi(),
+      projectId: process.env.IPFS_PROJECT_ID,
+      secretId: process.env.IPFS_PROJECT_SECRET,
+      IPFS_URL: process.env.IPFS_URL,
+      notify: showGlobalLoading
+    })
+    console.log('Created', afloatApi)
+    store['$afloatApi'] = afloatApi
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi
     store['$marketplaceApi'] = marketplaceApi

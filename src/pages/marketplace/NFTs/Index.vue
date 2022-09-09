@@ -33,7 +33,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    // ...mapGetters('polkadotWallet', ['selectedAccount'])
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   async beforeMount () {
     await this.getListUniques()
@@ -53,7 +54,7 @@ export default {
       try {
         const response = await this.$store.$uniquesApi.getUniquesByAddress({
           // address: '5HeHxV3P4k62Q7M2hp6xXabiz9Q64HdDTbaty3pSZREL96ua'
-          address: this.selectedAccount.address
+          address: this.polkadotAddress
         })
         const uniquesLength = response.length
         this.lastClass = uniquesLength > 0 ? parseInt(response[uniquesLength - 1].classId) : 0

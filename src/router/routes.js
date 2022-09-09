@@ -32,6 +32,28 @@ const routes = [
               ],
               app: 'hcd'
             }
+          },
+          {
+            path: '/afloat-library/create-asset',
+            name: 'create-asset',
+            component: () => import('pages/marketplace/afloat-example/create-asset-index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'createAsset', icon: 'home' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/afloat-library/get-all-assets',
+            name: 'get-all-assets',
+            component: () => import('pages/marketplace/afloat-example/get-asset-index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'getAllAssets', icon: 'home' }
+              ],
+              app: 'hcd'
+            }
           }
         ]
       },

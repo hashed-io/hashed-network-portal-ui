@@ -132,6 +132,16 @@ export default defineComponent({
           to: { name: 'hcd' },
           keyActive: 'confidentialDocuments',
           label: 'pages.hcd.documents.documents'
+        },
+        {
+          to: { name: 'create-asset' },
+          keyActive: 'createAsset',
+          label: 'pages.hcd.afloat.tab'
+        },
+        {
+          to: { name: 'get-all-assets' },
+          keyActive: 'getAllAssets',
+          label: 'pages.hcd.afloat.tabGetAllAssets'
         }
       ]
     }

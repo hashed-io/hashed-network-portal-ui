@@ -94,17 +94,18 @@ export default {
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount', 'isLoggedIn']),
+    ...mapGetters('profile', ['polkadotAddress']),
     isEnrolled () {
       return !!this.participants?.find(participant => {
-        return participant === this.selectedAccount.address
+        return participant === this.polkadotAddress
       })
     },
     statusApplication () {
       return this.application?.status || 'Not applied'
     },
     isAdmin () {
-      const isAdmin = this.admin && this.selectedAccount.address === this.admin.address
-      const isOwner = this.owner && this.selectedAccount.address === this.owner.address
+      const isAdmin = this.admin && this.polkadotAddress === this.admin.address
+      const isOwner = this.owner && this.polkadotAddress === this.owner.address
       return isAdmin || isOwner
     },
     admin () {
@@ -179,7 +180,7 @@ export default {
         }
         const { fields, custodianFields } = this.getStructureToSend(form)
         const propsToSubmit = {
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           fields,
           custodianFields: form?.custodian ? custodianFields : undefined
@@ -207,7 +208,7 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           feedback: applicant.feedback,
@@ -229,7 +230,7 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           approved: false,
@@ -250,7 +251,7 @@ export default {
     async getApplication () {
       try {
         this.application = await this.$store.$marketplaceApi.getApplicationStatusByAccount({
-          account: this.selectedAccount.address,
+          account: this.polkadotAddress,
           marketId: this.marketId
         })
       } catch (e) {

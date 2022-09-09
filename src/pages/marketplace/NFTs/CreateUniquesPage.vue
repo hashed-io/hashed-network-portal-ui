@@ -26,7 +26,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    // ...mapGetters('polkadotWallet', ['selectedAccount'])
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   methods: {
     async onSubmitTaxCredit (attributes, containFile) {
@@ -48,11 +49,11 @@ export default {
         // TODO: Remove classID when the last changes will be done [classId, instanceId]
         const lastClassId = await this.$store.$uniquesApi.getLastClassId() + 1
         await this.$store.$fruniquesApi.createWithAttributes({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           classId: lastClassId,
           instanceId: parseInt(this.instance),
           numericValue: 0,
-          admin: { Id: this.selectedAccount.address },
+          admin: { Id: this.polkadotAddress },
           attributes: attributes
         })
         this.showNotification({ message: this.$t('pages.marketplace.taxCredits.messages.uniqueCreated'), color: 'positive' })

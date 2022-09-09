@@ -85,8 +85,8 @@ class MarketplaceApi extends BasePolkadotApi {
     allMarketplaces.map((market, i) => {
       const admin = marketDetails[i].find(({ type }) => type === adminTag)
       const owner = marketDetails[i].find(({ type }) => type === ownerTag)
-      market.administrator = admin.address
-      market.owner = owner.address
+      market.administrator = admin?.address
+      market.owner = owner?.address
       return market
     })
     return allMarketplaces
