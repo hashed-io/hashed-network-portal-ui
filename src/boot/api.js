@@ -10,7 +10,8 @@ import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/
 // const { NbvStorageApi } = require('../../../nbv-client-api')
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
-const { AfloatApi } = require('../../../afloat-client-api')
+// const { AfloatApi } = require('../../../afloat-client-api')
+import { AfloatApi } from '@jmgayosso/afloat-client'
 console.log('AfloatApi', AfloatApi)
 export default async ({ app, store }) => {
   try {
