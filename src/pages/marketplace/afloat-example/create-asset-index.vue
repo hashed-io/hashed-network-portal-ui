@@ -37,18 +37,18 @@
                 dense
               )
               h-input(
-                v-if="attributes[index].state === 'ipfs' && !attributes[index].isFile"
+                v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && !attributes[index].isFile"
                 v-model="attributes[index].value"
                 dense
               )
               q-file(
-                v-if="attributes[index].state === 'ipfs' && attributes[index].isFile"
+                v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && attributes[index].isFile"
                 v-model="attributes[index].value"
                 dense
                 outlined
               )
               q-toggle(
-                v-if="attributes[index].state === 'ipfs'"
+                v-if="attributes[index].state === 'ipfs' || attributes[index].state === 'hcd'"
                 v-model="attributes[index].isFile"
                 color="secondary"
                 :label="$t('pages.marketplace.taxCredits.labels.isFile')"
@@ -68,6 +68,13 @@
                 @click="onRemoveAttribute(index)"
                 color="primary"
                 label="delete attribute"
+                rounded
+              )
+              q-btn(
+                v-if="attributes[index].state === 'hcd'"
+                @click="onUploadHCD(index)"
+                color="primary"
+                label="Upload to HCD"
                 rounded
               )
         q-btn.col-6.q-mt-md(
@@ -91,6 +98,7 @@ export default {
   emits: ['onSubmitTax'],
   data () {
     return {
+      prefixHCD: 'HCD:',
       attributes: [
         {
           label: undefined,
@@ -112,7 +120,7 @@ export default {
         {
           label: 'Confidential documents',
           value: 'hcd',
-          disable: true
+          disable: false
         }
       ]
 
@@ -168,22 +176,6 @@ export default {
         isFile: false
       })
     },
-    // async onSubmitTaxCredit () {
-    //   const isValid = await this.$refs.taxCreditForm.validate()
-    //   if (isValid) {
-    //     let containFile = false
-    //     const processedData = this.attributes.map(attribute => {
-    //       if (attribute.value instanceof File) {
-    //         containFile = true
-    //       }
-    //       return [
-    //         attribute.label,
-    //         attribute.value
-    //       ]
-    //     })
-    //     this.$emit('onSubmitTax', processedData, containFile)
-    //   }
-    // }
     async onSubmitTaxCredit () {
       const isValid = await this.$refs.taxCreditForm.validate()
       if (isValid) {
@@ -191,7 +183,8 @@ export default {
         const plaintextSaveToIPFS = { data: {}, files: {} }
         const encryptoThenSaveToIPFS = { data: {}, files: {} }
         const assetId = 0
-        this.attributes.forEach(attributeObj => {
+        const attributes = this.attributes
+        for (const attributeObj of attributes) {
           const { label, value, state, isFile } = attributeObj
           if (state === 'plain') {
             uniquesPublicAttributes[label] = value
@@ -208,18 +201,32 @@ export default {
               plaintextSaveToIPFS.data[label] = value
             }
           }
-        })
-        console.log({ assetId, uniquesPublicAttributes, plaintextSaveToIPFS, encryptoThenSaveToIPFS })
+        }
         try {
           this.showLoading()
-          await this.$store.$afloatApi.createAsset({ collectionId: undefined, assetId, uniquesPublicAttributes, plaintextSaveToIPFS, encryptoThenSaveToIPFS })
-          this.showNotification('Asset created successfully')
+          const admin = this.$store.$hcd.getPolkadotAddress()
+          await this.$store.$afloatApi.createAsset({ collectionId: undefined, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
+          this.showNotification({ message: 'Asset created successfully' })
         } catch (e) {
           console.error(e || e.message)
           this.showNotification({ message: e.message || e, color: 'negative' })
         } finally {
           this.hideLoading()
         }
+      }
+    },
+    async onUploadHCD (index) {
+      const { label, value } = JSON.parse(JSON.stringify(this.attributes[index]))
+      try {
+        this.showLoading()
+        const { cid } = await this.$store.$hcd.addOwnedData({ name: label, description: label, payload: value })
+        this.attributes[index].value = this.prefixHCD + cid
+        this.showNotification({ message: 'File uploaded successfully to Confidential Documents' })
+      } catch (e) {
+        console.error(e || e.message)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
       }
     }
   }

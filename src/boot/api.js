@@ -65,10 +65,10 @@ export default async ({ app, store }) => {
     console.log('polkadotApi', hashedConfidentialDocs.getPolkadotApi())
     const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
     const afloatApi = new AfloatApi({
+      polkadotApi: hashedConfidentialDocs.getPolkadotApi(),
       projectId: process.env.IPFS_PROJECT_ID,
       secretId: process.env.IPFS_PROJECT_SECRET,
       IPFS_URL: process.env.IPFS_URL,
-      hcd: hashedConfidentialDocs,
       notify: showGlobalLoading
     })
     console.log('Created', afloatApi)
