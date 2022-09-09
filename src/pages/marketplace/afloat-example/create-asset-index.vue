@@ -78,9 +78,6 @@
           rounded
           no-caps
         )
-        q-btn(
-          @click="callExtrinsic"
-        )
 </template>
 <script>
 import { validation } from '~/mixins/validation'
@@ -190,9 +187,39 @@ export default {
     async onSubmitTaxCredit () {
       const isValid = await this.$refs.taxCreditForm.validate()
       if (isValid) {
-        this.attributes.forEach(attributes => {
-
+        const uniquesPublicAttributes = {}
+        const plaintextSaveToIPFS = { data: {}, files: {} }
+        const encryptoThenSaveToIPFS = { data: {}, files: {} }
+        const assetId = 0
+        this.attributes.forEach(attributeObj => {
+          const { label, value, state, isFile } = attributeObj
+          if (state === 'plain') {
+            uniquesPublicAttributes[label] = value
+          } else if (state === 'hcd') {
+            if (isFile) {
+              encryptoThenSaveToIPFS.files[label] = value
+            } else {
+              encryptoThenSaveToIPFS.data[label] = value
+            }
+          } else if (state === 'ipfs') {
+            if (isFile) {
+              plaintextSaveToIPFS.files[label] = value
+            } else {
+              plaintextSaveToIPFS.data[label] = value
+            }
+          }
         })
+        console.log({ assetId, uniquesPublicAttributes, plaintextSaveToIPFS, encryptoThenSaveToIPFS })
+        try {
+          this.showLoading()
+          await this.$store.$afloatApi.createAsset({ collectionId: undefined, assetId, uniquesPublicAttributes, plaintextSaveToIPFS, encryptoThenSaveToIPFS })
+          this.showNotification('Asset created successfully')
+        } catch (e) {
+          console.error(e || e.message)
+          this.showNotification({ message: e.message || e, color: 'negative' })
+        } finally {
+          this.hideLoading()
+        }
       }
     }
   }

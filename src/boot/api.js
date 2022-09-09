@@ -68,7 +68,8 @@ export default async ({ app, store }) => {
       projectId: process.env.IPFS_PROJECT_ID,
       secretId: process.env.IPFS_PROJECT_SECRET,
       IPFS_URL: process.env.IPFS_URL,
-      hcd: hashedConfidentialDocs
+      hcd: hashedConfidentialDocs,
+      notify: showGlobalLoading
     })
     console.log('Created', afloatApi)
     store['$afloatApi'] = afloatApi

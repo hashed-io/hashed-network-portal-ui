@@ -1,6 +1,6 @@
 <template lang='pug'>
 #container
-  .text-h5.q-pb-lg {{$t('pages.hcd.afloat.getAsset')}}
+  .text-h5.q-pb-lg {{'Playground'}}
     q-card(flat)
       q-card-section
         pre(
@@ -17,7 +17,7 @@ export default {
     return {
       collectionId: 4,
       startKey: 0,
-      pageSize: 4,
+      pageSize: 20,
       assets: undefined
     }
   },
