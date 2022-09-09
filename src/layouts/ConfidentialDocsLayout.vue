@@ -135,7 +135,7 @@ export default defineComponent({
         },
         {
           to: { name: 'create-asset' },
-          keyActive: 'create-asset',
+          keyActive: 'createAsset',
           label: 'pages.hcd.afloat.tab'
         },
         {
