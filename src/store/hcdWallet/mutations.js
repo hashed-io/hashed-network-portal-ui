@@ -11,4 +11,5 @@ export function cleanAccount (state) {
   state.ssoUserId = undefined
   state.ssoImage = undefined
   state.ssoAccount = undefined
+  state.polkadotAddress = undefined
 }

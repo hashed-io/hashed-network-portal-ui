@@ -23,7 +23,12 @@ export default {
     logout: 'Logout'
   },
   breadcrumb: {
-    confidentialDocuments: 'Hashed Confidential Documents'
+    confidentialDocuments: 'Hashed Confidential Documents',
+    myVaults: 'My Vaults',
+    extendedKeys: 'Extended Keys',
+    vaultDetails: 'Vault Details',
+    createAsset: 'Create Asset',
+    getAllAssets: 'Get All Assets'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -185,7 +190,8 @@ export default {
         custodian: 'Custodian',
         privacy: 'Privacy',
         NFTCollections: 'NFT Collections',
-        create: 'Create'
+        create: 'Create',
+        afloat: 'Afloat Api example'
       },
       tabs: {
         myMarketplaces: 'My marketplaces',
@@ -341,6 +347,11 @@ export default {
         successRemovedMessage: 'Document removed successfully',
         successAddedMessage: 'Document added successfully',
         documents: 'Documents'
+      },
+      afloat: {
+        tab: 'Create Asset',
+        createAsset: 'Playground',
+        tabGetAllAssets: 'Get All Assets'
       }
     },
     sign: {

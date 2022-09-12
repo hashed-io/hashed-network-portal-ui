@@ -1,7 +1,8 @@
 const routes = {
   path: 'nbv',
   name: 'nbv',
-  component: () => import('layouts/MainLayout.vue'),
+  // component: () => import('layouts/MainLayout.vue'),
+  component: () => import('layouts/ConfidentialDocsLayout'),
   children: [
     // Vaults
     {

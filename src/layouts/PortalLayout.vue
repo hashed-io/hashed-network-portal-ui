@@ -58,7 +58,8 @@ export default {
           to: {
             name: 'manageVaults'
           },
-          login: 'polkadotjs'
+          // login: 'polkadotjs'
+          login: 'all'
         },
         {
           label: 'pages.marketplace.appName',
@@ -69,15 +70,15 @@ export default {
           },
           login: 'polkadotjs'
         },
-        {
-          label: 'pages.sign.appName',
-          icon: 'border_color',
-          key: 'sign',
-          to: {
-            name: 'signTest'
-          },
-          login: 'polkadotjs'
-        },
+        // {
+        //   label: 'pages.sign.appName',
+        //   icon: 'border_color',
+        //   key: 'sign',
+        //   to: {
+        //     name: 'signTest'
+        //   },
+        //   login: 'polkadotjs'
+        // },
         {
           label: 'HCD',
           icon: 'storage',
@@ -104,17 +105,17 @@ export default {
       return this.availableLanguages.find(v => v.key === this.$i18n.locale)
     },
     loginType () {
-      if (this.$store.getters['polkadotWallet/isLoggedIn']) {
-        return 'polkadotjs'
-      }
-      if (this.$store.getters['hashedConfidentialDocs/isLogged']) {
-        return 'hcd'
-      }
-      return undefined
+      // if (this.$store.getters['polkadotWallet/isLoggedIn']) {
+      //   return 'polkadotjs'
+      // }
+      // if (this.$store.getters['hcdWallet/isLogged']) {
+      //   return 'hcd'
+      // }
+      return this.$store.getters['profile/loginType']
     },
     optionsMenuByApp () {
       if (this.loginType) {
-        return this.optionsMenu.filter(v => v.login === this.loginType)
+        return this.optionsMenu.filter(v => (v.login === this.loginType || v.login === 'all'))
       }
       return this.optionsMenu
     }

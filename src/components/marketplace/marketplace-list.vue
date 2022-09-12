@@ -1,12 +1,12 @@
 <template lang="pug">
 #container
   #no-items(v-if="!haveMarketplaces")
-    .row.justify-center.q-pa-md.text-body2 {{ emptyLabel }}
+    .row.justify-center.q-pa-md.text-body2(data-testid="emptyLabel") {{ emptyLabel }}
   #items(v-else)
     .row.justify-start.q-px-md
       .col-12
         h-input(
-          testid="label_input"
+          data-testid="labelInput"
           :label="$t('pages.marketplace.searchInput.label')"
           v-model="search"
           :placeholder="$t('pages.marketplace.searchInput.placeholder')"
@@ -24,7 +24,7 @@
             q-spinner-dots(color="primary" size="40px")
         .row.q-col-gutter-md
           .col-xs-12.col-sm-4.col-md-3(v-for="marketplace in resultSearch" :key="marketplace.key")
-            marketplace-item.animated-item(:marketplace="marketplace" @onClick="selectMarketplace")
+            marketplace-item.animated-item( :marketplace="marketplace" @onClickItem="selectMarketplace" data-testid="marketplaceItem")
 </template>
 
 <script>
@@ -59,7 +59,7 @@ export default {
       default: undefined
     }
   },
-  emits: ['selectedMarketplace', 'onLoadMarkets'],
+  emits: ['onSelectedMarketplace', 'onLoadMarkets'],
   data () {
     return {
       search: '',
@@ -88,7 +88,10 @@ export default {
   },
   methods: {
     selectMarketplace (marketplace) {
-      this.$emit('selectedMarketplace', marketplace)
+      /**
+       * This event is emitted when the user do click in a marketplace item
+       */
+      this.$emit('onSelectedMarketplace', marketplace)
     },
     loadMoreMarkets (index, done) {
       const stop = this.$refs.infiniteScroll.stop
@@ -96,6 +99,12 @@ export default {
         done()
         return
       }
+      /**
+       * This event is emitted when the user do scroll to the bottom of the list
+       * It's necessary to add logic to know if the list is loaded from the chain
+       *
+       *
+       */
       this.$emit('onLoadMarkets', { index, done, stop })
     },
     onSearch () {
