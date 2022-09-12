@@ -133,9 +133,9 @@ export default {
         })
         const { credential } = response
         if (credential) {
-          console.log('JWT:', credential)
+          // console.log('JWT:', credential)
           const account = Jwt.decodeToken(credential)
-          console.log('Decoded JWT:', account)
+          // console.log('Decoded JWT:', account)
           this.hcdPasswordProps = {
             ssoProvider: 'Google',
             ssoUserId: account.sub,
@@ -146,6 +146,7 @@ export default {
           // this.showHCDPasswordModal = true
           // this.hideLoading()
           const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
+            /** Important do not change this value */
             ssoProvider: 'hashed-portal-google',
             jwt: credential,
             clientId: process.env.GOOGLE_CLIENT_ID
@@ -179,13 +180,12 @@ export default {
         this.showLoading({
           message: 'Login through Hashed Confidential Documents'
         })
-        const hcgResponse = await this.$store.$hcd.login({
+        await this.$store.$hcd.login({
           ssoProvider,
           ssoUserId,
           email
         })
         const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
-        console.log('hcgResponse', hcgResponse)
         this.$store.commit('hcdWallet/setAccount', {
           ssoProvider,
           ssoUserId,

@@ -57,7 +57,7 @@ export default async ({ app, store }) => {
       ipfsAuthHeader,
       chainURI: process.env.WSS,
       appName: process.env.APP_NAME,
-      signer: process.env.SIGNER
+      faucetServerUrl: process.env.FAUCET_SERVER_URL
     })
 
     await hashedConfidentialDocs.init()

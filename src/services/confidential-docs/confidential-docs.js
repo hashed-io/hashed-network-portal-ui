@@ -10,17 +10,17 @@ import {
 // } from '../../../../hashed-confidential-docs-client-api/src/index'
 
 class ConfidentialDocs {
-  constructor ({ ipfsURL, chainURI, appName, signer, ipfsAuthHeader }) {
+  constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {
     this._polkadot = new Polkadot({ wss: chainURI, appName })
     this._ipfsURL = ipfsURL
-    this._signer = signer
+    this._faucetServerUrl = faucetServerUrl
     this._ipfsAuthHeader = ipfsAuthHeader
   }
 
   async init () {
     await this._polkadot.connect()
 
-    const faucet = new HashedFaucet('https://faucet-dev.hashed.systems')
+    const faucet = new HashedFaucet(this._faucetServerUrl)
 
     const hcd = new HashedConfidentialDocs({
       ipfsURL: this._ipfsURL,
@@ -46,7 +46,7 @@ class ConfidentialDocs {
     const vaultAuthProvider = await createGoogleVaultAuthProvider({
       authName: ssoProvider,
       jwt,
-      faucetServerUrl: 'https://faucet-dev.hashed.systems',
+      faucetServerUrl: this._faucetServerUrl,
       googleDrive
     })
 

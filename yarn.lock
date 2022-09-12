@@ -2902,6 +2902,21 @@
     sha.js "^2.4.11"
     uint8arrays "^3.0.0"
 
+"@smontero/hashed-confidential-docs@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.1.8.tgz#647d2f2d6bab4fcfde9c020959e8c620ba809edf"
+  integrity sha512-0Iwm8SDbeokytMsoIhtKo3Ab088VAKyeB0QUhNsQfXzAu8ep0/gss6xUootiKx+Bp+cpuA5EwP/Zl346uhUGTw==
+  dependencies:
+    "@polkadot/api" "^8.1.1"
+    "@polkadot/extension-dapp" "^0.43.1"
+    "@smontero/generated-key-cipher-providers" "0.0.6"
+    "@smontero/hashed-crypto" "^0.0.8"
+    ipfs-http-client "^55.0.0"
+    it-all "^1.0.6"
+    mime-types "^2.1.35"
+    sha.js "^2.4.11"
+    uint8arrays "^3.0.0"
+
 "@smontero/hashed-crypto@0.0.8", "@smontero/hashed-crypto@^0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@smontero/hashed-crypto/-/hashed-crypto-0.0.8.tgz#4be29fa19ebce6ae8cfb357eb65ec2c66c027a85"
@@ -11774,12 +11789,7 @@ joi@^17.3.0:
     "@sideway/formula" "^3.0.0"
     "@sideway/pinpoint" "^2.0.0"
 
-jose@^4.8.3:
-  version "4.9.2"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.9.2.tgz#268994df4443b9c191de0b001c2e3796ac6cf368"
-  integrity sha512-EqKvu2PqJCD3Jrg3PvcYZVS7D21qMVLSYMDAFcOdGUEOpJSLNtJO7NjLANvu3SYHVl6pdP2ff7ve6EZW2nX7Nw==
-
-jose@^4.9.2:
+jose@^4.8.3, jose@^4.9.2:
   version "4.9.2"
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.9.2.tgz#268994df4443b9c191de0b001c2e3796ac6cf368"
   integrity sha512-EqKvu2PqJCD3Jrg3PvcYZVS7D21qMVLSYMDAFcOdGUEOpJSLNtJO7NjLANvu3SYHVl6pdP2ff7ve6EZW2nX7Nw==
