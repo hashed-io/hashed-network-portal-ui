@@ -131,7 +131,9 @@ export default {
         })
         const { credential } = response
         if (credential) {
+          console.log('JWT:', credential)
           const account = Jwt.decodeToken(credential)
+          console.log('Decoded JWT:', account)
           this.hcdPasswordProps = {
             ssoProvider: 'Google',
             ssoUserId: account.sub,
@@ -142,9 +144,8 @@ export default {
           // this.showHCDPasswordModal = true
           // this.hideLoading()
           const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
-            ssoProvider: 'Google',
-            ssoUserId: account.sub,
-            email: account.email,
+            ssoProvider: 'hashed-portal-google',
+            jwt: credential,
             clientId: process.env.GOOGLE_CLIENT_ID
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()

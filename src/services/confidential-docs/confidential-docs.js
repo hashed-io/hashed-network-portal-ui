@@ -3,13 +3,11 @@ import {
   HashedConfidentialDocs,
   GoogleDrive,
   Google,
-  GoogleVaultAuthProvider,
+  createGoogleVaultAuthProvider,
   Polkadot,
-  LocalAccountFaucet,
-  BalancesApi
+  HashedFaucet
 } from '@smontero/hashed-confidential-docs'
 // } from '../../../../hashed-confidential-docs-client-api/src/index'
-import { Keyring } from '@polkadot/api'
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, signer, ipfsAuthHeader }) {
@@ -22,12 +20,7 @@ class ConfidentialDocs {
   async init () {
     await this._polkadot.connect()
 
-    const keyring = new Keyring()
-    const faucet = new LocalAccountFaucet({
-      balancesApi: new BalancesApi(this._polkadot._api, () => {}),
-      signer: keyring.addFromUri(this._signer, {}, 'sr25519'),
-      amount: 1000000000
-    })
+    const faucet = new HashedFaucet('https://faucet-dev.hashed.systems')
 
     const hcd = new HashedConfidentialDocs({
       ipfsURL: this._ipfsURL,
@@ -39,21 +32,19 @@ class ConfidentialDocs {
     this._hcd = hcd
   }
 
-  async ssoGoogleLogin ({ ssoProvider, ssoUserId, email, clientId }) {
+  async ssoGoogleLogin ({ ssoProvider, jwt, clientId }) {
     const googleDrive = new GoogleDrive(new Google({
       // eslint-disable-next-line no-undef
       gapi,
       clientId
     }))
 
-    const vaultAuthProvider = new GoogleVaultAuthProvider({
+    const vaultAuthProvider = await createGoogleVaultAuthProvider({
       authName: ssoProvider,
-      userId: ssoUserId,
-      email: email,
+      jwt,
+      faucetServerUrl: 'https://faucet-dev.hashed.systems',
       googleDrive
     })
-
-    await vaultAuthProvider.init()
 
     return this._hcd.login(vaultAuthProvider)
   }
