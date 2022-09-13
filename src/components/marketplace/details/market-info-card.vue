@@ -3,12 +3,12 @@
   q-card(class="bg-inherit" flat)
     q-card-section
       .row.justify-center
-        .text-h5 {{market.label}}
+        .text-h5(data-testid="market_label") {{market.label}}
     q-card-section
       .row.text-center
         .col-6
           .text-subtitle1.text-weight-regular.q-my-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}
-            .headline2 {{participants.length}}
+            .headline2(data-testid="number_participants") {{participants.length}}
         .col-6
           .row.q-col-gutter-md
             .col-6.q-pb-md
@@ -17,6 +17,7 @@
                 class="q-mt-md"
                 :address="market.admin?.address"
                 shortDisplay
+                data-testid="admin_account"
               )
             .col-6.q-pb-md
               .text-subtitle1.text-weight-regular {{ $t('pages.marketplace.role.owner') }}
@@ -24,6 +25,7 @@
                 class="q-mt-md"
                 :address="market.owner?.address"
                 shortDisplay
+                data-testid="owner_account"
               )
   .row.text-center.q-pa-md
     .text-subtitle1.text-weight-regular.q-py-md {{$t('pages.marketplace.details.participantsTitle')}}
@@ -36,10 +38,11 @@
             bordered
             flat
             shortDisplay
+            data-testid="participant_item"
           )
       .row.q-gutter-md(v-else)
         .col-12
-          .text-subtitle2.text-weight-regular {{$t('pages.marketplace.details.noParticipants')}}
+          .text-subtitle2.text-weight-regular(data-testid="no_participants") {{$t('pages.marketplace.details.noParticipants')}}
 </template>
 
 <script>

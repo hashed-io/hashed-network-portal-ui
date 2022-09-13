@@ -11,7 +11,6 @@
       @click="onCreateUnique"
     )
   NFTList.q-py-md(
-    :loading="loadingUniques"
     :uniquesList="uniques"
     @onClickUnique="onClickUnique"
   )
@@ -28,8 +27,7 @@ export default {
     return {
       uniques: undefined,
       lastClass: undefined,
-      lastInstance: undefined,
-      loadingUniques: false
+      lastInstance: undefined
     }
   },
   computed: {
@@ -50,9 +48,9 @@ export default {
     },
     async getListUniques () {
       this.loadingUniques = true
+      this.showLoading({ message: this.$t('pages.nfts.loadingUniques') })
       try {
         const response = await this.$store.$uniquesApi.getUniquesByAddress({
-          // address: '5HeHxV3P4k62Q7M2hp6xXabiz9Q64HdDTbaty3pSZREL96ua'
           address: this.selectedAccount.address
         })
         const uniquesLength = response.length
@@ -63,7 +61,7 @@ export default {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
-        this.loadingUniques = false
+        this.hideLoading()
       }
     },
     async getUniques () {
@@ -75,14 +73,14 @@ export default {
       console.log(taxcredit)
       this.uniques = [taxcredit]
     },
-    onClickUnique (unique) {
-      const { classId } = unique
-      const uniqueParams = JSON.stringify(unique)
+    onClickUnique (classId) {
+      // const { classId } = unique
+      // const uniqueParams = JSON.stringify(unique)
       this.$router.push({
         name: 'NTFDetails',
-        params: {
-          unique: uniqueParams
-        },
+        // params: {
+        //   unique: uniqueParams
+        // },
         query: {
           classId: classId
         }

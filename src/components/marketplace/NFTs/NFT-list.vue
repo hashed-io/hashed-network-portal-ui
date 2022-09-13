@@ -1,16 +1,10 @@
 <template lang='pug'>
 #container
-  #loading.flex.flex-center(v-if="loading")
-    q-spinner(
-      color="primary"
-      size="md"
-      class="q-ma-md"
-    )
-  #EmptyList(v-if="!loading && uniquesList.length === 0")
+  #EmptyList(v-if="uniquesList.length === 0")
     .row
       q-card.col-12(flat)
         q-card-section
-          .flex.flex-center.text-h6.q-py-xl {{$t('pages.marketplace.taxCredits.emptyList')}}
+          .flex.flex-center.text-h6.q-py-xl(data-testid='empty-list') {{$t('pages.marketplace.taxCredits.emptyList')}}
   #content(v-else)
     .row.justify-start.q-col-gutter-md
       .col-3(v-for="(unique, key) in uniquesList")
@@ -22,6 +16,9 @@
 </template>
 <script>
 import NFTItem from '~/components/marketplace/NFTs/NFT-item.vue'
+/**
+   * Component to get all the NFT associated with the logged account
+   */
 export default {
   name: 'NFTList',
   components: {
@@ -31,11 +28,6 @@ export default {
     uniquesList: {
       type: Array,
       default: () => [],
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: false,
       required: true
     }
   },
@@ -47,7 +39,7 @@ export default {
   },
   methods: {
     onClickTax (unique) {
-      this.$emit('onClickUnique', unique)
+      this.$emit('onClickUnique', unique.classId)
     }
   }
 }

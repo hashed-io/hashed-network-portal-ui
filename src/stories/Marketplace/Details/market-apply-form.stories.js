@@ -147,15 +147,3 @@ ApplyFormManyFiles.play = async ({ args, canvasElement }) => {
   const file2 = new File([asset], 'testFile.pdf', { type: 'file/pdf' })
   await userEvent.upload(fileInput2, file2)
 }
-// export const MarketplaceFormFailed = Template.bind({})
-// MarketplaceFormFailed.args = {
-// }
-
-// MarketplaceFormFailed.play = async ({ args, canvasElement }) => {
-//   const canvas = within(canvasElement)
-//   const labelInput = canvas.getByTestId('HInput')
-//   await userEvent.clear(labelInput)
-//   const submitButton = canvas.getByTestId('submit_btn')
-//   await userEvent.click(submitButton)
-//   await expect(args.onSubmittedForm).toHaveBeenCalledTimes(0)
-// }

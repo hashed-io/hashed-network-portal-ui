@@ -70,12 +70,12 @@ export default {
   components: {
     AccountItem
   },
-  props: {
-    unique: {
-      type: String,
-      default: ''
-    }
-  },
+  // props: {
+  //   unique: {
+  //     type: String,
+  //     default: ''
+  //   }
+  // },
   data () {
     return {
       uniqueData: [],
@@ -110,13 +110,15 @@ export default {
     }
   },
   created () {
-    if (!this.unique) {
-      this.$router.push({
-        name: 'NFTs'
-      })
-    } else {
-      this.uniqueData = JSON.parse(this.unique)
-    }
+    const { classId } = this.$route.query
+    console.log('Unique', classId)
+    // if (!this.unique) {
+    //   this.$router.push({
+    //     name: 'NFTs'
+    //   })
+    // } else {
+    // this.uniqueData = JSON.parse(this.unique)
+    // }
   },
   methods: {
     async downloadFile (file) {

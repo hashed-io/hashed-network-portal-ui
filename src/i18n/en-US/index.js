@@ -315,6 +315,14 @@ export default {
         }
       }
     },
+    nfts: {
+      loadingUniques: 'Loading the NFTs...',
+      element: {
+        title: 'Unique',
+        owner: 'Owner',
+        issuer: 'Issuer'
+      }
+    },
     hcd: {
       documents: {
         addDocument: 'Add document',
