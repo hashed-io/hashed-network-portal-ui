@@ -4,6 +4,7 @@
   q-card(flat)
     q-card-section
       q-btn(
+        data-testid="add-attribute"
         :label="$t('pages.marketplace.taxCredits.buttons.addAttribute')"
         color="primary"
         rounded
@@ -28,7 +29,9 @@
           color='primary'
           icon="add"
           rounded
-          no-caps)
+          no-caps
+          data-testid="submit-btn"
+          )
 </template>
 <script>
 import { validation } from '~/mixins/validation'
@@ -39,7 +42,7 @@ export default {
     NFTInput
   },
   mixins: [validation],
-  emits: ['onSubmitTax'],
+  emits: ['onSubmitForm'],
   data () {
     return {
       attributes: [
@@ -78,7 +81,10 @@ export default {
             attribute.value
           ]
         })
-        this.$emit('onSubmitTax', processedData, containFile)
+        /**
+         * Emit the data from the Form with the correct structure
+         */
+        this.$emit('onSubmitForm', { attributes: processedData, containFile })
       }
     }
   }

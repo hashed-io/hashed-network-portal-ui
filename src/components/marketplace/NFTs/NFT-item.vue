@@ -31,12 +31,11 @@ export default {
   emits: ['onClickItem'],
   data () {
     return {
-
     }
   },
   methods: {
     onClickTax () {
-      this.$emit('onClickItem', this.unique)
+      this.$emit('onClickItem', this.unique.classId)
     }
   }
 }

@@ -322,7 +322,7 @@ export default {
       }
     },
     nfts: {
-      loadingUniques: 'Loading the NFTs...',
+      loadingUniques: 'Loading the NFT(s)...',
       element: {
         title: 'Unique',
         owner: 'Owner',

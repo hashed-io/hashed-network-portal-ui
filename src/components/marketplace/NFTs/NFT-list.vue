@@ -38,8 +38,8 @@ export default {
     }
   },
   methods: {
-    onClickTax (unique) {
-      this.$emit('onClickUnique', unique.classId)
+    onClickTax (classId) {
+      this.$emit('onClickUnique', classId)
     }
   }
 }

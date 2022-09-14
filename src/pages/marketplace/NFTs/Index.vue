@@ -76,13 +76,8 @@ export default {
       this.uniques = [taxcredit]
     },
     onClickUnique (classId) {
-      // const { classId } = unique
-      // const uniqueParams = JSON.stringify(unique)
       this.$router.push({
         name: 'NTFDetails',
-        // params: {
-        //   unique: uniqueParams
-        // },
         query: {
           classId: classId
         }
