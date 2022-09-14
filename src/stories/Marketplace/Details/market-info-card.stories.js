@@ -47,8 +47,8 @@ BaseComponent.play = async ({ args, canvasElement }) => {
   const ownerAccount = await canvas.getByTestId('owner_account')
   await expect(ownerAccount).toBeInTheDocument()
 
-  const noParticipants = await canvas.getByTestId('no_participants')
-  await expect(noParticipants).not.toBeInTheDocument()
+  const noParticipants = await canvas.queryByTestId('no_participants')
+  await expect(!!noParticipants).toBe(false)
 
   const participantsArray = await canvas.getAllByTestId('participant_item')
   await expect({ numberParticipants: participantsArray.length }).toEqual({ numberParticipants: 2 })
