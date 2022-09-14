@@ -4,10 +4,19 @@ import { Rbac } from '../polkadot-pallets'
 // import participants from '~/services/const/participants'
 // import applicants from '~/services/const/applicants'
 class MarketplaceApi extends BasePolkadotApi {
-  constructor (polkadotApi, notify) {
+  constructor (polkadotApi, notify, palletId) {
     super(polkadotApi, 'gatedMarketplace', notify)
     this.RBAC = new Rbac(polkadotApi)
-    this.palletId = '0x5d208df71427902157988a56e7527474a7dce921f9d5efa159dcfc849289a53c'
+    this.palletId = palletId
+  }
+
+  /**
+   * Method to set the palletId
+   * @name setPalletId
+   * @param {string} palletId The id of the pallet on the RBAC pallet
+   */
+  setPalletId (palletId) {
+    this.palletId = palletId
   }
 
   /**
@@ -33,8 +42,8 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    * @returns {Object}
    */
-  async getAuthoritiesByMarketplace ({ palletId, marketId, authTypes }, subTrigger) {
-    const authorities = await this.RBAC.exEntriesQuery('usersByScope', [palletId, marketId])
+  async getAuthoritiesByMarketplace ({ marketId, authTypes }, subTrigger) {
+    const authorities = await this.RBAC.exEntriesQuery('usersByScope', [this.palletId, marketId])
     const mapAuthorities = this.mapEntries(authorities)
     const rolesIds = mapAuthorities.map(auth => {
       return auth.id[2]
@@ -66,12 +75,9 @@ class MarketplaceApi extends BasePolkadotApi {
         id: v.id[0]
       }
     })
-    // // 4.1 Get the pallet ID using query
-    // const [obj] = await this.RBAC.getAllPalletScopes()
-    // const palletId = obj?.id[0]
     const promises = []
     allMarketplaces.forEach(market => {
-      promises.push(this.getAuthoritiesByMarketplace({ palletId: this.palletId, marketId: market.id }, subTrigger))
+      promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
     })
     const marketDetails = await Promise.all(promises)
     const adminTag = 'Admin'
@@ -79,8 +85,8 @@ class MarketplaceApi extends BasePolkadotApi {
     allMarketplaces.map((market, i) => {
       const admin = marketDetails[i].find(({ type }) => type === adminTag)
       const owner = marketDetails[i].find(({ type }) => type === ownerTag)
-      market.administrator = admin.address
-      market.owner = owner.address
+      market.administrator = admin?.address
+      market.owner = owner?.address
       return market
     })
     return allMarketplaces
@@ -151,7 +157,7 @@ class MarketplaceApi extends BasePolkadotApi {
     // 11 Get Authorities by marketplaces given marketplacesId
     const promises = []
     marketInfo.forEach(market => {
-      promises.push(this.getAuthoritiesByMarketplace({ palletId: this.palletId, marketId: market.id }, subTrigger))
+      promises.push(this.getAuthoritiesByMarketplace({ marketId: market.id }, subTrigger))
     })
     const marketDetails = await Promise.all(promises)
     // 12 Map marketplaces details

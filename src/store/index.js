@@ -2,9 +2,9 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 
 // import example from './module-example'
-import ualWallet from './ualWallet'
+import profile from './profile'
 import polkadotWallet from './polkadotWallet'
-import hashedConfidentialDocs from './hashedConfidentialDocs'
+import hcdWallet from './hcdWallet'
 
 /*
  * If not building with SSR mode, you can
@@ -18,10 +18,9 @@ import hashedConfidentialDocs from './hashedConfidentialDocs'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      // example
-      ualWallet,
+      profile,
       polkadotWallet,
-      hashedConfidentialDocs
+      hcdWallet
     },
 
     // enable strict mode (adds overhead!)

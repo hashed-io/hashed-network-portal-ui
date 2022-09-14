@@ -189,7 +189,8 @@ export default {
         custodian: 'Custodios',
         privacy: 'Privacidad',
         NFTCollections: 'Colecciones NFT',
-        create: 'Crear'
+        create: 'Crear',
+        afloat: 'Afloat Api ejemplo'
       },
       tabs: {
         myMarketplaces: 'Mis Marketplaces',

@@ -3,31 +3,24 @@ import {
   HashedConfidentialDocs,
   GoogleDrive,
   Google,
-  GoogleVaultAuthProvider,
+  createGoogleVaultAuthProvider,
   Polkadot,
-  LocalAccountFaucet,
-  BalancesApi
+  HashedFaucet
 } from '@smontero/hashed-confidential-docs'
 // } from '../../../../hashed-confidential-docs-client-api/src/index'
-import { Keyring } from '@polkadot/api'
 
 class ConfidentialDocs {
-  constructor ({ ipfsURL, chainURI, appName, signer, ipfsAuthHeader }) {
+  constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {
     this._polkadot = new Polkadot({ wss: chainURI, appName })
     this._ipfsURL = ipfsURL
-    this._signer = signer
+    this._faucetServerUrl = faucetServerUrl
     this._ipfsAuthHeader = ipfsAuthHeader
   }
 
   async init () {
     await this._polkadot.connect()
 
-    const keyring = new Keyring()
-    const faucet = new LocalAccountFaucet({
-      balancesApi: new BalancesApi(this._polkadot._api, () => {}),
-      signer: keyring.addFromUri(this._signer, {}, 'sr25519'),
-      amount: 1000000000
-    })
+    const faucet = new HashedFaucet(this._faucetServerUrl)
 
     const hcd = new HashedConfidentialDocs({
       ipfsURL: this._ipfsURL,
@@ -39,27 +32,30 @@ class ConfidentialDocs {
     this._hcd = hcd
   }
 
-  async ssoGoogleLogin ({ ssoProvider, ssoUserId, email, clientId }) {
+  getPolkadotApi () {
+    return this._polkadot
+  }
+
+  async ssoGoogleLogin ({ ssoProvider, jwt, clientId }) {
     const googleDrive = new GoogleDrive(new Google({
       // eslint-disable-next-line no-undef
       gapi,
       clientId
     }))
 
-    const vaultAuthProvider = new GoogleVaultAuthProvider({
+    const vaultAuthProvider = await createGoogleVaultAuthProvider({
       authName: ssoProvider,
-      userId: ssoUserId,
-      email: email,
+      jwt,
+      faucetServerUrl: this._faucetServerUrl,
       googleDrive
     })
-
-    await vaultAuthProvider.init()
 
     return this._hcd.login(vaultAuthProvider)
   }
 
   logout () {
-    return this._hcd.logout()
+    this._hcd.logout()
+    this._polkadot.setWallet()
   }
 
   getPolkadotAddress () {

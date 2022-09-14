@@ -94,17 +94,18 @@ export default {
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount', 'isLoggedIn']),
+    ...mapGetters('profile', ['polkadotAddress']),
     isEnrolled () {
       return !!this.participants?.find(participant => {
-        return participant === this.selectedAccount.address
+        return participant === this.polkadotAddress
       })
     },
     statusApplication () {
       return this.application?.status || 'Not applied'
     },
     isAdmin () {
-      const isAdmin = this.admin && this.selectedAccount.address === this.admin.address
-      const isOwner = this.owner && this.selectedAccount.address === this.owner.address
+      const isAdmin = this.admin && this.polkadotAddress === this.admin.address
+      const isOwner = this.owner && this.polkadotAddress === this.owner.address
       return isAdmin || isOwner
     },
     admin () {
@@ -149,8 +150,7 @@ export default {
       try {
         this.showLoading()
         const market = await this.$store.$marketplaceApi.getMarketplaceById({ marketId: this.marketId })
-        const palletId = this.$store.$marketplaceApi.palletId
-        const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ palletId, marketId: this.marketId })
+        const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId: this.marketId })
         const participants = await this.$store.$marketplaceApi.getParticipantsByMarket({ marketId: this.marketId })
         const applicants = await this.$store.$marketplaceApi.getApplicantsByMarket({ marketId: this.marketId })
         try {
@@ -180,7 +180,7 @@ export default {
         }
         const { fields, custodianFields } = this.getStructureToSend(form)
         const propsToSubmit = {
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           fields,
           custodianFields: form?.custodian ? custodianFields : undefined
@@ -208,7 +208,7 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           feedback: applicant.feedback,
@@ -230,7 +230,7 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           approved: false,
@@ -251,7 +251,7 @@ export default {
     async getApplication () {
       try {
         this.application = await this.$store.$marketplaceApi.getApplicationStatusByAccount({
-          account: this.selectedAccount.address,
+          account: this.polkadotAddress,
           marketId: this.marketId
         })
       } catch (e) {

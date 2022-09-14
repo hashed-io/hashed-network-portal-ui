@@ -15,10 +15,10 @@
             q-item-section.q-pa-sm
               q-item-label {{ $t(option.label) }}
         q-space
-        q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-        q-btn.no-padding(no-caps)
-          SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+        q-btn.q-mr-md(v-if="loginType === 'polkadotjs'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
+          selected-account-btn(v-bind="polkadotUserInfo")
+        q-btn.no-padding(no-caps v-if="loginType === 'hcd'")
+          SSOAccountItem( v-bind="ssoAccountInfo")
           q-menu
             q-list
               q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
@@ -74,22 +74,26 @@ export default defineComponent({
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
     const ssoAccountInfo = computed(() => {
-      if ($store.getters['hashedConfidentialDocs/isLogged']) {
+      if ($store.getters['hcdWallet/isLogged']) {
         return {
-          displayName: $store.getters['hashedConfidentialDocs/accountInfo'].given_name,
-          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture,
-          polkadotAddress: $store.getters['hashedConfidentialDocs/polkadotAddress']
+          displayName: $store.getters['hcdWallet/accountInfo'].given_name,
+          profilePicture: $store.getters['hcdWallet/accountInfo'].picture,
+          polkadotAddress: $store.getters['hcdWallet/polkadotAddress']
+        }
+      }
+      return undefined
+    })
+    const polkadotUserInfo = computed(() => {
+      if ($store.getters['polkadotWallet/isLoggedIn']) {
+        return {
+          username: $store.getters['profile/profileInfo'].profileName,
+          address: $store.getters['profile/profileInfo'].polkadotAddress
         }
       }
       return undefined
     })
     const loginType = computed(() => {
-      if ($store.getters['polkadotWallet/isLoggedIn']) {
-        return 'polkadotjs'
-      } else if ($store.getters['hashedConfidentialDocs/isLogged']) {
-        return 'hcd'
-      }
-      return undefined
+      return $store.getters['profile/loginType']
     })
 
     // Dynamic options for each app
@@ -97,12 +101,12 @@ export default defineComponent({
       nbv: [
         {
           to: { name: 'manageVaults' },
-          keyActive: 'My Vaults',
+          keyActive: 'myVaults',
           label: 'My Vaults'
         },
         {
           to: { name: 'manageXpub' },
-          keyActive: 'Extended Keys',
+          keyActive: 'extendedKeys',
           label: 'Extended Keys'
         }
       ],
@@ -128,6 +132,16 @@ export default defineComponent({
           to: { name: 'hcd' },
           keyActive: 'confidentialDocuments',
           label: 'pages.hcd.documents.documents'
+        },
+        {
+          to: { name: 'create-asset' },
+          keyActive: 'createAsset',
+          label: 'pages.hcd.afloat.tab'
+        },
+        {
+          to: { name: 'get-all-assets' },
+          keyActive: 'getAllAssets',
+          label: 'pages.hcd.afloat.tabGetAllAssets'
         }
       ]
     }
@@ -146,9 +160,11 @@ export default defineComponent({
       }
     })
 
-    function logout () {
+    async function logout () {
+      $store.dispatch('hcdWallet/logout')
       $store.dispatch('polkadotWallet/hashedLogout')
-      $store.dispatch('hashedConfidentialDocs/logout')
+      await $router.push({ name: 'login' })
+      $store.commit('profile/cleanProfile')
     }
 
     function onSelectAccount (account) {
@@ -207,7 +223,8 @@ export default defineComponent({
       logout,
       loginType,
       ssoAccountInfo,
-      copyTextToClipboard
+      copyTextToClipboard,
+      polkadotUserInfo
     }
   }
 })
