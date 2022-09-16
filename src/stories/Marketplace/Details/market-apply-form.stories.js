@@ -52,7 +52,9 @@ ApplyFormSuccessWithoutCustodian.play = async ({ args, canvasElement }) => {
   await userEvent.upload(fileInput, file)
 
   const submitButton = canvas.getByTestId('submit_apply_btn')
+  await expect(submitButton).toBeInTheDocument()
   await userEvent.click(submitButton)
+  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
 
 export const ApplyFormSuccessWithCustodian = Template.bind({})
@@ -82,6 +84,7 @@ ApplyFormSuccessWithCustodian.play = async ({ args, canvasElement }) => {
 
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await userEvent.click(submitButton)
+  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
 export const ApplyFormFailure = Template.bind({})
 ApplyFormFailure.args = {
@@ -107,6 +110,7 @@ ApplyFormFailure.play = async ({ args, canvasElement }) => {
 
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await userEvent.click(submitButton)
+  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(0)
 }
 
 export const ApplyFormManyFiles = Template.bind({})
@@ -146,4 +150,7 @@ ApplyFormManyFiles.play = async ({ args, canvasElement }) => {
 
   const file2 = new File([asset], 'testFile.pdf', { type: 'file/pdf' })
   await userEvent.upload(fileInput2, file2)
+  const submitButton = canvas.getByTestId('submit_apply_btn')
+  await userEvent.click(submitButton)
+  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(0)
 }

@@ -1,5 +1,5 @@
 import ApplicantsList from '~/components/marketplace/applicants-list.vue'
-import { within } from '@storybook/testing-library'
+import { userEvent, within } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
 import asset from '../../assets/portal/logo-gradient-white.png'
 export default {
@@ -104,10 +104,21 @@ ListApplicants.args = {
 ListApplicants.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const item = canvas.getAllByTestId('applicantExpanderItem')
+  const items = canvas.getAllByTestId('accountItem')
   await expect(item).toHaveLength(3)
   await expect(item[0]).toHaveTextContent('Approved')
   await expect(item[1]).toHaveTextContent('Rejected')
   await expect(item[2]).toHaveTextContent('Pending')
+  await userEvent.click(items[2])
+  const feedbackInput = canvas.getAllByTestId('feedbackInput')
+  await userEvent.type(feedbackInput[1], 'Lorem ipsum', { delay: 10 })
+
+  const enrollButton = canvas.getAllByTestId('enrollButton')
+  const rejectButton = canvas.getAllByTestId('rejectButton')
+  await userEvent.click(enrollButton[1])
+  await userEvent.click(rejectButton[0])
+  await expect(args.onEnrollApplicant).toBeCalled()
+  await expect(args.onRejectApplicant).toBeCalled()
 }
 export const EmptyList = Template.bind({})
 EmptyList.args = {

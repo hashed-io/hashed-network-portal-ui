@@ -40,6 +40,10 @@ BaseComponent.play = async ({ args, canvasElement }) => {
   await userEvent.type(NFTValueArray[0], letters, { delay: 1 })
   await userEvent.type(NFTLabelArray[1], letters + '2', { delay: 1 })
   await userEvent.type(NFTValueArray[1], letters + '2', { delay: 1 })
+
+  const submitBtn = canvas.getByTestId('submit-btn')
+  await userEvent.click(submitBtn)
+  await expect(args.onSubmitForm).toBeCalledTimes(1)
 }
 
 export const WithFileInput = Template.bind({})
@@ -66,4 +70,8 @@ WithFileInput.play = async ({ args, canvasElement }) => {
 
   const NFTLabel = await canvas.getByTestId('nft-label')
   await userEvent.type(NFTLabel, 'Lorem ipsum', { delay: 1 })
+
+  const submitBtn = canvas.getByTestId('submit-btn')
+  await userEvent.click(submitBtn)
+  await expect(args.onSubmitForm).toBeCalledTimes(1)
 }

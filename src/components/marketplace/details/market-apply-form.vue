@@ -114,13 +114,11 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$refs.applyForm.validate().then(async () => {
-        const data = {
-          custodian: this.isCustodian ? this.custodianAddress : undefined,
-          fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
-        }
-        this.$emit('onSubmitApplyForm', data)
-      })
+      const data = {
+        custodian: this.isCustodian ? this.custodianAddress : undefined,
+        fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
+      }
+      this.$emit('onSubmitApplyForm', data)
     },
     onMoreFiles () {
       this.form.files.push({
