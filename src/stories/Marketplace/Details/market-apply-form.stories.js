@@ -152,5 +152,5 @@ ApplyFormManyFiles.play = async ({ args, canvasElement }) => {
   await userEvent.upload(fileInput2, file2)
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await userEvent.click(submitButton)
-  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(0)
+  await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
