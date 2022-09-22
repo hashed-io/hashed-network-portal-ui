@@ -13,7 +13,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         q-input(
           data-testid="description"
           outlined
-          :label="$t('pages.nbv.proposals.descripion')"
+          :label="$t('pages.nbv.proposals.description')"
           v-model="description"
           :rules="[rules.required]"
         )
@@ -24,7 +24,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         q-input(
           data-testid="recipient"
           outlined
-          :label="$t('pages.nbv.proposals.recipientAddress ')"
+          :label="$t('pages.nbv.proposals.recipientAddress')"
           v-model="recipientAddress"
           :rules="[rules.required, rules.isValidMainetBTC]"
         )

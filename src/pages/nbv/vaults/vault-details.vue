@@ -116,6 +116,7 @@ import { AccountItem, Banner } from '~/components/common'
 import CreateProposalForm from '~/components/nbv/proposals/create-proposal-form'
 import ProposalsList from '~/components/nbv/proposals/proposals-list'
 import { Encoder } from '@smontero/nbv-ur-codec'
+var interval
 
 export default {
   name: 'VaultDetails',
@@ -182,9 +183,20 @@ export default {
       }
       this.syncData(vault)
       // this.$route.meta.breadcrumb[1].name = 'Detailsss'
+
+      interval = setInterval(() => {
+        if (this.offchainMessage) {
+          this.updateVault()
+        } else {
+          clearInterval(interval)
+        }
+      }, 10000)
     } catch (e) {
       this.showNotification({ message: e.message || e, color: 'negative' })
     }
+  },
+  beforeUnmount () {
+    clearInterval(interval)
   },
   methods: {
     async updateVault () {

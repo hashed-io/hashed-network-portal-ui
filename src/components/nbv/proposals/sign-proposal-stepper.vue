@@ -191,6 +191,7 @@ export default {
         await this.$nextTick()
         setTimeout(() => {
           this.$refs.stepper.next()
+          this.savePsbt()
         }, 500)
       } catch (e) {
         console.error('error', e)

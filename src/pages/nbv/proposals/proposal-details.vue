@@ -33,7 +33,7 @@
   //- Body
   .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
   .text-body2.one-line {{ vaultId }}
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.proposalId') }}d
+  .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposalId') }}
   .text-body2.one-line {{ proposalId }}
   .row
     .col
@@ -63,7 +63,7 @@
   .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
   account-item.full-width(:address="proposer")
   #cosigners
-    .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.cosigners') }}
+    .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
     cosigners-list(:cosigners="proposalCosigners")
   #modals
     q-dialog(v-model="isShowingSignPsbt")
@@ -87,6 +87,7 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
+var interval
 
 export default {
   name: 'ProposalDetails',
@@ -198,6 +199,13 @@ export default {
         if (proposal && proposal.vaultId) {
           // this.proposal = proposal
           this.syncData(proposal)
+          interval = setInterval(() => {
+            if (this.offchainMessage) {
+              this.updateProposal()
+            } else {
+              clearInterval(interval)
+            }
+          }, 10000)
         } else {
           this.$router.replace({
             name: 'manageVaults'
@@ -224,6 +232,9 @@ export default {
     } catch (e) {
       this.showNotification({ message: e.message || e, color: 'negative' })
     }
+  },
+  beforeUnmount () {
+    clearInterval(interval)
   },
   methods: {
     openTxExplorer () {

@@ -131,6 +131,7 @@ export default {
     onDecode (xpub) {
       this.toggleQRScanner(false)
       this.fullXpub = xpub.fullXpub
+      this.setXpub()
     },
     setXpub () {
       const XPUB = (!this.useForm) ? this.fullXpub : `[${this.masterFingerprint}${this.derivation.replace('m', '')}]${this.publicKey}`
