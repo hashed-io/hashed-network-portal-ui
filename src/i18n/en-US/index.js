@@ -121,7 +121,9 @@ export default {
         vaultsBalanceMustBeGreaterThanZero: 'The vault\'s balance must be greater than 0',
         descriptorQr: 'Descriptor QR',
         creatingDescriptor: 'Please wait a moment, we are creating the descriptor',
-        accountDuplicated: 'This account is duplicated'
+        accountDuplicated: 'This account is duplicated',
+        refreshAndCopyAddress: 'Refresh and copy',
+        refreshAndShowQrAddress: 'Refresh and show qr'
       },
       proposals: {
         create_proposal: 'Create new proposal',

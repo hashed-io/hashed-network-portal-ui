@@ -7,10 +7,14 @@
     q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
       q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   //- Header
-  .row.justify-between.q-mb-md
-    .text-h5 {{ $t('pages.nbv.proposals.proposalDetails') }}
-    .row.q-gutter-x-sm(v-if="!isBroadcasted")
-      #signPSBT
+  .text-overline {{ $t('pages.nbv.proposals.proposalDetails') }}
+  //- .row.justify-between.q-mb-md
+  q-item.no-padding
+    q-item-section
+      .text-h4 {{ description }}
+    q-item-section(avatar v-if="!isBroadcasted")
+      //- .row.q-gutter-x-sm(v-if="!isBroadcasted")
+      #signPSBT.q-mt-xs
         q-btn(
           :label="$t('pages.nbv.proposals.signPSBT')"
           color="secondary"
@@ -21,7 +25,7 @@
           :disabled="isOffchainError"
         )
         q-tooltip(v-if="isOffchainError") {{ validationMessage }}
-      #DeleteProposal(v-if="canRemove")
+      #DeleteProposal.q-mt-xs(v-if="canRemove")
         q-btn(
           :label="$t('pages.nbv.proposals.deleteProposal')"
           color="negative"
@@ -31,25 +35,23 @@
           @click="removeProposal"
         )
   //- Body
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
-  .text-body2.one-line {{ vaultId }}
+  //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
+  //- .text-body2.one-line {{ vaultId }}
   .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposalId') }}
   .text-body2.one-line {{ proposalId }}
   .row
     .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.description') }}
-      .text-body2 {{ description }}
-    .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
       .text-body2 {{ labelStatus }}
-  .row
-    .col-xs-6.col-sm-6.col-md-4
+    .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
       .text-body2 {{ threshold }}
-    .col-xs-6.col-sm-6.col-md-4
+  .row
+    //- .col-xs-12.col-sm-12.col-md-4
+    .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
       .text-body2 {{ amount }}
-    .col-xs-12.col-sm-12.col-md-4
+    .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
       .text-body2 {{ feeSatPerVb }}
   .row

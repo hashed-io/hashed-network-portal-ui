@@ -7,8 +7,9 @@
     q-btn(fab icon="refresh" color="secondary" @click="updateVault")
       q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   //- Header
+  .text-overline {{ $t('pages.nbv.vaults.vaultDetails') }}
   .row.justify-between.q-mb-md
-    .text-h5 {{ $t('pages.nbv.vaults.vaultDetails') }}
+    .text-h4 {{ description }}
     .row.q-gutter-x-sm
       #exportDescriptor.no-padding.q-ma-none
         q-btn(
@@ -32,17 +33,14 @@
           v-if="iAmOwner"
         )
   //- Body
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
-  .text-body2.one-line {{ vaultId }}
+  //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
+  //- .text-body2.one-line {{ vaultId }}
   .row
     .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
       .row
         q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
         .text-body2 {{ balance || 0 }} Sats
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.description') }}
-      .text-body2 {{ description }}
     .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
       .text-body2 {{ threshold }}
@@ -54,16 +52,23 @@
   .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.receiveAddress') }}
   q-card.q-pa-xs(v-if="outputDescriptor")
     q-item
-      q-item-section.no-padding(v-if="vaultAddress")
-        q-item-label.text-body2(lines="1") {{ vaultAddress }}
-      q-item-section.no-padding(avatar)
-        q-btn(
-          :label="!vaultAddress ? $t('pages.nbv.vaults.getReceiveAddress') : $t('pages.nbv.vaults.refreshReceiveAddress') "
-          size="sm"
-          no-caps
-          color="secondary"
-          @click="getReceiveAddress"
-        )
+      q-item-label.text-body2(lines="1") {{ vaultAddress }}
+    q-item
+     .row.full-width.reverse.q-gutter-xs
+      q-btn(
+        :label="$t('pages.nbv.vaults.refreshAndShowQrAddress') "
+        size="sm"
+        no-caps
+        color="secondary"
+        @click="refreshAndShowQrAddress"
+      )
+      q-btn(
+        :label="$t('pages.nbv.vaults.refreshAndCopyAddress') "
+        size="sm"
+        no-caps
+        color="secondary"
+        @click="refreshAndCopyAddress"
+      )
   .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.outputDescriptor') }}
   q-card.q-pa-xs(v-if="outputDescriptor")
     q-item
@@ -75,7 +80,7 @@
           size="sm"
           no-caps
           color="secondary"
-          @click="copyTextToClipboard(outputDescriptor)"
+          @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"
         )
   //- Proposals
   #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
@@ -106,8 +111,12 @@
           flat
           size="md"
           no-caps
-          @click="copyTextToClipboard(vaultQrText)"
+          @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
         )
+    q-dialog(v-model="isShowingAddressQR")
+      q-card.modalQrSize.q-pa-sm
+        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.receiveAddress') }}
+        div.qrContainer(v-html="addressQR")
 </template>
 
 <script>
@@ -115,8 +124,10 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CreateProposalForm from '~/components/nbv/proposals/create-proposal-form'
 import ProposalsList from '~/components/nbv/proposals/proposals-list'
-import { Encoder } from '@smontero/nbv-ur-codec'
+import { Encoder, QRCode } from '@smontero/nbv-ur-codec'
+// eslint-disable-next-line no-var
 var interval
+const qrCode = new QRCode()
 
 export default {
   name: 'VaultDetails',
@@ -134,6 +145,8 @@ export default {
       cosigners: undefined,
       isShowingCreateProposal: false,
       isShowingVaultQR: false,
+      isShowingAddressQR: false,
+      addressQR: undefined,
       vaultQR: undefined,
       vaultQrText: undefined,
       vaultAddress: undefined,
@@ -182,6 +195,7 @@ export default {
         return
       }
       this.syncData(vault)
+      this.getReceiveAddress()
       // this.$route.meta.breadcrumb[1].name = 'Detailsss'
 
       interval = setInterval(() => {
@@ -203,6 +217,7 @@ export default {
       try {
         this.showLoading({ message: this.$t('pages.nbv.proposals.updatingProposal') })
         const vault = await this.$store.$nbvStorageApi.getVaultsById({ Ids: [this.vaultId] })
+        this.getReceiveAddress()
         this.syncData({
           ...vault[0].toHuman(),
           vaultId: this.vaultId
@@ -288,7 +303,7 @@ export default {
           descriptor: this.outputDescriptor
         })
         this.vaultAddress = data
-        this.copyTextToClipboard(data)
+        // this.copyTextToClipboard(data)
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -372,6 +387,25 @@ export default {
         }
       } else if (offchainStatus.toLowerCase() === 'valid') {
         this.offchainMessage = undefined
+      }
+    },
+    async refreshAndCopyAddress () {
+      try {
+        await this.getReceiveAddress()
+        this.copyTextToClipboard(this.vaultAddress, 'Vault address copied to clipboard')
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      }
+    },
+    async refreshAndShowQrAddress () {
+      try {
+        await this.getReceiveAddress()
+        this.addressQR = qrCode.create(this.vaultAddress)
+        this.isShowingAddressQR = true
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
       }
     }
   }

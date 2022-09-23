@@ -18,10 +18,12 @@ export default {
     hideLoading () {
       this.notifications.hideLoading()
     },
-    copyTextToClipboard (data) {
+    copyTextToClipboard (data, notificationMessage) {
       try {
         navigator.clipboard.writeText(data).then(e => {
-          this.showNotification({ message: 'Text copied to clipboard' })
+          if (notificationMessage) {
+            this.showNotification({ message: notificationMessage })
+          }
         })
       } catch (e) {
         console.error('error', e)
