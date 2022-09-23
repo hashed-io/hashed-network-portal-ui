@@ -6,7 +6,7 @@ const routes = {
   children: [
     // Vaults
     {
-      path: '',
+      path: '/vaults',
       name: 'manageVaults',
       component: () => import('src/pages/nbv/vaults/manage-vaults.vue'),
       meta: {

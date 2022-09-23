@@ -1,5 +1,5 @@
 <template lang="pug">
-#container
+#container(v-if="$route.params && $route.params.vault")
   .row
     .col-10.q-pr-md
       //- Error Banner
@@ -188,9 +188,11 @@ export default {
   },
   beforeMount () {
     try {
+      // debugger
+      // this.$router.push({ path: '/vaults' })
       const params = this.$route.params
-      if (!params || !params.vault) {
-        this.$router.replace({ name: 'manageVaults' })
+      if (!params || params === {} || !params.vault) {
+        this.$router.push({ path: '/vaults' })
         return
       }
       const vault = JSON.parse(params.vault)

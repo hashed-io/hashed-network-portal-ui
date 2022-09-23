@@ -1,5 +1,5 @@
 <template lang="pug">
-#container
+#container(v-if="$route.params && $route.params.parentParams && $route.params.proposalParams")
   .row
     .col-10.q-pr-md
       //- Error Banner
@@ -195,6 +195,7 @@ export default {
   },
   beforeMount () {
     try {
+      // debugger
       const params = this.$route.params
       if (params && params.parentParams && params.proposalParams) {
         const paramsParent = JSON.parse(params.parentParams)
