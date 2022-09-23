@@ -1,122 +1,127 @@
 <template lang="pug">
 #container
-  //- Error Banner
-  banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
-  //- Action Btn
-  q-page-sticky(position="bottom-right" :offset="[18, 18]")
-    q-btn(fab icon="refresh" color="secondary" @click="updateVault")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
-  //- Header
-  .text-overline {{ $t('pages.nbv.vaults.vaultDetails') }}
-  .row.justify-between.q-mb-md
-    .text-h4 {{ description }}
-    .row.q-gutter-x-sm
-      #exportDescriptor.no-padding.q-ma-none
-        q-btn(
-          :label="$t('pages.nbv.vaults.exportDescriptor')"
-          color="secondary"
-          icon="qr_code"
-          no-caps
-          outline
-          @click="exportVault"
-          :disabled="!outputDescriptor"
-        )
-        q-tooltip(v-if="!outputDescriptor") {{ $t('pages.nbv.vaults.pending') }}
-      #deleteVault
-        q-btn(
-          :label="$t('pages.nbv.vaults.deleteVault')"
-          color="negative"
-          icon="delete"
-          no-caps
-          outline
-          @click="removeVault"
-          v-if="iAmOwner"
-        )
-  //- Body
-  //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
-  //- .text-body2.one-line {{ vaultId }}
   .row
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
+    .col-10.q-pr-md
+      //- Error Banner
+      banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
+      //- Action Btn
+      q-page-sticky(position="bottom-right" :offset="[18, 18]")
+        q-btn(fab icon="refresh" color="secondary" @click="updateVault")
+          q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
+      //- Header
+      .text-overline {{ $t('pages.nbv.vaults.vaultDetails') }}
+      .row.justify-between.q-mb-md
+        .text-h4 {{ description }}
+      //- Body
+      //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
+      //- .text-body2.one-line {{ vaultId }}
       .row
-        q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
-        .text-body2 {{ balance || 0 }} Sats
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
+          .row
+            q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
+            .text-body2 {{ balance || 0 }} Sats
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
+          .text-body2 {{ threshold }}
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.owner') }}
+      account-item(:address="owner")
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
+      .q-gutter-sm(v-for="cosigner in cosigners")
+        account-item.q-mt-md(:address="cosigner")
+      .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.receiveAddress') }}
+      q-card.q-pa-xs(v-if="outputDescriptor")
+        q-item
+          q-item-label.text-body2(lines="1") {{ vaultAddress }}
+        q-item
+        .row.full-width.reverse.q-gutter-xs
+          q-btn(
+            :label="$t('pages.nbv.vaults.refreshAndShowQrAddress') "
+            size="sm"
+            no-caps
+            color="secondary"
+            @click="refreshAndShowQrAddress"
+          )
+          q-btn(
+            :label="$t('pages.nbv.vaults.refreshAndCopyAddress') "
+            size="sm"
+            no-caps
+            color="secondary"
+            @click="refreshAndCopyAddress"
+          )
+      .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.outputDescriptor') }}
+      q-card.q-pa-xs(v-if="outputDescriptor")
+        q-item
+          q-item-section
+            q-item-label.text-body2(lines="1") {{ outputDescriptor }}
+          q-item-section.no-padding(avatar)
+            q-btn(
+              :label="$t('pages.nbv.actions.copyToClipboard')"
+              size="sm"
+              no-caps
+              color="secondary"
+              @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"
+            )
+      //- Proposals
+      #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
+        .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
+      proposals-list(:proposals="proposalsList" @onProposalSelected="goToProposalDetails")
+      #modals
+        q-dialog(v-model="isShowingCreateProposal" persistent)
+          q-card.modalSize.minH
+            create-proposal-form(@submittedForm="createNewProposal" :currentBalance="balance")
+        q-dialog(v-model="isShowingVaultQR")
+          q-card.modalQrSize.q-pa-sm
+            .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.descriptorQr') }}
+            div.qrContainer(v-html="vaultQR")
+            q-btn.full-width.q-mx-md(
+              icon="content_copy"
+              :label="$t('pages.nbv.actions.copyToClipboard')"
+              flat
+              size="md"
+              no-caps
+              @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
+            )
+        q-dialog(v-model="isShowingAddressQR")
+          q-card.modalQrSize.q-pa-sm
+            .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.receiveAddress') }}
+            div.qrContainer(v-html="addressQR")
     .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-      .text-body2 {{ threshold }}
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.owner') }}
-  account-item(:address="owner")
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
-  .q-gutter-sm(v-for="cosigner in cosigners")
-    account-item.q-mt-md(:address="cosigner")
-  .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.receiveAddress') }}
-  q-card.q-pa-xs(v-if="outputDescriptor")
-    q-item
-      q-item-label.text-body2(lines="1") {{ vaultAddress }}
-    q-item
-     .row.full-width.reverse.q-gutter-xs
-      q-btn(
-        :label="$t('pages.nbv.vaults.refreshAndShowQrAddress') "
-        size="sm"
-        no-caps
-        color="secondary"
-        @click="refreshAndShowQrAddress"
-      )
-      q-btn(
-        :label="$t('pages.nbv.vaults.refreshAndCopyAddress') "
-        size="sm"
-        no-caps
-        color="secondary"
-        @click="refreshAndCopyAddress"
-      )
-  .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.outputDescriptor') }}
-  q-card.q-pa-xs(v-if="outputDescriptor")
-    q-item
-      q-item-section
-        q-item-label.text-body2(lines="1") {{ outputDescriptor }}
-      q-item-section.no-padding(avatar)
-        q-btn(
-          :label="$t('pages.nbv.actions.copyToClipboard')"
-          size="sm"
-          no-caps
-          color="secondary"
-          @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"
-        )
-  //- Proposals
-  #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
-    .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
-    #btnCreateProposal
-      q-btn(
-        :label="$t('pages.nbv.proposals.createProposal')"
-        icon="add"
-        color="secondary"
-        no-caps
-        outline
-        @click="isShowingCreateProposal = true"
-        :disabled="!balance || balance <= 0"
-      )
-      q-tooltip(v-if="!balance || balance <= 0") {{ $t('pages.nbv.vaults.vaultsBalanceMustBeGreaterThanZero') }}
-  proposals-list(:proposals="proposalsList" @onProposalSelected="goToProposalDetails")
-  #modals
-    q-dialog(v-model="isShowingCreateProposal" persistent)
-      q-card.modalSize.minH
-        create-proposal-form(@submittedForm="createNewProposal" :currentBalance="balance")
-    q-dialog(v-model="isShowingVaultQR")
-      q-card.modalQrSize.q-pa-sm
-        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.descriptorQr') }}
-        div.qrContainer(v-html="vaultQR")
-        q-btn.full-width.q-mx-md(
-          icon="content_copy"
-          :label="$t('pages.nbv.actions.copyToClipboard')"
-          flat
-          size="md"
-          no-caps
-          @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
-        )
-    q-dialog(v-model="isShowingAddressQR")
-      q-card.modalQrSize.q-pa-sm
-        .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.receiveAddress') }}
-        div.qrContainer(v-html="addressQR")
+      q-card.actionsCard
+        q-card-section
+          .text-body2 Actions
+          .q-gutter-y-sm.q-mt-xs
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.vaults.exportDescriptor')"
+              color="secondary"
+              icon="qr_code"
+              no-caps
+              @click="exportVault"
+              :disabled="!outputDescriptor"
+            )
+              //- icon="qr_code"
+              q-tooltip(v-if="!outputDescriptor") {{ $t('pages.nbv.vaults.pending') }}
+            #btnCreateProposal
+              q-btn.full-width.no-padding(
+                :label="$t('pages.nbv.proposals.createProposal')"
+                :color="(!balance || balance <= 0) ? 'grey' : 'positive'"
+                no-caps
+                icon="add"
+                @click="isShowingCreateProposal = true"
+                :disabled="!balance || balance <= 0"
+              )
+              //- icon="add"
+              q-tooltip(v-if="!balance || balance <= 0") {{ $t('pages.nbv.vaults.vaultsBalanceMustBeGreaterThanZero') }}
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.vaults.deleteVault')"
+              color="negative"
+              no-caps
+              outline
+              @click="removeVault"
+              v-if="iAmOwner"
+              icon="delete"
+            )
+              //- icon="delete"
 </template>
 
 <script>

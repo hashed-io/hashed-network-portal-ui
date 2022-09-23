@@ -81,15 +81,16 @@ export default {
         fingerprintTooltip: 'The fingerprint of a public key is defined in BIP 32 as the first 4 bytes of the RIPEMD160 hash of the SHA256 hash of the public key.',
         derivationPath: 'Derivation Path',
         derivationPathDesc: 'Contains information about a key’s depth and index',
-        xpubDesc: 'Please pase or scan your XPUB from blue wallet',
+        xpubDesc: 'Please scan your XPUB from blue wallet',
         xpub: 'XPUB',
         xpubPlaceholder: 'Paste or write your XPUB',
         managePublicKeys: 'Manage Public Keys',
         removeYourXpub: 'Remove your XPUB',
         setXpub: 'Set XPUB',
-        useForm: 'Use Form',
+        useForm: 'Use Form to import manually your multi signature XPUB.',
         yourXpubWasAdded: 'Your XPUB was added',
-        yourXpubWasRemoved: 'Your XPUB was removed'
+        yourXpubWasRemoved: 'Your XPUB was removed',
+        scanXpub: 'Scan XPUB'
       },
       vaults: {
         manageVaults: 'Manage Vaults',
