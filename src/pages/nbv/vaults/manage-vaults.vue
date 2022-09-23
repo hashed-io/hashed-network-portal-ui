@@ -5,7 +5,7 @@
     q-btn(fab icon="refresh" color="secondary" @click="getVaults")
       q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   .row.justify-between.q-mb-md
-    .text-h5 {{ $t('pages.nbv.vaults.manageVaults') }}
+    .text-overline {{ $t('pages.nbv.vaults.manageVaults') }}
     q-btn(
       :label="$t('pages.nbv.vaults.createVault')"
       color="primary"

@@ -23,7 +23,7 @@
             .text-body2 {{ balance || 0 }} Sats
         .col
           .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-          .text-body2 {{ threshold }}
+          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.owner') }}
       account-item(:address="owner")
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
@@ -33,16 +33,15 @@
       q-card.q-pa-xs(v-if="outputDescriptor")
         q-item
           q-item-label.text-body2(lines="1") {{ vaultAddress }}
-        q-item
         .row.full-width.reverse.q-gutter-xs
-          q-btn(
+          q-btn.button(
             :label="$t('pages.nbv.vaults.refreshAndShowQrAddress') "
             size="sm"
             no-caps
             color="secondary"
             @click="refreshAndShowQrAddress"
           )
-          q-btn(
+          q-btn.button(
             :label="$t('pages.nbv.vaults.refreshAndCopyAddress') "
             size="sm"
             no-caps
@@ -54,14 +53,14 @@
         q-item
           q-item-section
             q-item-label.text-body2(lines="1") {{ outputDescriptor }}
-          q-item-section.no-padding(avatar)
-            q-btn(
-              :label="$t('pages.nbv.actions.copyToClipboard')"
-              size="sm"
-              no-caps
-              color="secondary"
-              @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"
-            )
+        .row.reverse
+          q-btn.button(
+            :label="$t('pages.nbv.actions.copyToClipboard')"
+            size="sm"
+            no-caps
+            color="secondary"
+            @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"
+          )
       //- Proposals
       #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
@@ -424,4 +423,7 @@ export default {
 
 .minH
  height: 700px !important
+
+.button
+  min-width: 150px
 </style>

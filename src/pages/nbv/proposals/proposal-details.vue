@@ -35,10 +35,6 @@
           @click="removeProposal"
         )
   //- Body
-  //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
-  //- .text-body2.one-line {{ vaultId }}
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposalId') }}
-  .text-body2.one-line {{ proposalId }}
   .row
     .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
@@ -61,7 +57,7 @@
   .row(v-if="txId")
     .col
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
-      .text-body2.one-line.txLabel(@click="openTxExplorer") {{ txId }}
+      .text-body2.one-line.txLabel(@click="openTxExplorer") Click to open explorer
   .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
   account-item.full-width(:address="proposer")
   #cosigners
@@ -89,6 +85,7 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
+// eslint-disable-next-line no-var
 var interval
 
 export default {

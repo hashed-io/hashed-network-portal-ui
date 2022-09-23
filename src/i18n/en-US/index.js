@@ -28,7 +28,8 @@ export default {
     extendedKeys: 'Extended Keys',
     vaultDetails: 'Vault Details',
     createAsset: 'Create Asset',
-    getAllAssets: 'Get All Assets'
+    getAllAssets: 'Get All Assets',
+    proposalDetails: 'Proposal Details'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -154,7 +155,7 @@ export default {
         satoshiAmount: 'Satoshi Amount',
         feeInSatoshiPerVirtualByte: 'Fee in Satoshi Per Virtual Byte',
         toAddress: 'To Address',
-        tx: 'Tx',
+        tx: 'See Transaction Details',
         proposer: 'Proposer',
         finalizeTxx: 'Finalize Txx',
         broadcastTx: 'Broadcast Tx',

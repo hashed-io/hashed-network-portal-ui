@@ -6,10 +6,7 @@ q-card.q-pa-sm.animated-item(@click="emitClick")
         .label-container
           .text-subtitle2.text-primary.hoverView Click to see details
         q-chip(v-bind="chipStatus")
-      .row.items-center
-        q-icon.q-mr-md(name="description" size="sm" color="secondary")
-        .text-subtitle2 Description:
-          span.text-body2.q-ml-sm {{ description }}
+      .title.text-subtitle2.text-overline {{ description }}
       .row.items-center
         .col-sm-12.col-md-6.min-h
           .row
@@ -180,4 +177,7 @@ export default {
 
 .animated-item:hover .hoverView
   display: block
+
+.title
+  font-size: 20px
 </style>
