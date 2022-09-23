@@ -302,6 +302,7 @@ export default {
     },
     async getReceiveAddress () {
       try {
+        if (!this.outputDescriptor) return
         this.showLoading()
         const data = await this.$store.$bdkApi.getNewAddress({
           descriptor: this.outputDescriptor
