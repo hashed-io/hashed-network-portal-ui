@@ -167,7 +167,10 @@ export default {
         creatingPSBT: 'Please wait a moment, we are creating the PSBT',
         description: 'Description',
         recipientAddress: 'Recipient address',
-        amountInSatoshi: 'Amount in Satoshi'
+        amountInSatoshi: 'Amount in Satoshi',
+        pendingStatus: 'Waiting on signatures',
+        finalizedStatus: 'Finalized, waiting for broadcast',
+        broadcastedStatus: 'Broadcasted'
         // signPsbtStep1: ''
       },
       list: {

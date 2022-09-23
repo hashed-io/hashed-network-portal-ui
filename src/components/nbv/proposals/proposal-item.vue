@@ -115,10 +115,10 @@ export default {
   computed: {
     chipStatus () {
       const chip = {
-        color: 'warning',
+        color: 'yellow-8',
         'text-color': 'white',
         icon: 'error',
-        label: 'Pending',
+        label: this.$t('pages.nbv.proposals.pendingStatus'),
         size: '1.2em',
         ripple: false,
         clickable: false
@@ -129,13 +129,15 @@ export default {
         return {
           ...chip,
           color: 'positive',
-          label: 'Finalized'
+          icon: 'error',
+          label: this.$t('pages.nbv.proposals.finalizedStatus')
         }
       } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
         return {
           ...chip,
           color: 'positive',
-          label: 'Broadcasted'
+          icon: 'cloud_done',
+          label: this.$t('pages.nbv.proposals.broadcastedStatus')
         }
       }
       return undefined

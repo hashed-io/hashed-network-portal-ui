@@ -1,68 +1,74 @@
 <template lang="pug">
 #container
-  //- Error Banner
-  banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
-  //- Action Btn
-  q-page-sticky(position="bottom-right" :offset="[18, 18]")
-    q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
-  //- Header
-  .text-overline {{ $t('pages.nbv.proposals.proposalDetails') }}
-  //- .row.justify-between.q-mb-md
-  q-item.no-padding
-    q-item-section
-      .text-h4 {{ description }}
-    q-item-section(avatar v-if="!isBroadcasted")
-      //- .row.q-gutter-x-sm(v-if="!isBroadcasted")
-      #signPSBT.q-mt-xs
-        q-btn(
-          :label="$t('pages.nbv.proposals.signPSBT')"
-          color="secondary"
-          icon="qr_code"
-          no-caps
-          outline
-          @click="showSignPSBT"
-          :disabled="isOffchainError"
-        )
-        q-tooltip(v-if="isOffchainError") {{ validationMessage }}
-      #DeleteProposal.q-mt-xs(v-if="canRemove")
-        q-btn(
-          :label="$t('pages.nbv.proposals.deleteProposal')"
-          color="negative"
-          icon="delete"
-          no-caps
-          outline
-          @click="removeProposal"
-        )
-  //- Body
   .row
+    .col-10.q-pr-md
+      //- Error Banner
+      banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
+      //- Action Btn
+      q-page-sticky(position="bottom-right" :offset="[18, 18]")
+        q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
+          q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
+      //- Header
+      .text-overline {{ $t('pages.nbv.proposals.proposalDetails') }}
+      //- .row.justify-between.q-mb-md
+      q-item.no-padding
+        q-item-section
+          .text-h4 {{ description }}
+        q-item-section(avatar v-if="!isBroadcasted")
+          //- .row.q-gutter-x-sm(v-if="!isBroadcasted")
+          #signPSBT.q-mt-xs
+      //- Body
+      .row
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
+          .text-body2 {{ labelStatus }}
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
+          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature Vault` }}
+      .row
+        //- .col-xs-12.col-sm-12.col-md-4
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
+          .text-body2 {{ amount }}
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
+          .text-body2 {{ feeSatPerVb }}
+      .row
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.toAddress') }}
+          .text-body2.one-line {{ toAddress }}
+      .row(v-if="txId")
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
+          .text-body2.one-line.txLabel(@click="openTxExplorer") Click to open explorer
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
+      account-item.full-width(:address="proposer")
+      #cosigners
+        .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
+        cosigners-list(:cosigners="proposalCosigners")
     .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
-      .text-body2 {{ labelStatus }}
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-      .text-body2 {{ threshold }}
-  .row
-    //- .col-xs-12.col-sm-12.col-md-4
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
-      .text-body2 {{ amount }}
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
-      .text-body2 {{ feeSatPerVb }}
-  .row
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.toAddress') }}
-      .text-body2.one-line {{ toAddress }}
-  .row(v-if="txId")
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
-      .text-body2.one-line.txLabel(@click="openTxExplorer") Click to open explorer
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
-  account-item.full-width(:address="proposer")
-  #cosigners
-    .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
-    cosigners-list(:cosigners="proposalCosigners")
+      q-card
+        q-card-section.actionsCard
+          .text-body2 Actions
+          .q-gutter-y-sm.q-mt-xs
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proposals.signPSBT')"
+              color="secondary"
+              icon="qr_code"
+              no-caps
+              @click="showSignPSBT"
+              :disabled="isOffchainError"
+            )
+            q-tooltip(v-if="isOffchainError") {{ validationMessage }}
+          #DeleteProposal.q-mt-xs(v-if="canRemove")
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proposals.deleteProposal')"
+              color="negative"
+              icon="delete"
+              no-caps
+              outline
+              @click="removeProposal"
+            )
   #modals
     q-dialog(v-model="isShowingSignPsbt")
       q-card.modalSize.q-pa-sm
@@ -134,6 +140,8 @@ export default {
         return this.$t('pages.nbv.proposals.finalizing')
       } else if (this.status && this.status.ReadyToFinalize === false) {
         return this.$t('pages.nbv.proposals.broadcasting')
+      } else if (this.status === 'Pending') {
+        return this.$t('pages.nbv.proposals.pendingStatus')
       }
       return this.status
     },
