@@ -18,18 +18,18 @@
           //- .row.q-gutter-x-sm(v-if="!isBroadcasted")
           #signPSBT.q-mt-xs
       //- Body
-      .row
-        .col
-          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
-          .text-body2 {{ labelStatus }}
-        .col
-          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature Vault` }}
+      //- .row
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
+      //-     .text-body2 {{ labelStatus }}
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
+      //-     .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature Vault` }}
       .row
         //- .col-xs-12.col-sm-12.col-md-4
-        .col
-          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
-          .text-body2 {{ amount }}
+        //- .col
+        //-   .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
+        //-   .text-body2 {{ amount }}
         .col
           .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
           .text-body2 {{ feeSatPerVb }}
@@ -49,8 +49,17 @@
     .col
       q-card
         q-card-section.actionsCard
-          .text-body2 Actions
-          .q-gutter-y-sm.q-mt-xs
+          .text-overline {{ $t('pages.nbv.proposals.status') }}
+          .text-body2 {{ labelStatus }}
+          hr
+          .text-overline {{ $t('pages.nbv.proposals.satoshiAmount') }}
+          .text-body2 {{ amount }}
+          hr
+          .text-overline {{ $t('pages.nbv.vaults.threshold') }}
+          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
+          hr
+          .text-overline Actions
+          .q-gutter-y-sm
             q-btn.full-width.no-padding(
               :label="$t('pages.nbv.proposals.signPSBT')"
               color="secondary"
