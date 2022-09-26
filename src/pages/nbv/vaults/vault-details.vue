@@ -15,15 +15,15 @@
       //- Body
       //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
       //- .text-body2.one-line {{ vaultId }}
-      .row
-        .col
-          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
-          .row
-            q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
-            .text-body2 {{ balance || 0 }} Sats
-        .col
-          .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
+      //- .row
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.balance') }}
+      //-     .row
+      //-       q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
+      //-       .text-body2 {{ balance || 0 }} Sats
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
+      //-     .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.owner') }}
       account-item(:address="owner")
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
@@ -88,8 +88,16 @@
     .col
       q-card.actionsCard
         q-card-section
-          .text-body2 Actions
-          .q-gutter-y-sm.q-mt-xs
+          .text-overline {{ $t('pages.nbv.vaults.balance') }}
+            .row
+              q-icon.q-mr-md(name="fak fa-satoshisymbol-solid" size="sm" color="secondary")
+              .text-subtitle2 {{ balance || 0 }} Sats
+          hr
+          .text-overline {{ $t('pages.nbv.vaults.threshold') }}
+          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
+          hr
+          .text-overline.q-mt-xs Actions
+          .q-gutter-y-sm
             q-btn.full-width.no-padding(
               :label="$t('pages.nbv.vaults.exportDescriptor')"
               color="secondary"
