@@ -141,7 +141,7 @@ export default {
         signPsbtFinalizeDesc: 'Complete the transaction, ready to broadcast',
         signPsbtBroadcastDesc: 'Broadcast the transaction',
         saveBtn: 'Save',
-        finalizeBtn: 'Finalize',
+        finalizeBtn: 'Finalize and Broadcast',
         broadcastBtn: 'Broadcast',
         proposals: 'Proposals',
         createProposal: 'Create proposal',

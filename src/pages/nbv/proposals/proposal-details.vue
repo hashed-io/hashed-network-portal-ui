@@ -58,6 +58,7 @@
               no-caps
               @click="showSignPSBT"
               :disabled="isOffchainError"
+              v-if="!alreadySigned"
             )
             q-tooltip(v-if="isOffchainError") {{ validationMessage }}
             q-btn.full-width.no-padding(
@@ -68,14 +69,14 @@
               no-caps
               @click="finalizePsbt"
             )
-            q-btn.full-width.no-padding(
-              v-if="canBroadcast"
-              :label="$t('pages.nbv.proposals.broadcastBtn')"
-              color="positive"
-              icon="connect_without_contact"
-              no-caps
-              @click="broadcastPsbt"
-            )
+            //- q-btn.full-width.no-padding(
+            //-   v-if="canBroadcast"
+            //-   :label="$t('pages.nbv.proposals.broadcastBtn')"
+            //-   color="positive"
+            //-   icon="connect_without_contact"
+            //-   no-caps
+            //-   @click="broadcastPsbt"
+            //- )
             #DeleteProposal(v-if="canRemove")
               q-btn.full-width.no-padding(
                 :label="$t('pages.nbv.proposals.deleteProposal')"
@@ -289,7 +290,8 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.finalizePsbt({
           proposalId: this.proposalId,
-          signer: this.polkadotAddress
+          signer: this.polkadotAddress,
+          broadcast: true
         })
         this.isShowingSignPsbt = false
         this.showNotification({ message: 'Finalized' })
@@ -362,25 +364,25 @@ export default {
           psbt
         })
         const userXPub = await this.getXpub()
-        console.log('signers', signers, userXPub)
-        console.log('myXpub', userXPub)
         if (!this.isValidSignature(signers, userXPub)) {
+          console.error('Not valid signatures', { signers, userXPub })
           this.showNotification({ message: this.$t('pages.nbv.proposals.signThePsbtWithValidXPUB'), color: 'negative' })
           return
         }
+        this.showLoading()
         await this.$store.$nbvStorageApi.savePsbt({
           proposalId: this.proposalId,
           signer: this.polkadotAddress,
           psbt
         })
-        this.isShowingSignPsbt = false
         this.showNotification({ message: this.$t('pages.nbv.proposals.psbtSavedSuccessfully') })
-        this.updateProposal()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
+        this.isShowingSignPsbt = false
         this.hideLoading()
+        this.updateProposal()
       }
     },
     isValidSignature (signers, xpub) {
