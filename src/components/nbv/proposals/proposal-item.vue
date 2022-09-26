@@ -129,14 +129,14 @@ export default {
         return {
           ...chip,
           color: 'positive',
-          icon: 'error',
+          icon: 'cloud_done',
           label: this.$t('pages.nbv.proposals.finalizedStatus')
         }
       } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
         return {
           ...chip,
           color: 'positive',
-          icon: 'cloud_done',
+          icon: 'connect_without_contact',
           label: this.$t('pages.nbv.proposals.broadcastedStatus')
         }
       }

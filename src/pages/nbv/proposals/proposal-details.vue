@@ -60,15 +60,31 @@
               :disabled="isOffchainError"
             )
             q-tooltip(v-if="isOffchainError") {{ validationMessage }}
-          #DeleteProposal.q-mt-xs(v-if="canRemove")
             q-btn.full-width.no-padding(
-              :label="$t('pages.nbv.proposals.deleteProposal')"
-              color="negative"
-              icon="delete"
+              v-if="canFinalize"
+              :label="$t('pages.nbv.proposals.finalizeBtn')"
+              color="secondary"
+              icon="cloud_done"
               no-caps
-              outline
-              @click="removeProposal"
+              @click="finalizePsbt"
             )
+            q-btn.full-width.no-padding(
+              v-if="canBroadcast"
+              :label="$t('pages.nbv.proposals.broadcastBtn')"
+              color="positive"
+              icon="connect_without_contact"
+              no-caps
+              @click="broadcastPsbt"
+            )
+            #DeleteProposal(v-if="canRemove")
+              q-btn.full-width.no-padding(
+                :label="$t('pages.nbv.proposals.deleteProposal')"
+                color="negative"
+                icon="delete"
+                no-caps
+                outline
+                @click="removeProposal"
+              )
   #modals
     q-dialog(v-model="isShowingSignPsbt")
       q-card.modalSize.q-pa-sm
