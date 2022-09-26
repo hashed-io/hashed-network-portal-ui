@@ -28,6 +28,16 @@
   -webkit-box-orient: vertical
   height: auto
 
+.two-lines
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+  max-width: 100%
+  overflow: hidden
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
+  height: auto
+
 .icon-btn
   transition: all 0.3s
   max-width: 400px
@@ -71,6 +81,16 @@
   color: $white !important
   background: $secondary !important
   font-weight: bold !important
+
+.actionsCard
+  position: sticky
+  top: 130px
+
+.link
+  text-decoration: underline
+  color: blue
+  cursor: pointer
+
 @media (max-width: 800px)
   .modalSize
     width: 90vw

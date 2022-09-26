@@ -1,70 +1,100 @@
 <template lang="pug">
-#container
-  //- Error Banner
-  banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
-  //- Action Btn
-  q-page-sticky(position="bottom-right" :offset="[18, 18]")
-    q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
-  //- Header
-  .row.justify-between.q-mb-md
-    .text-h5 {{ $t('pages.nbv.proposals.proposalDetails') }}
-    .row.q-gutter-x-sm(v-if="!isBroadcasted")
-      #signPSBT
-        q-btn(
-          :label="$t('pages.nbv.proposals.signPSBT')"
-          color="secondary"
-          icon="qr_code"
-          no-caps
-          outline
-          @click="showSignPSBT"
-          :disabled="isOffchainError"
-        )
-        q-tooltip(v-if="isOffchainError") {{ validationMessage }}
-      #DeleteProposal(v-if="canRemove")
-        q-btn(
-          :label="$t('pages.nbv.proposals.deleteProposal')"
-          color="negative"
-          icon="delete"
-          no-caps
-          outline
-          @click="removeProposal"
-        )
-  //- Body
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.vaultId') }}
-  .text-body2.one-line {{ vaultId }}
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.proposalId') }}d
-  .text-body2.one-line {{ proposalId }}
+#container(v-if="$route.params && $route.params.parentParams && $route.params.proposalParams")
   .row
+    .col-10.q-pr-md
+      //- Error Banner
+      banner.q-mb-md(v-if="offchainMessage" v-bind="offchainMessage" )
+      //- Action Btn
+      q-page-sticky(position="bottom-right" :offset="[18, 18]")
+        q-btn(fab icon="refresh" color="secondary" @click="updateProposal")
+          q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
+      //- Header
+      .text-overline {{ $t('pages.nbv.proposals.proposalDetails') }}
+      //- .row.justify-between.q-mb-md
+      q-item.no-padding
+        q-item-section
+          .text-h4 {{ description }}
+        q-item-section(avatar v-if="!isBroadcasted")
+          //- .row.q-gutter-x-sm(v-if="!isBroadcasted")
+          #signPSBT.q-mt-xs
+      //- Body
+      //- .row
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
+      //-     .text-body2 {{ labelStatus }}
+      //-   .col
+      //-     .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
+      //-     .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature Vault` }}
+      .row
+        //- .col-xs-12.col-sm-12.col-md-4
+        //- .col
+        //-   .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
+        //-   .text-body2 {{ amount }}
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
+          .text-body2 {{ feeSatPerVb }}
+      .row
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.toAddress') }}
+          .text-body2.one-line {{ toAddress }}
+      .row(v-if="txId")
+        .col
+          .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
+          .text-body2.one-line.txLabel(@click="openTxExplorer") Click to open explorer
+      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
+      account-item.full-width(:address="proposer")
+      #cosigners
+        .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.cosigners') }}
+        cosigners-list(:cosigners="proposalCosigners")
     .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.description') }}
-      .text-body2 {{ description }}
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.status') }}
-      .text-body2 {{ labelStatus }}
-  .row
-    .col-xs-6.col-sm-6.col-md-4
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.vaults.threshold') }}
-      .text-body2 {{ threshold }}
-    .col-xs-6.col-sm-6.col-md-4
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.satoshiAmount') }}
-      .text-body2 {{ amount }}
-    .col-xs-12.col-sm-12.col-md-4
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.feeInSatoshiPerVirtualByte') }}
-      .text-body2 {{ feeSatPerVb }}
-  .row
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.toAddress') }}
-      .text-body2.one-line {{ toAddress }}
-  .row(v-if="txId")
-    .col
-      .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
-      .text-body2.one-line.txLabel(@click="openTxExplorer") {{ txId }}
-  .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
-  account-item.full-width(:address="proposer")
-  #cosigners
-    .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.cosigners') }}
-    cosigners-list(:cosigners="proposalCosigners")
+      q-card
+        q-card-section.actionsCard
+          .text-overline {{ $t('pages.nbv.proposals.status') }}
+          .text-body2 {{ labelStatus }}
+          hr
+          .text-overline {{ $t('pages.nbv.proposals.satoshiAmount') }}
+          .text-body2 {{ amount }}
+          hr
+          .text-overline {{ $t('pages.nbv.vaults.threshold') }}
+          .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
+          hr
+          .text-overline Actions
+          .q-gutter-y-sm
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proposals.signPSBT')"
+              color="secondary"
+              icon="qr_code"
+              no-caps
+              @click="showSignPSBT"
+              :disabled="isOffchainError"
+              v-if="!alreadySigned"
+            )
+            q-tooltip(v-if="isOffchainError") {{ validationMessage }}
+            q-btn.full-width.no-padding(
+              v-if="canFinalize"
+              :label="$t('pages.nbv.proposals.finalizeBtn')"
+              color="secondary"
+              icon="cloud_done"
+              no-caps
+              @click="finalizePsbt"
+            )
+            //- q-btn.full-width.no-padding(
+            //-   v-if="canBroadcast"
+            //-   :label="$t('pages.nbv.proposals.broadcastBtn')"
+            //-   color="positive"
+            //-   icon="connect_without_contact"
+            //-   no-caps
+            //-   @click="broadcastPsbt"
+            //- )
+            #DeleteProposal(v-if="canRemove")
+              q-btn.full-width.no-padding(
+                :label="$t('pages.nbv.proposals.deleteProposal')"
+                color="negative"
+                icon="delete"
+                no-caps
+                outline
+                @click="removeProposal"
+              )
   #modals
     q-dialog(v-model="isShowingSignPsbt")
       q-card.modalSize.q-pa-sm
@@ -87,6 +117,8 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
+// eslint-disable-next-line no-var
+var interval
 
 export default {
   name: 'ProposalDetails',
@@ -134,6 +166,8 @@ export default {
         return this.$t('pages.nbv.proposals.finalizing')
       } else if (this.status && this.status.ReadyToFinalize === false) {
         return this.$t('pages.nbv.proposals.broadcasting')
+      } else if (this.status === 'Pending') {
+        return this.$t('pages.nbv.proposals.pendingStatus')
       }
       return this.status
     },
@@ -187,6 +221,7 @@ export default {
   },
   beforeMount () {
     try {
+      // debugger
       const params = this.$route.params
       if (params && params.parentParams && params.proposalParams) {
         const paramsParent = JSON.parse(params.parentParams)
@@ -198,6 +233,13 @@ export default {
         if (proposal && proposal.vaultId) {
           // this.proposal = proposal
           this.syncData(proposal)
+          interval = setInterval(() => {
+            if (this.offchainMessage) {
+              this.updateProposal()
+            } else {
+              clearInterval(interval)
+            }
+          }, 10000)
         } else {
           this.$router.replace({
             name: 'manageVaults'
@@ -224,6 +266,9 @@ export default {
     } catch (e) {
       this.showNotification({ message: e.message || e, color: 'negative' })
     }
+  },
+  beforeUnmount () {
+    clearInterval(interval)
   },
   methods: {
     openTxExplorer () {
@@ -254,7 +299,8 @@ export default {
         this.showLoading()
         await this.$store.$nbvStorageApi.finalizePsbt({
           proposalId: this.proposalId,
-          signer: this.polkadotAddress
+          signer: this.polkadotAddress,
+          broadcast: true
         })
         this.isShowingSignPsbt = false
         this.showNotification({ message: 'Finalized' })
@@ -327,25 +373,25 @@ export default {
           psbt
         })
         const userXPub = await this.getXpub()
-        console.log('signers', signers, userXPub)
-        console.log('myXpub', userXPub)
         if (!this.isValidSignature(signers, userXPub)) {
+          console.error('Not valid signatures', { signers, userXPub })
           this.showNotification({ message: this.$t('pages.nbv.proposals.signThePsbtWithValidXPUB'), color: 'negative' })
           return
         }
+        this.showLoading()
         await this.$store.$nbvStorageApi.savePsbt({
           proposalId: this.proposalId,
           signer: this.polkadotAddress,
           psbt
         })
-        this.isShowingSignPsbt = false
         this.showNotification({ message: this.$t('pages.nbv.proposals.psbtSavedSuccessfully') })
-        this.updateProposal()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
+        this.isShowingSignPsbt = false
         this.hideLoading()
+        this.updateProposal()
       }
     },
     isValidSignature (signers, xpub) {

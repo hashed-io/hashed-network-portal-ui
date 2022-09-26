@@ -27,7 +27,7 @@
 
     q-page-container
       .row.justify-center
-        .col-10
+        .col-xs-12.col-md-11.col-lg-10
           .q-px-lg.q-pa-lg
             not-connected(v-if="!isConnectedToServer")
             not-accounts(v-else-if="!selectedAccount")

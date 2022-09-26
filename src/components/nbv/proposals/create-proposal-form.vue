@@ -8,23 +8,47 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       size="sm"
     )
     .text-h4.q-mb-lg {{ $t('pages.nbv.proposals.create_proposal') }}
+    #info
+      .text-overline Current balance
+      .text-body2 {{ currentBalanceLabel }}
+        span.link.text-body2.q-ml-md(@click="isShowingInBTC = !isShowingInBTC") Show in {{ isShowingInBTC ? 'sats' : 'BTC' }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
-        q-input(
-          data-testid="description"
-          outlined
-          :label="$t('pages.nbv.proposals.descripion')"
-          v-model="description"
-          :rules="[rules.required]"
-        )
+        .row.items-center.q-col-gutter-sm
+          .col-6
+            q-input(
+              data-testid="amount"
+              outlined
+              :label="$t('pages.nbv.proposals.amountInSatoshi')"
+              v-model="amountInSats"
+              :rules="[rules.required, rules.positiveInteger, rules.lessOrEqualThan(currentBalance || 0), rules.greaterOrEqualThan(546)]"
+              :suffix="isAmountOnBTC ? 'BTC' : 'sats'"
+            )
+          .col
+            .column.q-gutter-y-sm
+              q-btn(
+                label="Use Max"
+                dense
+                no-caps
+                color="secondary"
+                @click="useMaxBalance"
+              )
+              q-btn(
+                label="Change"
+                dense
+                no-caps
+                color="secondary"
+                outline
+                @click="changeAmountTo"
+              )
       .col
-        .text-body2 {{ $t('pages.nbv.proposals.descriptionDesc')  }}
+        .text-body2 {{ $t('pages.nbv.proposals.amountDesc')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-input(
           data-testid="recipient"
           outlined
-          :label="$t('pages.nbv.proposals.recipientAddress ')"
+          :label="$t('pages.nbv.proposals.recipientAddress')"
           v-model="recipientAddress"
           :rules="[rules.required, rules.isValidMainetBTC]"
         )
@@ -33,14 +57,14 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-input(
-          data-testid="amount"
+          data-testid="description"
           outlined
-          :label="$t('pages.nbv.proposals.amountInSatoshi')"
-          v-model="amountInSats"
-          :rules="[rules.required, rules.positiveInteger, rules.lessOrEqualThan(currentBalance || 0), rules.greaterOrEqualThan(546)]"
+          :label="$t('pages.nbv.proposals.description')"
+          v-model="description"
+          :rules="[rules.required]"
         )
       .col
-        .text-body2 {{ $t('pages.nbv.proposals.amountDesc')  }}
+        .text-body2 {{ $t('pages.nbv.proposals.descriptionDesc')  }}
     q-btn.float-right.q-mb-md(
         data-testid="submitButton"
         :label="$t('pages.nbv.proposals.createProposal')"
@@ -74,10 +98,36 @@ export default {
     return {
       recipientAddress: undefined,
       amountInSats: undefined,
-      description: undefined
+      description: undefined,
+      btcSatsRelation: 100000000,
+      isShowingInBTC: false,
+      isAmountInBTC: false
+    }
+  },
+  computed: {
+    currentBalanceLabel () {
+      if (this.isShowingInBTC) {
+        return `${this.currentBalance / this.btcSatsRelation} BTC`
+      }
+      return `${this.currentBalance} sats`
+    }
+  },
+  watch: {
+    isShowingInBTC (v) {
+      console.log('isShowingInBTC', v)
     }
   },
   methods: {
+    changeAmountTo () {
+      this.isAmountInBTC = !this.isAmountInBTC
+    },
+    useMaxBalance () {
+      if (this.isShowingInBTC) {
+        this.amountInSats = this.currentBalance / this.btcSatsRelation
+      } else {
+        this.amountInSats = this.currentBalance
+      }
+    },
     async submitForm () {
       try {
         const data = {
