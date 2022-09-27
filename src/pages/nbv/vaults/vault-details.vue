@@ -72,17 +72,29 @@
           q-card.modalSize.minH
             create-proposal-form(@submittedForm="createNewProposal" :currentBalance="balance")
         q-dialog(v-model="isShowingVaultQR")
-          q-card.modalQrSize.q-pa-sm
+          q-card.modalSize.q-pa-sm
             .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.descriptorQr') }}
-            div.qrContainer(v-html="vaultQR")
-            q-btn.full-width.q-mx-md(
-              icon="content_copy"
-              :label="$t('pages.nbv.actions.copyToClipboard')"
-              flat
-              size="md"
-              no-caps
-              @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
-            )
+            .row
+              .col
+                div.qrContainer(v-html="vaultQR")
+                q-btn.full-width.q-mx-md(
+                  icon="content_copy"
+                  :label="$t('pages.nbv.actions.copyToClipboard')"
+                  flat
+                  size="md"
+                  no-caps
+                  @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
+                )
+              .col
+                .text-bold.q-mt-sm Notes:
+                  span.text-body2.q-ml-sm You have to import this vault on Blue Wallet to co-sign transactions.
+                .text-bold.q-mt-md How to import vault on Blue Wallet:
+                ul
+                  li Go to Home screen in Blue Wallet.
+                  li Tap on ➕ button positioned on top right corner.
+                  li Top on "Import wallet" button.
+                  li Tap on "Scan or import a file".
+                  li Scan this qr from Blue Wallet.
         q-dialog(v-model="isShowingAddressQR")
           q-card.modalQrSize.q-pa-sm
             .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.receiveAddress') }}

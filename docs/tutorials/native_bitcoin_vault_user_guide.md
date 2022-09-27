@@ -60,7 +60,7 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 
 # **How to Safely Store Your Wallet**
 
---- 
+---
 In the following tutorial, we'll talk about some concepts related to wallets & keys so you can be familiar with them.
 
 - ### **About Keys**
