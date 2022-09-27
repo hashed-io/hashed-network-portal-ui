@@ -30,33 +30,35 @@
       .q-gutter-sm(v-for="cosigner in cosigners")
         account-item.q-mt-md(:address="cosigner")
       .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.receiveAddress') }}
-      q-card.q-pa-xs(v-if="outputDescriptor")
-        q-item
-          q-item-label.text-body2(lines="1") {{ vaultAddress }}
-        .row.full-width.reverse.q-gutter-xs
-          q-btn.button(
-            :label="$t('pages.nbv.vaults.refreshAndShowQrAddress') "
-            size="sm"
+      .row.center-items(v-if="outputDescriptor")
+        .col-9.q-mr-md
+          q-card
+            q-item
+              q-item-label.text-body2(lines="1") {{ vaultAddress }}
+        .col
+         .column.q-gutter-xs
+          q-btn(
+            :label="$t('pages.nbv.vaults.refreshAndShowQrAddress')"
             no-caps
             color="secondary"
             @click="refreshAndShowQrAddress"
           )
-          q-btn.button(
-            :label="$t('pages.nbv.vaults.refreshAndCopyAddress') "
-            size="sm"
+          q-btn(
+            :label="$t('pages.nbv.vaults.refreshAndCopyAddress')"
             no-caps
             color="secondary"
             @click="refreshAndCopyAddress"
           )
       .text-subtitle2.q-mt-md(v-if="outputDescriptor") {{ $t('pages.nbv.vaults.outputDescriptor') }}
-      q-card.q-pa-xs(v-if="outputDescriptor")
-        q-item
-          q-item-section
-            q-item-label.text-body2(lines="1") {{ outputDescriptor }}
-        .row.reverse
-          q-btn.button(
+      .row.q-pa-xs(v-if="outputDescriptor")
+        .col-9.q-mr-md
+          q-card
+            q-item
+              q-item-section
+                q-item-label.text-body2(lines="1") {{ outputDescriptor }}
+        .col
+          q-btn.full-width(
             :label="$t('pages.nbv.actions.copyToClipboard')"
-            size="sm"
             no-caps
             color="secondary"
             @click="copyTextToClipboard(outputDescriptor, 'Output Descriptor copied to clipboard')"

@@ -50,7 +50,8 @@
       q-card
         q-card-section.actionsCard
           .text-overline {{ $t('pages.nbv.proposals.status') }}
-          .text-body2 {{ labelStatus }}
+          q-chip.full-width(v-bind="statusChip")
+          //- .text-body2 {{ labelStatus }}
           hr
           .text-overline {{ $t('pages.nbv.proposals.satoshiAmount') }}
           .text-body2 {{ amount }}
@@ -160,6 +161,33 @@ export default {
       default:
         return this.$t('pages.nbv.proposals.signPSBT')
       }
+    },
+    statusChip () {
+      const chip = {
+        label: this.labelStatus,
+        color: 'yellow-8',
+        'text-color': 'white',
+        ripple: false,
+        click: false
+      }
+      if (this.status && this.status.toLowerCase() === 'pending') {
+        return chip
+      } else if (this.status && this.status.toLowerCase() === 'finalized') {
+        return {
+          ...chip,
+          color: 'positive',
+          icon: 'cloud_done',
+          label: this.$t('pages.nbv.proposals.finalizedStatus')
+        }
+      } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
+        return {
+          ...chip,
+          color: 'positive',
+          icon: 'connect_without_contact',
+          label: this.$t('pages.nbv.proposals.broadcastedStatus')
+        }
+      }
+      return chip
     },
     labelStatus () {
       if (this.status && this.status.ReadyToFinalize === true) {
