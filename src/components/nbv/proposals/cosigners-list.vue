@@ -4,7 +4,7 @@
     account-item.full-width(:address="cosigner.address")
         q-item-section(avatar)
             q-chip(v-if="cosigner.signed" label="Signed" color="primary" text-color="white")
-            q-chip(v-else label="Waiting for signature" color="warning" text-color="white")
+            q-chip(v-else label="Waiting for signature" color="primary" text-color="white")
 </template>
 
 <script>

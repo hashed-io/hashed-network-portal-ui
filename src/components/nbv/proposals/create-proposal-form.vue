@@ -10,37 +10,28 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     .text-h4.q-mb-lg {{ $t('pages.nbv.proposals.create_proposal') }}
     #info
       .text-overline Current balance
-      .text-body2 {{ currentBalanceLabel }}
+      .text-body2 {{ currentBalanceLabel.label }}
         span.link.text-body2.q-ml-md(@click="isShowingInBTC = !isShowingInBTC") Show in {{ isShowingInBTC ? 'sats' : 'BTC' }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         .row.items-center.q-col-gutter-sm
-          .col-6
+          .col-8
             q-input(
               data-testid="amount"
               outlined
               :label="$t('pages.nbv.proposals.amountInSatoshi')"
               v-model="amountInSats"
-              :rules="[rules.required, rules.positiveInteger, rules.lessOrEqualThan(currentBalance || 0), rules.greaterOrEqualThan(546)]"
-              :suffix="isAmountOnBTC ? 'BTC' : 'sats'"
+              :rules="[rules.required, rules.positiveInteger, rules.lessOrEqualThan(currentBalanceLabel.amount || 0), rules.greaterOrEqualThan(isShowingInBTC ? 0.00000246 : 546)]"
+              :suffix="isShowingInBTC ? 'BTC' : 'sats'"
             )
           .col
-            .column.q-gutter-y-sm
-              q-btn(
-                label="Use Max"
-                dense
-                no-caps
-                color="secondary"
-                @click="useMaxBalance"
-              )
-              q-btn(
-                label="Change"
-                dense
-                no-caps
-                color="secondary"
-                outline
-                @click="changeAmountTo"
-              )
+            q-btn.full-width(
+              label="Max"
+              dense
+              no-caps
+              color="secondary"
+              @click="useMaxBalance"
+            )
       .col
         .text-body2 {{ $t('pages.nbv.proposals.amountDesc')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
@@ -100,26 +91,43 @@ export default {
       amountInSats: undefined,
       description: undefined,
       btcSatsRelation: 100000000,
-      isShowingInBTC: false,
-      isAmountInBTC: false
+      isShowingInBTC: false
     }
   },
   computed: {
     currentBalanceLabel () {
       if (this.isShowingInBTC) {
-        return `${this.currentBalance / this.btcSatsRelation} BTC`
+        return {
+          label: `${this.currentBalance / this.btcSatsRelation} BTC`,
+          amount: this.currentBalance / this.btcSatsRelation
+        }
       }
-      return `${this.currentBalance} sats`
+      return {
+        label: `${this.currentBalance} sats`,
+        amount: this.currentBalance
+      }
     }
   },
   watch: {
     isShowingInBTC (v) {
-      console.log('isShowingInBTC', v)
+      // console.log('isShowingInBTC', v)
+      this.changeAmountTo()
     }
   },
   methods: {
     changeAmountTo () {
-      this.isAmountInBTC = !this.isAmountInBTC
+      // const currentCurrency = this.isAmountInBTC
+      const currentAmount = this.amountInSats
+      if (Number.isNaN(currentAmount) || !currentAmount) {
+        this.amountInSats = 0
+        return
+      }
+      // this.isAmountInBTC = !this.isAmountInBTC
+      if (this.isShowingInBTC) {
+        this.amountInSats = currentAmount / this.btcSatsRelation
+      } else {
+        this.amountInSats = currentAmount * this.btcSatsRelation
+      }
     },
     useMaxBalance () {
       if (this.isShowingInBTC) {
@@ -132,7 +140,7 @@ export default {
       try {
         const data = {
           recipientAddress: this.recipientAddress,
-          amountInSats: this.amountInSats,
+          amountInSats: this.isShowingInBTC ? this.amountInSats * this.btcSatsRelation : this.amountInSats,
           description: this.description
         }
         /**

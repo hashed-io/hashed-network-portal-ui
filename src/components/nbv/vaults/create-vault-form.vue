@@ -34,11 +34,13 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
           :inner-min="2"
           :min="1"
           :max="7"
-          track-color="red-4"
+          track-color="grey-4"
           inner-track-color="grey"
+          label-always
         )
       .col
-        .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }} amount
+        //- .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }} amount
+        .text-body2 Number of cosigners
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-slider(
@@ -49,10 +51,12 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
           drag-range
           snap
           :inner-min="2"
+          :inner-max="cosignersAmount"
           :min="1"
-          :max="cosignersAmount"
-          track-color="red-4"
+          :max="7"
+          track-color="grey-4"
           inner-track-color="grey"
+          label-always
         )
       .col
         .text-body2 Minimum {{ $t('pages.nbv.vaults.threshold')  }}
@@ -71,13 +75,13 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
     //-     )
     //-   .col
     //-     .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
-    .row.items-center.q-col-gutter-md.q-my-sm
-      .col-7.justify-end
+    .row.items-center.q-col-gutter-md.q-my-md.q-mb-xl
+      .text-body2.text-right {{ `${threshold} of ${cosignersAmount}`  }} Multisignature vault
+      //- .col-7
         //- .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
-        .text-body2.text-right {{ `${threshold} of ${cosignersAmount}`  }}
-      .col
-        //- .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
-        .text-body2 Multisignature vault
+      //- .col
+      //-   //- .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
+      //-   .text-body2 Multisignature vault
     #cosigners
       .row
         .col-7
