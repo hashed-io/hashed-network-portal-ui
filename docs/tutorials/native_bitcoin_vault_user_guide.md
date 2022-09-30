@@ -56,11 +56,210 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 <img src="./assets/bw_add_wallet.png" style="width: 30vw; min-width: 250px">
 </div>
 
+<hr/>
+
+### How to create a new vault
+
+1. Go to "My Vaults" page.
+2. Click on "Create vault" button.
+<div style="text-align: center">
+<img src="./assets/nbv_vault_list.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+3. Fill out the form with the following fields.
+    * Title (Label)
+    * Number of cosigners
+    * Minimum threshold
+    * Cosigners address
+    * Include owner as cosigner (Default selected)
+<div style="text-align: center">
+<img src="./assets/nbv_create_vault.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+4. Click on "Create vault" button
+5. Sign transaction using polkadot extension.
+6. Now you can find your new vault on "My vaults" page
+
+<hr/>
+
+### How to export your vault and import on Blue Wallet
+
+1. Go to "My vaults" page.
+2. Click on the vault you want to see details.
+<div style="text-align: center">
+<img src="./assets/nbv_click_to_see_details_vault.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+3. You should see the next screen.
+<div style="text-align: center">
+<img src="./assets/nbv_vault_details_screen.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+4. Click on "Export descriptor" button.
+<div style="text-align: center">
+<img src="./assets/nbv_vaults_card.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+5. You should see the next screen.
+<div style="text-align: center">
+<img src="./assets/nbv_export_descriptor.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+6. Go to home screen on Blue wallet app.
+<div style="text-align: center">
+<img src="./assets/bw_home.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+7. Tap on ➕ button positioned on top right corner.
+8. Top on "Import wallet" button.
+<div style="text-align: center">
+<img src="./assets/bw_add_wallet.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+9. Tap on "Scan or import a file".
+10. Scan this qr from Blue Wallet.
+11. You should see the vault from Blue Wallet
+<div style="text-align: center">
+<img src="./assets/bw_vault_list.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+**Note:** To sign transactions you need to write the SEED of your xpub
+
+12. On Blue Wallet click on a vault to see details, you should see the next screen.
+
+<div style="text-align: center">
+<img src="./assets/bw_vault_details.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+13. Click on "Manage Keys" button.
+
+14. Click on "I have a seed for this key" option for your respective XPUB.
+
+<div style="text-align: center">
+<img src="./assets/bw_manage_key.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+15. Write you SEED and click on Save.
+<div style="text-align: center">
+<img src="./assets/bw_write_seed.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+<hr/>
+
+### How to deposit to vault
+
+1. Go to "My vaults" page.
+2. Click on the vault you want to transfer to see details.
+
+3. Get receive address to transfer.
+     * Using QR
+        1. Click on "Refresh and show qr" button.
+        2. Scan this qr from your wallet to transfer founds.
+     * Using Address
+        1. Click on "Refresh and copy" button.
+        2. Use this address to transfer founds from your wallet.
+<div style="text-align: center">
+<img src="./assets/nbv_receive_address.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+
+<hr/>
+
+### How to create a proposal
+
+*Note:* The vault balance must be greather than 546 sats to create a proposal.
+
+1. Go to *Vault Details* page.
+2. Click on "Create proposal" button.
+<div style="text-align: center">
+<img src="./assets/nbv_crate_proposal_btn.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+3. Fill out the form with the following fields:
+    * Amount
+    * Recipient address
+    * Description
+<div style="text-align: center">
+<img src="./assets/nbv_create_proposal.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+4. Click on "Create proposal" button.
+5. Sing transaction using polkadot extension.
+6. You should see your new proposal on *Vault Details* screen.
+<div style="text-align: center">
+<img src="./assets/nbv_proposals_list.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+<hr/>
+
+### How to sign a proposal.
+**Note:** Remember to import the vault on Blue Wallet app if you have't already.
+
+1. Go to "My Vaults" page.
+2. Click on the vault that contain the proposal you want to sign, now we are on *Vault details* screen.
+3. Click on the proposal you want to sign, now we are on *Proposal details* screen.
+4. Click on "Sign PSBT" button.
+<div style="text-align: center">
+<img src="./assets/nbv_sign_psbt_button.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+5. On Blue Wallet go to home screen and click on previously imported vault.
+<div style="text-align: center">
+<img src="./assets/bw_vault_details.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+6. Tap on "Send" button.
+7. Tap on "..." button, positioned on top right corner.
+7. Tap on "Sign a transaction" option.
+<div style="text-align: center">
+<img src="./assets/bw_sign_a_transaction_btn.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+8. Scan this qr from Blue Wallet.
+<div style="text-align: center">
+<img src="./assets/bw_scanning_descriptor.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+9. When appear "Co-sign this transaction" message tap on "Yes" button.
+<div style="text-align: center">
+<img src="./assets/bw_cosign_transaction.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+10. Tap on "Provide signature" button, now you should see a QR.
+<div style="text-align: center">
+<img src="./assets/bw_provide_signature.png" style="width: 30vw; min-width: 250px" />
+<img src="./assets/bw_qr_psbt_signed.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+11. From web app click on "Continue" button.
+<div style="text-align: center">
+<img src="./assets/nbv_signing_psbt_1.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+12. Scan QR generated from Blue Wallet on Web app.
+<div style="text-align: center">
+<img src="./assets/nbv_signing_psbt_2.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+13. Sign transaction using polkadot extension.
+
+<hr/>
+
+### How to finalize and broadcast a proposal.
+
+**Note:** Remember to import the vault on Blue Wallet app if you have't already.
+
+**Note:** To finalize and broadcast a proposal make sure the threshold of multisignature has been met. To sign a proposal review  <a>previous</a> step.
+
+1. Go to proposal page details.
+
+
+<hr />
 <div id="refConcepts"></div>
+
 
 # **How to Safely Store Your Wallet**
 
----
 In the following tutorial, we'll talk about some concepts related to wallets & keys so you can be familiar with them.
 
 - ### **About Keys**
@@ -85,11 +284,10 @@ A user builds a transaction object, usually through an interface (`Proxy website
 
 2. **Online? AT YOUR OWN RISK!:** It's not recommended to keep private keys online, in the mail, or in the cloud because they are most susceptible to getting hacked there. Many users take screenshots of their private keys, and their photo album is usually synced online. This previous action creates a security risk and is something you should do at your own risk.
 
-3. **Offline Flash drive:** If you don't have a hardware wallet, you can temporarily keep your private keys or seed in an offline flash drive or HDD. But these options are only safe as long as they aren't in the hands of an attacker. 
+3. **Offline Flash drive:** If you don't have a hardware wallet, you can temporarily keep your private keys or seed in an offline flash drive or HDD. But these options are only safe as long as they aren't in the hands of an attacker.
 
-4. **Paper wallet:** A paper wallet is free and is just a piece of paper that prints the pair of private and public keys on it. 
-
-5. **Memorize it:** It's hard to memorize your private key. 
+4. **Paper wallet:** A paper wallet is free and is just a piece of paper that prints the pair of private and public keys on it.
+5. **Memorize it:** It's hard to memorize your private key.
 
 We hope these insights will help you make the best decision for yourself and also help you secure your private keys.
 
