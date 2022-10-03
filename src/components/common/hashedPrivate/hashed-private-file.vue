@@ -11,8 +11,8 @@
     :rules="rules"
     @keyup="onTypeTagFile"
     data-cy="name_file"
-    testid="name_file"
-    data-testid="name_file"
+    testid="filename"
+    :data-testid="'filename'"
   )
   q-file(
     class="col-6 q-my-xs"

@@ -1,78 +1,75 @@
 <template lang="pug">
 #container
-  div(v-if="status !== 'Pending'" class="q-py-md")
-    .headline4(v-if="!isLoggedIn") Please login to apply for this market.
-    .container(v-else)
-      .row.justify-center
-        .col-11
-          .text-subtitle1.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
-          q-form(ref="applyForm" @submit="onSubmit")
-            h-input(
-              required
-              data-cy="notes_input"
-              testid="notes_input"
-              class="q-mt-md"
-              v-model="form.notes"
-              :label="$t('pages.marketplace.applyForm.notes.label')"
-              :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
-              :rules="[rules.required,rules.lessOrEqualThanString(25)]"
-            )
-            //- .paragraph1.text-weight-regular.q-pb-md {{$t('pages.marketplace.applyForm.subtitle')}}
-            //- div.qItem.q-my-lg(@click="() => {this.isCustodian = !this.isCustodian}")
-            //-   .row.justify-between.q-gutter-md
-            q-toggle(
-              @toggle="() => {this.isCustodian = !this.isCustodian}"
-              v-model="isCustodian"
-              color="primary"
-              :label="$t('pages.marketplace.applyForm.custodian.infoLabel')"
-            )
-            account-input(
-              v-if="isCustodian"
-              v-model="custodianAddress"
-              data-cy="custodian_input"
-              testid="custodian_input"
-              class="q-mt-md"
-              :label="$t('pages.marketplace.applyForm.custodian.label')"
-              outlined
-              :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address), rules.notEqual(selectedAccount.address)]"
-            )
-            .row.justify-between
-              div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
-              div
-                q-btn.q-mr-sm.q-mb-md(rounded no-caps color="primary" outline @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
-            .container(v-for="(file, index, key) in form.files" :key="index")
-              .row
-                hashed-private-file(
-                  class="col-11"
-                  v-model="form.files[index]"
-                  :index="index"
-                  :administrator-address="market.admin?.address"
-                  @onDelete="onDeleteFile"
-                  :rules="[rules.required, rules.greaterOrEqualThanString(6), rules.lessOrEqualThanString(25)]"
-                  showDelete
-                  )
-                q-icon(
-                  rounded
-                  class="col-1 q-pb-md cursor-pointer"
-                  size="1.5rem"
-                  name="delete"
-                  label="delete file"
-                  color="red"
-                  @click="onDeleteFile(index)"
-                  data-cy="delete_file"
-                  data-testid="delete_file"
+  .container.q-py-md
+    .row.justify-center
+      .col-11
+        .text-subtitle1.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
+        q-form(ref="applyForm" @submit="onSubmit")
+          h-input(
+            required
+            data-cy="notes_input"
+            testid="notes_input"
+            class="q-mt-md"
+            v-model="form.notes"
+            :label="$t('pages.marketplace.applyForm.notes.label')"
+            :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
+            :rules="[rules.required,rules.lessOrEqualThanString(25)]"
+          )
+          q-toggle(
+            data-testid="custodian_toggle"
+            @toggle="() => {this.isCustodian = !this.isCustodian}"
+            v-model="isCustodian"
+            color="primary"
+            :label="$t('pages.marketplace.applyForm.custodian.infoLabel')"
+          )
+          account-input(
+            v-if="isCustodian"
+            v-model="custodianAddress"
+            data-cy="custodian_input"
+            testid="custodian_input"
+            class="q-mt-md"
+            :label="$t('pages.marketplace.applyForm.custodian.label')"
+            outlined
+            :rules="[rules.isValidPolkadotAddress, rules.notEqual(market.owner?.address), rules.notEqual(selectedAccount.address)]"
+          )
+          .row.justify-between
+            div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
+            div
+              q-btn.q-mr-sm.q-mb-md(data-testid="add_files_button" rounded no-caps color="primary" outline @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
+          .container(v-for="(file, index, key) in form.files" :key="index")
+            .row
+              hashed-private-file(
+                class="col-11"
+                v-model="form.files[index]"
+                :index="index"
+                :administrator-address="market.admin?.address"
+                @onDelete="onDeleteFile"
+                :rules="[rules.required, rules.greaterOrEqualThanString(6), rules.lessOrEqualThanString(25)]"
+                showDelete
+                testid="file"
                 )
-            .row.justify-center.q-px-sm
-              q-btn(
-                type="submit"
-                color="primary"
+              q-icon(
                 rounded
-                no-caps
-                unelevated
-                class="q-mt-sm btn-lg"
-                data-cy="submit_apply_btn"
-                data-testid="submit_apply_btn"
-              ) {{ $t('pages.marketplace.applyForm.submitButton') }}
+                class="col-1 q-pb-md cursor-pointer"
+                size="1.5rem"
+                name="delete"
+                label="delete file"
+                color="red"
+                @click="onDeleteFile(index)"
+                data-cy="delete_file"
+                data-testid="delete_file"
+              )
+          .row.justify-center.q-px-sm
+            q-btn(
+              type="submit"
+              color="primary"
+              rounded
+              no-caps
+              unelevated
+              class="q-mt-sm btn-lg"
+              data-cy="submit_apply_btn"
+              data-testid="submit_apply_btn"
+            ) {{ $t('pages.marketplace.applyForm.submitButton') }}
 </template>
 
 <script>
@@ -94,18 +91,9 @@ export default {
     market: {
       type: Object,
       required: true
-    },
-    /**
-     * This props contains the status of the application [Required]
-     * @type {Array}
-     */
-    status: {
-      type: String,
-      required: true,
-      default: () => undefined
     }
   },
-  emits: ['submit'],
+  emits: ['onSubmitApplyForm'],
   data () {
     return {
       isCustodian: false,
@@ -122,19 +110,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['isLoggedIn', 'selectedAccount'])
+    ...mapGetters('polkadotWallet', ['selectedAccount'])
   },
   methods: {
     onSubmit () {
-      this.$refs.applyForm.validate().then(async () => {
-        const data = {
-          custodian: this.isCustodian ? this.custodianAddress : undefined,
-          fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
-        }
-        console.log('data', data)
-        // console.log('data submitted', data)
-        this.$emit('submit', data)
-      })
+      const data = {
+        custodian: this.isCustodian ? this.custodianAddress : undefined,
+        fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
+      }
+      this.$emit('onSubmitApplyForm', data)
     },
     onMoreFiles () {
       this.form.files.push({
