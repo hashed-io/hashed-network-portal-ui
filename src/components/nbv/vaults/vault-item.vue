@@ -2,27 +2,16 @@
 q-card.q-pa-sm(@click="goToVaultDetails")
   q-item
     q-item-section.q-gutter-y-xs
-      //- .text-subtitle2 Id:
-      //-   span.text-body2.one-line.q-ml-sm {{ vaultId }}
-      .row.items-center
-        q-icon.q-mr-md(name="description" size="sm" color="secondary")
-        .text-subtitle2 {{ $t('pages.nbv.vaults.description') }}:
-          span.text-body2.q-ml-sm {{ description }}
+      .title.text-subtitle2.text-overline {{ description }}
       .row.items-center
         q-icon.q-mr-md(name="people" size="sm" color="secondary")
-        .text-subtitle2 {{ $t('pages.nbv.vaults.threshold') }}:
-          span.text-body2.q-ml-sm {{ threshold }}:
+        .span.text-body2 {{ `${threshold} of ${cosigners.length} Multisignature Vault` }}
+        //- .text-subtitle2 {{ $t('pages.nbv.vaults.threshold') }}:
+        //-   span.text-body2.q-ml-sm {{ threshold }}:
       .text-subtitle2 {{ $t('pages.nbv.vaults.owner') }}:
       account-item.full-width(:address="owner" flat inherit)
     q-item-section.gt-sm(avatar)
       .text-subtitle2.text-primary.hoverView {{ $t('pages.nbv.vaults.clickToSeeDetails') }}
-      //- q-btn(
-      //-   label="See details"
-      //-   no-caps
-      //-   size="md"
-      //-   color="secondary"
-      //-   @click="goToVaultDetails"
-      //- )
 </template>
 
 <script>
@@ -113,4 +102,7 @@ export default {
 
 .animated-item:hover .hoverView
   display: block
+
+.title
+  font-size: 20px
 </style>

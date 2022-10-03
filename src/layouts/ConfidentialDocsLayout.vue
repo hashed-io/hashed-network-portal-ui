@@ -35,8 +35,8 @@
 
     q-page-container
       .row.justify-center
-        .col-10
-          .q-px-lg.q-pa-lg
+        .col-12
+          q-page.q-py-md.q-px-lg
             not-connected(v-if="!isConnectedToServer")
             not-accounts(v-else-if="!selectedAccount")
             router-view(v-else)

@@ -28,7 +28,8 @@ export default {
     extendedKeys: 'Extended Keys',
     vaultDetails: 'Vault Details',
     createAsset: 'Create Asset',
-    getAllAssets: 'Get All Assets'
+    getAllAssets: 'Get All Assets',
+    proposalDetails: 'Proposal Details'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -81,15 +82,16 @@ export default {
         fingerprintTooltip: 'The fingerprint of a public key is defined in BIP 32 as the first 4 bytes of the RIPEMD160 hash of the SHA256 hash of the public key.',
         derivationPath: 'Derivation Path',
         derivationPathDesc: 'Contains information about a key’s depth and index',
-        xpubDesc: 'Please pase or scan your XPUB from blue wallet',
+        xpubDesc: 'Please scan your XPUB from blue wallet',
         xpub: 'XPUB',
         xpubPlaceholder: 'Paste or write your XPUB',
         managePublicKeys: 'Manage Public Keys',
         removeYourXpub: 'Remove your XPUB',
         setXpub: 'Set XPUB',
-        useForm: 'Use Form',
+        useForm: 'Use Form to import manually your multi signature XPUB.',
         yourXpubWasAdded: 'Your XPUB was added',
-        yourXpubWasRemoved: 'Your XPUB was removed'
+        yourXpubWasRemoved: 'Your XPUB was removed',
+        scanXpub: 'Scan XPUB from Blue Wallet'
       },
       vaults: {
         manageVaults: 'Manage Vaults',
@@ -120,14 +122,16 @@ export default {
         outputDescriptor: 'Output Descriptor',
         vaultsBalanceMustBeGreaterThanZero: 'The vault\'s balance must be greater than 0',
         descriptorQr: 'Descriptor QR',
-        creatingDescriptor: 'Please await a moment, we are creating the descriptor',
-        accountDuplicated: 'This account is duplicated'
+        creatingDescriptor: 'Please wait a moment, we are creating the descriptor',
+        accountDuplicated: 'This account is duplicated',
+        refreshAndCopyAddress: 'Refresh and copy',
+        refreshAndShowQrAddress: 'Refresh and show qr'
       },
       proposals: {
         create_proposal: 'Create new proposal',
         descriptionDesc: 'Write a brief description',
         recipientAddressDesc: 'Write a valid BTC address to send satoshis',
-        amountDesc: 'Write amount in satoshis',
+        amountDesc: 'Write amount you want to send',
         titleStep1: 'Export PSBT',
         titleStep2: 'Import signed PSBT',
         titleStep3: 'Finalize',
@@ -137,7 +141,7 @@ export default {
         signPsbtFinalizeDesc: 'Complete the transaction, ready to broadcast',
         signPsbtBroadcastDesc: 'Broadcast the transaction',
         saveBtn: 'Save',
-        finalizeBtn: 'Finalize',
+        finalizeBtn: 'Finalize and Broadcast',
         broadcastBtn: 'Broadcast',
         proposals: 'Proposals',
         createProposal: 'Create proposal',
@@ -148,11 +152,11 @@ export default {
         deleteProposal: 'Delete Proposal',
         proposalId: 'Proposal Id',
         status: 'Status',
-        satoshiAmount: 'Satoshi Amount',
+        satoshiAmount: 'Amount',
         feeInSatoshiPerVirtualByte: 'Fee in Satoshi Per Virtual Byte',
         toAddress: 'To Address',
-        tx: 'Tx',
-        Proposer: 'Proposer',
+        tx: 'See Transaction Details',
+        proposer: 'Proposer',
         finalizeTxx: 'Finalize Txx',
         broadcastTx: 'Broadcast Tx',
         finalizing: 'Finalizing',
@@ -160,10 +164,13 @@ export default {
         pending: 'Pending',
         signThePsbtWithValidXPUB: 'Please sign the psbt with a valid XPUB',
         psbtSavedSuccessfully: 'PSBT saved successfully',
-        creatingPSBT: 'Please await a moment, we are creating the PSBT',
+        creatingPSBT: 'Please wait a moment, we are creating the PSBT',
         description: 'Description',
         recipientAddress: 'Recipient address',
-        amountInSatoshi: 'Amount in Satoshi'
+        amountInSatoshi: 'Amount',
+        pendingStatus: 'Waiting on signatures',
+        finalizedStatus: 'Finalized, waiting for broadcast',
+        broadcastedStatus: 'Broadcasted'
         // signPsbtStep1: ''
       },
       list: {

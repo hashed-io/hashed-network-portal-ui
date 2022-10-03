@@ -9,17 +9,24 @@
   q-card(v-if="userHasXpub")
     q-item
       q-item-section
-        .one-line {{ userXpub.toHuman() }}
-      q-item-section(avatar)
-        q-icon.icon-btn(
-          v-ripple
-          round
-          name="delete"
-          color="negative"
-          @click="removeXpub"
-        )
-          q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
+        .text-subtitle2.q-mt-md XPUB
+        .one-line {{ userXpub.substr(0, 20) + '........' + userXpub.substr(-20) }}
+    .row.q-gutter-sm.q-pa-md
+      q-btn(
+        @click="copyTextToClipboard(userXpub, 'XPUB copied to clipboard')"
+        label="Copy XPUB"
+        color="primary"
+        no-caps
+      )
+      q-btn(
+        @click="removeXpub"
+        label="Remove XPUB"
+        color="negative"
+        no-caps
+      )
+        q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
   set-xpub-form(v-else :userAddress="polkadotAddress" @onSubmitted="setXpub")
+
 </template>
 
 <script>
@@ -93,7 +100,7 @@ export default {
         const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.polkadotAddress)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
-          this.userXpub = xpub.isEmpty ? undefined : xpub.value
+          this.userXpub = xpub.isEmpty ? undefined : xpub.value.toHuman()
         }
       } catch (e) {
         console.error('error', e)
@@ -111,7 +118,7 @@ export default {
           XPUB: payload.XPUB
         })
         // console.log('setXpub', response)
-        this.showNotification({ message: this.$t('pages.nbv.xbub.yourXpubWasAdded') })
+        this.showNotification({ message: this.$t('pages.nbv.xpub.yourXpubWasAdded') })
         this.getXpub()
         // this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
@@ -125,7 +132,7 @@ export default {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.removeXpub({ user: this.polkadotAddress })
-        this.showNotification({ message: this.$t('pages.nbv.xbub.yourXpubWasRemoved') })
+        this.showNotification({ message: this.$t('pages.nbv.xpub.yourXpubWasRemoved') })
         // this.showLoading({ message: this.$t('general.waitingSub') })
         this.getXpub()
       } catch (e) {
@@ -141,6 +148,7 @@ export default {
 
 <style lang="stylus" scoped>
 .myTooltip
-  // width: 500px
   max-width: 600px
+.actionCards
+  // background: blue
 </style>

@@ -22,32 +22,66 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       .col
         .text-body2 {{ $t('pages.nbv.vaults.descriptionLabel')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
-      //- .col-2
-      //-   q-input(
-      //-     outlined
-      //-     label="Threshold"
-      //-     v-model="threshold"
-      //-     :rules="[rules.required, rules.positiveInteger, rules.greaterOrEqualThan(minCosigners), rules.lessOrEqualThan(maxCosigners)]"
-      //-   )
       .col-7
-        q-range(
-          data-testid="vault-threshold-input"
-          v-model="thresholdRange"
+        q-slider(
+          data-testid="vault-cosigner-amount"
+          :model-value="cosignersAmount"
+          @change="val => { cosignersAmount = val }"
           marker-labels
           markers
           drag-range
           snap
-          :min="minCosigners"
+          :inner-min="2"
+          :min="1"
           :max="7"
-          debounce="500"
+          track-color="grey-4"
+          inner-track-color="grey"
+          label-always
         )
       .col
-        .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
+        //- .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }} amount
+        .text-body2 Number of cosigners
     .row.items-center.q-col-gutter-md.q-my-sm
-      .col-7.justify-end
-        .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
+      .col-7
+        q-slider(
+          data-testid="vault-cosigner-amount"
+          v-model="threshold"
+          marker-labels
+          markers
+          drag-range
+          snap
+          :inner-min="2"
+          :inner-max="cosignersAmount"
+          :min="1"
+          :max="7"
+          track-color="grey-4"
+          inner-track-color="grey"
+          label-always
+        )
       .col
-        .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
+        .text-body2 Minimum {{ $t('pages.nbv.vaults.threshold')  }}
+    //- .row.items-center.q-col-gutter-md.q-my-sm
+    //-   .col-7
+    //-     q-range(
+    //-       data-testid="vault-threshold-input"
+    //-       v-model="thresholdRange"
+    //-       marker-labels
+    //-       markers
+    //-       drag-range
+    //-       snap
+    //-       :min="minCosigners"
+    //-       :max="7"
+    //-       debounce="500"
+    //-     )
+    //-   .col
+    //-     .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
+    .row.items-center.q-col-gutter-md.q-my-md.q-mb-xl
+      .text-body2.text-right {{ `${threshold} of ${cosignersAmount}`  }} Multisignature vault
+      //- .col-7
+        //- .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
+      //- .col
+      //-   //- .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
+      //-   .text-body2 Multisignature vault
     #cosigners
       .row
         .col-7
@@ -136,14 +170,19 @@ export default {
   data () {
     return {
       description: undefined,
-      threshold: undefined,
+      threshold: 2,
       includeOwnerAsCosigner: true,
       thresholdRange: {
         min: 1,
         max: 1
       },
+      cosignersAmount: 3,
       cosigners: [{
         id: 0,
+        address: undefined
+      },
+      {
+        id: 1,
         address: undefined
       }],
       ownerAddress: undefined
@@ -160,7 +199,7 @@ export default {
       return this.cosigners.length
     },
     realCosignerNumber () {
-      let result = this.thresholdRange.max
+      let result = this.cosignersAmount
       if (this.includeOwnerAsCosigner) {
         result -= 1
       }
@@ -177,7 +216,7 @@ export default {
       await this.$nextTick()
       this.$refs.form.resetValidation()
     },
-    async 'thresholdRange.max' () {
+    async 'cosignersAmount' () {
       this.setCosigners()
     }
   },
@@ -211,8 +250,7 @@ export default {
       try {
         const data = {
           description: this.description,
-          // threshold: this.threshold,
-          threshold: this.thresholdRange.min,
+          threshold: this.threshold,
           cosigners: this.cosigners.map(v => v.address),
           includeOwnerAsCosigner: this.includeOwnerAsCosigner
         }
