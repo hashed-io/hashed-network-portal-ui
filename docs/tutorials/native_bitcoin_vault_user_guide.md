@@ -15,7 +15,6 @@ This tutorial will go through NBV user flow! The following tutorials will show s
 
 **Note:** If you are starting with BlueWallet or Polkadot{JS} you can go through the following tutorials.
  * Create an account using <a>Polkadot{JS}</a>
- * Create an account using <a>Blue Wallet</a>
 <hr>
 
 First, we need to access to the Hashed Network Portal <a href="https://portal-dev.hashed.systems/login" target="_blank">site</a>.
@@ -40,8 +39,9 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 
 <hr/>
 
-### Link your xpub
-First we need to create a multi signature XPUB, to crete a new one we are going to use Blue Wallet.
+<div id="refCreateXPUB"></div>
+
+### How to create a new xpub from Blue Wallet
 
 1. Open Blue Wallet App on your mobile, we will see a similar screen to the following.
 	* Tap on ➕ button on top-right corner.
@@ -53,10 +53,72 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 	* Tap on Vault
 	* Tap on ***Create*** button
 <div style="text-align: center">
-<img src="./assets/bw_add_wallet.png" style="width: 30vw; min-width: 250px">
+<img src="./assets/bw_xpub_create_vault.png" style="width: 30vw; min-width: 250px">
+</div>
+
+3. Tap on ***Let's start*** button.
+<div style="text-align: center">
+<img src="./assets/bw_let_start_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+4. Tap on ***Create new*** button.
+<div style="text-align: center">
+<img src="./assets/bw_create_new_vault_key.png" style="width: 30vw; min-width: 250px">
+</div>
+
+5. Save your ***Seed*** in a safe place.
+
+    **Important:** Not share this Seed with anyone, this value is required to sign transactions using your XPUB.
+
+    **Note:** This screen is just an example.
+
+<div style="text-align: center">
+<img src="./assets/bw_seed_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+6. Tap on ***Share*** button.
+<div style="text-align: center">
+<img src="./assets/bw_share_vault_key.png" style="width: 30vw; min-width: 250px">
+</div>
+
+7. Take a screenshot of XPUB qr (just as backup) also we can click on ***Share*** button and save the json was generated.
+<div style="text-align: center">
+<img src="./assets/bw_sharing_key_vault.png" style="width: 30vw; min-width: 250px">
+</div>
+
+<hr />
+
+<div id="refLinkXPUB"></div>
+
+### How to link your XPUB from Blue Wallet
+1. Go to "Extended Keys" page.
+<div style="text-align: center">
+<img src="./assets/nbv_extended_keys_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+2. Click on "Scan XPUB from Blue Wallet" button.
+3. Open on your mobile the XPUB qr you got on previous steps.
+    
+    ***Note:*** If you don't have an XPUB yet please review <a href="#refCreateXPUB">How to create a new XPUB from Blue Wallet</a>.
+<div style="text-align: center">
+<img src="./assets/bw_sharing_key_vault.png" style="width: 30vw; min-width: 250px">
+</div>
+
+4. Scan the XPUB qr.
+<div style="text-align: center">
+<img src="./assets/nbv_scanning_xpub.png" style="width: 30vw; min-width: 250px">
+</div>
+
+5. Sign transaction using polkadot extension.
+
+6. Now you should see the next screen
+<div style="text-align: center">
+<img src="./assets/nbv_added_xpub_screen.png" style="width: 30vw; min-width: 250px">
 </div>
 
 <hr/>
+
+<div id="refCreateVault"></div>
 
 ### How to create a new vault
 
@@ -81,6 +143,8 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 6. Now you can find your new vault on "My vaults" page
 
 <hr/>
+
+<div id="refExportVault"></div>
 
 ### How to export your vault and import on Blue Wallet
 
@@ -139,12 +203,14 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 <img src="./assets/bw_manage_key.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-15. Write you SEED and click on Save.
+15. Write your SEED and click on Save.
 <div style="text-align: center">
 <img src="./assets/bw_write_seed.png" style="width: 30vw; min-width: 250px" />
 </div>
 
 <hr/>
+
+<div id="refDepositVault"></div>
 
 ### How to deposit to vault
 
@@ -164,6 +230,8 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 
 
 <hr/>
+
+<div id="refCreateProposal"></div>
 
 ### How to create a proposal
 
@@ -191,6 +259,8 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 </div>
 
 <hr/>
+
+<div id="refSignProposal"></div>
 
 ### How to sign a proposal.
 **Note:** Remember to import the vault on Blue Wallet app if you have't already.
@@ -245,6 +315,8 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 
 <hr/>
 
+<div id="refFinalizeProposal"></div>
+
 ### How to finalize and broadcast a proposal.
 
 **Note:** Remember to import the vault on Blue Wallet app if you have't already.
@@ -252,7 +324,26 @@ First we need to create a multi signature XPUB, to crete a new one we are going 
 **Note:** To finalize and broadcast a proposal make sure the threshold of multisignature has been met. To sign a proposal review  <a>previous</a> step.
 
 1. Go to proposal page details.
+<div style="text-align: center">
+<img src="./assets/nbv_proposal_home.png" style="width: 30vw; min-width: 250px" />
+</div>
 
+2. Click on "Finalize and Broadcast" button.
+<div style="text-align: center">
+<img src="./assets/nbv_finalize_btn.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+3. Sign proposal using polkadot extension.
+4. Now the proposal is doing broadcasted, in a few minutes you should see the proposal with *Broadcasted* status.
+<div style="text-align: center">
+<img src="./assets/nbv_broadcasted_status.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+5. You can click on "Click to open explorer" link to see the details transaction in a btc explorer.
+<div style="text-align: center">
+<img src="./assets/nbv_see_transaction_details_btn.png" style="width: 30vw; min-width: 250px" />
+<img src="./assets/nbv_btc_explorer.png" style="width: 30vw; min-width: 250px" />
+</div>
 
 <hr />
 <div id="refConcepts"></div>

@@ -91,7 +91,7 @@ export default {
         useForm: 'Use Form to import manually your multi signature XPUB.',
         yourXpubWasAdded: 'Your XPUB was added',
         yourXpubWasRemoved: 'Your XPUB was removed',
-        scanXpub: 'Scan XPUB'
+        scanXpub: 'Scan XPUB from Blue Wallet'
       },
       vaults: {
         manageVaults: 'Manage Vaults',
@@ -152,7 +152,7 @@ export default {
         deleteProposal: 'Delete Proposal',
         proposalId: 'Proposal Id',
         status: 'Status',
-        satoshiAmount: 'Satoshi Amount',
+        satoshiAmount: 'Amount',
         feeInSatoshiPerVirtualByte: 'Fee in Satoshi Per Virtual Byte',
         toAddress: 'To Address',
         tx: 'See Transaction Details',
@@ -167,7 +167,7 @@ export default {
         creatingPSBT: 'Please wait a moment, we are creating the PSBT',
         description: 'Description',
         recipientAddress: 'Recipient address',
-        amountInSatoshi: 'Amount in Satoshi',
+        amountInSatoshi: 'Amount',
         pendingStatus: 'Waiting on signatures',
         finalizedStatus: 'Finalized, waiting for broadcast',
         broadcastedStatus: 'Broadcasted'
