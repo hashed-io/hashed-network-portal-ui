@@ -82,7 +82,7 @@ export default {
         fingerprintTooltip: 'The fingerprint of a public key is defined in BIP 32 as the first 4 bytes of the RIPEMD160 hash of the SHA256 hash of the public key.',
         derivationPath: 'Derivation Path',
         derivationPathDesc: 'Contains information about a key’s depth and index',
-        xpubDesc: 'Please scan your XPUB from blue wallet',
+        xpubDesc: 'Scan XPUB from blue wallet',
         xpub: 'XPUB',
         xpubPlaceholder: 'Paste or write your XPUB',
         managePublicKeys: 'Manage Public Keys',

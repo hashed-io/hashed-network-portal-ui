@@ -25,23 +25,43 @@
         no-caps
       )
         q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
-  set-xpub-form(v-else :userAddress="polkadotAddress" @onSubmitted="setXpub")
-
+  #NotXPUB(v-else)
+    .text-body2 Create a new Xpub
+    q-btn.q-ma-md(
+      label="Generate a new XPUB"
+      color="primary"
+      icon="key"
+      no-caps
+      @click="generateXPUB"
+    )
+    q-dialog(v-model="modals.showingConfirmationSeed" persistent)
+      q-card.modalSize
+        seed-viewer(:seed="newXpub.seed" @onConfirm="onSeedSavedConfirmed")
+    hr
+    .text-body2 I have an Xpub
+    set-xpub-form.q-ma-md( :userAddress="polkadotAddress" @onSubmitted="setXpub")
 </template>
 
 <script>
-import SetXpubForm from '~/components/nbv/xpub/set-xpub-form'
 import { mapGetters } from 'vuex'
+import SetXpubForm from '~/components/nbv/xpub/set-xpub-form'
+import SeedViewer from '~/components/nbv/xpub/seed-viewer'
+const { GenerateCosigner } = require('./../../../../../nbv-ur-codec')
 
 export default {
   name: 'ManageXpub',
   components: {
-    SetXpubForm
+    SetXpubForm,
+    SeedViewer
   },
   data () {
     return {
       userXpub: undefined,
-      xpubUnsub: undefined
+      xpubUnsub: undefined,
+      newXpub: undefined,
+      modals: {
+        showingConfirmationSeed: false
+      }
     }
   },
   computed: {
@@ -66,6 +86,37 @@ export default {
     // this.unsubscribeToXPUB()
   },
   methods: {
+    async onSeedSavedConfirmed () {
+      try {
+        this.showLoading()
+        const XPUB = `[${this.newXpub.xfp}${this.newXpub.path.replace('m', '')}]${this.newXpub.Zpub}`
+        await this.$store.$nbvStorageApi.submitXPUB({
+          user: this.polkadotAddress,
+          XPUB: XPUB
+        })
+        this.modals.showingConfirmationSeed = false
+      } catch (e) {
+        console.error(e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async generateXPUB () {
+      try {
+        this.showLoading()
+        // const generateCosigner = new GenerateCosigner()
+        // await generateCosigner.resolveEcc()
+        this.newXpub = await GenerateCosigner.getCosigner()
+        console.log('xpub', this.newXpub)
+        this.modals.showingConfirmationSeed = true
+      } catch (e) {
+        console.error(e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
     async subscribeToXPUB () {
       try {
         this.showLoading()
@@ -112,7 +163,6 @@ export default {
     async setXpub (payload) {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        console.log('setXpub', payload)
         await this.$store.$nbvStorageApi.submitXPUB({
           user: this.polkadotAddress,
           XPUB: payload.XPUB

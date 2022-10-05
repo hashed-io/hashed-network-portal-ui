@@ -17,11 +17,33 @@ This tutorial will go through NBV user flow! The following tutorials will show s
  * Create an account using <a>Polkadot{JS}</a>
 <hr>
 
+### Sections
+ <a href="#refLogin">Login</a>
+
+ <a href="#refCreateXPUB">How to create a new xpub from Blue Wallet</a>
+
+ <a href="#refLinkXPUB">How to link your XPUB from Blue Wallet</a>
+
+ <a href="#refCreateVault">How to create a new vault</a>
+
+ <a href="#refExportVault">How to export your vault and import on Blue Wallet</a>
+
+ <a href="#refDepositVault">How to deposit to vault</a>
+
+ <a href="#refCreateProposal">How to create a proposal</a>
+
+ <a href="#refSignProposal">How to sign a proposal.</a>
+
+ <a href="#refFinalizeProposal">How to finalize and broadcast a proposal.</a>
+
+<hr>
 First, we need to access to the Hashed Network Portal <a href="https://portal-dev.hashed.systems/login" target="_blank">site</a>.
 
 <div style="text-align: center">
 <img src="./assets/login_screen.png" style="width: 30vw; min-width: 250px">
 </div>
+
+<div id="refLogin"></div>
 
 ### Login
 1. Login using polkadot {JS}
@@ -70,7 +92,7 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 
     **Important:** Not share this Seed with anyone, this value is required to sign transactions using your XPUB.
 
-    **Note:** This screen is just an example.
+    **Note:** This image is just an example.
 
 <div style="text-align: center">
 <img src="./assets/bw_seed_screen.png" style="width: 30vw; min-width: 250px">
@@ -100,6 +122,9 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 3. Open on your mobile the XPUB qr you got on previous steps.
     
     ***Note:*** If you don't have an XPUB yet please review <a href="#refCreateXPUB">How to create a new XPUB from Blue Wallet</a>.
+
+    ***Note:*** This image is just an example.
+
 <div style="text-align: center">
 <img src="./assets/bw_sharing_key_vault.png" style="width: 30vw; min-width: 250px">
 </div>
