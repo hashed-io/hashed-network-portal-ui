@@ -14,4 +14,5 @@ export function cleanProfile (state) {
   state.profileName = undefined
   state.loginType = undefined
   state.polkadotAddress = undefined
+  state.xpub = undefined
 }

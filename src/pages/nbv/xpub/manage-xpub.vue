@@ -131,6 +131,7 @@ export default {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value.toHuman()
         }
+        this.$store.dispatch('profile/getXpub')
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
