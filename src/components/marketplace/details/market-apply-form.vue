@@ -114,6 +114,13 @@ export default {
   },
   methods: {
     onSubmit () {
+      // this.$refs.applyForm.validate().then(async () => {
+      //   const data = {
+      //     custodian: this.isCustodian ? this.custodianAddress : undefined,
+      //     fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
+      //   }
+      //   this.$emit('submit', data)
+      // })
       const data = {
         custodian: this.isCustodian ? this.custodianAddress : undefined,
         fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
@@ -127,7 +134,6 @@ export default {
       })
     },
     async onDeleteFile (index) {
-      console.log(index)
       this.form.files.splice(index, 1)
     }
   }

@@ -142,7 +142,7 @@ export default {
         link.href = window.URL.createObjectURL(blob)
         window.open(link.href)
       } catch (e) {
-        console.log(e)
+        console.error(e)
         this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()

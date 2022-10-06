@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async onSubmitNFT ({ attributes, containFile }) {
-      console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
+      // console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
       try {
         this.showLoading()
         if (containFile) {
@@ -68,7 +68,6 @@ export default {
       }
     },
     async uploadToPrivateService ({ attributes, addressToShare }) {
-      console.log('uploadToPrivateService', attributes, addressToShare)
       const promises = []
       const privateService = this.$store.$hashedPrivateApi
       try {
@@ -98,7 +97,6 @@ export default {
           //   description: result.sharedData.description
           // }
         }
-        console.log('uploadToPrivateService', attributes)
         return attributes
       } catch (error) {
         console.error(error)

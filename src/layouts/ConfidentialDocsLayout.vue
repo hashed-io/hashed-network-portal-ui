@@ -180,7 +180,7 @@ export default defineComponent({
       breadcrumbList.value = v.meta.breadcrumb
       // Dynamic options
       if (v.meta.app) {
-        console.log('v.meta.app', v.meta.app)
+        // console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }

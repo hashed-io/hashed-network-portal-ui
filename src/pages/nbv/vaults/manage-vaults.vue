@@ -91,9 +91,9 @@ export default {
         this.showLoading()
         const message = 'Test To Sign'
         const response = await this.$store.$nbvStorageApi.signMessage(message, this.polkadotAddress)
-        console.log('signMessage', response)
+        // console.log('signMessage', response)
         const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.polkadotAddress)
-        console.log('verifyMessage', response2)
+        // console.log('verifyMessage', response2)
         if (response2.isValid) {
           this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })
         }

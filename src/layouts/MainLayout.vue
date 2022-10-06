@@ -131,7 +131,7 @@ export default defineComponent({
       // Dynamic options
       if (v.meta.app) {
         app.value = v.meta.app
-        console.log('v.meta.app', v.meta.app)
+        // console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }

@@ -7,7 +7,6 @@ class UniquesApi extends BasePolkadotApi {
   // Queries
   async getAsset ({ classId, instanceId }) {
     const allIds = await this.exEntriesQuery('attribute', [classId, instanceId])
-    console.log('allIds', allIds)
     const map = this.mapEntries(allIds)
     // Example
     //   {
@@ -33,14 +32,12 @@ class UniquesApi extends BasePolkadotApi {
 
   async getUniquesByAddress ({ address }) {
     const allIds = await this.exEntriesQuery('classAccount', [address])
-    console.log('allIds', allIds)
     const map = this.mapEntries(allIds)
     const classesIdArray = map.map(v => {
       return v.id[1]
     })
     const classData = await this.getClassInfoByClassesId({ classesIds: classesIdArray })
     const classAttributes = await this.getAttributesByClassesId({ classesIds: classesIdArray })
-    console.log('classAttributes', classAttributes)
     const uniquesList = classAttributes.map((attributes, index) => {
       classData[index].attributes = attributes
       return {
@@ -57,7 +54,6 @@ class UniquesApi extends BasePolkadotApi {
    * @returns Array class data in array
    */
   async getClassInfoByClassesId ({ classesIds }) {
-    console.log('classesIds', classesIds)
     const classData = await this.exMultiQuery('class', classesIds)
     const classDataReadable = classData.map((v, index) => {
       return {

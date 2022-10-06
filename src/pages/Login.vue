@@ -145,14 +145,13 @@ export default {
           }
           // this.showHCDPasswordModal = true
           // this.hideLoading()
-          const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
+          await this.$store.$hcd.ssoGoogleLogin({
             /** Important do not change this value */
             ssoProvider: 'hashed-portal-google',
             jwt: credential,
             clientId: process.env.GOOGLE_CLIENT_ID
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
-          console.log('hcgResponse', hcgResponse)
           this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,

@@ -292,7 +292,6 @@ export default {
             cid
           }
         })
-        console.log('applicant.fields', applicant.fields)
         return applicant
       })
 
@@ -308,7 +307,6 @@ export default {
           let fileName
           if (file?.name) {
             const fileNameSplit = file.name.split('.')
-            console.log('fileNameSplit', fileNameSplit)
             const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
             const ext = fileNameSplit[1]
             fileName = filename + '.' + ext
@@ -316,8 +314,6 @@ export default {
             // if file.name is undefined, it means that the file is a note (String)
             fileName = file
           }
-          console.log('fileName To Send', fileName)
-          console.log('fileElement', fileElement)
           promises.push(hpService.shareNew({
             toUserAddress: administratorAddress,
             name: fileName,

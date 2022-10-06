@@ -59,7 +59,6 @@ export default {
         startKey: this.startKey,
         pageSize: this.pageSize
       })
-      console.log('Assets', response)
       this.assets = response
     },
     async getAsset () {
@@ -67,7 +66,6 @@ export default {
         collectionId: this.collectionId,
         instanceId: 0
       })
-      console.log('Get asset example ', response)
       this.assetExample = response
     },
     getRows (asset) {

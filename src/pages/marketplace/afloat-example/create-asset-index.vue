@@ -155,7 +155,7 @@ export default {
           }
         })
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.showNotification({ message: error.message || error, color: 'negative' })
       } finally {
         this.hideLoading()

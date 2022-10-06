@@ -359,7 +359,7 @@ export default {
       }
     },
     syncData (proposal) {
-      console.log('proposal syncData', proposal)
+      // console.log('proposal syncData', proposal)
       this.vaultId = proposal.vaultId
       this.proposalId = proposal.proposalId
       this.toAddress = proposal.toAddress

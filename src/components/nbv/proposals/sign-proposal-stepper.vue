@@ -195,7 +195,6 @@ export default {
     getPsbtQR () {
       try {
         this.showLoading()
-        console.log('PsbtQrViewer', PsbtQrViewer)
         const encoder = new Encoder()
         this.psbtQR = encoder.psbtToQRCode(this.psbt, 200)
       } catch (e) {

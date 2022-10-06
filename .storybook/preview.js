@@ -51,7 +51,6 @@ const i18n = createI18n({
 app.use(i18n)
 
 app.use(store)
-console.log('store on storybook', store)
 
 // API INSTANCES
 // import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'

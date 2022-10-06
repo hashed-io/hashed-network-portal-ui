@@ -2,7 +2,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     const to = returnTo || { name: 'root' }
-    console.log('store', this)
+    // console.log('store', this)
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
@@ -32,7 +32,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
 
 export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo }) {
   try {
-    console.log('hashedAutoLogin')
+    // console.log('hashedAutoLogin')
     if (localStorage.getItem('autoLoginAccount')) {
       await dispatch('hashedLogin', { returnTo, userAddress: localStorage.getItem('autoLoginAccount') })
     }
@@ -47,7 +47,7 @@ export const hashedLogout = async function ({ commit }) {
     this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
   } catch (error) {
-    console.log('Authenticator logout error', error)
+    console.error('Authenticator logout error', error)
   }
   localStorage.removeItem('autoLoginAccount')
   // this.$router.push({ name: 'login' })

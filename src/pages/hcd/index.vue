@@ -131,7 +131,6 @@ export default {
     },
     async searchDoc (cid) {
       try {
-        console.log('searchDoc', this.cid)
         this.showLoading({
           message: this.$t('pages.hcd.documents.loadingMessage')
         })
