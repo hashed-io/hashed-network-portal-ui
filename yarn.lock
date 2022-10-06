@@ -1783,20 +1783,6 @@
     ipfs-http-client "^57.0.3"
     stream-browserify "^3.0.0"
 
-"@jmgayosso/nbv-ur-codec@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-ur-codec/-/nbv-ur-codec-1.0.5.tgz#545c532e03390f124298c96977bd34785d3d4eff"
-  integrity sha512-Vbad3Nkonkr5X5M1h49MMLhkzX6euXk771O0SWCi/hTf5K0CuvI7zMgyQtCP+PV6/qqTiwXu6fC4HQ2AvhFloQ==
-  dependencies:
-    "@keystonehq/bc-ur-registry" "^0.5.0-alpha.6"
-    "@ngraveio/bc-ur" "^1.1.6"
-    bip32 "^3.1.0"
-    bip39 "^3.0.4"
-    bitcoinjs-lib "^6.0.1"
-    bs58check "^2.1.2"
-    qrcode-svg "^1.1.0"
-    tiny-secp256k1 "^2.2.1"
-
 "@jmgayosso/test-btn@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@jmgayosso/test-btn/-/test-btn-1.0.1.tgz#0c5e74e0f67774c63fab02158cbc0526caa2bbd8"
@@ -2968,16 +2954,19 @@
   dependencies:
     jose "^4.9.2"
 
-"@smontero/nbv-ur-codec@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@smontero/nbv-ur-codec/-/nbv-ur-codec-1.0.3.tgz#c2699131f115917f9628b9c4de189e7ecd529c46"
-  integrity sha512-NJt77UL+ul6gsPIASw5TJ/4ZonGCmJfLvIamqgRO3dG+1gCQU85vqtjziSS46fj3pyr7NJ7+1ZjuBUXl74ApYw==
+"@smontero/nbv-ur-codec@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@smontero/nbv-ur-codec/-/nbv-ur-codec-1.0.4.tgz#09556e56f3f8160f8844d7f323b9c44e6206a197"
+  integrity sha512-JU1n7r6aFq6JAfBgGdP6OT4myfPjc5Sg4JbTiFJcXyOYEgnNRQQyzDUmowQTEPskJxpi1tbj1mR4lnPLnjLw/g==
   dependencies:
     "@keystonehq/bc-ur-registry" "^0.5.0-alpha.6"
     "@ngraveio/bc-ur" "^1.1.6"
+    bip32 "^3.1.0"
+    bip39 "^3.0.4"
     bitcoinjs-lib "^6.0.1"
     bs58check "^2.1.2"
     qrcode-svg "^1.1.0"
+    tiny-secp256k1 "^2.2.1"
 
 "@storybook/addon-actions@6.5.10", "@storybook/addon-actions@^6.5.9":
   version "6.5.10"
@@ -6511,11 +6500,6 @@ charenc@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==
-
-chart.js@^3.7.1:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.9.1.tgz#3abf2c775169c4c71217a107163ac708515924b8"
-  integrity sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w==
 
 check-more-types@^2.24.0:
   version "2.24.0"

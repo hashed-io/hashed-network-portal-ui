@@ -6,12 +6,19 @@
     :label="word"
     :clickable="false"
   )
-  .row.q-mt-md.reverse
+  .row.q-mt-md.reverse.q-gutter-sm
     q-btn(
       label="I saved my seed in a safe place"
       color="negative"
       no-caps
       @click="confirm"
+    )
+    q-btn(
+      label="Cancel"
+      color="negative"
+      no-caps
+      @click="cancel"
+      outline
     )
 </template>
 
@@ -24,10 +31,13 @@ export default {
       required: true
     }
   },
-  emits: ['onConfirm'],
+  emits: ['onConfirm', 'onCancel'],
   methods: {
     confirm () {
       this.$emit('onConfirm')
+    },
+    cancel () {
+      this.$emit('onCancel')
     }
   }
 }
