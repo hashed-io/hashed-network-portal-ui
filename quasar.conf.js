@@ -111,6 +111,30 @@ module.exports = configure(function (ctx) {
           }))
         chain.plugin('node-polyfill-webpack-plugin')
           .use(NodePolyfillPlugin, [{ extensions: ['js', 'vue'] }])
+        // chain.module
+        //   .rule('wasm')
+        //   .test(/\.wasm(\.bin)?$/)
+        //   .use('file-loader')
+        //   .loader('file-loader')
+        //   .end()
+        // chain.experiments = chain.experiments || {}
+        // chain.experiments.syncWebAssembly = true
+        chain.merge({
+          experiments: {
+            asyncWebAssembly: true
+          }
+        })
+        chain.merge({
+          resolve: {
+            fallback: {
+              fs: false
+            }
+          }
+        })
+        // chain.experiments = {
+        //   ...chain.experiments,
+
+        // }
       }
     },
 

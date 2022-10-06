@@ -29,7 +29,7 @@ export default route(function ({ store }) {
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
     const isAuthenticated = store.getters['profile/isLogged']
-    console.log(isAuthenticated, 'Authenticated')
+    // console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
       next({
@@ -47,6 +47,11 @@ export default route(function ({ store }) {
       // Validation by Apps
       const app = to.meta.app
       const loginType = store.getters['profile/loginType']
+
+      if (app === 'nbv' && store.getters['profile/xpub'] === undefined) {
+        store.dispatch('profile/getXpub')
+        // next()
+      }
 
       if (app === 'hcd' && loginType === 'polkadotjs') {
         next({ name: 'nbv' })

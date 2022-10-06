@@ -40,7 +40,7 @@
       .row(v-if="txId")
         .col
           .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.tx') }}
-          .text-body2.one-line.txLabel(@click="openTxExplorer") Click to open explorer
+          .text-body2.one-line.txLabel(style="width: fit-content" @click="openTxExplorer") Click to open explorer
       .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposer') }}
       account-item.full-width(:address="proposer")
       #cosigners
@@ -72,7 +72,7 @@
             )
             q-tooltip(v-if="isOffchainError") {{ validationMessage }}
             q-btn.full-width.no-padding(
-              v-if="canFinalize"
+              v-if="canFinalize && !isBroadcasted"
               :label="$t('pages.nbv.proposals.finalizeBtn')"
               color="secondary"
               icon="cloud_done"
