@@ -67,7 +67,7 @@
               icon="qr_code"
               no-caps
               @click="showSignPSBT"
-              :disabled="isOffchainError && hasPsbt"
+              :disabled="isOffchainError || !hasPsbt"
               v-if="!alreadySigned"
             )
             q-tooltip(v-if="isOffchainError") {{ validationMessage }}
