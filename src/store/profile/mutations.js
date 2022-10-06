@@ -5,6 +5,10 @@ export function setProfile (state, { profilePicture, profileName, loginType, pol
   state.polkadotAddress = polkadotAddress
 }
 
+export function setXPUB (state, { xpub }) {
+  state.xpub = xpub
+}
+
 export function cleanProfile (state) {
   state.profilePicture = undefined
   state.profileName = undefined

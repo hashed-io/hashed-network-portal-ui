@@ -3,6 +3,7 @@ export default function () {
     profilePicture: undefined,
     profileName: undefined,
     loginType: undefined,
-    polkadotAddress: undefined
+    polkadotAddress: undefined,
+    xpub: undefined
   }
 }

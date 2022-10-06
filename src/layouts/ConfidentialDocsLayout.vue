@@ -16,7 +16,8 @@
               q-item-label {{ $t(option.label) }}
         q-space
         q-btn.q-mr-md(v-if="loginType === 'polkadotjs'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(v-bind="polkadotUserInfo")
+            selected-account-btn(v-bind="polkadotUserInfo")
+        //- .text-caption Hola
         q-btn.no-padding(no-caps v-if="loginType === 'hcd'")
           SSOAccountItem( v-bind="ssoAccountInfo")
           q-menu
@@ -32,7 +33,8 @@
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
           q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
-
+        q-toolbar-title
+        .text-caption(v-if="xpub && $route && $route.meta?.app === 'nbv'") XPUB: ...{{ xpub.substr(-8) }}
     q-page-container
       .row.justify-center
         .col-12
@@ -73,6 +75,8 @@ export default defineComponent({
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
+    const xpub = computed(() => $store.getters['profile/xpub'])
+
     const ssoAccountInfo = computed(() => {
       if ($store.getters['hcdWallet/isLogged']) {
         return {
@@ -224,7 +228,8 @@ export default defineComponent({
       loginType,
       ssoAccountInfo,
       copyTextToClipboard,
-      polkadotUserInfo
+      polkadotUserInfo,
+      xpub
     }
   }
 })

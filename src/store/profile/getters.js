@@ -6,6 +6,10 @@ export function profileInfo (state) {
   return state
 }
 
+export function xpub (state) {
+  return state.xpub
+}
+
 export function polkadotAddress ({ polkadotAddress }) {
   return polkadotAddress
 }
