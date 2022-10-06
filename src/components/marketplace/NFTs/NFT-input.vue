@@ -11,6 +11,7 @@
             :placeholder="$t('pages.marketplace.taxCredits.placeholders.label')"
             filled
             dense
+            testid="nft-label"
           )
         .col-6.padding-top
           q-file(
@@ -35,6 +36,7 @@
             filled
             dense
             :rules="[...rulesValue]"
+            testid="nft-value"
           )
       .row
         .col-6
@@ -47,9 +49,11 @@
             :label="$t('pages.marketplace.taxCredits.labels.isFile')"
             unchecked-icon="text_fields"
             checked-icon="attach_file"
+            data-testid="toggle"
           )
     .col-3.margin-top
       q-btn(
+        data-testid="remove-attribute"
         :label="$t('pages.marketplace.taxCredits.buttons.removeAttribute')"
         color="primary"
         rounded
@@ -68,17 +72,17 @@ export default {
   mixins: [validation],
   props: {
     /**
-     * Label of the attribute
+     * Label of the attribute [Used by v-model]
      */
     label: {
       type: String,
       default: ''
     },
     /**
-     * Value of the attribute
+     * Value of the attribute [Used by v-model]
      */
     value: {
-      type: String,
+      type: [String, File],
       default: ''
     },
     /**
@@ -129,6 +133,9 @@ export default {
   },
   methods: {
     onRemoveItem () {
+      /**
+       * Emitted the index of the item [Used on the Form]
+       */
       this.$emit('onRemoveAttribute', this.index)
     },
     validFile (file) {

@@ -1747,10 +1747,10 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@jmgayosso/afloat-client@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/afloat-client/-/afloat-client-0.0.2.tgz#ff2288ff2fb01d0c5a5cecfb645ee9757f2b310f"
-  integrity sha512-1DTieTLwbun0bgAOrdPFbARESSxZrScTigGL2EqV0qlcNti34ENWOEHMGLAKBoshRHEF03/BzDMRNLGMI6W3QA==
+"@jmgayosso/afloat-client@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@jmgayosso/afloat-client/-/afloat-client-0.0.3.tgz#bc45cfa88b706267068463982d11413e01912783"
+  integrity sha512-XNbZVjFy9m4VYKXeaY8sA/U8yA0nRelNtLRiNNm1qzmDabqyNi/53SAhUOgS2RCkOl39ac59GhaYvk2uMTq2vg==
   dependencies:
     "@polkadot/api" "^9.2.4"
     "@polkadot/extension-dapp" "^0.44.4"
@@ -17435,7 +17435,7 @@ vue-loader@^16.4.1, vue-loader@^16.8.3:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
-
+    
 vue-router@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.0.tgz#1fbf642ec66a6b06305af288b70cc2ad6ff2b9d3"

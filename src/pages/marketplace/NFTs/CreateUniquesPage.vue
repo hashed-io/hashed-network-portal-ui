@@ -1,6 +1,6 @@
 <template lang='pug'>
 #container
-  NFTForm.col-12.dialogClass(@onSubmitTax="onSubmitTaxCredit" )
+  NFTForm.col-12.dialogClass(@onSubmitForm="onSubmitNFT" )
 </template>
 <script>
 import NFTForm from 'src/components/marketplace/NFTs/NFT-form.vue'
@@ -30,7 +30,8 @@ export default {
     ...mapGetters('profile', ['polkadotAddress'])
   },
   methods: {
-    async onSubmitTaxCredit (attributes, containFile) {
+    async onSubmitNFT ({ attributes, containFile }) {
+      // console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
       try {
         this.showLoading()
         if (containFile) {

@@ -321,6 +321,14 @@ export default {
         }
       }
     },
+    nfts: {
+      loadingUniques: 'Cargando los NFTs...',
+      element: {
+        title: 'Único',
+        owner: 'Propietario',
+        issuer: 'Editor'
+      }
+    },
     hcd: {
       documents: {
         addDocument: 'Añadir documento',

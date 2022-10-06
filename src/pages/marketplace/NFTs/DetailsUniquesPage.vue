@@ -70,12 +70,12 @@ export default {
   components: {
     AccountItem
   },
-  props: {
-    unique: {
-      type: String,
-      default: ''
-    }
-  },
+  // props: {
+  //   unique: {
+  //     type: String,
+  //     default: ''
+  //   }
+  // },
   data () {
     return {
       uniqueData: [],
@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     getAttributes () {
-      return this.uniqueData?.attributes?.filter(attribute => attribute.attribute !== '$num_value')
+      return this.uniqueData?.attributes?.filter(attribute => attribute.label !== '$num_value')
     },
     getColumnsi18n () {
       return [
@@ -94,7 +94,7 @@ export default {
           name: 'attribute',
           label: this.$t('pages.marketplace.taxCredits.details.attribute'),
           value: 'attribute',
-          field: row => row.attribute,
+          field: row => row.label,
           align: 'left',
           width: '50%'
         },
@@ -109,13 +109,26 @@ export default {
       ]
     }
   },
-  created () {
-    if (!this.unique) {
+  async beforeMount () {
+    const classId = this.$route.query?.classId
+    if (classId) {
+      try {
+        this.showLoading({ message: this.$t('pages.nfts.loadingUniques') })
+        const response = await this.$store.$afloatApi.getAsset({
+          collectionId: classId,
+          instanceId: 0
+        })
+        this.uniqueData = response
+      } catch (e) {
+        console.error(e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    } else {
       this.$router.push({
         name: 'NFTs'
       })
-    } else {
-      this.uniqueData = JSON.parse(this.unique)
     }
   },
   methods: {
