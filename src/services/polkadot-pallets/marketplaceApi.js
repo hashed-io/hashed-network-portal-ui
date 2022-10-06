@@ -26,7 +26,6 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async getMarketplaceById ({ marketId }, subTrigger) {
-    console.log('getMarketplaceById', marketId)
     const market = await this.exQuery('marketplaces', [marketId])
     if (!market.isEmpty) {
       return market.toHuman()
@@ -214,7 +213,6 @@ class MarketplaceApi extends BasePolkadotApi {
         key: v.key
       }
     })
-    console.log('applicantsByState', applicantsByState)
 
     // Applicants address to call in multiquery
     let applicantsAddress = []
@@ -228,11 +226,9 @@ class MarketplaceApi extends BasePolkadotApi {
     })
     // 2 Get applicants Ids
     const applicantsIds = await this.exMultiQuery('applicationsByAccount', applicantsAddress, subTrigger)
-    console.log('applicantsIds', applicantsIds.map(v => v.toHuman()))
 
     // 3 Get applicant details
     const applicantsDetails = await this.exMultiQuery('applications', applicantsIds.map(v => v.toHuman()), subTrigger)
-    console.log('applicantsDetails', applicantsDetails)
 
     // Add address to applicant details
     const details = applicantsDetails.map((v, i) => {
@@ -242,7 +238,6 @@ class MarketplaceApi extends BasePolkadotApi {
       }
       return auxObj
     })
-    console.log('details', details)
     return details
   }
 
@@ -251,7 +246,6 @@ class MarketplaceApi extends BasePolkadotApi {
    * @description This function call apply extrinsic
    */
   async applyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
-    console.log('submitApplicationForm', marketId, user, custodianFields, fields, subTrigger)
     return this.callTx('apply', user, [marketId, fields, custodianFields])
   }
 
@@ -260,12 +254,10 @@ class MarketplaceApi extends BasePolkadotApi {
    * @description This function call reapply extrinsic
    */
   async reapplyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
-    console.log('submitReApplicationForm', marketId, user, custodianFields, fields, subTrigger)
     return this.callTx('reapply', user, [marketId, fields, custodianFields])
   }
 
   async createMarketplace ({ admin, user, label }, subTrigger) {
-    console.log('createMarketplace', admin, user, subTrigger)
     return this.callTx('createMarketplace', user, [admin, label])
   }
 
@@ -281,7 +273,6 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async enrollApplicant ({ marketId, user, accountOrApplication, approved, feedback }, subTrigger) {
-    console.log('enrollApplicant', marketId, user, accountOrApplication, approved, feedback, subTrigger)
     return this.callTx('enroll', user, [marketId, accountOrApplication, approved, feedback])
   }
 
@@ -293,7 +284,6 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {Function} subTrigger Function to trigger when subscription detect changes
    */
   async getApplicationStatusByAccount ({ marketId, account }, subTrigger) {
-    console.log('getApplicationStatusByAccount', marketId, account, subTrigger)
     const applicantionId = await this.exQuery('applicationsByAccount', [account, marketId])
     if (applicantionId.isEmpty) {
       return undefined
@@ -303,7 +293,6 @@ class MarketplaceApi extends BasePolkadotApi {
   }
 
   async getMarketplacesByAuthority ({ accountId, marketplaceId }, subTrigger) {
-    console.log('getMarketplacesByAuthority', accountId, marketplaceId, subTrigger)
     const marketplaceAuthority = await this.exQuery('marketplacesByAuthority', [accountId, marketplaceId])
     if (marketplaceAuthority.isEmpty) {
       return undefined
@@ -318,18 +307,14 @@ class MarketplaceApi extends BasePolkadotApi {
    * @param {*} subTrigger
    */
   async getApplicationsByCustodian ({ account }, subTrigger) {
-    console.log('getApplicationsByCustodian', account, subTrigger)
     // 1. Get accounts ids by Custodian
     const accountsIds = await this.exEntriesQuery('custodians', [account])
-    console.log('applicationsIds', accountsIds)
     // There is no custodian files
     if (accountsIds.length === 0) return []
     // 2. Map entries of the response of the query
     const mapEntries = this.mapEntries(accountsIds)
-    console.log('mapEntries', mapEntries)
     // 3. Map response by Account id [Applicant]. The response contains more information (filtering)
     const applicantIdsArray = mapEntries.map(v => v.value)
-    console.log('applicationsIdsArray', applicantIdsArray)
     // 4. Execute entries query to get applications details
     const promises = []
     // Loop through each market

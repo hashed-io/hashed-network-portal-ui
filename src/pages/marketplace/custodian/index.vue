@@ -48,14 +48,13 @@ export default {
         const applicantsHP = await this.getFromHP(response)
         this.applicants = applicantsHP
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.showNotification({ message: error.message || error, color: 'negative' })
       } finally {
         this.hideLoading()
       }
     },
     async getFromHP (applicants) {
-      console.log('applicants', applicants)
       const promisesFields = []
       const tmpApplicants = applicants.filter(applicant => {
         return applicant.fields[0].custodianCid !== null

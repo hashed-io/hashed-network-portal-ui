@@ -131,8 +131,6 @@ export default {
           custodian: this.isCustodian ? this.custodianAddress : undefined,
           fields: [{ label: 'Notes', file: this.form.notes }, ...this.form.files]
         }
-        console.log('data', data)
-        // console.log('data submitted', data)
         this.$emit('submit', data)
       })
     },
@@ -143,7 +141,6 @@ export default {
       })
     },
     async onDeleteFile (index) {
-      console.log(index)
       this.form.files.splice(index, 1)
     }
   }

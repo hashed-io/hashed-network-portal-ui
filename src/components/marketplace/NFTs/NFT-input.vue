@@ -132,7 +132,6 @@ export default {
       this.$emit('onRemoveAttribute', this.index)
     },
     validFile (file) {
-      console.log('Valid file', file, typeof file)
       if (file != null && this.loading) return true
       else if (!this.loading && this.initWithString) return true
       else if (!this.loading && typeof file === 'object') return true

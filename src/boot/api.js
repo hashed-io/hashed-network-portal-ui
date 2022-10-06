@@ -12,7 +12,6 @@ import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
 // const { AfloatApi } = require('../../../afloat-client-api')
 import { AfloatApi } from '@jmgayosso/afloat-client'
-console.log('AfloatApi', AfloatApi)
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -21,7 +20,6 @@ export default async ({ app, store }) => {
     const api = new PolkadotApi()
     const bdkApi = new BdkApi()
     await api.connect()
-    console.log('PolkadotApiCreated', api)
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
     // const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
     const palletId = process.env.GATED_MARKETPLACE_ID
@@ -46,7 +44,6 @@ export default async ({ app, store }) => {
       })
       await hashedPrivateApi.connect()
       store['$hashedPrivateApi'] = hashedPrivateApi
-      console.log('Hashed Private connected', hashedPrivateApi)
     } catch (e) {
       console.error(e)
     }
@@ -62,8 +59,6 @@ export default async ({ app, store }) => {
 
     await hashedConfidentialDocs.init()
 
-    console.log('NBVStorageApi', NbvStorageApi)
-    console.log('polkadotApi', hashedConfidentialDocs.getPolkadotApi())
     const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
     const afloatApi = new AfloatApi({
       polkadotApi: hashedConfidentialDocs.getPolkadotApi(),
@@ -72,7 +67,7 @@ export default async ({ app, store }) => {
       IPFS_URL: process.env.IPFS_URL,
       notify: showGlobalLoading
     })
-    console.log('Created', afloatApi)
+
     store['$afloatApi'] = afloatApi
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi

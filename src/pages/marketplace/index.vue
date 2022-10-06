@@ -108,7 +108,6 @@ export default {
     async createMarketplace (marketplace) {
       try {
         this.showLoading()
-        console.log('createMarketplace', marketplace)
         this.modals.isShowingAddMarketplace = false
         await this.$store.$marketplaceApi.createMarketplace({
           admin: this.polkadotAddress,
@@ -129,7 +128,6 @@ export default {
       }
     },
     onSelectMarketplace (marketplace) {
-      console.log('onSelectMarketplace', marketplace)
       this.$router.push({
         name: 'marketplace-details',
         query: { marketId: marketplace.id }

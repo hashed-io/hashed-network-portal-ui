@@ -5,7 +5,6 @@ class FruniquesApi extends BasePolkadotApi {
   }
 
   createWithAttributes ({ user, classId, instanceId, numericValue, admin, attributes }, subTrigger) {
-    console.log('createWithAttributes', { classId, instanceId, numericValue, admin, attributes })
     return this.callTx('createWithAttributes', user, [classId, instanceId, numericValue, admin, attributes], subTrigger)
   }
 }

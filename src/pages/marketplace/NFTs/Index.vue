@@ -73,7 +73,6 @@ export default {
         classId: '1',
         instanceId: '0'
       })
-      console.log(taxcredit)
       this.uniques = [taxcredit]
     },
     onClickUnique (unique) {
