@@ -131,7 +131,7 @@ export default {
       proposals: {
         create_proposal: 'Create new proposal',
         descriptionDesc: 'Write a brief description',
-        recipientAddressDesc: 'Write a valid BTC address to send satoshis',
+        recipientAddressDesc: 'Write or scan a valid BTC address to send satoshis',
         amountDesc: 'Write amount you want to send',
         titleStep1: 'Export PSBT',
         titleStep2: 'Import signed PSBT',

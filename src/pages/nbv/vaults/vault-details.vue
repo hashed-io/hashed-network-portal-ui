@@ -34,7 +34,8 @@
         .col-9.q-mr-md
           q-card
             q-item
-              q-item-label.text-body2(lines="1") {{ vaultAddress }}
+              q-item-label.text-body2(lines="1" v-if="vaultAddress") {{ vaultAddress }}
+              q-item-label.text-body2(lines="1" v-else) Retrieving...
         .col
          .column.q-gutter-xs
           q-btn(
@@ -245,11 +246,11 @@ export default {
       try {
         this.showLoading({ message: this.$t('pages.nbv.proposals.updatingProposal') })
         const vault = await this.$store.$nbvStorageApi.getVaultsById({ Ids: [this.vaultId] })
-        this.getReceiveAddress()
         this.syncData({
           ...vault[0].toHuman(),
           vaultId: this.vaultId
         })
+        await this.getReceiveAddress()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -332,7 +333,9 @@ export default {
           descriptor: this.outputDescriptor
         })
         this.vaultAddress = data
-        // this.copyTextToClipboard(data)
+        if (!data || data === undefined) {
+          setTimeout(this.getReceiveAddress(), 2000)
+        }
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

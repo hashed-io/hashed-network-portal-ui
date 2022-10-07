@@ -54,7 +54,7 @@
           //- .text-body2 {{ labelStatus }}
           hr
           .text-overline {{ $t('pages.nbv.proposals.satoshiAmount') }}
-          .text-body2 {{ amount }}
+          .text-body2 {{ amount || 0 }} Sats
           hr
           .text-overline {{ $t('pages.nbv.vaults.threshold') }}
           .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
@@ -222,11 +222,12 @@ export default {
     },
     validationMessage () {
       if (this.offchainStatus) {
-        if (this.offchainStatus.status && this.offchainMessage.status === 'pending') {
+        if (this.offchainStatus.status && this.offchainMessage?.status === 'pending') {
           return this.$t('pages.nbv.proposals.pending')
         } else if (this.offchainMessage.message) {
           return this.offchainMessage.message
         }
+        return undefined
       }
       return undefined
     },
