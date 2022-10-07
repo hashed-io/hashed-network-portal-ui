@@ -131,7 +131,7 @@ export default {
       proposals: {
         create_proposal: 'Create new proposal',
         descriptionDesc: 'Write a brief description',
-        recipientAddressDesc: 'Write a valid BTC address to send satoshis',
+        recipientAddressDesc: 'Write or scan a valid BTC address to send satoshis',
         amountDesc: 'Write amount you want to send',
         titleStep1: 'Export PSBT',
         titleStep2: 'Import signed PSBT',
@@ -142,7 +142,7 @@ export default {
         signPsbtFinalizeDesc: 'Complete the transaction, ready to broadcast',
         signPsbtBroadcastDesc: 'Broadcast the transaction',
         saveBtn: 'Save',
-        finalizeBtn: 'Finalize and Broadcast',
+        finalizeBtn: 'Finalize',
         broadcastBtn: 'Broadcast',
         proposals: 'Proposals',
         createProposal: 'Create proposal',
@@ -171,7 +171,8 @@ export default {
         amountInSatoshi: 'Amount',
         pendingStatus: 'Waiting on signatures',
         finalizedStatus: 'Finalized, waiting for broadcast',
-        broadcastedStatus: 'Broadcasted'
+        broadcastedStatus: 'Broadcasted',
+        readyToFinalize: 'Ready to finalize'
         // signPsbtStep1: ''
       },
       list: {

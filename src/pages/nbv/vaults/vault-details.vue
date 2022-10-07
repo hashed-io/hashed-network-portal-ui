@@ -34,7 +34,8 @@
         .col-9.q-mr-md
           q-card
             q-item
-              q-item-label.text-body2(lines="1") {{ vaultAddress }}
+              q-item-label.text-body2(lines="1" v-if="vaultAddress") {{ vaultAddress }}
+              q-item-label.text-body2(lines="1" v-else) Retrieving...
         .col
          .column.q-gutter-xs
           q-btn(
@@ -86,15 +87,33 @@
                   @click="copyTextToClipboard(vaultQrText, 'Descriptor copied to clipboard')"
                 )
               .col
-                .text-bold.q-mt-sm Notes:
+                .text-bold.q-mt-sm Note:
                   span.text-body2.q-ml-sm You have to import this vault on Blue Wallet to co-sign transactions.
+
                 .text-bold.q-mt-md How to import vault on Blue Wallet:
-                ul
+                ol
                   li Go to Home screen in Blue Wallet.
                   li Tap on ➕ button positioned on top right corner.
                   li Top on "Import wallet" button.
                   li Tap on "Scan or import a file".
                   li Scan this qr from Blue Wallet.
+
+                .text-bold.q-mt-sm Note:
+                  span.text-body2.q-ml-sm After import the vault on Blue Wallet you have to import the seed for your XPUB.
+                .text-bold.q-mt-md How to import the seed for your XPUB:
+                ol
+                  li Go to Home screen in Blue Wallet.
+                  li Tap on
+                    span.text-bold.q-ml-sm '{{ description }}'
+                      span.q-ml-sm.text-weight-regular vault.
+                  li Tap on 'Manage Keys' button.
+                  li Search
+                    span.text-bold.q-ml-sm '{{ xpubForBW }}'
+                      span.q-ml-sm.text-weight-regular and tap on 'I have a seed for this key'.
+                  li Write or paste your seed.
+                  li Tap on "Import" button.
+                  li Tap on "Save" button.
+
         q-dialog(v-model="isShowingAddressQR")
           q-card.modalQrSize.q-pa-sm
             .text-body2.text-weight-light.q-ml-sm.text-center.q-mt-sm {{ $t('pages.nbv.vaults.receiveAddress') }}
@@ -184,6 +203,10 @@ export default {
   computed: {
     // ...mapGetters('polkadotWallet', ['selectedAccount']),
     ...mapGetters('profile', ['polkadotAddress']),
+    xpubForBW () {
+      const xpub = this.$store.getters['profile/xpub']
+      return `${xpub.substr(23, 5)}...${xpub.substr(-5)}`
+    },
     iAmOwner () {
       return this.polkadotAddress === this.owner
     },
@@ -245,11 +268,11 @@ export default {
       try {
         this.showLoading({ message: this.$t('pages.nbv.proposals.updatingProposal') })
         const vault = await this.$store.$nbvStorageApi.getVaultsById({ Ids: [this.vaultId] })
-        this.getReceiveAddress()
         this.syncData({
           ...vault[0].toHuman(),
           vaultId: this.vaultId
         })
+        await this.getReceiveAddress()
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -332,7 +355,9 @@ export default {
           descriptor: this.outputDescriptor
         })
         this.vaultAddress = data
-        // this.copyTextToClipboard(data)
+        if (!data || data === undefined) {
+          setTimeout(this.getReceiveAddress(), 2000)
+        }
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })
@@ -370,7 +395,8 @@ export default {
           this.proposalsList = proposals.map((v, i) => {
             return {
               ...v.toHuman(),
-              proposalId: Ids[i]
+              proposalId: Ids[i],
+              threshold: this.threshold
             }
           })
         } else this.proposalsList = []

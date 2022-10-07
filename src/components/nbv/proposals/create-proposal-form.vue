@@ -16,7 +16,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       .col-7
         .row.items-center.q-col-gutter-sm
           .col-8
-            q-input(
+            q-input.q-pt-sm(
               data-testid="amount"
               outlined
               :label="$t('pages.nbv.proposals.amountInSatoshi')"
@@ -25,7 +25,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
               :suffix="isShowingInBTC ? 'BTC' : 'sats'"
             )
           .col
-            q-btn.full-width(
+            q-btn.full-width.q-mb-md(
               label="Max"
               dense
               no-caps
@@ -36,13 +36,23 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         .text-body2 {{ $t('pages.nbv.proposals.amountDesc')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
-        q-input(
-          data-testid="recipient"
-          outlined
-          :label="$t('pages.nbv.proposals.recipientAddress')"
-          v-model="recipientAddress"
-          :rules="[rules.required, rules.isValidMainetBTC]"
-        )
+        .row.items-center.q-col-gutter-sm
+          .col-8
+            q-input.q-pt-sm(
+              data-testid="recipient"
+              outlined
+              :label="$t('pages.nbv.proposals.recipientAddress')"
+              v-model="recipientAddress"
+              :rules="[rules.required, rules.isValidMainetBTC]"
+            )
+          .col
+            q-btn.full-width.q-mb-md(
+              label="Scan Qr"
+              dense
+              no-caps
+              color="secondary"
+              @click="modals.qrScanner = true"
+            )
       .col
         .text-body2 {{ $t('pages.nbv.proposals.recipientAddressDesc')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
@@ -64,16 +74,26 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
         type="submit"
         no-caps
     )
+    #modals
+      q-dialog(v-model="modals.qrScanner")
+        q-card.modalQrSize.q-pa-md
+          .text-body2.text-weight-light Scan a valid BTC address.
+          QrStream(
+            ref="qrReader"
+            @decode="onQrDetected"
+          )
 </template>
 
 <script>
 import { validation } from '~/mixins/validation'
+import { QrStream } from 'vue3-qr-reader'
 
 /**
  * Form to create a new proposal
  */
 export default {
   name: 'CreateProposalForm',
+  components: { QrStream },
   mixins: [validation],
   props: {
     /**
@@ -91,7 +111,10 @@ export default {
       amountInSats: undefined,
       description: undefined,
       btcSatsRelation: 100000000,
-      isShowingInBTC: false
+      isShowingInBTC: false,
+      modals: {
+        qrScanner: false
+      }
     }
   },
   computed: {
@@ -115,6 +138,18 @@ export default {
     }
   },
   methods: {
+    onQrDetected (v) {
+      try {
+        let address = v
+        address = address.replace('bitcoin:', '')
+        this.recipientAddress = address
+      } catch (e) {
+        console.error('error', e)
+        this.showNotification({ message: e.message || e, color: 'negative' })
+      } finally {
+        this.modals.qrScanner = false
+      }
+    },
     changeAmountTo () {
       // const currentCurrency = this.isAmountInBTC
       const currentAmount = this.amountInSats

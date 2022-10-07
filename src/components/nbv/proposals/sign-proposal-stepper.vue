@@ -19,13 +19,13 @@
           .text-bold Notes:
           ul
             li First you have to import the vault on Blue Wallet, if you don't know how do that, please check the
-              span.link  documentation.
-            li.q-mt-sm If is the first time you sign a transaction using this vault you must import your XPUB's seeds on Blue Wallet, please check the
-              span.link  documentation.
+              a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refExportVault" target="_blank").span.link  documentation.
+            //- li.q-mt-sm If is the first time you sign a transaction using this vault you must import your XPUB's seeds on Blue Wallet, please check the
+            //-   span.link  documentation.
           #Steps
             .text-bold How to sign a transaction:
             .text-caption Follow the next steps from Blue Wallet app. Also you can see ours
-              span.link  tutorials.
+              a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refSignProposal" target="_blank").span.link  tutorials.
             ol
               li Enter on 'name vault'
               li Tap on "Send" button.
@@ -46,8 +46,11 @@
         .col-7
           psbt-qr-scanner.q-pa-md(@onScanned="onPSBTScanned")
         .col
-          .text-bold How to import and save signed transaction:
-          ul
+          .text-bold How to import and save a signed transaction:
+          .text-caption You can see ours tutorials.
+              a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refSignProposal" target="_blank").span.link  How to sign a proposal.
+          ol
+            li Tap on "Provide signature" button, now you should see a QR.
             li {{ $t('pages.nbv.proposals.signPsbtStep2') }}
             li Sign "Save" transaction using Polkadot extension.
     //- q-step.minH(
@@ -103,8 +106,8 @@
     template(v-slot:navigation)
       q-stepper-navigation
         .row.justify-between
-            q-btn(:disabled="!(step > 1)" @click="$refs.stepper.previous()" flat color="primary" label="Back" class="q-ml-sm")
-            q-btn(v-if="step !== steps.importPsbt" @click="$refs.stepper.next()" color="primary" :label="step === 2 ? 'Finish' : 'Continue'")
+          q-btn(:disabled="!(step > 1)" @click="$refs.stepper.previous()" flat color="primary" label="Back" class="q-ml-sm")
+          q-btn(v-if="step !== steps.importPsbt" @click="$refs.stepper.next()" color="primary" :label="step === 2 ? 'Finish' : 'Continue'")
 </template>
 
 <script>

@@ -54,7 +54,7 @@
           //- .text-body2 {{ labelStatus }}
           hr
           .text-overline {{ $t('pages.nbv.proposals.satoshiAmount') }}
-          .text-body2 {{ amount }}
+          .text-body2 {{ amount || 0 }} Sats
           hr
           .text-overline {{ $t('pages.nbv.vaults.threshold') }}
           .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
@@ -79,14 +79,6 @@
               no-caps
               @click="finalizePsbt"
             )
-            //- q-btn.full-width.no-padding(
-            //-   v-if="canBroadcast"
-            //-   :label="$t('pages.nbv.proposals.broadcastBtn')"
-            //-   color="positive"
-            //-   icon="connect_without_contact"
-            //-   no-caps
-            //-   @click="broadcastPsbt"
-            //- )
             #DeleteProposal(v-if="canRemove")
               q-btn.full-width.no-padding(
                 :label="$t('pages.nbv.proposals.deleteProposal')"
@@ -170,26 +162,37 @@ export default {
         ripple: false,
         click: false
       }
-      if (this.status && this.status.toLowerCase() === 'pending') {
+      try {
+        if (this.status && this.canFinalize && this.status.toLowerCase() !== 'broadcasted') {
+          return chip
+        }
+        if (this.status && this.status.toLowerCase() === 'pending') {
+          return chip
+        } else if (this.status && this.status.toLowerCase() === 'finalized') {
+          return {
+            ...chip,
+            color: 'positive',
+            icon: 'cloud_done',
+            label: this.$t('pages.nbv.proposals.finalizedStatus')
+          }
+        } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
+          return {
+            ...chip,
+            color: 'positive',
+            icon: 'cloud_done',
+            label: this.$t('pages.nbv.proposals.broadcastedStatus')
+          }
+        }
         return chip
-      } else if (this.status && this.status.toLowerCase() === 'finalized') {
-        return {
-          ...chip,
-          color: 'positive',
-          icon: 'cloud_done',
-          label: this.$t('pages.nbv.proposals.finalizedStatus')
-        }
-      } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
-        return {
-          ...chip,
-          color: 'positive',
-          icon: 'connect_without_contact',
-          label: this.$t('pages.nbv.proposals.broadcastedStatus')
-        }
+      } catch (e) {
+        console.error('statusChip:', e)
+        return chip
       }
-      return chip
     },
     labelStatus () {
+      if (this.canFinalize && this.status && this.status !== 'Broadcasted') {
+        return this.$t('pages.nbv.proposals.readyToFinalize')
+      }
       if (this.status && this.status.ReadyToFinalize === true) {
         return this.$t('pages.nbv.proposals.finalizing')
       } else if (this.status && this.status.ReadyToFinalize === false) {
@@ -222,11 +225,12 @@ export default {
     },
     validationMessage () {
       if (this.offchainStatus) {
-        if (this.offchainStatus.status && this.offchainMessage.status === 'pending') {
+        if (this.offchainStatus.status && this.offchainMessage?.status === 'pending') {
           return this.$t('pages.nbv.proposals.pending')
         } else if (this.offchainMessage.message) {
           return this.offchainMessage.message
         }
+        return undefined
       }
       return undefined
     },
