@@ -183,7 +183,7 @@ export default {
         return {
           ...chip,
           color: 'positive',
-          icon: 'connect_without_contact',
+          icon: 'cloud_done',
           label: this.$t('pages.nbv.proposals.broadcastedStatus')
         }
       }
