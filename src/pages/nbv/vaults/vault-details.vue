@@ -395,7 +395,8 @@ export default {
           this.proposalsList = proposals.map((v, i) => {
             return {
               ...v.toHuman(),
-              proposalId: Ids[i]
+              proposalId: Ids[i],
+              threshold: this.threshold
             }
           })
         } else this.proposalsList = []

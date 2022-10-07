@@ -106,6 +106,10 @@ export default {
       type: String,
       default: undefined
     },
+    threshold: {
+      type: [String, Number],
+      default: undefined
+    },
     signedPsbts: {
       type: Array,
       default: () => []
@@ -117,11 +121,17 @@ export default {
       const chip = {
         color: 'yellow-8',
         'text-color': 'white',
-        icon: 'error',
+        // icon: 'error',
         label: this.$t('pages.nbv.proposals.pendingStatus'),
         size: '1.2em',
         ripple: false,
         clickable: false
+      }
+      if (this.status && this.canFinalize && this.status.toLowerCase() !== 'broadcasted') {
+        return {
+          ...chip,
+          label: 'Ready to finalize'
+        }
       }
       if (this.status && this.status.toLowerCase() === 'pending') {
         return chip
@@ -141,6 +151,10 @@ export default {
         }
       }
       return undefined
+    },
+    canFinalize () {
+      // const signers = this.signedPsbts.filter(v => v.signed)
+      return !!(this.signedPsbts.length >= this.threshold)
     }
   },
   methods: {

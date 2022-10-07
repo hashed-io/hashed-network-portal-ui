@@ -171,7 +171,8 @@ export default {
         amountInSatoshi: 'Amount',
         pendingStatus: 'Waiting on signatures',
         finalizedStatus: 'Finalized, waiting for broadcast',
-        broadcastedStatus: 'Broadcasted'
+        broadcastedStatus: 'Broadcasted',
+        readyToFinalize: 'Ready to finalize'
         // signPsbtStep1: ''
       },
       list: {
