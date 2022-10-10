@@ -123,7 +123,7 @@ export default {
         outputDescriptor: 'Output Descriptor',
         vaultsBalanceMustBeGreaterThanZero: 'The vault\'s balance must be greater than 0',
         descriptorQr: 'Descriptor QR',
-        creatingDescriptor: 'Please wait a moment, we are creating the descriptor',
+        creatingDescriptor: 'We are creating the descriptor',
         accountDuplicated: 'This account is duplicated',
         refreshAndCopyAddress: 'Refresh and copy',
         refreshAndShowQrAddress: 'Refresh and show qr'
@@ -165,7 +165,7 @@ export default {
         pending: 'Pending',
         signThePsbtWithValidXPUB: 'Please sign the psbt with a valid XPUB',
         psbtSavedSuccessfully: 'PSBT saved successfully',
-        creatingPSBT: 'Please wait a moment, we are creating the PSBT',
+        creatingPSBT: 'We are creating the PSBT',
         description: 'Description',
         recipientAddress: 'Recipient address',
         amountInSatoshi: 'Amount',

@@ -18,7 +18,7 @@
         .col
           .text-bold Notes:
           ul
-            li First you have to import the vault on Blue Wallet, if you don't know how do that, please check the
+            li First you have to import the vault on Blue Wallet, if you don't know how to do that, please check the
               a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refExportVault" target="_blank").span.link  documentation.
             //- li.q-mt-sm If is the first time you sign a transaction using this vault you must import your XPUB's seeds on Blue Wallet, please check the
             //-   span.link  documentation.
@@ -27,7 +27,10 @@
             .text-caption Follow the next steps from Blue Wallet app. Also you can see ours
               a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refSignProposal" target="_blank").span.link  tutorials.
             ol
-              li Enter on 'name vault'
+              li Go to home page.
+              li Enter on
+                span.text-bold.q-ml-sm '{{ vaultName }}'
+                      span.q-ml-sm.text-weight-regular vault.
               li Tap on "Send" button.
               li Tap on "..." button, positioned on top right corner.
               li Tap on "Sign a transaction" option.
@@ -163,6 +166,10 @@ export default {
     isFinalized: {
       type: Boolean,
       default: false
+    },
+    vaultName: {
+      type: String,
+      default: undefined
     }
   },
   emits: ['onSavePsbt', 'onFinalizePsbt', 'onBroadcastPsbt'],
