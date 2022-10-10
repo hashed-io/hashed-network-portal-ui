@@ -60,10 +60,40 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 </div>
 
 <hr/>
+<div id="createANewXpubFromNBV"></div>
+
+### How to create a new xpub from NBV web.
+
+1. Go to *Extended Keys* page in the portal.
+    <div style="text-align: center">
+    <img src="./assets/nbv_manage_keys_screen.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+2. Click on *Generate a new XPUB* button.
+
+
+3. Save your ***Seed*** in a safe place then click on **I saved my seed in a safe place**.
+
+    **Important:** Not share this Seed with anyone, this value is required to sign transactions using your XPUB on Blue Wallet app.
+
+    **Note:** This image is just an example.
+    <div>    
+    <img src="./assets/nbv_seed_screen.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+4. Sign the transaction using polkadot extension.
+
+5. Now you have a new Xpub linked to you polkadot account.
+<img src="./assets/nbv_manage_key_with_xpub_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+<hr>
 
 <div id="refCreateXPUB"></div>
 
 ### How to create a new xpub from Blue Wallet
+
+**Note:** You can create a new xpub from NBV web application (recommended) <a href="#createANewXpubFromNBV">How to create a new xpub from NBV web</a>.
 
 1. Open Blue Wallet App on your mobile, we will see a similar screen to the following.
 	* Tap on ➕ button on top-right corner.

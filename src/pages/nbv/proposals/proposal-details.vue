@@ -98,6 +98,7 @@
           :alreadySigned="alreadySigned"
           :isBroadcasted="isBroadcasted"
           :isFinalized="isFinalized"
+          :vaultName="vaultParentName"
           @onSavePsbt="savePsbt"
           @onFinalizePsbt="finalizePsbt"
           @onBroadcastPsbt="broadcastPsbt"
@@ -249,6 +250,12 @@ export default {
     },
     alreadySigned () {
       return !!this.signedPsbts.find(v => v.signer === this.polkadotAddress)
+    },
+    vaultParentName () {
+      if (this.paramsParent && this.paramsParent.description) {
+        return this.paramsParent.description
+      }
+      return undefined
     }
   },
   beforeMount () {
@@ -336,7 +343,8 @@ export default {
         })
         this.isShowingSignPsbt = false
         this.showNotification({ message: 'Finalized' })
-        this.updateProposal()
+        await this.updateProposal()
+        setTimeout(this.updateProposal(), 5000)
       } catch (e) {
         console.error('error', e)
         this.showNotification({ message: e.message || e, color: 'negative' })

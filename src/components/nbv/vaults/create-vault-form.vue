@@ -76,7 +76,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
     //-   .col
     //-     .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
     .row.items-center.q-col-gutter-md.q-my-md.q-mb-xl
-      .text-body2.text-right {{ `${threshold} of ${cosignersAmount}`  }} Multisignature vault
+      .text-body2.text-right You are creating a {{ `${threshold} of ${cosignersAmount}`  }} multisignature vault
       //- .col-7
         //- .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
       //- .col
