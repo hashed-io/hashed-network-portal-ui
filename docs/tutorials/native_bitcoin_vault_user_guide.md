@@ -20,7 +20,9 @@ This tutorial will go through NBV user flow! The following tutorials will show s
 ### Sections
  <a href="#refLogin">Login</a>
 
- <a href="#refCreateXPUB">How to create a new xpub from Blue Wallet</a>
+ <a href="#createANewXpubFromNBV">createANewXpubFromNBV</a>
+
+ <a href="#refCreateXPUB">How to create a new xpub from NBV web.</a>
 
  <a href="#refLinkXPUB">How to link your XPUB from Blue Wallet</a>
 
