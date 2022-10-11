@@ -1767,10 +1767,10 @@
     stream-browserify "^3.0.0"
     uint8arrays "^3.0.0"
 
-"@jmgayosso/nbv-client-api@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.1.tgz#ddcbe4caed945728d8918bff7278499db1cec411"
-  integrity sha512-sS6mGGfPqxo+X9NJ1x1kEVKEoaN/ynRygZcdpEw/8i4rbMVCtIFQ1exg1oBn0xCdhi61HZUXvbMkMkS2EaqICA==
+"@jmgayosso/nbv-client-api@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.2.tgz#2a91e37122599d95adc3ec4f09525ea09cc764b0"
+  integrity sha512-kbfu613mOjeVJLP7gqm2W6395b6+beRvBAOCRlCa5CINg3RPljwNQLzwDmUxMtNVU+ThUu7uM+GV1ft/aAEk3Q==
   dependencies:
     "@polkadot/api" "^9.2.4"
     "@polkadot/extension-dapp" "^0.44.4"
@@ -17435,7 +17435,7 @@ vue-loader@^16.4.1, vue-loader@^16.8.3:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
-    
+
 vue-router@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.0.tgz#1fbf642ec66a6b06305af288b70cc2ad6ff2b9d3"
