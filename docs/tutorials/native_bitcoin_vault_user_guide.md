@@ -56,6 +56,8 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed-po
     <img src="./assets/sign_message.png" style="width: 30vw; min-width: 250px">
     </div>
 
+    **Note:** You can activate the checkbox **Remember my password for the next 15 minutes** to sign transactions easier.
+
 4. If you logged correctly you will see the following screen.
     <div style="text-align: center">
     <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
@@ -67,35 +69,40 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed-po
 ### How to create a new xpub.
 To create and link a new xpub we have two options:
 
-* [Create a new xpub from NBV](#createANewXpubFromNBV): Create a new xpub and link to your polkadot account using **Hashed portal web**.
+* [Create a new xpub from NBV](#createANewXpubFromNBV): Create a new xpub and link to your polkadot account using **Hashed portal web** (recommended).
 
 * [Create a new xpub from Blue Wallet App](#createANewXpubFromBW): Create a new xpub using **Blue Wallet App** then you have to [Link your xpub](#refLinkXPUB) using the portal.
 
 <hr>
 <div id="createANewXpubFromNBV"></div>
 
-### How to create a new xpub from NBV ( recommended option).
+### How to create a new xpub from NBV (Option 1 recommended).
 
 1. Go to *Extended Keys* page in the portal.
     <div style="text-align: center">
-    <img src="./assets/nbv_manage_keys_screen.png" style="width: 30vw; min-width: 250px">
+    <img src="./assets/nbv_header_options.png" style="width: 30vw; min-width: 250px">
     </div>
 
 2. Click on *Generate a new XPUB* button.
-
+    <div style="text-align: center">
+    <img src="./assets/nbv_manage_keys_screen.png" style="width: 30vw; min-width: 250px">
+    </div>
 
 3. Save your ***Seed*** in a safe place then click on **I saved my seed in a safe place**.
 
     **Important:** Not share this Seed with anyone, this value is required to sign transactions using your XPUB on Blue Wallet app.
 
     **Note:** This image is just an example.
+
+    **Note:** If you aren't familiar with any concepts, we suggest reading the <a href="#refConcepts">last section</a> first.
+
     <div>    
     <img src="./assets/nbv_seed_screen.png" style="width: 30vw; min-width: 250px">
     </div>
 
 4. Sign the transaction using polkadot extension.
 
-5. Now you have a new Xpub linked to you polkadot account.
+5. Now you have created a new Xpub linked to your polkadot account.
 <img src="./assets/nbv_manage_key_with_xpub_screen.png" style="width: 30vw; min-width: 250px">
 </div>
 
@@ -136,6 +143,8 @@ To create and link a new xpub we have two options:
 
     **Note:** This image is just an example.
 
+    **Note:** If you aren't familiar with any concepts, we suggest reading the <a href="#refConcepts">last section</a> first.
+
 <div style="text-align: center">
 <img src="./assets/bw_seed_screen.png" style="width: 30vw; min-width: 250px">
 </div>
@@ -172,6 +181,9 @@ To create and link a new xpub we have two options:
 </div>
 
 4. Scan the XPUB qr.
+
+  **Note:** You must allow camera permission to scan qr.
+
 <div style="text-align: center">
 <img src="./assets/nbv_scanning_xpub.png" style="width: 30vw; min-width: 250px">
 </div>
@@ -197,8 +209,8 @@ To create and link a new xpub we have two options:
 
 3. Fill out the form with the following fields.
     * Title (Label)
-    * Number of cosigners
-    * Minimum threshold
+    * Number of cosigners: Number of cosigners allowed to sign a proposal.
+    * Minimum threshold: Minimum number of signatures needed to finalize a proposal.
     * Cosigners address
     * Include owner as cosigner (Default selected)
 <div style="text-align: center">
@@ -235,6 +247,8 @@ To create and link a new xpub we have two options:
 
     **Note:** Please follow the steps showed on the modal.
 
+    **Note:** If you followed successfully the modal steps you can skip the followings steps to export the vault.
+
 <div style="text-align: center">
 <img src="./assets/nbv_export_descriptor.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -252,12 +266,13 @@ To create and link a new xpub we have two options:
 
 9. Tap on "Scan or import a file".
 10. Scan this qr from Blue Wallet.
+    **Note:** You must allow camera permissions to scan qr.
 11. You should see the vault from Blue Wallet
 <div style="text-align: center">
 <img src="./assets/bw_vault_list.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-**Note:** To sign transactions you need to write the SEED of your xpub
+**Note:** ***To sign transactions you need to write the SEED of your xpub***
 
 12. On Blue Wallet click on a vault to see details, you should see the next screen.
 
@@ -296,10 +311,18 @@ To create and link a new xpub we have two options:
         1. Click on "Refresh and copy" button.
 
         2. Use this address to transfer founds from your preferred wallet.
-
 <div style="text-align: center">
 <img src="./assets/nbv_receive_address.png" style="width: 30vw; min-width: 250px" />
 </div>
+
+4. Click on **Refresh** button positioned on bottom right corner to confirm the sats was received successfully.
+<div style="text-align: center">
+<img src="./assets/nbv_refresh_button.png" style="width: 30vw; min-width: 250px" />
+</div>
+<div style="text-align: center">
+<img src="./assets/nbv_balance_widget.png" style="width: 30vw; min-width: 250px" />
+</div>
+
 
 
 <hr/>
@@ -350,6 +373,8 @@ To create and link a new xpub we have two options:
 
     **Note:** Please follow the steps showed on the modal.
 
+    **Note:** If you followed successfully the modal steps you can skip the followings steps to sign a proposal.
+
 <div style="text-align: center">
 <img src="./assets/nbv_signing_psbt_1.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -362,6 +387,8 @@ To create and link a new xpub we have two options:
 7. Tap on "Send" button.
 8. Tap on "..." button, positioned on top right corner.
 9. Tap on "Sign a transaction" option.
+    **Note:** If this option is not available please confirm you have imported your seed correctly on Blue Wallet. [Tutorial](#refExportVault)
+
 <div style="text-align: center">
 <img src="./assets/bw_sign_a_transaction_btn.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -416,11 +443,16 @@ To create and link a new xpub we have two options:
 
 3. Sign proposal using polkadot extension.
 4. Now the proposal is doing broadcasted, in a few minutes you should see the proposal with *Broadcasted* status.
+
+    **Note:** You can click on *Refresh* button positioned on bottom right corner to validate if the status has changed.
+<div style="text-align: center">
+<img src="./assets/nbv_refresh_button.png" style="width: 30vw; min-width: 250px" />
+</div>
 <div style="text-align: center">
 <img src="./assets/nbv_broadcasted_status.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-5. You can click on "Click to open explorer" link to see the details transaction in a btc explorer.
+5. You can click on "Click to open explorer" link to see the transaction details in a btc explorer.
 <div style="text-align: center">
 <img src="./assets/nbv_see_transaction_details_btn.png" style="width: 30vw; min-width: 250px" />
 <img src="./assets/nbv_btc_explorer.png" style="width: 30vw; min-width: 250px" />
