@@ -76,8 +76,7 @@ export default {
       try {
         this.accountInfo = await this.$store.$polkadotApi.getAccountInfo(this.address)
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     },
     getAddress (address) {

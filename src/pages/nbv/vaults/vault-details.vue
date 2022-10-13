@@ -107,9 +107,9 @@
                     span.text-bold.q-ml-sm '{{ description }}'
                       span.q-ml-sm.text-weight-regular vault.
                   li Tap on 'Manage Keys' button.
-                  li Search
+                  li Find your Xpub key
                     span.text-bold.q-ml-sm '{{ xpubForBW }}'
-                      span.q-ml-sm.text-weight-regular and tap on 'I have a seed for this key'.
+                      span.q-ml-sm.text-weight-regular on the cosigner list and tap on 'I have a seed for this key'.
                   li Write or paste your seed.
                   li Tap on "Import" button.
                   li Tap on "Save" button.
@@ -257,7 +257,7 @@ export default {
         }
       }, 10000)
     } catch (e) {
-      this.showNotification({ message: e.message || e, color: 'negative' })
+      this.handlerError(e)
     }
   },
   beforeUnmount () {
@@ -274,8 +274,7 @@ export default {
         })
         await this.getReceiveAddress()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -305,8 +304,7 @@ export default {
         })
         this.balance = balance
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     },
     async removeVault () {
@@ -320,8 +318,7 @@ export default {
           name: 'manageVaults'
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -341,8 +338,7 @@ export default {
         }
         this.isShowingVaultQR = true
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -359,8 +355,7 @@ export default {
           setTimeout(this.getReceiveAddress(), 2000)
         }
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -379,8 +374,7 @@ export default {
         this.showNotification({ message: this.$t('pages.nbv.proposals.proposalCreated') })
         this.getProposals()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -401,8 +395,7 @@ export default {
           })
         } else this.proposalsList = []
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -449,8 +442,7 @@ export default {
         await this.getReceiveAddress()
         this.copyTextToClipboard(this.vaultAddress, 'Vault address copied to clipboard')
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     },
     async refreshAndShowQrAddress () {
@@ -459,8 +451,7 @@ export default {
         this.addressQR = qrCode.create(this.vaultAddress)
         this.isShowingAddressQR = true
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     }
   }

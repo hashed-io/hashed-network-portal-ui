@@ -88,8 +88,7 @@ export default {
         this.showLoading()
         this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -99,8 +98,7 @@ export default {
         this.showLoading()
         this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.polkadotAddress })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -121,8 +119,7 @@ export default {
         }
         this.showNotification({ message: this.$t('pages.marketplace.createForm.marketplacecreatedSuccessfully') })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

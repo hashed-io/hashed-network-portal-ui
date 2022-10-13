@@ -62,8 +62,7 @@ export default {
           // console.log('vaults', vaults, this.vaultList)
         } else this.vaultList = []
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -80,8 +79,7 @@ export default {
         this.showNotification({ message: this.$t('pages.nbv.vaults.vaultCreated') })
         await this.getVaults()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -98,8 +96,7 @@ export default {
           this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })
         }
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

@@ -68,7 +68,7 @@
               no-caps
               @click="showSignPSBT"
               :disabled="isOffchainError || !hasPsbt"
-              v-if="!alreadySigned"
+              v-if="!alreadySigned && !isBroadcasted"
             )
             q-tooltip(v-if="isOffchainError") {{ validationMessage }}
             q-btn.full-width.no-padding(
@@ -303,7 +303,7 @@ export default {
         this.$router.replace({ name: 'manageVaults' })
       }
     } catch (e) {
-      this.showNotification({ message: e.message || e, color: 'negative' })
+      this.handlerError(e)
     }
   },
   beforeUnmount () {
@@ -327,8 +327,7 @@ export default {
         this.showNotification({ message: this.$t('pages.nbv.proposals.broadcasting') })
         this.updateProposal()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -346,8 +345,7 @@ export default {
         await this.updateProposal()
         setTimeout(this.updateProposal(), 5000)
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -364,8 +362,7 @@ export default {
           params: { vault: JSON.stringify(this.paramsParent) }
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -396,8 +393,7 @@ export default {
           threshold: this.threshold
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -426,8 +422,7 @@ export default {
         })
         this.showNotification({ message: this.$t('pages.nbv.proposals.psbtSavedSuccessfully') })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.isShowingSignPsbt = false
         this.hideLoading()
@@ -459,8 +454,7 @@ export default {
         }
         return userXpub.toHuman()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
         return undefined
       } finally {
         this.hideLoading()

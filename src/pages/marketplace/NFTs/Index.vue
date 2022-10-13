@@ -60,8 +60,7 @@ export default {
         this.lastInstance = 0
         this.uniques = response
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

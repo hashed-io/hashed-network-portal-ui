@@ -144,8 +144,7 @@ export default {
         address = address.replace('bitcoin:', '')
         this.recipientAddress = address
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.modals.qrScanner = false
       }

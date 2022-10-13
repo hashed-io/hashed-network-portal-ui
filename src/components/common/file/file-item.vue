@@ -58,8 +58,7 @@ export default {
           const file = await BrowserIpfs.retrieve(this.cid)
           window.open(URL.createObjectURL(file.payload))
         } catch (e) {
-          console.error(e)
-          this.showNotification({ message: e.message || e, color: 'negative' })
+          this.handlerError(e)
         } finally {
           this.loading = false
         }
