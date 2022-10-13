@@ -17,6 +17,10 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 // }
 
 module.exports = (cfg) => {
+  cfg.experiments = {
+    asyncWebAssembly: true
+  }
+
   cfg.module.rules.push({
     test: /\.pug$/,
     loader: 'pug-plain-loader'

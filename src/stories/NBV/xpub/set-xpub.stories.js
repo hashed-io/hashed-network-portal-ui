@@ -1,14 +1,11 @@
 // import ProposalItem from '../../components/proposals/proposal-card.vue'
 import SetXpubForm from '../../../components/nbv/xpub/set-xpub-form.vue'
 import { userEvent, within } from '@storybook/testing-library'
-import { action } from '@storybook/addon-actions'
+import { expect } from '@storybook/jest'
 
 export default {
   title: 'NBV/Xpub/xpub-form',
-  component: SetXpubForm,
-  argType: {
-    onsubmit: { action: 'submit' }
-  }
+  component: SetXpubForm
 }
 
 const Template = (args) => ({
@@ -17,13 +14,10 @@ const Template = (args) => ({
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup () {
     // Story args can be spread into the returned object
-    return { ...args }
-  },
-  methods: {
-    onsubmit: action('submit')
+    return { args }
   },
   // Then, the spread values can be accessed directly in the template
-  template: '<SetXpubForm @onSubmitted="onSubmit"/>'
+  template: '<SetXpubForm v-bind="args" @onSubmitted="args.onSubmitted"/>'
 })
 
 export const Base = Template.bind({})
@@ -31,19 +25,7 @@ Base.args = {
   userAddress: 'HnBKWAi6qrCHmiryEy9UPJnZsajWXXwEWjYRfYa9AqDQtVy',
   qr: 'false'
 }
-export const BaseSuccess = Template.bind({})
-BaseSuccess.args = {
-  userAddress: 'HnBKWAi6qrCHmiryEy9UPJnZsajWXXwEWjYRfYa9AqDQtVy',
-  qr: 'false'
-}
-BaseSuccess.play = async ({ args, canvasElement }) => {
-  const validXpub = 'xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz'
 
-  const canvas = within(canvasElement)
-
-  await userEvent.type(canvas.getByTestId('fullXpubInput'), validXpub)
-  await userEvent.click(canvas.getByTestId('submitButton'))
-}
 export const UsingFormBase = Template.bind({})
 UsingFormBase.args = {
   userAddress: 'HnBKWAi6qrCHmiryEy9UPJnZsajWXXwEWjYRfYa9AqDQtVy',
@@ -71,6 +53,7 @@ UsingFormSucess.play = async ({ args, canvasElement }) => {
   await userEvent.clear(canvas.getByTestId('derivationInput'))
   await userEvent.type(canvas.getByTestId('derivationInput'), validDerivationPath)
   await userEvent.click(canvas.getByTestId('submitButton'))
+  await expect(args.onSubmitted).toHaveBeenCalled()
 }
 export const UsingFormFail = Template.bind({})
 UsingFormFail.args = {
@@ -91,6 +74,7 @@ UsingFormFail.play = async ({ args, canvasElement }) => {
   await userEvent.type(canvas.getByTestId('derivationInput'), validDerivationPath)
   await userEvent.click(canvas.getByTestId('submitButton'))
 }
+
 export const OpenQR = Template.bind({})
 OpenQR.args = {
   userAddress: 'HnBKWAi6qrCHmiryEy9UPJnZsajWXXwEWjYRfYa9AqDQtVy',
@@ -98,5 +82,8 @@ OpenQR.args = {
 }
 OpenQR.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
-  await userEvent.click(canvas.getByTestId('openQr'))
+  // const grantedPermissions = canvas.getByTestId('grantedPermissions')
+  await userEvent.click(canvas.getByTestId('scanButton'))
+  // await sleep(10000)
+  // await expect(grantedPermissions).toBeInTheDocument()
 }

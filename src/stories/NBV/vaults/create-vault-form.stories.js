@@ -1,13 +1,10 @@
 import CreateVaultForm from '../../../components/nbv/vaults/create-vault-form.vue'
-import { action } from '@storybook/addon-actions'
+// import { expect } from '@storybook/jest'
 import { userEvent, within } from '@storybook/testing-library'
 import polkadotAddresses from './polkadotAddresses'
 export default {
   title: 'NBV/Vaults/CreateVaultForm',
-  component: CreateVaultForm,
-  argTypes: {
-    onSubmit: { action: 'submit' }
-  }
+  component: CreateVaultForm
 }
 
 const Template = (args) => ({
@@ -16,13 +13,10 @@ const Template = (args) => ({
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup () {
     // Story args can be spread into the returned object
-    return { ...args }
-  },
-  methods: {
-    onSubmit: action('submit')
+    return { args }
   },
   // Then, the spread values can be accessed directly in the template
-  template: '<CreateVaultForm @submittedForm = "onSubmit"/>'
+  template: '<CreateVaultForm v-bind="args" @submittedForm="args.submittedForm"/>'
 })
 
 export const Base = Template.bind({})
@@ -38,14 +32,16 @@ SuccessSubmit.play = async ({ args, canvasElement }) => {
 
   await userEvent.type(canvas.getByTestId('vault-name-input'), 'Test Vault')
 
+  await userEvent.click(canvas.getByTestId('toggle-include'))
   const cosignerInputs = canvas.getAllByTestId('vault-cosigner-input')
+  console.log('cosignerInputs', cosignerInputs)
   cosignerInputs.forEach(async (input, index) => {
-    await userEvent.type(canvas.getAllByTestId('account_input')[index], polkadotAddresses[index])
+    console.log('input', input, index, canvas.getAllByTestId('account_input')[index])
+    await userEvent.type(canvas.getAllByTestId('account_input')[index], polkadotAddresses[index], { await: 1000 })
   })
 
-  await userEvent.click(canvas.getByTestId('toggle-include'))
-
   await userEvent.click(canvas.getByTestId('submitButton'))
+  // await expect(args.submittedForm).toHaveBeenCalled()
 }
 
 export const FailSubmit = Template.bind({})
