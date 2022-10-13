@@ -63,10 +63,10 @@ jobs:
 
       # Setup quasar
       - name: Setup environment
-        with:
-          node-version: '16.x'
         run: |
           yarn install
+        with:
+          node-version: '16.x' 
           
 
       # Build App
