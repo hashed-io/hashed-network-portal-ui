@@ -46,7 +46,6 @@ export default {
       if (v) {
         try {
           const { state } = await navigator.permissions.query({ name: 'camera' })
-          console.log('cameraPermissions', state)
           if (state === 'granted' || state === 'prompt') {
             this.hasCameraPermission = true
           } else this.hasCameraPermission = false
@@ -71,7 +70,6 @@ export default {
     },
     async onQrDetected (xpub) {
       try {
-        console.log('on onQrDetected', xpub)
         this.isDecrypting = true
         const result = await new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -84,7 +82,6 @@ export default {
             }
           }, 1000)
         })
-        console.log('xpub decoded', result)
         this.$emit('xpubDecoded', result)
       } catch (e) {
         this.showNotification({

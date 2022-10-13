@@ -89,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('hashedConfidentialDocs', ['polkadotAddress'])
+    ...mapGetters('hcdWallet', ['polkadotAddress'])
   },
   async mounted () {
     this.updateAllList()
@@ -122,8 +122,7 @@ export default {
         this.loadMyDocuments()
         this.loadMySharedDocuments()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
         this.addResponse = undefined
       } finally {
         this.hideLoading()
@@ -131,7 +130,6 @@ export default {
     },
     async searchDoc (cid) {
       try {
-        console.log('searchDoc', this.cid)
         this.showLoading({
           message: this.$t('pages.hcd.documents.loadingMessage')
         })
@@ -142,8 +140,7 @@ export default {
           const payload = await this.$store.$hcd.viewSharedDataByCID(cid)
           return payload
         } catch (e) {
-          console.error('error', e)
-          this.showNotification({ message: e.message || e, color: 'negative' })
+          this.handlerError(e)
           throw new Error(e)
         }
       } finally {
@@ -158,8 +155,7 @@ export default {
         const list = await this.$store.$hcd.getMyDocuments({ address: this.polkadotAddress })
         this.myDocsList = list.map(v => { return { ...v, isOwner: true } })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -172,8 +168,7 @@ export default {
         const list = await this.$store.$hcd.getMySharedDocuments({ address: this.polkadotAddress })
         this.mySharedDocsList = list.map(v => { return { ...v, isShared: true } })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -186,8 +181,7 @@ export default {
         const list = await this.$store.$hcd.getSharedWithMeDocuments({ address: this.polkadotAddress })
         this.sharedWithMeDocsList = list.map(v => { return { ...v, isSharedWithMe: true } })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -201,8 +195,7 @@ export default {
         this.showNotification({ message: this.$t('pages.hcd.documents.successRemovedMessage') })
         this.updateAllList()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -218,8 +211,7 @@ export default {
         this.modals.isShowingDocumentForm = false
         this.documentFormProps = undefined
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -258,8 +250,7 @@ export default {
         }
         this.modals.isShowingDocumentForm = true
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -272,8 +263,7 @@ export default {
         const { payload } = await this.searchDoc(cid)
         this.openFile(payload)
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

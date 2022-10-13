@@ -1,17 +1,28 @@
-export const hashedLogin = async function ({ commit }, { userAddress, returnTo }) {
+export const hashedLogin = async function ({ commit }, { userAddress, meta, returnTo }) {
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
-    console.log('isLoggedIn', isLoggedIn)
     const to = returnTo || { name: 'root' }
+    // console.log('store', this)
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
+      commit('profile/setProfile', {
+        loginType: 'polkadotjs',
+        polkadotAddress: userAddress,
+        profileName: meta.name
+      }, { root: true })
+      this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
       commit('setIsHashedLoggedIn', true)
       localStorage.setItem('autoLoginAccount', userAddress)
-      console.log('returnUrl', to)
+      commit('profile/setProfile', {
+        loginType: 'polkadotjs',
+        polkadotAddress: userAddress,
+        profileName: meta.name
+      }, { root: true })
+      this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)
     }
   } catch (e) {
@@ -21,7 +32,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, returnTo }
 
 export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo }) {
   try {
-    console.log('hashedAutoLogin')
+    // console.log('hashedAutoLogin')
     if (localStorage.getItem('autoLoginAccount')) {
       await dispatch('hashedLogin', { returnTo, userAddress: localStorage.getItem('autoLoginAccount') })
     }
@@ -32,12 +43,12 @@ export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo 
 
 export const hashedLogout = async function ({ commit }) {
   try {
-    console.log('hashedLogout')
     await this.$hashedPrivateApi.logout()
+    this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
   } catch (error) {
-    console.log('Authenticator logout error', error)
+    console.error('Authenticator logout error', error)
   }
   localStorage.removeItem('autoLoginAccount')
-  this.$router.push({ name: 'login' })
+  // this.$router.push({ name: 'login' })
 }

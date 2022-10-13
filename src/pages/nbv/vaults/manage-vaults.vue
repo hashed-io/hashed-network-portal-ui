@@ -3,9 +3,9 @@
   //- Action Btn
   q-page-sticky(position="bottom-right" :offset="[18, 18]")
     q-btn(fab icon="refresh" color="secondary" @click="getVaults")
-      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") Refresh
+      q-tooltip(self="bottom left" anchor="top left" :offset="[10, 10]") {{ $t('pages.nbv.actions.refresh') }}
   .row.justify-between.q-mb-md
-    .text-h5 {{ $t('pages.nbv.vaults.manageVaults') }}
+    .text-overline {{ $t('pages.nbv.vaults.manageVaults') }}
     q-btn(
       :label="$t('pages.nbv.vaults.createVault')"
       color="primary"
@@ -18,7 +18,7 @@
   #modals
     q-dialog(v-model="isShowingCreateVault")
       q-card.modalSize
-        create-vault-form(@submittedForm="createNewVault" :signer="selectedAccount.address")
+        create-vault-form(@submittedForm="createNewVault" :signer="polkadotAddress")
 </template>
 
 <script>
@@ -36,12 +36,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
-  },
-  watch: {
-    selectedAccount () {
-      this.getVaults()
-    }
+    // ...mapGetters('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   async mounted () {
     this.getVaults()
@@ -51,7 +47,7 @@ export default {
       try {
         this.showLoading()
         const vaultsId = await this.$store.$nbvStorageApi.getVaultsByUser({
-          user: this.selectedAccount.address
+          user: this.polkadotAddress
         })
         if (!vaultsId.isEmpty) {
           const Ids = vaultsId.toJSON()
@@ -66,8 +62,7 @@ export default {
           // console.log('vaults', vaults, this.vaultList)
         } else this.vaultList = []
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -78,14 +73,13 @@ export default {
         // console.log('createNewVault', data)
         await this.$store.$nbvStorageApi.createVault({
           ...data,
-          user: this.selectedAccount.address
+          user: this.polkadotAddress
         })
         this.isShowingCreateVault = false
-        this.showNotification({ message: 'Vault created' })
+        this.showNotification({ message: this.$t('pages.nbv.vaults.vaultCreated') })
         await this.getVaults()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -94,16 +88,15 @@ export default {
       try {
         this.showLoading()
         const message = 'Test To Sign'
-        const response = await this.$store.$nbvStorageApi.signMessage(message, this.selectedAccount.address)
-        console.log('signMessage', response)
-        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.selectedAccount.address)
-        console.log('verifyMessage', response2)
+        const response = await this.$store.$nbvStorageApi.signMessage(message, this.polkadotAddress)
+        // console.log('signMessage', response)
+        const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.polkadotAddress)
+        // console.log('verifyMessage', response2)
         if (response2.isValid) {
-          this.showNotification({ message: 'Message Signed and Verified' })
+          this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })
         }
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

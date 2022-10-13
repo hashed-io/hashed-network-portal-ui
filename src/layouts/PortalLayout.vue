@@ -21,7 +21,7 @@ q-layout(view="lHh lpR lFf")
             //- v-if="(option.login === loginType || !option.login)"
             q-item-section(avatar)
                 q-icon(:name="option.icon")
-            q-item-section(avatar) {{ option.label }}
+            q-item-section(avatar) {{ $t(option.label) }}
       .fixed-bottom.q-mb-md.q-px-md
         q-btn.text-primary.full-width.q-ma-md(:label="selectedLang.label" color="white" icon-right="arrow_drop_down" no-caps)
           q-menu(fit auto-close)
@@ -52,32 +52,33 @@ export default {
       drawerLeft: false,
       optionsMenu: [
         {
-          label: 'NBV',
+          label: 'pages.nbv.appName',
           icon: 'currency_bitcoin',
           key: 'nbv',
           to: {
             name: 'manageVaults'
           },
-          login: 'polkadotjs'
+          // login: 'polkadotjs'
+          login: 'all'
         },
         {
-          label: 'Marketplaces',
+          label: 'pages.marketplace.appName',
           icon: 'store',
-          key: 'marketplaces',
+          key: 'marketplace',
           to: {
             name: 'marketplacesList'
           },
           login: 'polkadotjs'
         },
-        {
-          label: 'Sign Test',
-          icon: 'border_color',
-          key: 'sign',
-          to: {
-            name: 'signTest'
-          },
-          login: 'polkadotjs'
-        },
+        // {
+        //   label: 'pages.sign.appName',
+        //   icon: 'border_color',
+        //   key: 'sign',
+        //   to: {
+        //     name: 'signTest'
+        //   },
+        //   login: 'polkadotjs'
+        // },
         {
           label: 'HCD',
           icon: 'storage',
@@ -104,17 +105,17 @@ export default {
       return this.availableLanguages.find(v => v.key === this.$i18n.locale)
     },
     loginType () {
-      if (this.$store.getters['polkadotWallet/isLoggedIn']) {
-        return 'polkadotjs'
-      }
-      if (this.$store.getters['hashedConfidentialDocs/isLogged']) {
-        return 'hcd'
-      }
-      return undefined
+      // if (this.$store.getters['polkadotWallet/isLoggedIn']) {
+      //   return 'polkadotjs'
+      // }
+      // if (this.$store.getters['hcdWallet/isLogged']) {
+      //   return 'hcd'
+      // }
+      return this.$store.getters['profile/loginType']
     },
     optionsMenuByApp () {
       if (this.loginType) {
-        return this.optionsMenu.filter(v => v.login === this.loginType)
+        return this.optionsMenu.filter(v => (v.login === this.loginType || v.login === 'all'))
       }
       return this.optionsMenu
     }

@@ -2,8 +2,9 @@
 #container.q-gutter-y-sm
   q-card(v-for="cosigner in cosigners")
     account-item.full-width(:address="cosigner.address")
-        q-item-section(v-if="cosigner.signed" avatar)
-            q-chip(label="Signed" color="primary" text-color="white")
+        q-item-section(avatar)
+            q-chip(v-if="cosigner.signed" label="Signed" color="primary" text-color="white")
+            q-chip(v-else label="Waiting for signature" color="primary" text-color="white")
 </template>
 
 <script>

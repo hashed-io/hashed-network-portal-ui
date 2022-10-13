@@ -36,9 +36,9 @@
         status="error"
       )
       market-apply-form(
+        v-if="statusApplication !== 'Pending'"
         :market="{...market, admin, owner}"
-        :status="statusApplication"
-        @submit="onSubmitApplyForm"
+        @onSubmitApplyForm="onSubmitApplyForm"
       )
   //- Tabs
   q-tabs.q-mt-lg(
@@ -94,17 +94,18 @@ export default {
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount', 'isLoggedIn']),
+    ...mapGetters('profile', ['polkadotAddress']),
     isEnrolled () {
       return !!this.participants?.find(participant => {
-        return participant === this.selectedAccount.address
+        return participant === this.polkadotAddress
       })
     },
     statusApplication () {
       return this.application?.status || 'Not applied'
     },
     isAdmin () {
-      const isAdmin = this.admin && this.selectedAccount.address === this.admin.address
-      const isOwner = this.owner && this.selectedAccount.address === this.owner.address
+      const isAdmin = this.admin && this.polkadotAddress === this.admin.address
+      const isOwner = this.owner && this.polkadotAddress === this.owner.address
       return isAdmin || isOwner
     },
     admin () {
@@ -164,8 +165,7 @@ export default {
         this.market = market
         this.market.authorities = authorities
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -179,7 +179,7 @@ export default {
         }
         const { fields, custodianFields } = this.getStructureToSend(form)
         const propsToSubmit = {
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           fields,
           custodianFields: form?.custodian ? custodianFields : undefined
@@ -194,10 +194,9 @@ export default {
             ...propsToSubmit
           })
         }
-        this.showNotification({ message: 'Application was submitted', color: 'primary' })
+        this.showNotification({ message: this.$t('pages.marketplace.details.applicationWasSubmitted'), color: 'primary' })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -207,19 +206,18 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           feedback: applicant.feedback,
           approved: true
         })
         this.showNotification({
-          message: 'Application approved.',
+          message: this.$t('pages.marketplace.details.applicationApproved'),
           color: 'primary'
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -229,19 +227,18 @@ export default {
       try {
         this.showLoading()
         await this.$store.$marketplaceApi.enrollApplicant({
-          user: this.selectedAccount.address,
+          user: this.polkadotAddress,
           marketId: this.marketId,
           accountOrApplication: { Account: applicant.address },
           approved: false,
           feedback: applicant.feedback
         })
         this.showNotification({
-          message: 'Application rejected. ',
+          message: this.$t('pages.marketplace.details.applicationRejected'),
           color: 'primary'
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -250,12 +247,11 @@ export default {
     async getApplication () {
       try {
         this.application = await this.$store.$marketplaceApi.getApplicationStatusByAccount({
-          account: this.selectedAccount.address,
+          account: this.polkadotAddress,
           marketId: this.marketId
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     },
     async getFromHP (applicants) {
@@ -291,7 +287,6 @@ export default {
             cid
           }
         })
-        console.log('applicant.fields', applicant.fields)
         return applicant
       })
 
@@ -307,7 +302,6 @@ export default {
           let fileName
           if (file?.name) {
             const fileNameSplit = file.name.split('.')
-            console.log('fileNameSplit', fileNameSplit)
             const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
             const ext = fileNameSplit[1]
             fileName = filename + '.' + ext
@@ -315,8 +309,6 @@ export default {
             // if file.name is undefined, it means that the file is a note (String)
             fileName = file
           }
-          console.log('fileName To Send', fileName)
-          console.log('fileElement', fileElement)
           promises.push(hpService.shareNew({
             toUserAddress: administratorAddress,
             name: fileName,

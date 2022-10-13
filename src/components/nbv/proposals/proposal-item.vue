@@ -6,10 +6,7 @@ q-card.q-pa-sm.animated-item(@click="emitClick")
         .label-container
           .text-subtitle2.text-primary.hoverView Click to see details
         q-chip(v-bind="chipStatus")
-      .row.items-center
-        q-icon.q-mr-md(name="description" size="sm" color="secondary")
-        .text-subtitle2 Description:
-          span.text-body2.q-ml-sm {{ description }}
+      .title.text-subtitle2.text-overline {{ description }}
       .row.items-center
         .col-sm-12.col-md-6.min-h
           .row
@@ -109,6 +106,10 @@ export default {
       type: String,
       default: undefined
     },
+    threshold: {
+      type: [String, Number],
+      default: undefined
+    },
     signedPsbts: {
       type: Array,
       default: () => []
@@ -118,13 +119,19 @@ export default {
   computed: {
     chipStatus () {
       const chip = {
-        color: 'warning',
+        color: 'yellow-8',
         'text-color': 'white',
-        icon: 'error',
-        label: 'Pending',
+        // icon: 'error',
+        label: this.$t('pages.nbv.proposals.pendingStatus'),
         size: '1.2em',
         ripple: false,
         clickable: false
+      }
+      if (this.status && this.canFinalize && this.status.toLowerCase() !== 'broadcasted') {
+        return {
+          ...chip,
+          label: 'Ready to finalize'
+        }
       }
       if (this.status && this.status.toLowerCase() === 'pending') {
         return chip
@@ -132,16 +139,22 @@ export default {
         return {
           ...chip,
           color: 'positive',
-          label: 'Finalized'
+          // icon: 'cloud_done',
+          label: this.$t('pages.nbv.proposals.finalizedStatus')
         }
       } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
         return {
           ...chip,
           color: 'positive',
-          label: 'Broadcasted'
+          // icon: 'cloud_done',
+          label: this.$t('pages.nbv.proposals.broadcastedStatus')
         }
       }
       return undefined
+    },
+    canFinalize () {
+      // const signers = this.signedPsbts.filter(v => v.signed)
+      return !!(this.signedPsbts.length >= this.threshold)
     }
   },
   methods: {
@@ -180,4 +193,7 @@ export default {
 
 .animated-item:hover .hoverView
   display: block
+
+.title
+  font-size: 20px
 </style>

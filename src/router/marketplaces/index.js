@@ -9,9 +9,9 @@ const routes = {
       component: () => import('pages/marketplace/index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Marketplaces', icon: 'storefront' }
+          { name: 'marketplaces', icon: 'storefront' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -21,10 +21,10 @@ const routes = {
       component: () => import('pages/marketplace/details-market.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
-          { name: 'Detail', icon: 'info' }
+          { name: 'marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
+          { name: 'detail', icon: 'info' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -33,9 +33,9 @@ const routes = {
       component: () => import('pages/marketplace/custodian/index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Custodian', icon: 'shield' }
+          { name: 'custodian', icon: 'shield' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -44,9 +44,9 @@ const routes = {
       component: () => import('pages/marketplace/privacy/Index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'Privacy', icon: 'home' }
+          { name: 'privacy', icon: 'home' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -55,9 +55,9 @@ const routes = {
       component: () => import('pages/marketplace/NFTs/Index.vue'),
       meta: {
         breadcrumb: [
-          { name: 'NFTs Collections', icon: 'article' }
+          { name: 'NFTCollections', icon: 'article' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -67,10 +67,10 @@ const routes = {
       component: () => import('pages/marketplace/NFTs/DetailsUniquesPage.vue'),
       meta: {
         breadcrumb: [
-          { name: 'NFTs Collections', icon: 'article', to: { name: 'NFTs' } },
-          { name: 'Detail', icon: 'info' }
+          { name: 'NFTCollections', icon: 'article', to: { name: 'NFTs' } },
+          { name: 'detail', icon: 'info' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     },
     {
@@ -80,10 +80,10 @@ const routes = {
       component: () => import('pages/marketplace/NFTs/CreateUniquesPage.vue'),
       meta: {
         breadcrumb: [
-          { name: 'NFTs Collections', icon: 'article', to: { name: 'NFTs' } },
-          { name: 'Create', icon: 'create' }
+          { name: 'NFTCollections', icon: 'article', to: { name: 'NFTs' } },
+          { name: 'create', icon: 'create' }
         ],
-        app: 'marketplaces'
+        app: 'marketplace'
       }
     }
   ]

@@ -5,7 +5,7 @@
 <script>
 import ApplicantsList from 'src/components/marketplace/applicants-list.vue'
 import { authentication } from 'src/mixins/authentication'
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   name: 'CustodianIndex',
   components: {
@@ -19,10 +19,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('polkadotWallet', ['selectedAccount'])
+    // ...mapState('polkadotWallet', ['selectedAccount']),
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   watch: {
-    'selectedAccount.address': {
+    polkadotAddress: {
       async handler () {
         this.applicants = []
         const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
@@ -40,21 +41,20 @@ export default {
     ...mapMutations('polkadotWallet', ['setIsHashedLoggedIn']),
     async getApplications () {
       try {
-        this.showLoading({ message: 'Getting applications where you are custodian' })
+        this.showLoading({ message: this.$t('pages.marketplace.custodian.gettingApplicationsWhereYouAreCustodian') })
         const response = await this.$store.$marketplaceApi.getApplicationsByCustodian({
-          account: this.selectedAccount.address
+          account: this.polkadotAddress
         })
         const applicantsHP = await this.getFromHP(response)
         this.applicants = applicantsHP
       } catch (error) {
-        console.log(error)
+        console.error(error)
         this.showNotification({ message: error.message || error, color: 'negative' })
       } finally {
         this.hideLoading()
       }
     },
     async getFromHP (applicants) {
-      console.log('applicants', applicants)
       const promisesFields = []
       const tmpApplicants = applicants.filter(applicant => {
         return applicant.fields[0].custodianCid !== null

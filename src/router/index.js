@@ -28,8 +28,8 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
-    const isAuthenticated = store.getters['polkadotWallet/isLoggedIn'] || store.getters['hashedConfidentialDocs/isLogged']
-    console.log(isAuthenticated, 'Authenticated')
+    const isAuthenticated = store.getters['profile/isLogged']
+    // console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
       next({
@@ -46,19 +46,17 @@ export default route(function ({ store }) {
     } else {
       // Validation by Apps
       const app = to.meta.app
-      // eslint-disable-next-line no-undef-init
-      let loginType = undefined
-      if (store.getters['polkadotWallet/isLoggedIn']) {
-        loginType = 'polkadotjs'
+      const loginType = store.getters['profile/loginType']
+
+      if (app === 'nbv' && store.getters['profile/xpub'] === undefined) {
+        store.dispatch('profile/getXpub')
+        // next()
       }
-      if (store.getters['hashedConfidentialDocs/isLogged']) {
-        loginType = 'hcd'
-      }
-      // debugger
 
       if (app === 'hcd' && loginType === 'polkadotjs') {
         next({ name: 'nbv' })
-      } else if ((app === 'nbv' || app === 'marketplaces') && loginType === 'hcd') {
+      // } else if ((app === 'nbv' || app === 'marketplaces') && loginType === 'hcd') {
+      } else if ((app === 'marketplaces') && loginType === 'hcd') {
         next({ name: 'hcd' })
       } else next()
     }

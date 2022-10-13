@@ -1,11 +1,17 @@
 /* eslint-disable dot-notation */
 import PolkadotApi from '~/services/polkadotApi'
-import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
+import { MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
+// import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
 
+// const { NbvStorageApi } = require('../../../nbv-client-api')
+import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
+
+// const { AfloatApi } = require('../../../afloat-client-api')
+import { AfloatApi } from '@jmgayosso/afloat-client'
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -14,10 +20,10 @@ export default async ({ app, store }) => {
     const api = new PolkadotApi()
     const bdkApi = new BdkApi()
     await api.connect()
-    console.log('PolkadotApiCreated', api)
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
-    const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
-    const marketplaceApi = new MarketplaceApi(api, showGlobalLoading)
+    // const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
+    const palletId = process.env.GATED_MARKETPLACE_ID
+    const marketplaceApi = new MarketplaceApi(api, showGlobalLoading, palletId)
     const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
     const uniquesApi = new UniquesApi(api, showGlobalLoading)
     // Connect Hashed private service
@@ -38,7 +44,6 @@ export default async ({ app, store }) => {
       })
       await hashedPrivateApi.connect()
       store['$hashedPrivateApi'] = hashedPrivateApi
-      console.log('Hashed Private connected', hashedPrivateApi)
     } catch (e) {
       console.error(e)
     }
@@ -49,11 +54,21 @@ export default async ({ app, store }) => {
       ipfsAuthHeader,
       chainURI: process.env.WSS,
       appName: process.env.APP_NAME,
-      signer: process.env.SIGNER
+      faucetServerUrl: process.env.FAUCET_SERVER_URL
     })
 
     await hashedConfidentialDocs.init()
 
+    const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
+    const afloatApi = new AfloatApi({
+      polkadotApi: hashedConfidentialDocs.getPolkadotApi(),
+      projectId: process.env.IPFS_PROJECT_ID,
+      secretId: process.env.IPFS_PROJECT_SECRET,
+      IPFS_URL: process.env.IPFS_URL,
+      notify: showGlobalLoading
+    })
+
+    store['$afloatApi'] = afloatApi
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi
     store['$marketplaceApi'] = marketplaceApi

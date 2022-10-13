@@ -14,6 +14,14 @@ export default {
     waitingWeb3: 'Esperando la extensión de polkadot web3',
     waitingSub: 'Esperando cambios en la cadena'
   },
+  login: {
+    login: 'Iniciar Sesión',
+    chooseAnAccount: 'Elija una cuenta de su extensión de polkadot',
+    notHaveAccounts: 'ene cuentas en la exten',
+    or: 'O',
+    signinWithGoogle: 'Acceder con Google',
+    logout: 'Cerrar sesión'
+  },
   breadcrumb: {
     confidentialDocuments: 'Documentos confidenciales'
   },
@@ -38,61 +46,152 @@ export default {
       fileRequired: 'El archivo es requerido',
       greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}',
       lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}',
-      notEqual: 'El valor no debe ser igual al propietario'
+      notEqual: 'El valor no debe ser igual al propietario',
+      betweenString: 'El valor debe estar entre {min} y {max} caracteres'
     }
   },
   pages: {
     nbv: {
+      appName: 'NVB',
+      mainOptions: {
+        myVaults: 'Mis Baules',
+        extendedKeys: 'Llaves extendidas'
+      },
+      breadcrumbs: {
+        myVaults: 'Mis Baúles',
+        vaultDetails: 'Detalles del Baúl',
+        proposalDetails: 'Detalles de la propuesta',
+        extendedKeys: 'Llaves extendidas'
+      },
       xpub: {
         label: 'Label',
-        publicKey: 'Public Key',
-        labelDesc: 'Disabled temporally',
-        extendedPublicKeyInfo: 'An extended public key, or xpub, is a public key which can be used to derive child public keys as part of a Hierarchical Deterministic (HD) wallet. An extended public key is a Bitcoin standard established by BIP 32 and is mainly used by a wallet behind the scenes in order to derive public keys.',
-        textInfo: 'Enter your extended public key by scanning the QR code from BlueWallet (easiest) or via the input form.',
-        masterFingerPrint: 'Master fingerprint',
-        pubicKeyDesc: 'Please Insert an extended public key with "Zpub" prefix',
-        fingerprintDesc: 'The extended key fingerprint is defined as the first 8 alphanumeric characters',
-        fingerprintTooltip: 'The fingerprint of a public key is defined in BIP 32 as the first 4 bytes of the RIPEMD160 hash of the SHA256 hash of the public key.',
-        derivationPath: 'Derivation Path',
-        derivationPathDesc: 'Contains information about a key’s depth and index',
-        xpubDesc: 'Please pase or scan your XPUB from blue wallet',
+        publicKey: 'Llave Pública',
+        labelDesc: 'Desactivado temporalmente',
+        extendedPublicKeyInfo: 'Una clave pública extendida, o xpub, es una clave pública que puede utilizarse para derivar claves públicas secundarias como parte de un monedero determinista jerárquico (HD). Una clave pública extendida es un estándar de Bitcoin establecido por BIP 32 y se utiliza principalmente por un monedero entre bastidores para derivar claves públicas.',
+        textInfo: 'Introduzca su clave pública ampliada escaneando el código QR de BlueWallet (lo más fácil) o a través del formulario de entrada.',
+        masterFingerPrint: 'Huella dactilar principal',
+        pubicKeyDesc: 'Por favor, inserte una clave pública extendida con el prefijo "Zpub"',
+        fingerprintDesc: 'La huella digital de la clave extendida se define como los primeros 8 caracteres alfanuméricos',
+        fingerprintTooltip: 'La huella digital de una clave pública se define en el BIP 32 como los 4 primeros bytes del hash RIPEMD160 del hash SHA256 de la clave pública.',
+        derivationPath: 'Ruta de derivación',
+        derivationPathDesc: 'Contiene información sobre la profundidad y el índice de una clave',
+        xpubDesc: 'Por favor, pase o escanee su XPUB desde blue wallet',
         xpub: 'XPUB',
-        xpubPlaceholder: 'Paste or write your XPUB'
+        xpubPlaceholder: 'Pegue o escriba su XPUB',
+        managePublicKeys: 'Gestionar las claves públicas',
+        removeYourXpub: 'Remueva su XPUB',
+        setXpub: 'Establecer XPUB',
+        useForm: 'Utilizar Formulario',
+        yourXpubWasAdded: 'Tu XPUB fue añadido',
+        yourXpubWasRemoved: 'Tu XPUB fue removido'
       },
       vaults: {
         manageVaults: 'Administrar Baules',
-        descriptionLabel: 'Enter a public label for this vault',
-        cosigners: 'Cosigners',
-        cosignersLabelDesc: 'Enter a valid public address for each cosigner',
+        descriptionLabel: 'Introduzca una etiqueta pública para este baúl',
+        cosigners: 'Confirmantes',
+        cosignersLabelDesc: 'Introduzca una dirección pública válida para cada cofirmante',
         mOfn: 'M of N',
         description: 'Descripción',
         owner: 'Propietario',
         threshold: 'Threshold',
         clickToSeeDetails: 'Click para ver detalles',
-        createVault: 'Crear Baúl'
+        createVault: 'Crear Baúl',
+        createNewVault: 'Crear nuevo baúl',
+        label: 'Etiqueta',
+        accountAddress: 'Dirección de la cuenta',
+        includeOwnerAsCosigner: 'Incluir al propietario como cofirmante',
+        vaultCreated: 'Baúl creado',
+        messageSignedAndVerified: 'Mensaje firmado y verificado',
+        deleteVault: 'Borrar Baúl',
+        vaultDetails: 'Detalles del Baúl',
+        exportDescriptor: 'Exportar Descriptor',
+        pending: 'Pendiente',
+        vaultId: 'ID del Baúl',
+        balance: 'Balance',
+        receiveAddress: 'Dirección de recepción',
+        getReceiveAddress: 'Obtener la dirección de recepción',
+        refreshReceiveAddress: 'Actualizar la dirección de recepción',
+        outputDescriptor: 'Descriptor de salida',
+        vaultsBalanceMustBeGreaterThanZero: 'El balance de la baúl debe ser mayor que 0',
+        descriptorQr: 'QR del descriptor',
+        creatingDescriptor: 'Por favor, espere un momento, estamos creando el descriptor',
+        accountDuplicated: 'Esta cuenta está duplicada'
       },
       proposals: {
-        create_proposal: 'Create new proposal',
-        descriptionDesc: 'Write a brief description',
-        recipientAddressDesc: 'Write a valid BTC address to send satoshis',
-        amountDesc: 'Write amount in satoshis',
-        titleStep1: 'Export PSBT',
-        titleStep2: 'Import signed PSBT',
-        titleStep3: 'Finalize',
-        signPsbtStep1: "Please scan these qr codes on Blue wallet to sign the transaction, you must use the vault's transaction screen",
-        signPsbtStep2: 'Scan the qr codes you exported from Blue wallet after you signed the transaction',
-        signPsbtSaveDesc: 'Save your signed psbt',
-        signPsbtFinalizeDesc: 'Complete the transaction, ready to broadcast',
-        signPsbtBroadcastDesc: 'Broadcast the transaction',
-        saveBtn: 'Save',
-        finalizeBtn: 'Finalize',
-        broadcastBtn: 'Broadcast'
+        create_proposal: 'Crear una nueva propuesta',
+        descriptionDesc: 'Escriba una breve descripción',
+        recipientAddressDesc: 'Escribe una dirección BTC válida para enviar satoshis',
+        amountDesc: 'Escriba la cantidad en satoshis',
+        titleStep1: 'Exportar PSBT',
+        titleStep2: 'Importar firma PSBT',
+        titleStep3: 'Finalizar',
+        signPsbtStep1: 'Por favor, escanee estos códigos qr en Blue wallet para firmar la transacción, debe utilizar la pantalla de transacciones de la bóveda',
+        signPsbtStep2: 'Escanee los códigos qr que exportó desde Blue wallet después de firmar la transacción',
+        signPsbtSaveDesc: 'Guarda tu psbt firmado',
+        signPsbtFinalizeDesc: 'Completa la transacción, lista para emitir',
+        signPsbtBroadcastDesc: 'Emitir la transacción',
+        saveBtn: 'Guardar',
+        finalizeBtn: 'Finalizar',
+        broadcastBtn: 'Emitir',
+        proposals: 'Propuestas',
+        createProposal: 'Crear propuesta',
+        updatingProposal: 'Actualizando Propuesta',
+        proposalCreated: 'Propuesta Creada',
+        proposalDetails: 'Detalles de la propuesta',
+        signPSBT: 'Firmar PSBT',
+        deleteProposal: 'Eliminar Propuesta',
+        proposalId: 'Proposal Id',
+        status: 'Status',
+        satoshiAmount: 'Cantidad de Satoshi',
+        feeInSatoshiPerVirtualByte: 'Tarifa en satoshi por byte virtual',
+        toAddress: 'Para la dirección',
+        tx: 'Tx',
+        Proposer: 'Proponente',
+        finalizeTxx: 'Finalizar Txx',
+        broadcastTx: 'Broadcast Tx',
+        finalizing: 'Finalizando',
+        broadcasting: 'Broadcasting',
+        pending: 'Pendiente',
+        signThePsbtWithValidXPUB: 'Por favor, firme el PSBT con un XPUB válido',
+        psbtSavedSuccessfully: 'PSBT guardado con éxito',
+        creatingPSBT: 'Por favor, espere un momento, estamos creando el PSBT',
+        description: 'Descripción',
+        recipientAddress: 'Recipient address',
+        amountInSatoshi: 'Cantidad en Satoshi'
         // signPsbtStep1: ''
+      },
+      list: {
+        thereAreNotVaultsYet: 'Aun no hay baúles'
+      },
+      form: {
+        vault: {
+          createNewVault: 'Crear nuevo baúl'
+        }
+      },
+      actions: {
+        refresh: 'Actualizar',
+        copyToClipboard: 'Copiar al portapapeles'
       }
     },
     marketplace: {
+      appName: 'Mercados',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Añadir Marketplace',
+      mainOptions: {
+        marketplaces: 'Mercados',
+        custodian: 'Custodios',
+        privacy: 'Privacidad',
+        nftCollections: 'Colecciones NFT'
+      },
+      breadcrumbs: {
+        marketplaces: 'Mercados',
+        detail: 'Detalles',
+        custodian: 'Custodios',
+        privacy: 'Privacidad',
+        NFTCollections: 'Colecciones NFT',
+        create: 'Crear',
+        afloat: 'Afloat Api ejemplo'
+      },
       tabs: {
         myMarketplaces: 'Mis Marketplaces',
         allMarketplaces: 'Todos los marketplaces',
@@ -110,7 +209,10 @@ export default {
         notesTitle: 'Notas',
         filesTitle: 'Archivos',
         enrollButton: 'Inscribir',
-        rejectButton: 'Rechazar'
+        rejectButton: 'Rechazar',
+        applicationWasSubmitted: 'La solicitud fue presentada',
+        applicationApproved: 'La solicitud fue aprovada',
+        applicationRejected: 'La solicitud fue rechazada'
       },
       applyForm: {
         title: 'Aplicar para unirse al marketplace',
@@ -132,7 +234,9 @@ export default {
         title: 'Crear un nuevo Marketplace',
         label: 'Etiqueta',
         placeholder: 'Escriba una descripción para el marketplace',
-        button: 'Crear una nueva tienda'
+        button: 'Crear una nueva tienda',
+        marketplacecreatedSuccessfully: 'Mercado creado con éxito',
+        loggedToCreate: 'Debe iniciar sesión para crear un mercado'
       },
       searchInput: {
         label: 'Buscar',
@@ -145,7 +249,11 @@ export default {
         freezer: 'Congelador'
       },
       applicants: {
-        title: 'Aplicantes'
+        title: 'Aplicantes',
+        feedback: 'Feedback'
+      },
+      custodian: {
+        gettingApplicationsWhereYouAreCustodian: 'Getting applications where you are custodian'
       },
       privacy: {
         title: 'Playground de solución de privacidad',
@@ -153,7 +261,8 @@ export default {
           title: 'Subir archivo',
           fileInput: 'Seleccionar archivo',
           custodian: 'Dirección del custodio',
-          shareFile: 'Compartir archivo con otra dirección'
+          shareFile: 'Compartir archivo con otra dirección',
+          noFileToOpen: 'No hay archivo para abrir'
         },
         downloadSection: {
           title: 'Descargar archivo',
@@ -169,15 +278,29 @@ export default {
         query: 'Petición: ',
         response: 'Respuesta: '
       },
+      list: {
+        youDontHaveMarketplacesYet: 'Aún no tiene mercados',
+        marketplacesHaveNotYetBeenCreated: 'Todavía no se han creado mercados'
+      },
+      actions: {
+        loggedDownloadFile: 'Debe iniciar sesión para descargar un archivo'
+      },
       taxCredits: {
-        createForm: 'Create new Unique',
+        createForm: 'Crear nuevo Unique',
         title: 'Lista de créditos de impuestos',
         emptyList: 'No hay créditos de impuestos aún',
         details: {
           title: 'Detalles unique {class}',
-          frozen: 'Frozen',
-          active: 'Active'
-
+          admin: 'Administrador',
+          user: 'Usuario',
+          frozen: 'Congelado',
+          active: 'Activo',
+          attribute: 'Atributo',
+          value: 'Valor',
+          file: 'Archivo',
+          downloading: 'Descargando archivo',
+          numberItems: 'Número de elementos',
+          numberMetadata: 'Número de metadatos'
         },
         labels: {
           attributeLabel: 'Atributo',
@@ -196,6 +319,14 @@ export default {
         messages: {
           uniqueCreated: 'Unique creado'
         }
+      }
+    },
+    nfts: {
+      loadingUniques: 'Cargando los NFTs...',
+      element: {
+        title: 'Único',
+        owner: 'Propietario',
+        issuer: 'Editor'
       }
     },
     hcd: {
@@ -225,6 +356,9 @@ export default {
         successAddedMessage: 'Documento agregado exitosamente.',
         documents: 'Documentos'
       }
+    },
+    sign: {
+      appName: 'Prueba de Firma'
     }
   }
 }

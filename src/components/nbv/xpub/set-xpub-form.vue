@@ -4,7 +4,7 @@
     q-toggle(
       data-testid="toggleForm"
       data-cy="toggleForm"
-      label="Use form"
+      :label="$t('pages.nbv.xpub.useForm')"
       v-model="useForm"
     )
     #useForm.q-gutter-y-sm(v-if="useForm")
@@ -62,29 +62,41 @@
           .text-body2 {{ $t('pages.nbv.xpub.derivationPathDesc')  }}
     #scanQR(v-else)
       .row.q-col-gutter-x-md
-        .col-7
-            q-input(
-                data-testid="fullXpubInput"
-                data-cy="fullXpubInput"
-                v-model="fullXpub"
-                :placeholder="$t('pages.nbv.xpub.xpubPlaceholder')"
-                :label="$t('pages.nbv.xpub.xpub')"
-                stack-label
-                outlined
-                :rules="[rules.required, rules.isValidFullXpub]"
-            )
-                template(v-slot:append)
-                    q-icon.icon-btn(data-testid="openQr" data-cy="openQr" name="qr_code_scanner" @click="toggleQRScanner(true)")
-                        q-tooltip {{ $t('pages.nbv.xpub.xpubDesc') }}
+        //- .col-7
+            //- q-input(
+            //-     data-testid="fullXpubInput"
+            //-     data-cy="fullXpubInput"
+            //-     v-model="fullXpub"
+            //-     :placeholder="$t('pages.nbv.xpub.xpubPlaceholder')"
+            //-     :label="$t('pages.nbv.xpub.xpub')"
+            //-     stack-label
+            //-     outlined
+            //-     :rules="[rules.required, rules.isValidFullXpub]"
+            //- )
+            //-     template(v-slot:append)
+            //-         q-icon.icon-btn(data-testid="openQr" data-cy="openQr" name="qr_code_scanner" @click="toggleQRScanner(true)")
+            //-             q-tooltip {{ $t('pages.nbv.xpub.xpubDesc') }}
         .col
-          .text-body2 {{ $t('general.xpubDesc')  }}
+          .text-body2 {{ $t('pages.nbv.xpub.xpubDesc')  }}
+
     q-btn.q-mt-sm(
       data-testid="submitButton"
       data-cy="submitButton"
-      label="Set XPUB"
+      :label="$t('pages.nbv.xpub.setXpub')"
       color="primary"
       no-caps
       type="submit"
+      v-if="useForm"
+    )
+    q-btn.q-mt-sm(
+      v-else
+      data-testid="scanButton"
+      data-cy="scanButton"
+      :label="$t('pages.nbv.xpub.scanXpub')"
+      color="primary"
+      no-caps
+      icon="qr_code_scanner"
+      @click="toggleQRScanner(true)"
     )
   #modals
     qr-decode-xpub(ref="qrDecodeXpub" @xpubDecoded="onDecode" )
@@ -131,6 +143,7 @@ export default {
     onDecode (xpub) {
       this.toggleQRScanner(false)
       this.fullXpub = xpub.fullXpub
+      this.setXpub()
     },
     setXpub () {
       const XPUB = (!this.useForm) ? this.fullXpub : `[${this.masterFingerprint}${this.derivation.replace('m', '')}]${this.publicKey}`

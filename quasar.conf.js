@@ -64,7 +64,8 @@ module.exports = configure(function (ctx) {
         PRIVATE_URI: process.env.PRIVATE_URI,
         BDK_SERVICES_URL: process.env.BDK_SERVICES_URL,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-        SIGNER: process.env.SIGNER
+        FAUCET_SERVER_URL: process.env.FAUCET_SERVER_URL,
+        GATED_MARKETPLACE_ID: process.env.GATED_MARKETPLACE_ID
       },
       // transpile: false,
       // publicPath: '/',
@@ -110,6 +111,30 @@ module.exports = configure(function (ctx) {
           }))
         chain.plugin('node-polyfill-webpack-plugin')
           .use(NodePolyfillPlugin, [{ extensions: ['js', 'vue'] }])
+        // chain.module
+        //   .rule('wasm')
+        //   .test(/\.wasm(\.bin)?$/)
+        //   .use('file-loader')
+        //   .loader('file-loader')
+        //   .end()
+        // chain.experiments = chain.experiments || {}
+        // chain.experiments.syncWebAssembly = true
+        chain.merge({
+          experiments: {
+            asyncWebAssembly: true
+          }
+        })
+        chain.merge({
+          resolve: {
+            fallback: {
+              fs: false
+            }
+          }
+        })
+        // chain.experiments = {
+        //   ...chain.experiments,
+
+        // }
       }
     },
 

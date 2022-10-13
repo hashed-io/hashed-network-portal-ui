@@ -20,7 +20,7 @@ class BasePolkadotApi {
    */
   async callTx (extrinsicName, signer, params) {
     await this.polkadotApi.setWeb3Signer(signer)
-    console.log('callTx params', params)
+    // console.log('callTx params', params)
     let unsub
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
@@ -69,7 +69,7 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exEntriesQuery (queryName, params, pagination, subTrigger) {
-    console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
+    // console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
     if (!params) {
       return this.polkadotApi.api.query[this.palletName][queryName].entries()
     }
@@ -98,24 +98,24 @@ class BasePolkadotApi {
       type: 'listening'
     })
     const { events = [], status } = e
-    console.log('events', events)
-    console.log('status', status)
+    // console.log('events', events)
+    // console.log('status', status)
     if (status.isFinalized || status.isInBlock) {
       // console.log(`Transaction included at blockHash ${status.asFinalized}`)
 
       // Loop through Vec<EventRecord> to display all events
       events.forEach(({ phase, event: { data, method, section } }) => {
-        console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
+        // console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
       })
 
       events.filter(({ event: { section } }) => section === 'system').forEach(({ event: { method, data } }) => {
         if (method === 'ExtrinsicFailed') {
           // txFailedCb(result);
-          console.log('ExtrinsicFailed', data)
+          // console.log('ExtrinsicFailed', data)
           const [dispatchError] = data
           let errorInfo
 
-          console.log('ExtrinsicFailed error', data)
+          console.error('ExtrinsicFailed error', data)
           // decode the error
           if (dispatchError.isModule) {
             const decoded = data.registry.findMetaError(dispatchError.asModule)
@@ -126,13 +126,13 @@ class BasePolkadotApi {
           }
 
           // console.error('errorInfo', errorInfo)
-          console.log('unsub', unsub)
+          // console.log('unsub', unsub)
           unsub()
           reject(`Extrinsic failed: ${errorInfo}`)
           // const mod = data[0].asModule
         } else if (method === 'ExtrinsicSuccess') {
-          console.log('ExtrinsicSuccess', data)
-          console.log('unsub', unsub)
+          // console.log('ExtrinsicSuccess', data)
+          // console.log('unsub', unsub)
           unsub()
           resolve(data)
           // txSuccessCb(result);

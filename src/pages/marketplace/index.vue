@@ -26,13 +26,13 @@
 
   q-tab-panels(v-model="tab")
     q-tab-panel(name="myMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" emptyLabel="You don't have marketplaces yet" @selectedMarketplace="onSelectMarketplace")
+      marketplace-list(:type="'my-marketplaces'" :marketplaces="myMarketplaces" :emptyLabel="$t('pages.marketplace.list.youDontHaveMarketplacesYet')" @onSelectedMarketplace="onSelectMarketplace")
     q-tab-panel(name="allMarketplaces" class="tabPanel bg-inherit")
-      marketplace-list(:marketplaces="allMarketplaces" emptyLabel="Marketplaces have not yet been created" @selectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
+      marketplace-list(:marketplaces="allMarketplaces" :emptyLabel="$t('pages.marketplace.list.marketplacesHaveNotYetBeenCreated')" @onSelectedMarketplace="onSelectMarketplace" @onLoadMarkets="onLoadMoreMarkets")
   #modals
     q-dialog(v-model="modals.isShowingAddMarketplace" persistent)
       q-card.modalSize
-        create-marketplace-form(@submittedForm="createMarketplace")
+        create-marketplace-form(@onSubmittedForm="createMarketplace")
 </template>
 
 <script>
@@ -62,7 +62,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('polkadotWallet', ['selectedAccount'])
+    // ...mapGetters('polkadotWallet', ['selectedAccount'])
+    ...mapGetters('profile', ['polkadotAddress'])
   },
   watch: {
     selectedAccount (account) {
@@ -87,8 +88,7 @@ export default {
         this.showLoading()
         this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -96,10 +96,9 @@ export default {
     async getMyMarketplaces () {
       try {
         this.showLoading()
-        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.selectedAccount.address })
+        this.myMarketplaces = await this.$store.$marketplaceApi.getMyMarketplaces({ accountId: this.polkadotAddress })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -107,11 +106,10 @@ export default {
     async createMarketplace (marketplace) {
       try {
         this.showLoading()
-        console.log('createMarketplace', marketplace)
         this.modals.isShowingAddMarketplace = false
         await this.$store.$marketplaceApi.createMarketplace({
-          admin: this.selectedAccount.address,
-          user: this.selectedAccount.address,
+          admin: this.polkadotAddress,
+          user: this.polkadotAddress,
           label: marketplace.label
         })
         this.getMyMarketplaces()
@@ -119,16 +117,14 @@ export default {
         if (this.tab !== 'myMarketplaces') {
           this.tab = 'myMarketplaces'
         }
-        this.showNotification({ message: 'Marketplace created successfully' })
+        this.showNotification({ message: this.$t('pages.marketplace.createForm.marketplacecreatedSuccessfully') })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
     },
     onSelectMarketplace (marketplace) {
-      console.log('onSelectMarketplace', marketplace)
       this.$router.push({
         name: 'marketplace-details',
         query: { marketId: marketplace.id }
@@ -139,7 +135,7 @@ export default {
       if (isLoggedIn) {
         this.modals.isShowingAddMarketplace = true
       } else {
-        this.showNotification({ message: 'You must be logged in to create a marketplace', color: 'negative' })
+        this.showNotification({ message: this.$t('pages.marketplace.createForm.loggedToCreate'), color: 'negative' })
       }
     }
   }

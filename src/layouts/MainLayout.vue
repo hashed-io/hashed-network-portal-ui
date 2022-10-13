@@ -13,21 +13,21 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ option.label }}
+              q-item-label {{ $t(option.label) }}
         q-space
         q-btn.q-mr-md(flat padding="0px 0px 0px 0px" no-caps text-color="white")
           selected-account-btn(:selectedAccount="selectedAccount")
           //- accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
-        q-btn(label="Logout" no-caps @click="logout")
+        q-btn(:label="$t('login.logout')" no-caps @click="logout")
         //- q-toolbar-title.q-ml-md Hashed Template App
         //- div Quasar v{{ $q.version }}
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
-          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="breadcrumb.name" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
+          q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`pages.${app}.breadcrumbs.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
 
     q-page-container
       .row.justify-center
-        .col-10
+        .col-xs-12.col-md-11.col-lg-10
           .q-px-lg.q-pa-lg
             not-connected(v-if="!isConnectedToServer")
             not-accounts(v-else-if="!selectedAccount")
@@ -42,6 +42,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
+// import { useI18n } from 'vue-i18n'
 // import { TreasuryApi } from '~/services/polkadot-pallets'
 export default defineComponent({
   name: 'MainLayout',
@@ -61,6 +62,7 @@ export default defineComponent({
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
+    // const { t } = useI18n()
 
     // Dynamic options for each app
     const pageOptionsDictionary = {
@@ -68,38 +70,39 @@ export default defineComponent({
         {
           to: { name: 'manageVaults' },
           keyActive: 'My Vaults',
-          label: 'My Vaults'
+          label: 'pages.nbv.mainOptions.myVaults'
         },
         {
           to: { name: 'manageXpub' },
           keyActive: 'Extended Keys',
-          label: 'Extended Keys'
+          label: 'pages.nbv.mainOptions.extendedKeys'
         }
       ],
-      marketplaces: [
+      marketplace: [
         {
           to: { name: 'marketplacesList' },
           keyActive: 'Marketplaces',
-          label: 'Marketplaces'
+          label: 'pages.marketplace.mainOptions.marketplaces'
         },
         {
           to: { name: 'custodian' },
           keyActive: 'Custodian',
-          label: 'Custodian'
+          label: 'pages.marketplace.mainOptions.custodian'
         },
         {
           to: { name: 'privacy' },
           keyActive: 'Privacy',
-          label: 'Privacy'
+          label: 'pages.marketplace.mainOptions.privacy'
         },
         {
           to: { name: 'NFTs' },
-          keyActive: 'NFTs Collections',
-          label: 'NFTs Collections'
+          keyActive: 'NFTCollections',
+          label: 'pages.marketplace.mainOptions.nftCollections'
         }
       ]
     }
 
+    const app = ref(undefined)
     const breadcrumbList = ref(undefined)
     const pageOptions = ref([])
     watchEffect(() => updateBreadcrumbs($route))
@@ -127,7 +130,8 @@ export default defineComponent({
       breadcrumbList.value = v.meta.breadcrumb
       // Dynamic options
       if (v.meta.app) {
-        console.log('v.meta.app', v.meta.app)
+        app.value = v.meta.app
+        // console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }
@@ -171,7 +175,8 @@ export default defineComponent({
       isConnectedToServer,
       pageOptions,
       toggleDrawer,
-      logout
+      logout,
+      app
     }
   }
 })

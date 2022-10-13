@@ -15,10 +15,11 @@
             q-item-section.q-pa-sm
               q-item-label {{ $t(option.label) }}
         q-space
-        q-btn.q-mr-md(v-if="loginType === 'loginType'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
-          selected-account-btn(:selectedAccount="selectedAccount")
-        q-btn.no-padding(no-caps)
-          SSOAccountItem(v-if="loginType === 'hcd'" v-bind="ssoAccountInfo")
+        q-btn.q-mr-md(v-if="loginType === 'polkadotjs'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
+            selected-account-btn(v-bind="polkadotUserInfo")
+        //- .text-caption Hola
+        q-btn.no-padding(no-caps v-if="loginType === 'hcd'")
+          SSOAccountItem( v-bind="ssoAccountInfo")
           q-menu
             q-list
               q-item(clickable v-close-popup @click="copyTextToClipboard(ssoAccountInfo.polkadotAddress)")
@@ -32,11 +33,12 @@
       q-toolbar(class="bg-white text-primary")
         q-breadcrumbs(active-color="primary" style="font-size: 16px")
           q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
-
+        q-toolbar-title
+        .text-caption(v-if="xpub && $route && $route.meta?.app === 'nbv'") XPUB: ...{{ xpub.substr(-8) }}
     q-page-container
       .row.justify-center
-        .col-10
-          .q-px-lg.q-pa-lg
+        .col-12
+          q-page.q-py-md.q-px-lg
             not-connected(v-if="!isConnectedToServer")
             not-accounts(v-else-if="!selectedAccount")
             router-view(v-else)
@@ -73,23 +75,29 @@ export default defineComponent({
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
+    const xpub = computed(() => $store.getters['profile/xpub'])
+
     const ssoAccountInfo = computed(() => {
-      if ($store.getters['hashedConfidentialDocs/isLogged']) {
+      if ($store.getters['hcdWallet/isLogged']) {
         return {
-          displayName: $store.getters['hashedConfidentialDocs/accountInfo'].given_name,
-          profilePicture: $store.getters['hashedConfidentialDocs/accountInfo'].picture,
-          polkadotAddress: $store.getters['hashedConfidentialDocs/polkadotAddress']
+          displayName: $store.getters['hcdWallet/accountInfo'].given_name,
+          profilePicture: $store.getters['hcdWallet/accountInfo'].picture,
+          polkadotAddress: $store.getters['hcdWallet/polkadotAddress']
+        }
+      }
+      return undefined
+    })
+    const polkadotUserInfo = computed(() => {
+      if ($store.getters['polkadotWallet/isLoggedIn']) {
+        return {
+          username: $store.getters['profile/profileInfo'].profileName,
+          address: $store.getters['profile/profileInfo'].polkadotAddress
         }
       }
       return undefined
     })
     const loginType = computed(() => {
-      if ($store.getters['polkadotWallet/isLoggedIn']) {
-        return 'polkadotjs'
-      } else if ($store.getters['hashedConfidentialDocs/isLogged']) {
-        return 'hcd'
-      }
-      return undefined
+      return $store.getters['profile/loginType']
     })
 
     // Dynamic options for each app
@@ -97,12 +105,12 @@ export default defineComponent({
       nbv: [
         {
           to: { name: 'manageVaults' },
-          keyActive: 'My Vaults',
+          keyActive: 'myVaults',
           label: 'My Vaults'
         },
         {
           to: { name: 'manageXpub' },
-          keyActive: 'Extended Keys',
+          keyActive: 'extendedKeys',
           label: 'Extended Keys'
         }
       ],
@@ -128,6 +136,16 @@ export default defineComponent({
           to: { name: 'hcd' },
           keyActive: 'confidentialDocuments',
           label: 'pages.hcd.documents.documents'
+        },
+        {
+          to: { name: 'create-asset' },
+          keyActive: 'createAsset',
+          label: 'pages.hcd.afloat.tab'
+        },
+        {
+          to: { name: 'get-all-assets' },
+          keyActive: 'getAllAssets',
+          label: 'pages.hcd.afloat.tabGetAllAssets'
         }
       ]
     }
@@ -146,9 +164,11 @@ export default defineComponent({
       }
     })
 
-    function logout () {
+    async function logout () {
+      $store.dispatch('hcdWallet/logout')
       $store.dispatch('polkadotWallet/hashedLogout')
-      $store.dispatch('hashedConfidentialDocs/logout')
+      await $router.push({ name: 'login' })
+      $store.commit('profile/cleanProfile')
     }
 
     function onSelectAccount (account) {
@@ -160,7 +180,7 @@ export default defineComponent({
       breadcrumbList.value = v.meta.breadcrumb
       // Dynamic options
       if (v.meta.app) {
-        console.log('v.meta.app', v.meta.app)
+        // console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }
@@ -207,7 +227,9 @@ export default defineComponent({
       logout,
       loginType,
       ssoAccountInfo,
-      copyTextToClipboard
+      copyTextToClipboard,
+      polkadotUserInfo,
+      xpub
     }
   }
 })

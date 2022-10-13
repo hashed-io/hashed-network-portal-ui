@@ -11,8 +11,8 @@
     :rules="rules"
     @keyup="onTypeTagFile"
     data-cy="name_file"
-    testid="name_file"
-    data-testid="name_file"
+    testid="filename"
+    :data-testid="'filename'"
   )
   q-file(
     class="col-6 q-my-xs"
@@ -105,21 +105,17 @@ export default {
     }
   },
   beforeMount () {
-    console.log('Init ipfs input', this.modelValue)
     const value = this.modelValue
     if (value && typeof value === 'string') {
       this.initWithString = true
       this.typeCid = this.modelValue.value
-      console.log('Case 1 filled', this.modelValue)
       this.$emit('update:modelValue', { display: null, value: this.modelValue })
     } else if (value && this.modelValue.value !== '') {
-      console.log('Case 2 filled', this.modelValue)
       if (this.modelValue.length > 0) {
         this.labelFile = this.modelValue.map(file => file.display).join(', ')
       }
       this.labelFile = 'Upload file(s)'
     } else if (!value || !this.modelValue.display) {
-      console.log('Case 3 filled')
       this.labelFile = 'Upload file(s)'
       this.$emit('update:modelValue', [])
     }
@@ -127,7 +123,6 @@ export default {
   methods: {
     async updateModel (e) {
       this.file = e
-      console.log('Update model', e)
       const data = {
         label: this.tagFile,
         file: e
@@ -135,7 +130,6 @@ export default {
       this.$emit('update:modelValue', data)
     },
     validFile (file) {
-      console.log('Valid file', file, typeof file)
       if (file != null && this.loading) return true
       else if (!this.loading && this.initWithString) return true
       else if (!this.loading && typeof file === 'object') return true

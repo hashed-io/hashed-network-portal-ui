@@ -8,50 +8,85 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       v-close-popup
       size="sm"
     )
-    .text-h4.q-mb-lg Create new vault
+    .text-h4.q-mb-lg {{ $t('pages.nbv.vaults.createNewVault')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-input(
           data-testid="vault-name-input"
           data-cy="vault-name-input"
           outlined
-          label="Label"
+          :label="$t('pages.nbv.vaults.label')"
           v-model="description"
           :rules="[rules.required]"
         )
       .col
         .text-body2 {{ $t('pages.nbv.vaults.descriptionLabel')  }}
     .row.items-center.q-col-gutter-md.q-my-sm
-      //- .col-2
-      //-   q-input(
-      //-     outlined
-      //-     label="Threshold"
-      //-     v-model="threshold"
-      //-     :rules="[rules.required, rules.positiveInteger, rules.greaterOrEqualThan(minCosigners), rules.lessOrEqualThan(maxCosigners)]"
-      //-   )
       .col-7
-        q-range(
-          data-testid="vault-threshold-input"
-          v-model="thresholdRange"
+        q-slider(
+          data-testid="vault-cosigner-amount"
+          :model-value="cosignersAmount"
+          @change="val => { cosignersAmount = val }"
           marker-labels
           markers
           drag-range
           snap
-          :min="minCosigners"
+          :inner-min="2"
+          :min="1"
           :max="7"
+          track-color="grey-4"
+          inner-track-color="grey"
+          label-always
         )
       .col
-        .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
+        //- .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }} amount
+        .text-body2 Number of cosigners
     .row.items-center.q-col-gutter-md.q-my-sm
-      .col-7.justify-end
-        .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
+      .col-7
+        q-slider(
+          data-testid="vault-cosigner-amount"
+          v-model="threshold"
+          marker-labels
+          markers
+          drag-range
+          snap
+          :inner-min="2"
+          :inner-max="cosignersAmount"
+          :min="1"
+          :max="7"
+          track-color="grey-4"
+          inner-track-color="grey"
+          label-always
+        )
       .col
-        .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
+        .text-body2 Minimum {{ $t('pages.nbv.vaults.threshold')  }}
+    //- .row.items-center.q-col-gutter-md.q-my-sm
+    //-   .col-7
+    //-     q-range(
+    //-       data-testid="vault-threshold-input"
+    //-       v-model="thresholdRange"
+    //-       marker-labels
+    //-       markers
+    //-       drag-range
+    //-       snap
+    //-       :min="minCosigners"
+    //-       :max="7"
+    //-       debounce="500"
+    //-     )
+    //-   .col
+    //-     .text-body2 {{ $t('pages.nbv.vaults.cosigners')  }}
+    .row.items-center.q-col-gutter-md.q-my-md.q-mb-xl
+      .text-body2.text-right You are creating a {{ `${threshold} of ${cosignersAmount}`  }} multisignature vault
+      //- .col-7
+        //- .text-body2.text-right {{ `${thresholdRange.min} / ${thresholdRange.max}`  }}
+      //- .col
+      //-   //- .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
+      //-   .text-body2 Multisignature vault
     #cosigners
       .row
         .col-7
           .row.justify-between.q-mr-sm.q-mb-sm
-            .text-subtitle2 Cosigners
+            .text-subtitle2 {{ $t('pages.nbv.vaults.cosigners')  }}
             //- q-btn(
             //-   icon="add"
             //-   size="sm"
@@ -66,7 +101,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
               account-input(
                 data-testid="vault-cosigner-input-own"
                 data-cy="vault-cosigner-input-own"
-                label='Account address'
+                :label="$t('pages.nbv.vaults.accountAddress')"
                 v-model="ownerAddress"
                 outlined
                 readonly
@@ -83,7 +118,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
               account-input(
                 data-testid="vault-cosigner-input"
                 data-cy="vault-cosigner-input"
-                label='Account address'
+                :label="$t('pages.nbv.vaults.accountAddress')"
                 v-model="cosigner.address"
                 outlined
                 :rules="[rules.required, rules.isValidPolkadotAddress, rules.notOwnAccount(signer), notDuplicatedAccounts]"
@@ -98,11 +133,11 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
         .col
           .text-body2 {{ $t('pages.nbv.vaults.cosignersLabelDesc')  }}
     .q-col-gutter-md.q-my-sm
-      q-toggle(data-testid="toggle-include" data-cy="toggle-include" label="Include owner as cosigner" v-model="includeOwnerAsCosigner")
+      q-toggle(data-testid="toggle-include" data-cy="toggle-include" :label="$t('pages.nbv.vaults.includeOwnerAsCosigner')" v-model="includeOwnerAsCosigner")
     q-btn.float-right.q-mb-md(
         data-testid="submitButton"
         data-cy="submitButton"
-        label="Create Vault"
+        :label="$t('pages.nbv.vaults.createVault')"
         color="primary"
         size="md"
         type="submit"
@@ -135,14 +170,19 @@ export default {
   data () {
     return {
       description: undefined,
-      threshold: undefined,
+      threshold: 2,
       includeOwnerAsCosigner: true,
       thresholdRange: {
         min: 1,
         max: 1
       },
+      cosignersAmount: 3,
       cosigners: [{
         id: 0,
+        address: undefined
+      },
+      {
+        id: 1,
         address: undefined
       }],
       ownerAddress: undefined
@@ -159,7 +199,7 @@ export default {
       return this.cosigners.length
     },
     realCosignerNumber () {
-      let result = this.thresholdRange.max
+      let result = this.cosignersAmount
       if (this.includeOwnerAsCosigner) {
         result -= 1
       }
@@ -176,12 +216,12 @@ export default {
       await this.$nextTick()
       this.$refs.form.resetValidation()
     },
-    async 'thresholdRange.max' () {
+    async 'cosignersAmount' () {
       this.setCosigners()
     }
   },
   mounted () {
-    this.thresholdRange.max = 7
+    this.thresholdRange.max = 2
     this.ownerAddress = this.signer
   },
   methods: {
@@ -210,8 +250,7 @@ export default {
       try {
         const data = {
           description: this.description,
-          // threshold: this.threshold,
-          threshold: this.thresholdRange.min,
+          threshold: this.threshold,
           cosigners: this.cosigners.map(v => v.address),
           includeOwnerAsCosigner: this.includeOwnerAsCosigner
         }
@@ -238,7 +277,7 @@ export default {
     notDuplicatedAccounts (account) {
       const exist = this.cosigners.filter(e => e.address === account)
       if (exist && exist.length > 1) {
-        return 'This account is duplicated'
+        return this.$t('pages.nbv.vaults.accountDuplicated')
       } return true
     }
   }

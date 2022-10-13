@@ -13,7 +13,7 @@ export const validation = {
         containLessThanCosigners: value => val => val.length <= value || this.$t('forms.errors.containLessThanCosigners', { value }),
         // isAccountAvailable: async account => (await this.isAccountFree(account.toLowerCase())) || this.$t('forms.errors.accountNotAvailable', { account }),
         isInteger: val => Number.isInteger(parseInt(val)) || this.$t('forms.errors.integer'),
-        positiveInteger: val => parseInt(val) > 0 || this.$t('forms.errors.positiveInteger'),
+        positiveInteger: val => Number.parseFloat(val) > 0 || this.$t('forms.errors.positiveInteger'),
         required: val => !!val || this.$t('forms.errors.required'),
         isValidXPub: val => /([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub'),
         isValidFullXpub: val => /(\[[0-Z]{8}\/[0-9]{1,2}(')(\/)[0-9]{1,2}(')\/[0-9]{1,2}(')\/[0-9](')(]){1,30})([xyYzZtuUvV]pub[1-9A-HJ-NP-Za-km-z]{80,120})/.test(val) || this.$t('forms.errors.isNotValidXpub'),
@@ -24,6 +24,7 @@ export const validation = {
         notOwnAccount: value => val => !(value === val) || this.$t('forms.errors.notOwnAccount'),
         greaterOrEqualThanString: value => val => val.length >= value || this.$t('forms.errors.greaterOrEqualThanString', { value }),
         lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value }),
+        betweenLengthString: (min, max) => val => (val.length >= min && val.length <= max) || this.$t('forms.errors.betweenString', { min, max }),
         notEqual: value => val => !(value === val) || this.$t('forms.errors.notEqual'),
         // eslint-disable-next-line no-useless-escape
         password: value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#\$%\^&\*])(?=.{8,})/.test(value) || this.$t('forms.errors.password')

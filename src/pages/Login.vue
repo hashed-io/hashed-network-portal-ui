@@ -7,21 +7,21 @@
        .row.justify-center.q-mb-md
         img.logoImg(src="~/assets/portal/logo-gradient-white.png")
        q-card.login-card.q-pa-md
-        .text-h5.text-white Login
+        .text-h5.text-white {{ $t('login.login') }}
         #polkadotLogin.q-gutter-y-md(v-if="availableAccounts && availableAccounts.length > 0")
-            .text-caption.text-white Choose an account from your polkadot extension
+            .text-caption.text-white {{ $t('login.chooseAnAccount') }}
             q-btn.full-width.q-mt-lg(flat padding="0px 0px 0px 0px" no-caps text-color="white")
-                selected-account-btn.full-width(:selectedAccount="selectedAccount" arrow)
+                selected-account-btn.full-width(:username="selectedAccount.meta.name" :address="selectedAccount.address" :isSelector="true")
                 accounts-menu(:accounts="availableAccounts" @selectAccount="onSelectAccount" :selectedAccount="selectedAccount")
             q-btn.full-width.text-primary(
-                label="Login"
+                :label="$t('login.login')"
                 @click="login"
                 color="accent"
                 no-caps
             )
         #notPolkadotAccounts(v-else)
-          .text-caption.text-white You do not have accounts on polkadot js extension
-        .text-caption.text-center.text-white.q-mt-lg OR
+          .text-caption.text-white {{ $t('login.notHaveAccounts') }}
+        .text-caption.text-center.text-white.q-mt-lg.text-uppercase {{ $t('login.or') }}
         #googleLogin.q-mt-lg
           #google-signin-btn.flex.justify-center(class="g-signin2")
   #modals
@@ -72,6 +72,8 @@ export default {
     google.accounts.id.renderButton(
       document.getElementById('google-signin-btn'),
       {
+        locale: this.$i18n.locale,
+        text: this.$t('login.signinWithGoogle'),
         theme: 'filled_black',
         size: 'large',
         width: '300'
@@ -96,8 +98,7 @@ export default {
         returnTo: this.returnTo
       })
     } catch (e) {
-      console.error('error', e)
-      this.showNotification({ message: e.message || e, color: 'negative' })
+      this.handlerError(e)
     } finally {
       this.hideLoading()
     }
@@ -113,11 +114,12 @@ export default {
         })
         this.$store.dispatch('polkadotWallet/hashedLogin', {
           userAddress: this.selectedAccount.address,
+          meta: this.selectedAccount.meta,
+          type: this.selectedAccount.type,
           returnTo: this.returnTo
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -129,7 +131,9 @@ export default {
         })
         const { credential } = response
         if (credential) {
+          // console.log('JWT:', credential)
           const account = Jwt.decodeToken(credential)
+          // console.log('Decoded JWT:', account)
           this.hcdPasswordProps = {
             ssoProvider: 'Google',
             ssoUserId: account.sub,
@@ -139,29 +143,34 @@ export default {
           }
           // this.showHCDPasswordModal = true
           // this.hideLoading()
-          const hcgResponse = await this.$store.$hcd.ssoGoogleLogin({
-            ssoProvider: 'Google',
-            ssoUserId: account.sub,
-            email: account.email,
+          await this.$store.$hcd.ssoGoogleLogin({
+            /** Important do not change this value */
+            ssoProvider: 'hashed-portal-google',
+            jwt: credential,
             clientId: process.env.GOOGLE_CLIENT_ID
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
-          console.log('hcgResponse', hcgResponse)
-          this.$store.commit('hashedConfidentialDocs/setAccount', {
+          this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,
             ssoImage: account.picture,
             ssoAccount: account,
             polkadotAddress
           })
+          this.$store.commit('profile/setProfile', {
+            loginType: 'hcd',
+            polkadotAddress,
+            profilePicture: account.picture,
+            profileName: account.given_name
+          }, { root: true })
           this.$router.push({ name: 'hcd' })
         }
       } catch (e) {
-        console.error('error', e)
         // failed calling method: list of google client:drive.files, with params:{ "q": "name = 'hcd.metadata'", "spaces": "appDataFolder" }, error: { "error": "access_denied" }
         let message = e.message || e
         message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
         this.showNotification({ message, color: 'negative' })
+        // this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -171,14 +180,13 @@ export default {
         this.showLoading({
           message: 'Login through Hashed Confidential Documents'
         })
-        const hcgResponse = await this.$store.$hcd.login({
+        await this.$store.$hcd.login({
           ssoProvider,
           ssoUserId,
           email
         })
         const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
-        console.log('hcgResponse', hcgResponse)
-        this.$store.commit('hashedConfidentialDocs/setAccount', {
+        this.$store.commit('hcdWallet/setAccount', {
           ssoProvider,
           ssoUserId,
           ssoImage,
@@ -187,8 +195,7 @@ export default {
         })
         this.$router.push({ name: 'hcd' })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
