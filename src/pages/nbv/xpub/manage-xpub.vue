@@ -99,8 +99,9 @@ export default {
         this.modals.showingConfirmationSeed = false
         await this.getXpub()
       } catch (e) {
-        console.error(e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
+        // console.error(e)
+        // this.showNotification({ message: e.message || e, color: 'negative' })
       } finally {
         this.hideLoading()
       }
@@ -117,9 +118,8 @@ export default {
           this.hideLoading()
         }, 1000)
       } catch (e) {
-        console.error(e)
+        this.handlerError(e)
         this.hideLoading()
-        this.showNotification({ message: e.message || e, color: 'negative' })
       }
     },
     async getXpub () {
@@ -133,8 +133,7 @@ export default {
         }
         this.$store.dispatch('profile/getXpub')
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -151,8 +150,7 @@ export default {
         this.getXpub()
         // this.showLoading({ message: this.$t('general.waitingSub') })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -165,8 +163,7 @@ export default {
         // this.showLoading({ message: this.$t('general.waitingSub') })
         this.getXpub()
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

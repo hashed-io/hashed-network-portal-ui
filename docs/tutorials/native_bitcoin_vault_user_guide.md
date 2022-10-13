@@ -13,18 +13,10 @@ This tutorial will go through NBV user flow! The following tutorials will show s
     
 **Note:** If you aren't familiar with any concepts, we suggest reading the <a href="#refConcepts">last section</a> first.
 
-**Note:** If you are starting with BlueWallet or Polkadot{JS} you can go through the following tutorials.
- * Create an account using <a>Polkadot{JS}</a>
-<hr>
-
 ### Sections
- <a href="#refLogin">Login</a>
+ <a href="#refLogin">How to Login</a>
 
- <a href="#createANewXpubFromNBV">createANewXpubFromNBV</a>
-
- <a href="#refCreateXPUB">How to create a new xpub from NBV web.</a>
-
- <a href="#refLinkXPUB">How to link your XPUB from Blue Wallet</a>
+ <a href="#refCreateXPUB">How to create and link a new xpub</a>
 
  <a href="#refCreateVault">How to create a new vault</a>
 
@@ -39,32 +31,50 @@ This tutorial will go through NBV user flow! The following tutorials will show s
  <a href="#refFinalizeProposal">How to finalize and broadcast a proposal.</a>
 
 <hr>
-First, we need to access to the Hashed Network Portal <a href="https://portal-dev.hashed.systems/login" target="_blank">site</a>.
+<div id="refLogin"></div>
+
+### How to Login
+
+First, we need to access to the Hashed Network Portal <a href="https://hashed-portal-dev.hashed.systems/login" target="blank">site</a>.
 
 <div style="text-align: center">
 <img src="./assets/login_screen.png" style="width: 30vw; min-width: 250px">
 </div>
 
-<div id="refLogin"></div>
+1. If you have more of one account imported on **Polkadot extension** you can choose an account.
+    <div style="text-align: center">
+    <img src="./assets/portal_choose_account_login.png" style="width: 30vw; min-width: 250px">
+    </div>
 
-### Login
-1. Login using polkadot {JS}
-    * Choose an account
-    * Click on "Login" button
-    * Sign transaction (You must write your account password)
-<div style="text-align: center">
-<img src="./assets/sign_message.png" style="width: 30vw; min-width: 250px">
-</div>
+2. Click on "Login" button
+    <div style="text-align: center">
+    <img src="./assets/portal_login_btn.png" style="width: 30vw; min-width: 250px">
+    </div>
 
-2. If you logged correctly you will see the following screen.
-<div style="text-align: center">
-<img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
-</div>
+3. Sign transaction (You must write your account password)
+    <div style="text-align: center">
+    <img src="./assets/sign_message.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+4. If you logged correctly you will see the following screen.
+    <div style="text-align: center">
+    <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
+    </div>
 
 <hr/>
+<div id="refCreateXPUB"></div>
+
+### How to create a new xpub.
+To create and link a new xpub we have two options:
+
+* [Create a new xpub from NBV](#createANewXpubFromNBV): Create a new xpub and link to your polkadot account using **Hashed portal web**.
+
+* [Create a new xpub from Blue Wallet App](#createANewXpubFromBW): Create a new xpub using **Blue Wallet App** then you have to [Link your xpub](#refLinkXPUB) using the portal.
+
+<hr>
 <div id="createANewXpubFromNBV"></div>
 
-### How to create a new xpub from NBV web.
+### How to create a new xpub from NBV ( recommended option).
 
 1. Go to *Extended Keys* page in the portal.
     <div style="text-align: center">
@@ -91,9 +101,9 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 
 <hr>
 
-<div id="refCreateXPUB"></div>
+<div id="createANewXpubFromBW"></div>
 
-### How to create a new xpub from Blue Wallet
+### How to create a new xpub from Blue Wallet (Option 2)
 
 **Note:** You can create a new xpub from NBV web application (recommended) <a href="#createANewXpubFromNBV">How to create a new xpub from NBV web</a>.
 
@@ -144,7 +154,7 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 
 <div id="refLinkXPUB"></div>
 
-### How to link your XPUB from Blue Wallet
+### How to link your XPUB from Blue Wallet (Just valid when you create an Xpub from Blue Wallet)
 1. Go to "Extended Keys" page.
 <div style="text-align: center">
 <img src="./assets/nbv_extended_keys_screen.png" style="width: 30vw; min-width: 250px">
@@ -222,6 +232,9 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 </div>
 
 5. You should see the next screen.
+
+    **Note:** Please follow the steps showed on the modal.
+
 <div style="text-align: center">
 <img src="./assets/nbv_export_descriptor.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -262,7 +275,7 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 
 15. Write your SEED and click on Save.
 <div style="text-align: center">
-<img src="./assets/bw_write_seed.png" style="width: 30vw; min-width: 250px" />
+<img src="./assets/bw_write_seed_screen.png" style="width: 30vw; min-width: 250px" />
 </div>
 
 <hr/>
@@ -274,13 +287,16 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 1. Go to "My vaults" page.
 2. Click on the vault you want to transfer to see details.
 
-3. Get receive address to transfer.
+3. Get **receive address** to transfer btc to vault from your preferred wallet.
      * Using QR
         1. Click on "Refresh and show qr" button.
-        2. Scan this qr from your wallet to transfer founds.
+        2. Scan this qr from your preferred wallet to transfer founds.
+
      * Using Address
         1. Click on "Refresh and copy" button.
-        2. Use this address to transfer founds from your wallet.
+
+        2. Use this address to transfer founds from your preferred wallet.
+
 <div style="text-align: center">
 <img src="./assets/nbv_receive_address.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -330,45 +346,53 @@ First, we need to access to the Hashed Network Portal <a href="https://portal-de
 <img src="./assets/nbv_sign_psbt_button.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-5. On Blue Wallet go to home screen and click on previously imported vault.
+5. You should see the next screen.
+
+    **Note:** Please follow the steps showed on the modal.
+
+<div style="text-align: center">
+<img src="./assets/nbv_signing_psbt_1.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+6. On Blue Wallet go to home screen and click on previously imported vault.
 <div style="text-align: center">
 <img src="./assets/bw_vault_details.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-6. Tap on "Send" button.
-7. Tap on "..." button, positioned on top right corner.
-7. Tap on "Sign a transaction" option.
+7. Tap on "Send" button.
+8. Tap on "..." button, positioned on top right corner.
+9. Tap on "Sign a transaction" option.
 <div style="text-align: center">
 <img src="./assets/bw_sign_a_transaction_btn.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-8. Scan this qr from Blue Wallet.
+10. Scan this qr from Blue Wallet.
 <div style="text-align: center">
 <img src="./assets/bw_scanning_descriptor.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-9. When appear "Co-sign this transaction" message tap on "Yes" button.
+11. When appear "Co-sign this transaction" message tap on "Yes" button.
 <div style="text-align: center">
 <img src="./assets/bw_cosign_transaction.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-10. Tap on "Provide signature" button, now you should see a QR.
+12. Tap on "Provide signature" button, now you should see a QR.
 <div style="text-align: center">
 <img src="./assets/bw_provide_signature.png" style="width: 30vw; min-width: 250px" />
 <img src="./assets/bw_qr_psbt_signed.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-11. From web app click on "Continue" button.
+13. From web app click on "Continue" button.
 <div style="text-align: center">
 <img src="./assets/nbv_signing_psbt_1.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-12. Scan QR generated from Blue Wallet on Web app.
+14. Scan QR generated from Blue Wallet on Web app.
 <div style="text-align: center">
 <img src="./assets/nbv_signing_psbt_2.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-13. Sign transaction using polkadot extension.
+15. Sign transaction using polkadot extension.
 
 <hr/>
 

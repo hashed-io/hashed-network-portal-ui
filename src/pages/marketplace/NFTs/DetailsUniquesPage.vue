@@ -120,8 +120,7 @@ export default {
         })
         this.uniqueData = response
       } catch (e) {
-        console.error(e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -142,8 +141,7 @@ export default {
         link.href = window.URL.createObjectURL(blob)
         window.open(link.href)
       } catch (e) {
-        console.error(e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

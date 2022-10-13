@@ -208,8 +208,7 @@ export default {
         const encoder = new Encoder()
         this.psbtQR = encoder.psbtToQRCode(this.psbt, 200)
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -226,8 +225,7 @@ export default {
           // this.$refs.stepper.next()
         }, 500)
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

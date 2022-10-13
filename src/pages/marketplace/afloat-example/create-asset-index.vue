@@ -208,8 +208,7 @@ export default {
           await this.$store.$afloatApi.createAsset({ collectionId: undefined, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
           this.showNotification({ message: 'Asset created successfully' })
         } catch (e) {
-          console.error(e || e.message)
-          this.showNotification({ message: e.message || e, color: 'negative' })
+          this.handlerError(e)
         } finally {
           this.hideLoading()
         }
@@ -223,8 +222,7 @@ export default {
         this.attributes[index].value = this.prefixHCD + cid
         this.showNotification({ message: 'File uploaded successfully to Confidential Documents' })
       } catch (e) {
-        console.error(e || e.message)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }

@@ -165,8 +165,7 @@ export default {
         this.market = market
         this.market.authorities = authorities
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
       }
@@ -197,8 +196,7 @@ export default {
         }
         this.showNotification({ message: this.$t('pages.marketplace.details.applicationWasSubmitted'), color: 'primary' })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -219,8 +217,7 @@ export default {
           color: 'primary'
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -241,8 +238,7 @@ export default {
           color: 'primary'
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       } finally {
         this.hideLoading()
         this.getMarketplaceInfo()
@@ -255,8 +251,7 @@ export default {
           marketId: this.marketId
         })
       } catch (e) {
-        console.error('error', e)
-        this.showNotification({ message: e.message || e, color: 'negative' })
+        this.handlerError(e)
       }
     },
     async getFromHP (applicants) {

@@ -1,3 +1,5 @@
+import { Notify } from 'quasar'
+
 const errorMaps = [
   {
     message: 'Work in progress!',
@@ -103,11 +105,21 @@ const errorMaps = [
 
 const handlerError = (error) => {
   const message = error.message || error
-  const isErrorOnMaps = errorMaps.find(e => e.code === message)
+  const isErrorOnMaps = errorMaps.find(e => message.includes(e.code))
+  let errorMessage = message
   if (isErrorOnMaps) {
-    console.error(isErrorOnMaps.message)
+    errorMessage = isErrorOnMaps.message
   }
-  console.error(error, errorMaps, message)
+  console.error('handlingError:', errorMessage, error)
+  Notify.create({
+    message: errorMessage,
+    color: 'negative',
+    position: 'bottom',
+    timeout: 10000,
+    actions: [
+      { icon: 'notification_important', color: 'white', handler: () => { /* ... */ } }
+    ]
+  })
 }
 
 export default {
