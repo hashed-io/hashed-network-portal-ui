@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 // const ESLintPlugin = require('eslint-webpack-plugin')
-// const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
 // const options = {
 //   extensions: ['js', 'vue'],
@@ -17,6 +17,10 @@ const webpack = require('webpack')
 // }
 
 module.exports = (cfg) => {
+  cfg.experiments = {
+    asyncWebAssembly: true
+  }
+
   cfg.module.rules.push({
     test: /\.pug$/,
     loader: 'pug-plain-loader'
@@ -29,6 +33,10 @@ module.exports = (cfg) => {
   // cfg.plugins.push(
   //   new ESLintPlugin(options)
   // )
+
+  cfg.plugins.push(
+    new NodePolyfillPlugin()
+  )
 
   // cfg.plugins.push(
   //   new NodePolyfillPlugin()

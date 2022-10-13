@@ -7,7 +7,7 @@ q-dialog(v-model="open")
         .row.justify-center
           q-icon(name="video_camera_front" size="8em" color="primary")
         .text-body2.text-weight-light.text-center Please allow camera permission to scan your XPUB
-      #granted-permissions(v-else)
+      #granted-permissions(v-else data-testid="grantedPermissions")
         .text-h5.q-mb-sm QR Decode
         .text-body2.text-weight-light Please Scan your XPUB from Blue Wallet
         .row.justify-center.q-mt-sm

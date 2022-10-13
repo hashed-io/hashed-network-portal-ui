@@ -34,6 +34,9 @@
               li Tap on "Send" button.
               li Tap on "..." button, positioned on top right corner.
               li Tap on "Sign a transaction" option.
+                p.text-bold If this option is not available please confirm you have imported your seed correctly on Blue Wallet.
+                  span.q-ml-sm
+                   a(href="https://github.com/hashed-io/hashed-network-portal-ui/blob/dev/docs/tutorials/native_bitcoin_vault_user_guide.md#refExportVault" target="_blank").span.link See tutorials.
               li Scan this qr from Blue Wallet.
               li When appear "Co-sign this transaction" message tap on "Yes" button.
               li Tap on "Provide signature" button, now you should see a QR.

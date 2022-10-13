@@ -58,6 +58,9 @@ export default {
     }
   },
   pages: {
+    login: {
+      googleDriveError: 'An error has occurred trying to get access to Google Drive'
+    },
     nbv: {
       appName: 'NBV',
       mainOptions: {

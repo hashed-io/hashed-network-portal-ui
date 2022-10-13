@@ -48,6 +48,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: '0'
+          node-version: '16.x'
 
 
       # Setup node
@@ -63,7 +64,8 @@ jobs:
       # Setup quasar
       - name: Setup environment
         run: |
-            yarn install
+          yarn install
+          
 
       # Build App
       - name: Deploy Chromatic
@@ -76,5 +78,6 @@ jobs:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           allowConsoleErrors: true
+          node-version: '16.x'
         
 

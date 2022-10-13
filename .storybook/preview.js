@@ -17,6 +17,7 @@ import messages from '../src/i18n'
 import { createStore } from 'vuex'
 import polkadotWallet from '../src/store/polkadotWallet'
 import notifications from '~/mixins/notifications'
+import errorHandler from '~/mixins/errorHandler'
 import { Notify, Loading } from 'quasar'
 
 import TInput from '~/components/common/input/t-input.vue'
@@ -68,6 +69,7 @@ api.connect().then(() => {
 
 
 app.mixin(notifications)
+app.mixin(errorHandler)
 
 // const i18n = new VueI18n({
 //   locale: 'en-us',

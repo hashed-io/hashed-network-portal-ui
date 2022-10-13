@@ -9,6 +9,8 @@ export default {
   component: MarketApplyForm
 }
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve(), ms))
+
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
   components: { MarketApplyForm },
@@ -54,6 +56,7 @@ ApplyFormSuccessWithoutCustodian.play = async ({ args, canvasElement }) => {
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await expect(submitButton).toBeInTheDocument()
   await userEvent.click(submitButton)
+  await sleep(1000)
   await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
 

@@ -166,7 +166,11 @@ export default {
           this.$router.push({ name: 'hcd' })
         }
       } catch (e) {
-        this.handlerError(e)
+        // failed calling method: list of google client:drive.files, with params:{ "q": "name = 'hcd.metadata'", "spaces": "appDataFolder" }, error: { "error": "access_denied" }
+        let message = e.message || e
+        message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
+        this.showNotification({ message, color: 'negative' })
+        // this.handlerError(e)
       } finally {
         this.hideLoading()
       }
