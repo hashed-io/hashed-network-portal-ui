@@ -146,6 +146,11 @@ export default defineComponent({
           to: { name: 'get-all-assets' },
           keyActive: 'getAllAssets',
           label: 'pages.hcd.afloat.tabGetAllAssets'
+        },
+        {
+          to: { name: 'collections' },
+          keyActive: 'NFTCollections',
+          label: 'pages.marketplace.mainOptions.nftCollections'
         }
       ]
     }
