@@ -54,7 +54,8 @@ jobs:
           IPFS_PROJECT_ID: '${{ secrets.IPFS_PROJECT_ID }}'
           IPFS_PROJECT_SECRET: '${{ secrets.IPFS_PROJECT_SECRET }}'
           FAUCET_SERVER_URL: 'https://faucet-dev.hashed.systems'
-          GATED_MARKETPLACE_ID: '0x5d208df71427902157988a56e7527474a7dce921f9d5efa159dcfc849289a53c'
+          GATED_PALLET_ID: '0x5d208df71427902157988a56e7527474a7dce921f9d5efa159dcfc849289a53c',
+          GATED_MARKETPLACE_ID: '0x725443b071372ec9f30055e642c5a3fa47ae0f5ed5bbfc246dba55b02ba09db0'
       #Auth google Could SDK
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
