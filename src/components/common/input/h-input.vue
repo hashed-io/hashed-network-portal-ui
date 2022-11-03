@@ -4,6 +4,7 @@ div
   q-input(
     outlined
     v-model="value"
+    v-bind="$attrs"
     :placeholder="placeholder"
     :debounce="debounce"
     :type="typeProp"
