@@ -8,11 +8,11 @@
   #content(v-else)
     .row.justify-start.q-col-gutter-md
       .col-3(v-for="(unique, key) in uniquesList")
-        NFTItem.tax-class.animated-item(
-          :key="key"
-          :unique="unique"
-          @onClickItem="onClickTax"
-        )
+          NFTItem.tax-class.animated-item(
+            :key="key"
+            :unique="unique"
+            @onClickItem="onClickTax"
+          )
 </template>
 <script>
 import NFTItem from '~/components/marketplace/NFTs/NFT-item.vue'
@@ -31,7 +31,7 @@ export default {
       required: true
     }
   },
-  emits: ['onClickUnique'],
+  emits: ['onClickCollection'],
   data () {
     return {
 
@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     onClickTax (classId) {
-      this.$emit('onClickUnique', classId)
+      this.$emit('onClickCollection', classId)
     }
   }
 }
 </script>
 <style lang='stylus' scoped>
 .tax-class
-  min-height: 25vh
-  height: 45vh
+  min-height: 30vh
+  height: 20vh
 </style>
