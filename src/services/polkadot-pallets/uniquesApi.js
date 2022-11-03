@@ -30,6 +30,26 @@ class UniquesApi extends BasePolkadotApi {
     return response
   }
 
+  async getInstancesFromCollection ({ collectionId }) {
+    const assets = await this.exEntriesQuery('asset', [collectionId])
+    const assetsMap = this.mapEntries(assets)
+    return assetsMap.map(asset => {
+      const [collection, instance] = asset.id
+      const { owner, isFrozen, approved } = asset.value
+      return {
+        collection,
+        instance,
+        owner,
+        approved,
+        isFrozen
+      }
+    })
+  }
+
+  async getNFTFromCollection () {
+
+  }
+
   async getUniquesByAddress ({ address }) {
     const allIds = await this.exEntriesQuery('classAccount', [address])
     const map = this.mapEntries(allIds)
@@ -44,8 +64,18 @@ class UniquesApi extends BasePolkadotApi {
         ...classData[index]
       }
     })
+    const classMetadata = await this.getMetadaOf({ classIds: classesIdArray })
+    return uniquesList.map((unique, index) => {
+      return {
+        ...classMetadata[index],
+        ...unique
+      }
+    })
+  }
 
-    return uniquesList
+  async getMetadaOf ({ classIds }, subTrigger) {
+    const metadata = await this.exMultiQuery('classMetadataOf', classIds, subTrigger)
+    return metadata.map(v => v.toHuman())
   }
 
   /**
