@@ -25,7 +25,8 @@ export default {
   breadcrumb: {
     confidentialDocuments: 'Documentos confidenciales',
     NFTCollections: 'Colecciones NFT',
-    detail: 'Detalles'
+    detail: 'Detalles',
+    create: 'create NFT'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -292,7 +293,7 @@ export default {
         title: 'Lista de NFT',
         emptyList: 'No hay NFT aún',
         details: {
-          collectionTitle: 'Detalles unique {class}',
+          collectionTitle: 'Detalles de la colección {class}',
           NFTTitle: 'Detalles unique {class}',
           admin: 'Administrador',
           user: 'Usuario',
@@ -334,6 +335,10 @@ export default {
     },
     nfts: {
       loadingUniques: 'Cargando los NFTs...',
+      createNFT: 'Crear un nuevo NFT',
+      deleteOffer: 'Eliminar oferta',
+      enlistOffer: 'Enlistar oferta',
+      details: 'Detalles del NFT',
       element: {
         title: 'Único',
         owner: 'Propietario',

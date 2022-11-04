@@ -31,7 +31,8 @@ export default {
     vaultDetails: 'Vault Details',
     createAsset: 'Create Asset',
     getAllAssets: 'Get All Assets',
-    proposalDetails: 'Proposal Details'
+    proposalDetails: 'Proposal Details',
+    create: 'create NFT'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -304,7 +305,7 @@ export default {
         title: 'NFT collections',
         emptyList: 'No NFT yet',
         details: {
-          collectionTitle: 'Details Collections {class}',
+          collectionTitle: 'Details of the collection {class}',
           NFTTitle: 'Detalles NFT {class}',
           admin: 'Administator',
           user: 'User',
@@ -345,6 +346,10 @@ export default {
     },
     nfts: {
       loadingUniques: 'Loading the NFT(s)...',
+      createNFT: 'Create a new NFT',
+      deleteOffer: 'Delete offer',
+      enlistOffer: 'Enlist offer',
+      details: 'Details of the NFT',
       element: {
         title: 'Unique',
         owner: 'Owner',
