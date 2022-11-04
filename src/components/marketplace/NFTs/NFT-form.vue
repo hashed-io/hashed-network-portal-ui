@@ -3,78 +3,96 @@
   .text-h5.q-pb-lg {{$t('pages.marketplace.taxCredits.createNFTFormTitle')}}
   q-card(flat)
     q-card-section
+      q-form(ref="taxCreditForm" @submit="onSubmitForm")
+        div
+          h-input.col-8(
+            v-model="metadata"
+            :rules="[rules.required]"
+            label="The name of the NFT"
+            dense
+            testid="metadata"
+          )
         q-btn(
           :label="$t('pages.marketplace.taxCredits.buttons.addAttribute')"
           color="primary"
-          rounded
+          outline
           no-caps
           icon="add"
           @click="onAddAttribute"
+          data-testid="add-attribute"
         ).q-my-lg
-        q-form(ref="taxCreditForm" @submit="onSubmitForm")
-          template(v-for="(attribute, index) in attributes" :key="index")
-            .row.q-col-gutter-sm.q-py-md
-              .col-3
-                h-input(
-                    v-model="attributes[index].label"
-                    dense
-                  )
-              .col-5
-                h-input(
-                  v-if="attributes[index].state === 'plain' && !attributes[index].isFile.state"
-                  v-model="attributes[index].value"
+        template(v-for="(attribute, index) in attributes" :key="index")
+          .row.q-col-gutter-sm.q-py-md
+            .col-3
+              h-input(
+                  v-model="attributes[index].label"
                   dense
+                  testid="nft-label"
                 )
-                h-input(
-                  v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && !attributes[index].isFile.state"
-                  v-model="attributes[index].value"
-                  dense
-                )
-                q-file(
-                  v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && attributes[index].isFile.state"
-                  v-model="attributes[index].value"
-                  :label="isHCD(attribute) ? 'File Uploaded' : undefined"
-                  dense
-                  outlined
-                )
-                q-toggle(
-                  v-if="attributes[index].state === 'ipfs' || attributes[index].state === 'hcd'"
-                  v-model="attributes[index].isFile.state"
-                  color="secondary"
-                  :label="$t('pages.marketplace.taxCredits.labels.isFile')"
-                  unchecked-icon="text_fields"
-                  checked-icon="attach_file"
-                  left-label
-                )
-                q-option-group(
-                  v-model="attributes[index].state"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                )
-              .col-4
-                q-btn.q-mx-sm(
-                  @click="onRemoveAttribute(index)"
-                  color="primary"
-                  label="delete attribute"
-                  rounded
-                )
-                q-btn(
-                  v-if="attributes[index].state === 'hcd' && !attributes[index].isFile.uploaded"
-                  @click="onUploadHCD(index)"
-                  color="primary"
-                  label="Upload to HCD"
-                  rounded
-                )
-          q-btn.col-6.q-mt-md(
-            :label="$t('pages.marketplace.taxCredits.buttons.createUnique')"
-            type="submit"
-            color='primary'
-            icon="add"
-            rounded
-            no-caps
-          )
+            .col-5
+              h-input(
+                v-if="attributes[index].state === 'plain' && !attributes[index].isFile.state"
+                v-model="attributes[index].value"
+                :rules="[rules.required]"
+                dense
+                testid="nft-plaintext"
+              )
+              h-input(
+                v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && !attributes[index].isFile.state"
+                v-model="attributes[index].value"
+                :rules="[rules.required]"
+                dense
+              )
+              q-file(
+                v-if="(attributes[index].state === 'ipfs' || attributes[index].state === 'hcd') && attributes[index].isFile.state"
+                v-model="attributes[index].value"
+                :rules="[rules.required]"
+                :label="isHCD(attribute) ? 'File Uploaded' : undefined"
+                dense
+                outlined
+              )
+              q-toggle(
+                v-if="attributes[index].state === 'ipfs' || attributes[index].state === 'hcd'"
+                v-model="attributes[index].isFile.state"
+                :rules="[rules.required]"
+                color="secondary"
+                :label="$t('pages.marketplace.taxCredits.labels.isFile')"
+                unchecked-icon="text_fields"
+                checked-icon="attach_file"
+                left-label
+                data-testid="toggle"
+              )
+              q-option-group(
+                v-model="attributes[index].state"
+                :options="options"
+                color="primary"
+                inline
+                dense
+                data-testid="options-group"
+              )
+            .col-4
+              q-btn.q-mx-sm(
+                @click="onRemoveAttribute(index)"
+                color="primary"
+                label="delete attribute"
+                outline
+              )
+              q-btn(
+                v-if="attributes[index].state === 'hcd' && !attributes[index].isFile.uploaded"
+                @click="onUploadHCD(index)"
+                color="primary"
+                label="Upload to HCD"
+                outline
+              )
+        q-btn.col-6.q-mt-md(
+          :label="$t('pages.marketplace.taxCredits.buttons.createUnique')"
+          type="submit"
+          color='primary'
+          icon="add"
+          outline
+          no-caps
+          data-testid="submit-btn"
+        )
 </template>
 <script>
 import { validation } from '~/mixins/validation'
@@ -85,10 +103,17 @@ export default {
     NFTInput
   },
   mixins: [validation],
+  props: {
+    adminMarketAddress: {
+      type: String,
+      default: undefined
+    }
+  },
   emits: ['onSubmitForm'],
   data () {
     return {
       prefixHCD: 'HCD:',
+      metadata: undefined,
       attributes: [
         {
           label: undefined,
@@ -146,17 +171,21 @@ export default {
       /**
        * Emit the data from the Form with the correct structure
        */
-      if (await await this.$refs.taxCreditForm.validate()) {
-        this.$emit('onSubmitForm', this.attributes)
+      if (await this.$refs.taxCreditForm.validate()) {
+        this.$emit('onSubmitForm', { attributes: this.attributes, metadata: this.metadata })
       }
     },
     async onUploadHCD (index) {
       try {
         this.showLoading()
+
         const { label, value } = this.attributes[index]
         console.log({ label, value })
-        const { cid } = await this.$store.$hcd.addOwnedData({ name: label, description: label, payload: value })
-        console.log({ cid })
+
+        const { cid } = this.adminMarketAddress
+          ? await this.$store.$hcd.shareData({ toUserAddress: '5ChSU9uHtrePYHfwUgdcQ6MFaAK6ACc9GQYMthgyiMovvGDG', name: label, description: label, payload: value })
+          : await this.$store.$hcd.addOwnedData({ name: label, description: label, payload: value })
+
         if (cid) {
           this.attributes[index].value = this.prefixHCD + cid
           this.attributes[index].isFile.uploaded = true

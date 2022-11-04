@@ -1,25 +1,25 @@
 <template lang='pug'>
 #container
-  q-table(
-    :rows="getAttributes"
-    :columns="getColumnsi18n"
-    class="bg-inherit"
-    :separator="'none'"
-    flat
-    hide-pagination
-  ).q-my-xl
-    template(v-slot:body-cell="props")
-      q-td(:props="props")
-        q-chip(
-          v-if="isFile(props)"
-          clickable
-          @click="downloadFile(props.value)"
-          icon-right="download"
-          text-color="white"
-          color="primary"
-        ).animated-item.text-bold
-          | {{ $t('pages.marketplace.taxCredits.details.file') }}
-        div(v-else).text-subtitle2 {{ props.value }}
+  .text-h5 {{$t('pages.nfts.details')}}
+  q-card
+    q-table(
+      :rows="getAttributes"
+      :columns="getColumnsi18n"
+      class="bg-inherit"
+      :separator="'none'"
+    ).q-my-xl
+      template(v-slot:body-cell="props")
+        q-td(:props="props")
+          q-chip(
+            v-if="isFile(props)"
+            clickable
+            @click="downloadFile(props.value)"
+            icon-right="download"
+            text-color="white"
+            color="primary"
+          ).animated-item.text-bold
+            | {{ $t('pages.marketplace.taxCredits.details.file') }}
+          div(v-else).text-subtitle2 {{ props.value }}
 </template>
 <script>
 export default {

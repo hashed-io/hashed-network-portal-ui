@@ -1,6 +1,6 @@
 <template lang='pug'>
 #container
-  NFTForm.col-12.dialogClass(@onSubmitForm="onSubmitNFT" )
+  NFTForm.col-12.dialogClass(@onSubmitForm="onSubmitNFT" :adminMarketAddress="adminMarketAddress")
 </template>
 <script>
 import NFTForm from '~/components/marketplace/NFTs/NFT-form.vue'
@@ -22,14 +22,20 @@ export default {
   },
   data () {
     return {
-
+      adminMarketAddress: undefined
     }
   },
   computed: {
     ...mapGetters('profile', ['polkadotAddress'])
   },
+  async beforeMount () {
+    const marketId = process.env.GATED_MARKETPLACE_ID
+    const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId })
+    const adminObj = authorities.find((authority) => authority.type === 'Admin')
+    this.adminMarketAddress = adminObj.address
+  },
   methods: {
-    async onSubmitNFT (attributes) {
+    async onSubmitNFT ({ attributes, metadata }) {
       // console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
       try {
         const collectionId = this.$route.query?.classId
@@ -57,7 +63,7 @@ export default {
         }
         const admin = this.$store.$hcd.getPolkadotAddress()
         console.log({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
-        await this.$store.$afloatApi.createAsset({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin, isHierarchical: false })
+        await this.$store.$afloatApi.createAsset({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin, isHierarchical: false, metadata })
         this.showNotification({ message: this.$t('pages.marketplace.taxCredits.messages.uniqueCreated'), color: 'positive' })
         this.$router.push({
           name: 'collections'
