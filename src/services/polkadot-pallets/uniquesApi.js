@@ -30,26 +30,6 @@ class UniquesApi extends BasePolkadotApi {
     return response
   }
 
-  async getInstancesFromCollection ({ collectionId }) {
-    const assets = await this.exEntriesQuery('asset', [collectionId])
-    const assetsMap = this.mapEntries(assets)
-    return assetsMap.map(asset => {
-      const [collection, instance] = asset.id
-      const { owner, isFrozen, approved } = asset.value
-      return {
-        collection,
-        instance,
-        owner,
-        approved,
-        isFrozen
-      }
-    })
-  }
-
-  async getNFTFromCollection () {
-
-  }
-
   async getUniquesByAddress ({ address }) {
     const allIds = await this.exEntriesQuery('classAccount', [address])
     const map = this.mapEntries(allIds)
