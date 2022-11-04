@@ -2,7 +2,7 @@
 #container
   q-table(
     :rows="uniquesList"
-    :columns="getColumnsNFT"
+    :columns="columns"
     class="bg-white"
     :separator="'none'"
   ).q-my-xl
@@ -11,7 +11,7 @@
         q-td.cursor-pointer(key="instance" :props="props" @click="onClickRow(props.rowIndex)")
           q-chip.text-white.text-bold(
             color="primary"
-            ) {{$t('pages.nfts.element.title')}} {{props.row.instance}}
+            ) {{$t('pages.nfts.element.title')}} {{props.row.instance}} {{props.row.data}}
         q-td.cursor-pointer(key="owner" :props="props" @click="onClickRow(props.rowIndex)")
           AccountItem(
             inherit
@@ -26,22 +26,25 @@
             color="green"
           )
           q-chip.text-white(
-            v-if="props.row.onSale && isOwner(props.row.owner)"
-            label="Delete offer"
-            color="red"
-            clickable
-            @click="onDeleteOffer(props.row)"
-          )
-          q-chip.text-white(
-            v-if="!props.row.onSale && !isOwner(props.row.owner)"
+            v-if="!props.row.onSale"
             label="Not On Sale"
             color="blue"
           )
-          q-chip.text-white(
+        q-td(key="actions" :props="props")
+          q-btn.text-white(
+            v-if="props.row.onSale && isOwner(props.row.owner)"
+            :label="$t('pages.nfts.deleteOffer')"
+            color="red"
+            outline
+            size="sm"
+            @click="onDeleteOffer(props.row)"
+          )
+          q-btn.text-white(
             v-if="!props.row.onSale && isOwner(props.row.owner)"
-            label="Enlist sell offer"
+            :label="$t('pages.nfts.enlistOffer')"
             color="blue"
-            clickable
+            outline
+            size="sm"
             @click="onEnlistOffer(props.row)"
           )
 </template>
@@ -69,13 +72,7 @@ export default {
   emits: ['onClickRow', 'onClickDeleteOffer', 'onClickEnlistSellOffer'],
   data () {
     return {
-      uniquesArray: this.uniquesList
-    }
-  },
-  computed: {
-    ...mapGetters('profile', ['polkadotAddress']),
-    getColumnsNFT () {
-      return [
+      columns: [
         {
           name: 'instance',
           label: 'Instance',
@@ -92,7 +89,7 @@ export default {
         },
         {
           name: 'onSale',
-          label: 'on Sale',
+          label: 'On Sale',
           field: row => row.onSale,
           value: 'onSale',
           align: 'justify'
@@ -100,7 +97,29 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapGetters('profile', ['polkadotAddress'])
+  },
+  watch: {
+    uniquesList: {
+      handler (newVal) {
+        const atLeastOneOwner = this.uniquesList.some((unique) => {
+          return unique.owner === this.polkadotAddress
+        })
+        if (atLeastOneOwner) {
+          this.columns.push({
+            name: 'actions',
+            label: 'Actions',
+            value: 'actions',
+            align: 'justify'
+          })
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
+
     onClickRow (index) {
       this.$emit('onClickRow', this.uniquesList[index].instance)
     },
@@ -110,8 +129,8 @@ export default {
     onEnlistOffer ({ collection, instance }) {
       this.$emit('onClickEnlistSellOffer', { collectionId: collection, itemId: instance })
     },
-    onDeleteOffer ({ offerId = 3 }) {
-      // this.$emit('onClickDeleteOffer', { offerId, collection, instance })
+    onDeleteOffer ({ onSale, collection, instance }) {
+      this.$emit('onClickDeleteOffer', { offerId: onSale.offerId, collection, instance })
     }
   }
 }

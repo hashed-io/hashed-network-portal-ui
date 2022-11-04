@@ -15,7 +15,7 @@ q-card.full-width
         q-btn(
           type="submit"
           label="Submit Offer"
-          rounded
+          outline
           color="primary"
         )
 </template>

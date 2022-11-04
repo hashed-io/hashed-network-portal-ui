@@ -6,7 +6,7 @@
     q-btn(
       :label="$t('pages.marketplace.taxCredits.buttons.createCollection')"
       color="primary"
-      rounded
+      outline
       no-caps
       @click="onCreateCollection"
     )

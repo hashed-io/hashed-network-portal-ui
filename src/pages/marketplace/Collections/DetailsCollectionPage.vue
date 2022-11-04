@@ -1,6 +1,6 @@
 <template lang='pug'>
 #container
-  #title.text-h4 {{$t('pages.marketplace.taxCredits.details.collectionTitle', { class: this.collectionData.classId })}}
+  #title.text-h4 {{$t('pages.marketplace.taxCredits.details.collectionTitle', { class: this.collectionData.metadata })}}
   q-chip(
     :color="collectionData.isFrozen ? 'secondary' : 'primary'"
     :label="collectionData.isFrozen ? $t('pages.marketplace.taxCredits.details.frozen') : $t('pages.marketplace.taxCredits.details.active')"
@@ -40,12 +40,12 @@
         div {{ collectionData.itemMetadatas }}
   #Attributes
     q-btn.q-mt-md(
-      label="Create a new NFT"
+      :label="$t('pages.nfts.createNFT')"
       color="primary"
-      rounded
+      outline
+      no-caps
       @click="onCreateNFT"
     )
-    pre {{uniques}}
     NFTTable(
       :uniquesList="getNFTs"
       @onClickRow="onClickNFT"
@@ -92,38 +92,48 @@ export default {
     }
   },
   async beforeMount () {
-    const classId = this.$route.query?.classId
-    if (classId) {
-      try {
-        this.showLoading({ message: this.$t('pages.nfts.loadingUniques') })
-        const collectionInfo = await this.$store.$afloatApi.getAsset({
-          collectionId: classId,
-          instanceId: 0
+    await this.loadCollectionInfo()
+  },
+  methods: {
+    async loadCollectionInfo () {
+      const classId = this.$route.query?.classId
+      if (classId) {
+        try {
+          this.showLoading({ message: this.$t('pages.nfts.loadingUniques') })
+          const collectionInfo = await this.$store.$afloatApi.getAsset({
+            collectionId: classId,
+            instanceId: 0
+          })
+          this.collectionData = collectionInfo
+          await this.getNFTInfo(classId)
+        } catch (e) {
+          this.handlerError(e)
+        } finally {
+          this.hideLoading()
+        }
+      } else {
+        this.$router.push({
+          name: 'NFTs'
         })
-        this.collectionData = collectionInfo
+      }
+    },
+    async getNFTInfo (classId) {
+      try {
         const offers = await this.$store.$afloatApi.getOffersByCollection({ collectionId: classId })
-        console.log({ offers })
-        const uniques = await this.$store.$uniquesApi.getInstancesFromCollection({
+        const uniques = await this.$store.$afloatApi.getInstancesFromCollection({
           collectionId: classId
         })
         this.uniques = uniques.map((unique, i) => {
+          const onSale = offers.find(offer => offer.instance === unique.instance)
           return {
             ...unique,
-            onSale: offers.some(offer => offer.instance === unique.instance)
+            onSale: onSale?.offerId ? onSale : undefined
           }
         })
       } catch (e) {
         this.handlerError(e)
-      } finally {
-        this.hideLoading()
       }
-    } else {
-      this.$router.push({
-        name: 'NFTs'
-      })
-    }
-  },
-  methods: {
+    },
     onClickNFT (i) {
       const classId = this.$route.query?.classId
       this.$router.push({
@@ -148,6 +158,7 @@ export default {
       this.dialog.openModal = true
     },
     async onEnlistOffer ({ collectionId, itemId, offer }) {
+      const classId = this.$route.query?.classId
       this.dialog.openModal = false
       try {
         const marketplaceId = process.env.GATED_MARKETPLACE_ID
@@ -161,13 +172,26 @@ export default {
           price: offer
         })
         this.showNotification({ message: 'Created the offer successfully' })
+        await this.getNFTInfo(classId)
       } catch (error) {
         this.showNotification({ message: error.message || error, color: 'negative' })
       } finally {
         this.hideLoading()
       }
     },
-    async onDeleteOffer (offerId) {
+    async onDeleteOffer ({ offerId }) {
+      const classId = this.$route.query?.classId
+      try {
+        await this.$store.$afloatApi.removeOffer({
+          offerId
+        })
+        this.showNotification({ message: 'The offer was deleted' })
+        await this.getNFTInfo(classId)
+      } catch (error) {
+        this.showNotification({ message: error.message || error, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
     }
   }
 }
