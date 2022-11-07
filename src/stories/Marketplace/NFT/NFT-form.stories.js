@@ -20,7 +20,9 @@ const Template = (args) => ({
 })
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve(), ms))
 export const BaseComponent = Template.bind({})
-BaseComponent.args = {}
+BaseComponent.args = {
+  adminMarketAddress: '5DJQPW84Lbd4X9xyL9xsLoRYK8ojaRr1XbEoyGMraCSpNZmG'
+}
 BaseComponent.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
 
@@ -55,11 +57,7 @@ BaseComponent.play = async ({ args, canvasElement }) => {
 
 export const WithFileInput = Template.bind({})
 WithFileInput.args = {
-  label: 'label',
-  value: 'value',
-  index: 1,
-  rulesLabel: [],
-  rulesValue: []
+  adminMarketAddress: '5DJQPW84Lbd4X9xyL9xsLoRYK8ojaRr1XbEoyGMraCSpNZmG'
 }
 WithFileInput.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
@@ -70,18 +68,26 @@ WithFileInput.play = async ({ args, canvasElement }) => {
   await userEvent.type(name, 'The best NFT', { delay: 10 })
 
   const NFTLabelArray = await canvas.getAllByTestId('nft-label')
-  const NFTValueArray = await canvas.getAllByTestId('nft-plaintext')
   const options = await canvas.getAllByRole('radio')
 
   await expect(NFTLabelArray[0]).toBeInTheDocument()
-  await expect(NFTValueArray[0]).toBeInTheDocument()
   await expect(options[0]).toBeInTheDocument()
 
   await userEvent.click(options[0])
+
+  const toggle = await canvas.getByTestId('toggle')
+  await expect(toggle).toBeInTheDocument()
+  await userEvent.click(toggle)
+
   await userEvent.type(NFTLabelArray[0], letters, { delay: 1 })
-  await userEvent.type(NFTValueArray[0], letters, { delay: 1 })
+  const file = new File(['Lorem Ipsum'], 'Doc.pdf', { type: 'file/pdf' })
+
+  const NFTValueArray = await canvas.getAllByTestId('nft-file')
+  await expect(NFTValueArray[0]).toBeInTheDocument()
+  await userEvent.upload(NFTValueArray[0], file)
 
   const submitBtn = await canvas.getByTestId('submit-btn')
   await userEvent.click(submitBtn)
-  await expect(args.onSubmitForm).toBeCalledTimes(0)
+  await sleep(10)
+  await expect(args.onSubmitForm).toBeCalledTimes(1)
 }
