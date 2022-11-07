@@ -184,7 +184,7 @@ export default {
         console.log({ label, value })
 
         const { cid } = this.adminMarketAddress
-          ? await this.$store.$hcd.shareData({ toUserAddress: '5ChSU9uHtrePYHfwUgdcQ6MFaAK6ACc9GQYMthgyiMovvGDG', name: label, description: label, payload: value })
+          ? await this.$store.$hcd.shareData({ toUserAddress: this.adminMarketAddress, name: label, description: label, payload: value })
           : await this.$store.$hcd.addOwnedData({ name: label, description: label, payload: value })
 
         if (cid) {
