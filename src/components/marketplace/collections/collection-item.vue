@@ -4,13 +4,14 @@ q-card.q-pa-sm(v-ripple flat bordered @click="onClickTax" data-testid="collectio
     .row.justify-center.q-py-md
       q-icon(name="library_books" size="4.1em" color="black")
     .row.justify-center.q-py-md
-      q-chip.text-white.text-bold(color="primary") {{collection.data}}
-      q-chip.text-white.text-bold(color="secondary") {{$t('pages.collections.element.title')}} {{collection.classId}}
+      q-chip.text-white.text-bold(color="primary" data-testid="name") {{collection.data}}
+      q-chip.text-white.text-bold(color="secondary" data-testid="class") {{$t('pages.collections.element.title')}} {{collection.classId}}
     #Info
       AccountItem(
         :address="collection.owner"
         flat
         inherit
+        data-testid="owner"
       )
 </template>
 <script>

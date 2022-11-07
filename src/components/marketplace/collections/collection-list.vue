@@ -4,7 +4,7 @@
     .row
       q-card.col-12(flat)
         q-card-section
-          .flex.flex-center.text-h6.q-py-xl(data-testid='empty-list') {{$t('pages.marketplace.taxCredits.emptyList')}}
+          .flex.flex-center.text-h6.q-py-xl(data-testid='empty-list') {{$t('pages.marketplace.taxCredits.emptyCollectionList')}}
   #content(v-else)
     .row.justify-start.q-col-gutter-md
       .col-3(v-for="(collection, key) in collectionList")

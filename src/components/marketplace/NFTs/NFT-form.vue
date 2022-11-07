@@ -50,6 +50,7 @@
                 :label="isHCD(attribute) ? 'File Uploaded' : undefined"
                 dense
                 outlined
+                data-testid="nft-file"
               )
               q-toggle(
                 v-if="attributes[index].state === 'ipfs' || attributes[index].state === 'hcd'"

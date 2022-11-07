@@ -11,6 +11,7 @@
         q-td.cursor-pointer(key="instance" :props="props" @click="onClickRow(props.rowIndex)")
           q-chip.text-white.text-bold(
             color="primary"
+            data-testid="nft-name"
             ) {{$t('pages.nfts.element.title')}} {{props.row.instance}} {{props.row.data}}
         q-td.cursor-pointer(key="owner" :props="props" @click="onClickRow(props.rowIndex)")
           AccountItem(
@@ -18,17 +19,22 @@
             flat
             :address="props.row.owner"
             :label="$t('pages.marketplace.taxCredits.details.user')"
+            data-testid="account-icon"
           )
         q-td(key="onSale" :props="props")
           q-chip.text-white(
             v-if="props.row.onSale"
             label="On Sale"
             color="green"
+            :ripple="false"
+            data-testid="on-sale-chip"
           )
           q-chip.text-white(
             v-if="!props.row.onSale"
             label="Not On Sale"
             color="blue"
+            :ripple="false"
+            data-testid="not-on-sale-chip"
           )
         q-td(key="actions" :props="props")
           q-btn.text-white(
@@ -37,7 +43,9 @@
             color="red"
             outline
             size="sm"
+            :ripple="false"
             @click="onDeleteOffer(props.row)"
+            data-testid="delete-button"
           )
           q-btn.text-white(
             v-if="!props.row.onSale && isOwner(props.row.owner)"
@@ -46,6 +54,7 @@
             outline
             size="sm"
             @click="onEnlistOffer(props.row)"
+            data-testid="enlist-button"
           )
 </template>
 <script>

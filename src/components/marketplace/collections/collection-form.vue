@@ -14,7 +14,7 @@
           type="submit"
           color='primary'
           icon="add"
-          rounded
+          outline
           no-caps
           :disable="!collectionName"
           data-testid="submit-btn"

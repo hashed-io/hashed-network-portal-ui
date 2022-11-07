@@ -8,15 +8,17 @@ q-card.full-width
       h-input.q-pt-lg(
         v-model="offerInput"
         :rules="[rules.required, rules.greaterOrEqualThan(1001)]"
-        label="Enter the selling price of the NFT"
+        :label="$t('pages.nfts.sellingLabel')"
         typeProp="number"
+        testid="HInput"
       )
       .row.justify-start.q-py-md
         q-btn(
           type="submit"
-          label="Submit Offer"
+          :label="$t('pages.nfts.submitOffer')"
           outline
           color="primary"
+          data-testid="btn"
         )
 </template>
 <script>
@@ -41,10 +43,8 @@ export default {
     }
   },
   methods: {
-    async onSubmitForm () {
-      if (await this.$refs.offerForm.validate()) {
-        this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput })
-      }
+    onSubmitForm () {
+      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput })
     }
   }
 }
