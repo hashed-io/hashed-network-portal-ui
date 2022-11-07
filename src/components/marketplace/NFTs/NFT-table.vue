@@ -115,6 +115,8 @@ export default {
         const atLeastOneOwner = this.uniquesList.some((unique) => {
           return unique.owner === this.polkadotAddress
         })
+        const length = this.columns.length
+        if (this.columns[length - 1].name === 'actions') this.columns.pop()
         if (atLeastOneOwner) {
           this.columns.push({
             name: 'actions',
