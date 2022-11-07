@@ -62,14 +62,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import AccountItem from '~/components/common/account-item.vue'
-import NFTList from '~/components/marketplace/NFTs/NFT-list.vue'
 import NFTTable from '~/components/marketplace/NFTs/NFT-table.vue'
 import OfferForm from '~/components/marketplace/collections/OfferForm.vue'
 export default {
   name: 'DetailsCollectionPage',
   components: {
     AccountItem,
-    NFTList,
     NFTTable,
     OfferForm
   },
