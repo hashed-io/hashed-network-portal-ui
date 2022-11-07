@@ -292,6 +292,7 @@ export default {
         createNFTFormTitle: 'Crear nuevo unique',
         title: 'Lista de NFT',
         emptyList: 'No hay NFT aún',
+        emptyCollectionList: 'No hay colecciones aún',
         details: {
           collectionTitle: 'Detalles de la colección {class}',
           NFTTitle: 'Detalles unique {class}',
@@ -339,6 +340,8 @@ export default {
       deleteOffer: 'Eliminar oferta',
       enlistOffer: 'Enlistar oferta',
       details: 'Detalles del NFT',
+      sellingLabel: 'Ingresa el precio de venta del NFT',
+      submitOffer: 'Enviar oferta',
       element: {
         title: 'Único',
         owner: 'Propietario',
