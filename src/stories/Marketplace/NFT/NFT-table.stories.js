@@ -1,7 +1,6 @@
 import { expect } from '@storybook/jest'
 import NFTTable from '~/components/marketplace/NFTs/NFT-table.vue'
 import { userEvent, within } from '@storybook/testing-library'
-// import { mapMutations } from 'vuex'
 export default {
   title: 'NFT/NFTTable',
   component: NFTTable
@@ -18,7 +17,7 @@ const Template = (args) => ({
     return { args }
   },
   // Then, the spread values can be accessed directly in the template
-  template: '<NFTTable v-bind="args" @onClickRow="args.onClickRow" @onClickDeleteOffer="args.onClickDeleteOffer" @onClickDeleteOffer="args.onClickEnlistSellOffer" />'
+  template: '<NFTTable v-bind="args" @onClickRow="args.onClickRow" @onClickDeleteOffer="args.onClickDeleteOffer" @onClickEnlistSellOffer="args.onClickEnlistSellOffer" />'
 })
 
 export const BaseComponent = Template.bind({})
