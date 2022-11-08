@@ -59,6 +59,7 @@ BaseComponent.args = {
   ]
 
 }
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve(), ms))
 BaseComponent.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
 
@@ -77,7 +78,9 @@ BaseComponent.play = async ({ args, canvasElement }) => {
   await expect(enlistButton.length).toBeGreaterThan(0)
 
   await userEvent.click(deleteButton[0])
+  await sleep(300)
   await expect(args.onClickDeleteOffer).toBeCalledTimes(1)
   await userEvent.click(enlistButton[0])
+  await sleep(300)
   await expect(args.onClickEnlistSellOffer).toBeCalledTimes(1)
 }
