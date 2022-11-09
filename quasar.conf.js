@@ -65,6 +65,7 @@ module.exports = configure(function (ctx) {
         BDK_SERVICES_URL: process.env.BDK_SERVICES_URL,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         FAUCET_SERVER_URL: process.env.FAUCET_SERVER_URL,
+        GATED_PALLET_ID: process.env.GATED_PALLET_ID,
         GATED_MARKETPLACE_ID: process.env.GATED_MARKETPLACE_ID
       },
       // transpile: false,

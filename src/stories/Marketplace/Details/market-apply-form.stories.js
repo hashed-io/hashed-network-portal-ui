@@ -56,7 +56,7 @@ ApplyFormSuccessWithoutCustodian.play = async ({ args, canvasElement }) => {
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await expect(submitButton).toBeInTheDocument()
   await userEvent.click(submitButton)
-  await sleep(1000)
+  await sleep(100)
   await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
 
@@ -70,9 +70,9 @@ ApplyFormSuccessWithCustodian.args = {
 ApplyFormSuccessWithCustodian.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
   const custodianAddress = '5DJQPW84Lbd4X9xyL9xsLoRYK8ojaRr1XbEoyGMraCSpNZmG'
-  const notesInput = await canvas.getByTestId('notes_input')
+  const notesInput = canvas.getByTestId('notes_input')
   await userEvent.type(notesInput, 'Important notes', { delay: 1 })
-  const custodianToggle = await canvas.getByTestId('custodian_toggle')
+  const custodianToggle = canvas.getByTestId('custodian_toggle')
   await userEvent.click(custodianToggle)
   const custodian = canvas.getByTestId('account_input')
   await userEvent.type(custodian, custodianAddress, { delay: 1 })
@@ -87,6 +87,7 @@ ApplyFormSuccessWithCustodian.play = async ({ args, canvasElement }) => {
 
   const submitButton = canvas.getByTestId('submit_apply_btn')
   await userEvent.click(submitButton)
+  await sleep(100)
   await expect(args.onSubmitApplyForm).toHaveBeenCalledTimes(1)
 }
 export const ApplyFormFailure = Template.bind({})

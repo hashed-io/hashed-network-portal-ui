@@ -107,7 +107,7 @@ export default {
       try {
         this.showLoading()
         this.modals.isShowingAddMarketplace = false
-        await this.$store.$marketplaceApi.createMarketplace({
+        await this.$store.$afloatApi.createMarketplace({
           admin: this.polkadotAddress,
           user: this.polkadotAddress,
           label: marketplace.label
@@ -131,12 +131,7 @@ export default {
       })
     },
     async onAddMarketplace () {
-      const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
-      if (isLoggedIn) {
-        this.modals.isShowingAddMarketplace = true
-      } else {
-        this.showNotification({ message: this.$t('pages.marketplace.createForm.loggedToCreate'), color: 'negative' })
-      }
+      this.modals.isShowingAddMarketplace = true
     }
   }
 }

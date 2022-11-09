@@ -93,11 +93,6 @@ export default defineComponent({
           to: { name: 'privacy' },
           keyActive: 'Privacy',
           label: 'pages.marketplace.mainOptions.privacy'
-        },
-        {
-          to: { name: 'NFTs' },
-          keyActive: 'NFTCollections',
-          label: 'pages.marketplace.mainOptions.nftCollections'
         }
       ]
     }

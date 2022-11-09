@@ -24,12 +24,15 @@ export default {
   },
   breadcrumb: {
     confidentialDocuments: 'Hashed Confidential Documents',
+    NFTCollections: 'NFT Collections',
+    detail: 'Detail',
     myVaults: 'My Vaults',
     extendedKeys: 'Extended Keys',
     vaultDetails: 'Vault Details',
     createAsset: 'Create Asset',
     getAllAssets: 'Get All Assets',
-    proposalDetails: 'Proposal Details'
+    proposalDetails: 'Proposal Details',
+    create: 'create NFT'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -198,10 +201,8 @@ export default {
       },
       breadcrumbs: {
         marketplaces: 'Marketplaces',
-        detail: 'Detail',
         custodian: 'Custodian',
         privacy: 'Privacy',
-        NFTCollections: 'NFT Collections',
         create: 'Create',
         afloat: 'Afloat Api example'
       },
@@ -299,11 +300,14 @@ export default {
         loggedDownloadFile: 'You need to be logged in to download a file'
       },
       taxCredits: {
-        createFormTitle: 'Create new Unique',
+        createCollectionFormTitle: 'Create new collection',
+        createNFTFormTitle: 'Create new Unique',
         title: 'NFT collections',
-        emptyList: 'No tax credits yet',
+        emptyList: 'No NFT yet',
+        emptyCollectionList: 'No Collections yet',
         details: {
-          title: 'Details Unique {class}',
+          collectionTitle: 'Details of the collection {class}',
+          NFTTitle: 'Detalles NFT {class}',
           admin: 'Administator',
           user: 'User',
           frozen: 'Frozen',
@@ -326,15 +330,29 @@ export default {
         buttons: {
           addAttribute: 'Add attribute',
           createUnique: 'Create unique',
-          removeAttribute: 'Remove attribute'
+          removeAttribute: 'Remove attribute',
+          createCollection: 'Create collection'
         },
         messages: {
           uniqueCreated: 'Unique created'
         }
       }
     },
+    collections: {
+      loadingCollections: 'Loading the Collection(s)...',
+      element: {
+        title: 'Collection',
+        input: 'Collection\'s Name'
+      }
+    },
     nfts: {
       loadingUniques: 'Loading the NFT(s)...',
+      createNFT: 'Create a new NFT',
+      deleteOffer: 'Delete offer',
+      enlistOffer: 'Enlist offer',
+      details: 'Details of the NFT',
+      sellingLabel: 'Enter the selling price of the NFT',
+      submitOffer: 'Submit offer',
       element: {
         title: 'Unique',
         owner: 'Owner',

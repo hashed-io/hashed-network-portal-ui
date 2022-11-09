@@ -1,9 +1,9 @@
 <template lang='pug'>
 #container
-  NFTForm.col-12.dialogClass(@onSubmitForm="onSubmitNFT" )
+  NFTForm.col-12.dialogClass(@onSubmitForm="onSubmitNFT" :adminMarketAddress="adminMarketAddress")
 </template>
 <script>
-import NFTForm from 'src/components/marketplace/NFTs/NFT-form.vue'
+import NFTForm from '~/components/marketplace/NFTs/NFT-form.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'CreateUniquesPage',
@@ -22,43 +22,51 @@ export default {
   },
   data () {
     return {
-
+      adminMarketAddress: undefined
     }
   },
   computed: {
-    // ...mapGetters('polkadotWallet', ['selectedAccount'])
     ...mapGetters('profile', ['polkadotAddress'])
   },
+  async beforeMount () {
+    const marketId = process.env.GATED_MARKETPLACE_ID
+    const authorities = await this.$store.$marketplaceApi.getAuthoritiesByMarketplace({ marketId })
+    const adminObj = authorities.find((authority) => authority.type === 'Admin')
+    this.adminMarketAddress = adminObj.address
+  },
   methods: {
-    async onSubmitNFT ({ attributes, containFile }) {
+    async onSubmitNFT ({ attributes, metadata }) {
       // console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
       try {
-        this.showLoading()
-        if (containFile) {
-          const attributesToUpload = []
-          attributes.forEach(attribute => {
-            if (attribute[1] instanceof File) {
-              attributesToUpload.push(attribute)
+        const collectionId = this.$route.query?.classId
+        const uniquesPublicAttributes = {}
+        const plaintextSaveToIPFS = { data: {}, files: {} }
+        const encryptoThenSaveToIPFS = { data: {}, files: {} }
+        const assetId = 0
+        for (const attributeObj of attributes) {
+          const { label, value, state, isFile } = attributeObj
+          if (state === 'plain') {
+            uniquesPublicAttributes[label] = value
+          } else if (state === 'hcd') {
+            if (isFile) {
+              encryptoThenSaveToIPFS.files[label] = value
+            } else {
+              encryptoThenSaveToIPFS.data[label] = value
             }
-          })
-          await this.uploadToPrivateService({
-            attributes: attributesToUpload,
-            addressToShare: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym'
-          })
+          } else if (state === 'ipfs') {
+            if (isFile) {
+              plaintextSaveToIPFS.files[label] = value
+            } else {
+              plaintextSaveToIPFS.data[label] = value
+            }
+          }
         }
-        // TODO: Remove classID when the last changes will be done [classId, instanceId]
-        const lastClassId = await this.$store.$uniquesApi.getLastClassId() + 1
-        await this.$store.$fruniquesApi.createWithAttributes({
-          user: this.polkadotAddress,
-          classId: lastClassId,
-          instanceId: parseInt(this.instance),
-          numericValue: 0,
-          admin: { Id: this.polkadotAddress },
-          attributes: attributes
-        })
+        const admin = this.$store.$hcd.getPolkadotAddress()
+        console.log({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
+        await this.$store.$afloatApi.createAsset({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin, isHierarchical: false, metadata })
         this.showNotification({ message: this.$t('pages.marketplace.taxCredits.messages.uniqueCreated'), color: 'positive' })
         this.$router.push({
-          name: 'NFTs'
+          name: 'collections'
         })
       } catch (error) {
         console.error('error', error)
@@ -106,6 +114,6 @@ export default {
   }
 }
 </script>
-<style lang='styl'>
+  <style lang='styl'>
 
-</style>
+  </style>

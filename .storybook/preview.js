@@ -29,7 +29,15 @@ app.component('AccountInput', AccountInput)
 
 const store = createStore({
   modules: {
-    polkadotWallet
+    polkadotWallet,
+    profile: {
+      namespaced: true,
+      getters: {
+        polkadotAddress () {
+          return '5HeCZWDcdSrsV4YPVg9vDLBjV1nHDrzXb79UdA7DytiiZPVB'
+        }
+      }
+    }
   },
 })
 

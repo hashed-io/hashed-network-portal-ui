@@ -2,8 +2,6 @@
 q-card.q-pa-sm(v-ripple flat bordered @click="onClickTax" data-testid="nft-item")
   q-card-section
     .row.justify-center.q-py-md
-      q-icon(name="account_balance" size="4.1em" color="black")
-    .row.justify-center.q-py-md
       q-chip.text-white.text-bold(color="primary") {{$t('pages.nfts.element.title')}} {{unique.classId}}
     #labels
       .row.justify-between.q-gutter-xs

@@ -118,6 +118,7 @@ export default {
           type: this.selectedAccount.type,
           returnTo: this.returnTo
         })
+        await this.$store.$afloatApi.setSigner(this.selectedAccount.address)
       } catch (e) {
         this.handlerError(e)
       } finally {

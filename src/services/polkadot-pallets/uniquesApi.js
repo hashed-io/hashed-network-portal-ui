@@ -44,8 +44,18 @@ class UniquesApi extends BasePolkadotApi {
         ...classData[index]
       }
     })
+    const classMetadata = await this.getMetadaOf({ classIds: classesIdArray })
+    return uniquesList.map((unique, index) => {
+      return {
+        ...classMetadata[index],
+        ...unique
+      }
+    })
+  }
 
-    return uniquesList
+  async getMetadaOf ({ classIds }, subTrigger) {
+    const metadata = await this.exMultiQuery('classMetadataOf', classIds, subTrigger)
+    return metadata.map(v => v.toHuman())
   }
 
   /**

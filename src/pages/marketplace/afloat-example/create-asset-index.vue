@@ -127,40 +127,6 @@ export default {
     }
   },
   methods: {
-    async callExtrinsic () {
-    // Create with Attributes
-      try {
-        this.showLoading()
-        await this.$store.$afloatApi.createAsset({
-          collectionId: undefined,
-          assetId: 0,
-          uniquesPublicAttributes: {
-            title: 'My tax credit'
-          },
-          plaintextSaveToIPFS: {
-            data: {
-              ssn: '12313123'
-            },
-            files: {
-              filename1: 'File1212'
-            }
-          },
-          encryptoThenSaveToIPFS: {
-            // data: {
-            //   ssn121212: '12313123'
-            // },
-            // files: {
-            //   filename112: 'File121212'
-            // }
-          }
-        })
-      } catch (error) {
-        console.error(error)
-        this.showNotification({ message: error.message || error, color: 'negative' })
-      } finally {
-        this.hideLoading()
-      }
-    },
     onRemoveAttribute (index) {
       if (this.attributes.length > 1) {
         this.attributes.splice(index, 1)

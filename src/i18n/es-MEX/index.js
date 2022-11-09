@@ -23,7 +23,10 @@ export default {
     logout: 'Cerrar sesión'
   },
   breadcrumb: {
-    confidentialDocuments: 'Documentos confidenciales'
+    confidentialDocuments: 'Documentos confidenciales',
+    NFTCollections: 'Colecciones NFT',
+    detail: 'Detalles',
+    create: 'create NFT'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -188,7 +191,6 @@ export default {
         detail: 'Detalles',
         custodian: 'Custodios',
         privacy: 'Privacidad',
-        NFTCollections: 'Colecciones NFT',
         create: 'Crear',
         afloat: 'Afloat Api ejemplo'
       },
@@ -286,11 +288,14 @@ export default {
         loggedDownloadFile: 'Debe iniciar sesión para descargar un archivo'
       },
       taxCredits: {
-        createForm: 'Crear nuevo Unique',
-        title: 'Lista de créditos de impuestos',
-        emptyList: 'No hay créditos de impuestos aún',
+        createCollectionFormTitle: 'Crear nueva Colección',
+        createNFTFormTitle: 'Crear nuevo unique',
+        title: 'Lista de NFT',
+        emptyList: 'No hay NFT aún',
+        emptyCollectionList: 'No hay colecciones aún',
         details: {
-          title: 'Detalles unique {class}',
+          collectionTitle: 'Detalles de la colección {class}',
+          NFTTitle: 'Detalles unique {class}',
           admin: 'Administrador',
           user: 'Usuario',
           frozen: 'Congelado',
@@ -314,15 +319,29 @@ export default {
         buttons: {
           addAttribute: 'Añadir atributo',
           createUnique: 'Crear unique',
-          removeAttribute: 'Eliminar atributo'
+          removeAttribute: 'Eliminar atributo',
+          createCollection: 'Create collection'
         },
         messages: {
           uniqueCreated: 'Unique creado'
         }
       }
     },
+    collections: {
+      loadingCollections: 'Cargando las colecciones...',
+      element: {
+        title: 'Colecciones',
+        input: 'Nombre de la colección'
+      }
+    },
     nfts: {
       loadingUniques: 'Cargando los NFTs...',
+      createNFT: 'Crear un nuevo NFT',
+      deleteOffer: 'Eliminar oferta',
+      enlistOffer: 'Enlistar oferta',
+      details: 'Detalles del NFT',
+      sellingLabel: 'Ingresa el precio de venta del NFT',
+      submitOffer: 'Enviar oferta',
       element: {
         title: 'Único',
         owner: 'Propietario',

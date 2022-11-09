@@ -54,6 +54,69 @@ const routes = [
               ],
               app: 'hcd'
             }
+          },
+          {
+            path: '/Collections',
+            name: 'collections',
+            component: () => import('pages/marketplace/Collections/CollectionScreen.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'NFTCollections', icon: 'library_books' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/Collections/details',
+            name: 'collectionDetails',
+            props: true,
+            component: () => import('pages/marketplace/Collections/DetailsCollectionPage.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'NFTCollections', icon: 'library_books', to: { name: 'collections' } },
+                { name: 'detail', icon: 'info' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/NFT/details',
+            name: 'NFTDetails',
+            props: true,
+            component: () => import('pages/marketplace/NFTs/DetailsNFTPage.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'NFTCollections', icon: 'library_books', to: { name: 'collections' } },
+                { name: 'detail', icon: 'info' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/Collections/create',
+            name: 'collectionCreate',
+            props: true,
+            component: () => import('pages/marketplace/Collections/CreateCollectionPage.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'NFTCollections', icon: 'article', to: { name: 'collections' } },
+                { name: 'create', icon: 'create' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/NFT/create',
+            name: 'NFTCreate',
+            props: true,
+            component: () => import('pages/marketplace/NFTs/CreateNFTPage.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'NFTCollections', icon: 'article', to: { name: 'collections' } },
+                { name: 'create', icon: 'create' }
+              ],
+              app: 'hcd'
+            }
           }
         ]
       },
