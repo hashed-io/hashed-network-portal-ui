@@ -15,7 +15,7 @@
     "deploy": "node gh-pages-deploy.js"
   },
   "dependencies": {
-    "@jmgayosso/afloat-client": "^0.0.3",
+    "@jmgayosso/afloat-client": "^0.0.4",
     "@jmgayosso/nbv-client-api": "^0.0.2",
     "@jmgayosso/test-btn": "^1.0.1",
     "@polkadot/api": "^8.1.1",
@@ -29,6 +29,7 @@
     "@storybook/addon-interactions": "^6.5.10",
     "@storybook/jest": "^0.0.10",
     "@storybook/testing-library": "^0.0.13",
+    "add": "^2.0.6",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "eslint-loader": "^4.0.2",
@@ -45,7 +46,8 @@
     "vue-router": "4.0.0",
     "vue3-qr-reader": "^1.0.0",
     "vuex": "^4.0.1",
-    "webpack": "^5.68.0"
+    "webpack": "^5.68.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",
