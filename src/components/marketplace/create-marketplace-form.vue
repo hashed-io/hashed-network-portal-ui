@@ -18,6 +18,11 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     :placeholder="$t('pages.marketplace.createForm.placeholder')"
     autofocus
   )
+  AccountInput(
+    v-model="admin"
+    :label="$t('pages.marketplace.adminInput')"
+    :rules="admin ? [rules.isValidPolkadotAddress] : []"
+  )
   q-btn.float-right.q-mb-md(
     data-testid="submit_btn"
     outline
@@ -32,24 +37,28 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
 
 <script>
 import { validation } from '~/mixins/validation'
+import AccountInput from '~/components/common/account-input.vue'
 
 /**
  * This component is used to fill form to create a new marketplace
  */
 export default {
   name: 'CreateMarketplaceForm',
+  components: { AccountInput },
   mixins: [validation],
   emits: ['onSubmittedForm'],
   data () {
     return {
-      label: undefined
+      label: undefined,
+      admin: undefined
     }
   },
   methods: {
     async submitForm () {
       try {
         const data = {
-          label: this.label
+          label: this.label,
+          admin: this.admin
         }
         /**
          * This event is emitted when the form is filled and submitted

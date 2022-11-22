@@ -151,6 +151,21 @@ export default defineComponent({
           to: { name: 'collections' },
           keyActive: 'NFTCollections',
           label: 'pages.marketplace.mainOptions.nftCollections'
+        },
+        {
+          to: { name: 'marketplacesList' },
+          keyActive: 'MarketplacesList',
+          label: 'pages.marketplace.mainOptions.marketplaces'
+        },
+        {
+          to: { name: 'marketplace-details' },
+          keyActive: 'MarketplaceDetails',
+          label: 'pages.marketplace.mainOptions.marketplaceDetails'
+        },
+        {
+          to: { name: 'custodian' },
+          keyActive: 'custodian',
+          label: 'pages.marketplace.mainOptions.custodian'
         }
       ]
     }

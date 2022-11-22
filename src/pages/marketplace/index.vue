@@ -87,6 +87,7 @@ export default {
       try {
         this.showLoading()
         this.allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({ startKey: 0, pageSize: this.pagination.limit })
+        console.log({ allMarkets: this.allMarketplaces })
       } catch (e) {
         this.handlerError(e)
       } finally {
@@ -103,14 +104,14 @@ export default {
         this.hideLoading()
       }
     },
-    async createMarketplace (marketplace) {
+    async createMarketplace ({ label, admin }) {
       try {
         this.showLoading()
         this.modals.isShowingAddMarketplace = false
         await this.$store.$afloatApi.createMarketplace({
-          admin: this.polkadotAddress,
+          admin: admin || this.polkadotAddress,
           user: this.polkadotAddress,
-          label: marketplace.label
+          label
         })
         this.getMyMarketplaces()
         this.getAllMarketplace()
