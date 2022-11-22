@@ -108,6 +108,7 @@ class MarketplaceApi extends BasePolkadotApi {
         applicationId: v.value
       }
     })
+    // if (allIds.length === 0) return []
     // 2 Map all the aplicationsIds into array of application id
     const applicationsId = map.map(v => v.value)
     // 2.1 Execute multiquery to retrieve the applications details
@@ -150,7 +151,7 @@ class MarketplaceApi extends BasePolkadotApi {
     const marketInfo = marketLabels.map((v, index) => {
       return {
         id: marketplacesIdJoined[index],
-        label: v.label
+        label: v?.label
       }
     })
     // 11 Get Authorities by marketplaces given marketplacesId

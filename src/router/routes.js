@@ -109,11 +109,46 @@ const routes = [
             path: '/NFT/create',
             name: 'NFTCreate',
             props: true,
-            component: () => import('pages/marketplace/NFTs/CreateNFTPage.vue'),
+            component: () => import('pages/marketplace/NFTs/CreateTaxCreditPage.vue'),
             meta: {
               breadcrumb: [
                 { name: 'NFTCollections', icon: 'article', to: { name: 'collections' } },
                 { name: 'create', icon: 'create' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '',
+            name: 'marketplacesList',
+            component: () => import('pages/marketplace/index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'marketplaces', icon: 'storefront' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/marketplaces/details',
+            name: 'marketplace-details',
+            props: true,
+            component: () => import('pages/marketplace/details-market.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'marketplaces', icon: 'storefront', to: { name: 'marketplacesList' } },
+                { name: 'detail', icon: 'info' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/custody',
+            name: 'custodian',
+            component: () => import('pages/marketplace/custodian/index.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'custodian', icon: 'shield' }
               ],
               app: 'hcd'
             }
