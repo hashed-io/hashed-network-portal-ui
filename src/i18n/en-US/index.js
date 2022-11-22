@@ -32,7 +32,8 @@ export default {
     createAsset: 'Create Asset',
     getAllAssets: 'Get All Assets',
     proposalDetails: 'Proposal Details',
-    create: 'create NFT'
+    create: 'create NFT',
+    marketplaces: 'Marketplaces'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -193,8 +194,10 @@ export default {
       appName: 'Marketplace',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Add Marketplace',
+      adminInput: 'The administrator of the marketplace (optional)',
       mainOptions: {
         marketplaces: 'Marketplaces',
+        marketplaceDetails: 'Details',
         custodian: 'Custodian',
         privacy: 'Privacy',
         nftCollections: 'NFT Collections'
@@ -230,7 +233,7 @@ export default {
       },
       applyForm: {
         title: 'Apply for Marketplace',
-        subtitle: 'Fill in the form to apply for the Marketplace',
+        subtitle: 'Fill in the form to apply for the Marketplace. Each document must be uploaded to share with the administrator of the Marketplace',
         custodian: {
           label: 'Custodian',
           placeholder: 'Custodian address',

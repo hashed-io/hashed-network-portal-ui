@@ -26,7 +26,8 @@ export default {
     confidentialDocuments: 'Documentos confidenciales',
     NFTCollections: 'Colecciones NFT',
     detail: 'Detalles',
-    create: 'create NFT'
+    create: 'create NFT',
+    marketplaces: 'Marketplaces'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -180,8 +181,10 @@ export default {
       appName: 'Mercados',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Añadir Marketplace',
+      adminInput: 'El administrador del marketplace (Opcional)',
       mainOptions: {
         marketplaces: 'Mercados',
+        marketplaceDetails: 'Detalles',
         custodian: 'Custodios',
         privacy: 'Privacidad',
         nftCollections: 'Colecciones NFT'
@@ -218,7 +221,7 @@ export default {
       },
       applyForm: {
         title: 'Aplicar para unirse al marketplace',
-        subtitle: 'Llena el formulario para aplicar a este marketplace',
+        subtitle: 'Llena el formulario para aplicar a este marketplace. Cada archivo debe ser subido para ser compartido con el administrador del marketplace',
         custodian: {
           label: 'Custodio',
           placeholder: 'Dirección del custodio',
