@@ -32,8 +32,9 @@ export default {
     createAsset: 'Create Asset',
     getAllAssets: 'Get All Assets',
     proposalDetails: 'Proposal Details',
-    create: 'create NFT',
-    marketplaces: 'Marketplaces'
+    create: 'create',
+    marketplaces: 'Marketplaces',
+    taxCredits: 'Tax Credits'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -200,7 +201,8 @@ export default {
         marketplaceDetails: 'Details',
         custodian: 'Custodian',
         privacy: 'Privacy',
-        nftCollections: 'NFT Collections'
+        nftCollections: 'NFT Collections',
+        afloat: 'Afloat'
       },
       breadcrumbs: {
         marketplaces: 'Marketplaces',
@@ -310,6 +312,7 @@ export default {
         emptyCollectionList: 'No Collections yet',
         details: {
           collectionTitle: 'Details of the collection {class}',
+          afloatCollectionTitle: 'Afloat tax credits',
           NFTTitle: 'Detalles NFT {class}',
           admin: 'Administator',
           user: 'User',
@@ -351,13 +354,16 @@ export default {
     nfts: {
       loadingUniques: 'Loading the NFT(s)...',
       createNFT: 'Create a new NFT',
+      createTaxCredit: 'Create a new Tax Credit',
       deleteOffer: 'Delete offer',
       enlistOffer: 'Enlist offer',
       details: 'Details of the NFT',
+      detailsTaxCredit: 'Details of the Tax Credit',
       sellingLabel: 'Enter the selling price of the NFT',
       submitOffer: 'Submit offer',
       element: {
         title: 'Unique',
+        taxCreditTitle: 'Tax Credit',
         owner: 'Owner',
         issuer: 'Issuer'
       }
