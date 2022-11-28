@@ -143,6 +143,44 @@ const routes = [
             }
           },
           {
+            path: '/afloat/TaxCredit',
+            name: 'afloat',
+            component: () => import('pages/marketplace/afloat-example/TaxCreditsCollections.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'taxCredits', icon: 'library_books' },
+                { name: 'detail', icon: 'info' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/afloat/TaxCredit/details',
+            name: 'taxCreditDetails',
+            props: true,
+            component: () => import('pages/marketplace/afloat-example/TaxCreditDetails.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'taxCredits', icon: 'library_books', to: { name: 'afloat' } },
+                { name: 'detail', icon: 'info' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
+            path: '/afloat/create',
+            name: 'createTaxCredit',
+            props: true,
+            component: () => import('pages/marketplace/NFTs/CreateTaxCreditPage.vue'),
+            meta: {
+              breadcrumb: [
+                { name: 'taxCredits', icon: 'article', to: { name: 'afloat' } },
+                { name: 'create', icon: 'create' }
+              ],
+              app: 'hcd'
+            }
+          },
+          {
             path: '/custody',
             name: 'custodian',
             component: () => import('pages/marketplace/custodian/index.vue'),

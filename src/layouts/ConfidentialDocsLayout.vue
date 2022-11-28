@@ -154,18 +154,13 @@ export default defineComponent({
         },
         {
           to: { name: 'marketplacesList' },
-          keyActive: 'MarketplacesList',
+          keyActive: 'marketplaces',
           label: 'pages.marketplace.mainOptions.marketplaces'
         },
         {
-          to: { name: 'marketplace-details' },
-          keyActive: 'MarketplaceDetails',
-          label: 'pages.marketplace.mainOptions.marketplaceDetails'
-        },
-        {
-          to: { name: 'custodian' },
-          keyActive: 'custodian',
-          label: 'pages.marketplace.mainOptions.custodian'
+          to: { name: 'afloat' },
+          keyActive: 'taxCredits',
+          label: 'pages.marketplace.mainOptions.afloat'
         }
       ]
     }
