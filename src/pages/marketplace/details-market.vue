@@ -257,15 +257,15 @@ export default {
       const promisesFields = []
       applicants.forEach((applicant, indexApplicant) => {
         const applicantFields = applicant.fields
-        applicantFields.forEach(privateFields => {
-          const identifier = 'File:'
-          let cid = privateFields.displayName.includes(identifier)
-            ? privateFields.cid.split(':')[0]
-            : privateFields.cid
+        applicantFields.forEach(hcdFields => {
+          const identifier = 'HCD:'
+          let cid = hcdFields.displayName.includes(identifier)
+            ? hcdFields.cid.split(':')[0]
+            : hcdFields.cid
           if (cid.split(':').length > 1) {
-            cid = cid.split(':')[0]
+            cid = cid.split(':')[1]
           }
-          promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
+          promisesFields.push(this.$store.$hcd.viewSharedDataByCID(cid))
         })
       })
       const _resolvedFields = await Promise.all(promisesFields)
@@ -315,79 +315,6 @@ export default {
       ]
       return { fields: fieldsToSend, custodianFields }
     }
-    // async shareWithAdministrator (form) {
-    //   try {
-    //     const promises = []
-    //     const hcdService = this.$store.$hcd
-    //     const administratorAddress = this.admin.address
-    //     for (const fileElement of form.fields) {
-    //       const { label, file } = fileElement
-    //       let fileName
-    //       if (file?.name) {
-    //         const fileNameSplit = file.name.split('.')
-    //         const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
-    //         const ext = fileNameSplit[1]
-    //         fileName = filename + '.' + ext
-    //       } else if (file && typeof file === 'string') {
-    //         // if file.name is undefined, it means that the file is a note (String)
-    //         fileName = file
-    //       }
-    //       promises.push(hcdService.shareData({
-    //         toUserAddress: administratorAddress,
-    //         name: fileName,
-    //         description: label,
-    //         payload: file
-    //       }))
-    //     }
-    //     const results = await Promise.all(promises)
-    //     for (const fileElement of form.fields) {
-    //       const { file } = fileElement
-    //       const result = results.shift()
-    //       const CID = result.sharedData.cid
-    //       const fileName = file.name ? file.name : 'Notes'
-    //       fileElement.id = result.ownedData.id
-    //       fileElement.value = CID + ':' + fileName
-    //       fileElement.description = result.sharedData.description
-    //     }
-    //   } catch (error) {
-    //     console.error(error)
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //     throw new Error('Error sharing with administrator')
-    //   }
-    //   return form
-    // },
-    // async shareWithCustodian (form) {
-    //   const notesIdentifier = 'Notes'
-    //   const { custodian, fields } = form
-    //   if (!custodian) {
-    //     return form
-    //   }
-    //   const hpService = this.$store.$hcd
-    //   const promisesFields = []
-    //   try {
-    //     for (const field of fields) {
-    //       const { id } = field
-    //       promisesFields.push(hpService.shareData({
-    //         toUserAddress: custodian,
-    //         originalOwnedDataId: id
-    //       }))
-    //     }
-    //     const results = await Promise.all(promisesFields)
-    //     for (const field of fields) {
-    //       const result = results.shift()
-    //       if (result.description === 'Notes') {
-    //         field.custodianField = result.cid + ':' + notesIdentifier
-    //       } else {
-    //         field.custodianField = result.cid + ':' + result.name
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error('Error Sharing with Custodian', error)
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //     throw new Error('Error sharing with custodian')
-    //   }
-    //   return form || undefined
-    // }
   }
 
 }

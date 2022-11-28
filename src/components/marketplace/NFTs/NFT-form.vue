@@ -97,11 +97,9 @@
 </template>
 <script>
 import { validation } from '~/mixins/validation'
-import NFTInput from '~/components/marketplace/NFTs/NFT-input.vue'
 export default {
   name: 'NFTForm',
   components: {
-    NFTInput
   },
   mixins: [validation],
   props: {

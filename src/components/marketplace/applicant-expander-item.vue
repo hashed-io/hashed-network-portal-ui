@@ -139,7 +139,7 @@ export default {
     },
     getNotes () {
       const notesIdentifier = 'Notes'
-      const fileIdentifier = 'description'
+      const fileIdentifier = 'displayName'
       const notesField = this.fields.find(field => field[fileIdentifier] === notesIdentifier)
       return (notesField && typeof notesField.payload === 'object') ? notesField?.payload?.notes : notesField?.payload
     },
@@ -181,10 +181,11 @@ export default {
       this.$emit('onReject', data)
     },
     async getMarketplaceLabel (marketId) {
-      const market = await this.$store?.$marketplaceApi?.getMarketplaceById({
-        marketId
-      })
-      return market?.label
+      // const market = await this.$store?.$marketplaceApi?.getMarketplaceById({
+      //   marketId
+      // })
+      // return market?.label
+      return 'TODO: Migrate custodian to HCD'
     }
   }
 }

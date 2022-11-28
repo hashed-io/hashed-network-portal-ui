@@ -6,23 +6,35 @@
         .text-h5.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
         .text-subtitle.q-pb-md.text-red {{$t('pages.marketplace.applyForm.subtitle')}}
         q-form(ref="applyForm" @submit="onSubmit")
-          h-input(
-            required
-            data-cy="notes_input"
-            testid="notes_input"
-            class="q-mt-md"
-            v-model="form.notes.label"
-            :label="$t('pages.marketplace.applyForm.notes.label')"
-            :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
-            :rules="[rules.required,rules.lessOrEqualThanString(25)]"
-          )
-          q-btn.q-my-md(
-            color="primary"
-            :label="$t('pages.hcd.documents.shareDocument')"
-            outline
-            :disable="!form.notes.label"
-            @click="onUploadNotesHCD()"
-          )
+          .row.justify-between
+            .col-11
+              h-input(
+                required
+                data-cy="notes_input"
+                testid="notes_input"
+                class="q-mt-md"
+                v-model="form.notes.label"
+                :label="$t('pages.marketplace.applyForm.notes.label')"
+                :placeholder="$t('pages.marketplace.applyForm.notes.placeholder')"
+                :rules="[rules.required,rules.lessOrEqualThanString(25)]"
+              )
+            .col-1
+              q-icon.q-my-md.q-mx-md.q-pt-xl(
+                v-if="!form.notes.cid"
+                name="upload"
+                size="1.5rem"
+                color="primary"
+                :label="$t('pages.hcd.documents.shareDocument')"
+                outline
+                :disable="!form.notes.label"
+                @click="onUploadNotesHCD()"
+              )
+              q-icon.q-my-md.q-mx-md.q-pt-xl(
+                v-else
+                name="check"
+                size="1.5rem"
+                color="primary"
+              )
           .row.justify-between
             div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
             div
@@ -33,7 +45,7 @@
                 class="col-11"
                 v-model:label="form.files[index].label"
                 v-model:value="form.files[index].file"
-                :rulesLabel="[rules.required, rules.greaterOrEqualThanString(6), rules.lessOrEqualThanString(25)]"
+                :rulesLabel="[rules.required, rules.lessOrEqualThanString(25)]"
                 :rulesValue="[rules.required]"
                 testid="file"
               )
@@ -180,7 +192,16 @@ export default {
       const data = {
         fields: [{ label: 'Notes', cid: this.form.notes.cid }, ...files]
       }
-      this.$emit('onSubmitApplyForm', data)
+      let flag = true
+      data.fields.forEach(field => {
+        console.log({ field })
+        if (!field.cid) flag = false
+      })
+      if (flag) {
+        this.$emit('onSubmitApplyForm', data)
+      } else {
+        this.showNotification({ message: 'You must upload the file using the Upload icon', color: 'negative' })
+      }
     },
     onMoreFiles () {
       this.form.files.push({

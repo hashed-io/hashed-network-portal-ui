@@ -1,6 +1,6 @@
 import { expect } from '@storybook/jest'
 // import { expect } from '@storybook/jest'
-import MarketApplyForm from '~/components/marketplace/details/market-apply-form.vue'
+import MarketApplyForm from '~/components/marketplace/details/market-apply-form-backup.vue'
 import { userEvent, within } from '@storybook/testing-library'
 import { mapMutations } from 'vuex'
 import asset from '../../../assets/portal/logo-gradient-white.png'
