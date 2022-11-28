@@ -8,6 +8,7 @@
         :label="$t('pages.marketplace.taxCredits.labels.attributeLabel')"
         :placeholder="$t('pages.marketplace.taxCredits.placeholders.label')"
         dense
+        testid="filename"
       )
     .col-6.padding-top
       q-file(

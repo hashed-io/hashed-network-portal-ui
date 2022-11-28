@@ -1,8 +1,9 @@
 <template lang='pug'>
 q-form(
+  ref="taxCreditForm"
   @submit="onSubmit"
 )
-  .row.justify-around(v-if="withData")
+  .row.justify-around(v-show="withData")
     .col-4
       h-input(
         v-model="form.metadata"
@@ -77,17 +78,9 @@ q-form(
             v-model="recipient.creditHolderIDNumber"
             label="Credit Holder Identification Number"
             :rules="[rules.required]"
-            :typeProp="isPwd ? 'password' : 'text'"
             :mask="getMask"
             fill-mask
           )
-            template(v-slot:append)
-              q-icon(
-                :name="isPwd ? 'visibility_off' : 'visibility'"
-                class="cursor-pointer q-pt-md"
-                size="20px"
-                @click="isPwd = !isPwd"
-              )
           h-input.q-py-sm(
             v-model="recipient.streetAddress"
             label="Street Address or P.O. Box Number"
@@ -177,7 +170,7 @@ q-form(
           )
       q-btn.full-width(
         type="submit"
-        label="Create NFT"
+        label="Create Tax Credit"
         outline
         color="primary"
       )
@@ -194,6 +187,19 @@ q-form(
               outlined
               accept=".pdf"
             )
+            q-btn.q-my-md(
+              color="primary"
+              outline
+              :disable="!form.file"
+              @click="uploadToHCD"
+              label="Upload to Confidential Documents"
+            )
+            q-icon.q-px-md(
+              v-show="fileHCD"
+              color="green"
+              size="1.5rem"
+              name="check"
+            )
       .fileViewer
         embed(
             v-if="form.file"
@@ -201,14 +207,13 @@ q-form(
             height="800px"
             width="100%"
           )
-
 </template>
 <script>
 import { validation } from '~/mixins/validation'
+
 export default {
   name: 'TaxcreditForm',
   components: {
-
   },
   mixins: [validation],
   props: {
@@ -217,6 +222,10 @@ export default {
       default: undefined
     },
     typeCredit: {
+      type: String,
+      default: undefined
+    },
+    adminMarket: {
       type: String,
       default: undefined
     }
@@ -231,6 +240,7 @@ export default {
         expirationDate: undefined,
         file: undefined
       },
+      fileHCD: undefined,
       recipient: {
         SMLLC: false,
         LLCTreatedAs: undefined,
@@ -254,7 +264,7 @@ export default {
         email: undefined,
         phoneNumber: undefined
       },
-      creditHolder: undefined,
+      creditHolder: 'CACorporationNo',
       optionsLLC: [
         {
           label: 'Partnership',
@@ -280,7 +290,7 @@ export default {
         }
       ],
       hidden: true,
-      isPwd: false
+      prefixHCD: 'HCD:'
     }
   },
   computed: {
@@ -290,9 +300,6 @@ export default {
     isWisconsin () {
       return this.state === 'Wisconsin' && this.typeCredit?.includes('Wisconsin')
     },
-    withData () {
-      return this.state && this.typeCredit
-    },
     getMask () {
       return this.creditHolder === 'FEIN' ? '##-#######' : 'C#######'
     },
@@ -300,12 +307,49 @@ export default {
       const blob = new Blob([this.form.file], { type: 'application/pdf' })
       const blobURL = URL.createObjectURL(blob)
       return blobURL || undefined
+    },
+    withData () {
+      return this.state && this.typeCredit
     }
   },
   methods: {
+    reset () {
+      this.$refs.taxCreditForm.resetValidation()
+    },
     onSubmit () {
-      const form = this.state === 'California' ? { publicData: { ...this.form }, toEncrypt: { ...this.recipient } } : { publicData: { ...this.form }, toEncrypt: { ...this.transferorInfo } }
+      const formObj = { ...this.form }
+      delete formObj.file
+      const form = this.state === 'California'
+        ? { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.recipient, file: this.fileHCD } }
+        : { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.transferorInfo, file: this.fileHCD } }
+
+      console.log({ form })
+      if (!this.fileHCD) {
+        this.showNotification({ message: 'You need to upload the file to Confidential Docs', color: 'negative' })
+        return
+      }
       this.$emit('onSubmitForm', form)
+    },
+    async uploadToHCD (index) {
+      try {
+        this.showLoading()
+
+        const label = 'Tax Credit File'
+        const value = this.form.file
+
+        const { cid } = this.adminMarket
+          ? await this.$store.$hcd.shareData({ toUserAddress: this.adminMarket, name: label, description: label, payload: value })
+          : await this.$store.$hcd.addOwnedData({ name: label, description: label, payload: value })
+
+        if (cid) {
+          this.fileHCD = this.prefixHCD + cid
+        }
+        this.showNotification({ message: 'File uploaded successfully to Confidential Documents' })
+      } catch (e) {
+        this.handlerError(e)
+      } finally {
+        this.hideLoading()
+      }
     }
   }
 }

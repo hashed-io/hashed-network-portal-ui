@@ -4,8 +4,10 @@ q-card
     TaxcreditSelector(@onSubmit="onFilled")
   q-card-section
     TaxCreditForm(
+      ref="form"
       :state="taxCreditInfo.state"
       :typeCredit="taxCreditInfo.type"
+      :adminMarket="adminMarketAddress"
       @onSubmitForm="onCreateNFT"
     )
 </template>
@@ -46,19 +48,19 @@ export default {
         type,
         entity
       }
+      this.$refs.form.reset()
     },
     async onCreateNFT ({ publicData, toEncrypt }) {
-      console.log({ publicData, toEncrypt })
       try {
-        const collectionId = this.$route.query?.classId
+        const collectionId = this.$route.query?.classId || '0'
         const uniquesPublicAttributes = {}
         const plaintextSaveToIPFS = { data: {}, files: {} }
         const encryptoThenSaveToIPFS = { data: {}, files: {} }
         const assetId = 0
-        const file = publicData.file
-        plaintextSaveToIPFS.files.taxCredit = file
+        const file = toEncrypt.file
+        encryptoThenSaveToIPFS.files.taxCredit = file
         const metadata = publicData.metadata
-        delete publicData.file
+        delete toEncrypt.file
         delete publicData.metadata
         Object.entries(publicData)?.forEach(([key, value]) => {
           uniquesPublicAttributes[key] = value
@@ -66,13 +68,12 @@ export default {
         Object.entries(toEncrypt)?.forEach(([key, value]) => {
           encryptoThenSaveToIPFS.data[key] = value
         })
-        encryptoThenSaveToIPFS.files.taxCredit = file
         const admin = this.adminMarketAddress
         console.log({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
         await this.$store.$afloatApi.createAsset({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin, isHierarchical: false, metadata })
         this.showNotification({ message: this.$t('pages.marketplace.taxCredits.messages.uniqueCreated'), color: 'positive' })
         this.$router.push({
-          name: 'collections'
+          name: 'afloat'
         })
       } catch (error) {
         console.error('error', error)

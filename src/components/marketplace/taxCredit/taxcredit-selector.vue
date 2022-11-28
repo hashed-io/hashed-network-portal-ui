@@ -45,6 +45,7 @@
         label="Show Tax Credit form"
         color="primary"
         outline
+        no-caps
       )
 </template>
 <script>
