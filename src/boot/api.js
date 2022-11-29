@@ -20,14 +20,26 @@ export default async ({ app, store }) => {
     const api = new PolkadotApi()
     const bdkApi = new BdkApi()
     await api.connect()
+
+    // Hashed Confidential Docs
+    const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
+    const hashedConfidentialDocs = new ConfidentialDocs({
+      ipfsURL: process.env.IPFS_URL,
+      ipfsAuthHeader,
+      chainURI: process.env.WSS,
+      appName: process.env.APP_NAME,
+      faucetServerUrl: process.env.FAUCET_SERVER_URL
+    })
+
+    await hashedConfidentialDocs.init()
+
     // const treasuryApi = new TreasuryApi(api, showGlobalLoading)
     // const nbvStorageApi = new NbvStorageApi(api, showGlobalLoading)
     const palletId = process.env.GATED_PALLET_ID
-    const marketplaceApi = new MarketplaceApi(api, showGlobalLoading, palletId)
+    const marketplaceApi = new MarketplaceApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading, palletId)
     const fruniquesApi = new FruniquesApi(api, showGlobalLoading)
     const uniquesApi = new UniquesApi(api, showGlobalLoading)
     // Connect Hashed private service
-    const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
     hideGlobalLoading()
     showGlobalLoading({
       message: 'Connecting with Hashed Private Server'
@@ -47,17 +59,6 @@ export default async ({ app, store }) => {
     } catch (e) {
       console.error(e)
     }
-
-    // Hashed Confidential Docs
-    const hashedConfidentialDocs = new ConfidentialDocs({
-      ipfsURL: process.env.IPFS_URL,
-      ipfsAuthHeader,
-      chainURI: process.env.WSS,
-      appName: process.env.APP_NAME,
-      faucetServerUrl: process.env.FAUCET_SERVER_URL
-    })
-
-    await hashedConfidentialDocs.init()
 
     const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
     const afloatApi = new AfloatApi({

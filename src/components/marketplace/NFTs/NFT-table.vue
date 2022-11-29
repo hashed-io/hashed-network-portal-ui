@@ -12,7 +12,7 @@
           q-chip.text-white.text-bold(
             color="primary"
             data-testid="nft-name"
-            ) {{$t('pages.nfts.element.title')}} {{props.row.instance}} {{props.row.data}}
+            ) {{isTaxCredit ? $t('pages.nfts.element.taxCreditTitle') : $t('pages.nfts.element.title')}} {{props.row.instance}} {{props.row.data}}
         q-td.cursor-pointer(key="owner" :props="props" @click="onClickRow(props.rowIndex)")
           AccountItem(
             inherit
@@ -76,6 +76,10 @@ export default {
         isFrozen: false,
         onSale: false
       }]
+    },
+    isTaxCredit: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['onClickRow', 'onClickDeleteOffer', 'onClickEnlistSellOffer'],

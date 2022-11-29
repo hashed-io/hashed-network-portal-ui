@@ -151,6 +151,16 @@ export default defineComponent({
           to: { name: 'collections' },
           keyActive: 'NFTCollections',
           label: 'pages.marketplace.mainOptions.nftCollections'
+        },
+        {
+          to: { name: 'marketplacesList' },
+          keyActive: 'marketplaces',
+          label: 'pages.marketplace.mainOptions.marketplaces'
+        },
+        {
+          to: { name: 'afloat' },
+          keyActive: 'taxCredits',
+          label: 'pages.marketplace.mainOptions.afloat'
         }
       ]
     }

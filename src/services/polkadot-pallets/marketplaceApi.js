@@ -150,7 +150,7 @@ class MarketplaceApi extends BasePolkadotApi {
     const marketInfo = marketLabels.map((v, index) => {
       return {
         id: marketplacesIdJoined[index],
-        label: v.label
+        label: v?.label
       }
     })
     // 11 Get Authorities by marketplaces given marketplacesId
@@ -162,7 +162,7 @@ class MarketplaceApi extends BasePolkadotApi {
     // 12 Map marketplaces details
     const adminTag = 'Admin'
     const ownerTag = 'Owner'
-    return marketInfo.map((market, i) => {
+    const markets = marketInfo.map((market, i) => {
       const admin = marketDetails[i].find(({ type }) => type === adminTag)
       const owner = marketDetails[i].find(({ type }) => type === ownerTag)
       return {
@@ -172,6 +172,7 @@ class MarketplaceApi extends BasePolkadotApi {
         owner: owner?.address
       }
     })
+    return markets.filter(market => market?.label)
   }
 
   /**
@@ -246,7 +247,12 @@ class MarketplaceApi extends BasePolkadotApi {
    * @description This function call apply extrinsic
    */
   async applyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
-    return this.callTx('apply', user, [marketId, fields, custodianFields])
+    // return this.callTx('apply', user, [marketId, fields, custodianFields])
+    return this.callTx({
+      extrinsicName: 'apply',
+      signer: this._signer,
+      params: [marketId, fields, custodianFields]
+    })
   }
 
   /**
@@ -254,7 +260,12 @@ class MarketplaceApi extends BasePolkadotApi {
    * @description This function call reapply extrinsic
    */
   async reapplyFor ({ marketId, user, fields, custodianFields }, subTrigger) {
-    return this.callTx('reapply', user, [marketId, fields, custodianFields])
+    // return this.callTx('reapply', user, [marketId, fields, custodianFields])
+    return this.callTx({
+      extrinsicName: 'reapply',
+      signer: this._signer,
+      params: [marketId, fields, custodianFields]
+    })
   }
 
   async createMarketplace ({ admin, user, label }, subTrigger) {
@@ -273,7 +284,12 @@ class MarketplaceApi extends BasePolkadotApi {
    * @returns {Object}
    */
   async enrollApplicant ({ marketId, user, accountOrApplication, approved, feedback }, subTrigger) {
-    return this.callTx('enroll', user, [marketId, accountOrApplication, approved, feedback])
+    // return this.callTx('enroll', user, [marketId, accountOrApplication, approved, feedback])
+    return this.callTx({
+      extrinsicName: 'enroll',
+      signer: this._signer,
+      params: [marketId, accountOrApplication, approved, feedback]
+    })
   }
 
   /**

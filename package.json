@@ -15,7 +15,7 @@
     "deploy": "node gh-pages-deploy.js"
   },
   "dependencies": {
-    "@jmgayosso/afloat-client": "^0.0.4",
+    "@jmgayosso/afloat-client": "^0.0.5",
     "@jmgayosso/nbv-client-api": "^0.0.2",
     "@jmgayosso/test-btn": "^1.0.1",
     "@polkadot/api": "^8.1.1",

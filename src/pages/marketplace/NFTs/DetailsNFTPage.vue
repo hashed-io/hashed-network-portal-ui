@@ -60,7 +60,7 @@ export default {
     }
   },
   async beforeMount () {
-    const classId = this.$route.query?.classId
+    const classId = this.$route.query?.classId || '0'
     const instanceId = this.$route.query?.instanceId
     if (classId) {
       try {

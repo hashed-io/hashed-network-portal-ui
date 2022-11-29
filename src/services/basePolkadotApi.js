@@ -1,38 +1,34 @@
-class BasePolkadotApi {
+class BasePolkadot {
   /**
    * Class constructor
-   * @param {PolkadotApi} polkadotApi Instance from PolkadotApi class
+   * @param {Polkadot} polkadot Instance from Polkadot class
    * @param {String} palletName Pallet Name
    */
-  constructor (polkadotApi, palletName, notify) {
-    this.polkadotApi = polkadotApi
+  constructor (polkadot, palletName, notify) {
+    this.polkadot = polkadot
     this.palletName = palletName
     this.notify = notify
+    this._signer = undefined
   }
 
   /**
    * @name callTx
-   * @description Call a TX from polkadot api for a specific pallet and handler response subscription
+   * @description Call a TX from polkadot api for NbvStorage and handler response subscription
    * @param {String} extrinsicName Extrinsic function name to call
    * @param {String} signer User address to sign transaction
    * @param {*} params Params for extrinsic function
    * @returns tx response from polkadot api
    */
-  async callTx (extrinsicName, signer, params) {
-    await this.polkadotApi.setWeb3Signer(signer)
-    // console.log('callTx params', params)
-    let unsub
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (params) {
-          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName](...params).signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
-        } else {
-          unsub = await this.polkadotApi.api.tx[this.palletName][extrinsicName]().signAndSend(signer, (e) => this.handlerTXResponse(e, resolve, reject, unsub))
-        }
-      } catch (e) {
-        reject(e)
-      }
+  async callTx ({ extrinsicName, signer = null, params }) {
+    const txResponseHandler = (e, resolve, reject, unsub) => {
+      this.handlerTXResponse(e, resolve, reject, unsub)
+    }
+    return this.polkadot.callTx({
+      palletName: this.palletName,
+      extrinsicName,
+      params,
+      txResponseHandler,
+      signer
     })
   }
 
@@ -45,7 +41,8 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exQuery (queryName, params, subTrigger) {
-    return this.polkadotApi.api.query[this.palletName][queryName](...params, subTrigger)
+    // console.log('polkadot', this.polkadot._api)
+    return this.polkadot._api.query[this.palletName][queryName](...params, subTrigger)
   }
 
   /**
@@ -57,7 +54,7 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exMultiQuery (queryName, params, subTrigger) {
-    return this.polkadotApi.api.query[this.palletName][queryName].multi(params, subTrigger)
+    return this.polkadot._api.query[this.palletName][queryName].multi(params, subTrigger)
   }
 
   /**
@@ -69,18 +66,18 @@ class BasePolkadotApi {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exEntriesQuery (queryName, params, pagination, subTrigger) {
-    // console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
+    console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
     if (!params) {
-      return this.polkadotApi.api.query[this.palletName][queryName].entries()
+      return this.polkadot._api.query[this.palletName][queryName].entries()
     }
     if (pagination) {
-      return this.polkadotApi.api.query[this.palletName][queryName].entriesPaged({
+      return this.polkadot._api.query[this.palletName][queryName].entriesPaged({
         pageSize: pagination.pageSize || 10,
         args: [...params],
         startKey: pagination.startKey || null
       })
     }
-    return this.polkadotApi.api.query[this.palletName][queryName].entries(...params)
+    return this.polkadot._api.query[this.palletName][queryName].entries(...params)
   }
 
   /**
@@ -98,24 +95,24 @@ class BasePolkadotApi {
       type: 'listening'
     })
     const { events = [], status } = e
-    // console.log('events', events)
-    // console.log('status', status)
+    console.log('events', events)
+    console.log('status', status)
     if (status.isFinalized || status.isInBlock) {
       // console.log(`Transaction included at blockHash ${status.asFinalized}`)
 
       // Loop through Vec<EventRecord> to display all events
       events.forEach(({ phase, event: { data, method, section } }) => {
-        // console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
+        console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
       })
 
       events.filter(({ event: { section } }) => section === 'system').forEach(({ event: { method, data } }) => {
         if (method === 'ExtrinsicFailed') {
           // txFailedCb(result);
-          // console.log('ExtrinsicFailed', data)
+          console.log('ExtrinsicFailed', data)
           const [dispatchError] = data
           let errorInfo
 
-          console.error('ExtrinsicFailed error', data)
+          console.log('ExtrinsicFailed error', data)
           // decode the error
           if (dispatchError.isModule) {
             const decoded = data.registry.findMetaError(dispatchError.asModule)
@@ -126,13 +123,13 @@ class BasePolkadotApi {
           }
 
           // console.error('errorInfo', errorInfo)
-          // console.log('unsub', unsub)
+          console.log('unsub', unsub)
           unsub()
           reject(`Extrinsic failed: ${errorInfo}`)
           // const mod = data[0].asModule
         } else if (method === 'ExtrinsicSuccess') {
-          // console.log('ExtrinsicSuccess', data)
-          // console.log('unsub', unsub)
+          console.log('ExtrinsicSuccess', data)
+          console.log('unsub', unsub)
           unsub()
           resolve(data)
           // txSuccessCb(result);
@@ -148,7 +145,7 @@ class BasePolkadotApi {
    * [{ address, meta: { genesisHash, name, source }, type }]
    */
   requestUsers () {
-    return this.polkadotApi.requestUsers()
+    return this.polkadot.requestUsers()
   }
 
   /**
@@ -159,7 +156,7 @@ class BasePolkadotApi {
    * { identity }
    */
   getAccountInfo (user) {
-    return this.polkadotApi.getAccountInfo(user)
+    return this.polkadot.getAccountInfo(user)
   }
 
   /**
@@ -169,7 +166,7 @@ class BasePolkadotApi {
    * @returns BooleanP
    */
   isValidPolkadotAddress (address) {
-    return this.polkadotApi.isValidPolkadotAddress(address)
+    return this.polkadot.isValidPolkadotAddress(address)
   }
 
   /**
@@ -180,7 +177,7 @@ class BasePolkadotApi {
    * @returns Object
    */
   async signMessage (message, signer) {
-    return this.polkadotApi.signMessage(message, signer)
+    return this.polkadot.signMessage(message, signer)
   }
 
   /**
@@ -192,7 +189,7 @@ class BasePolkadotApi {
    * @returns Object
    */
   async verifyMessage (message, signature, signer) {
-    return this.polkadotApi.verifyMessage(message, signature, signer)
+    return this.polkadot.verifyMessage(message, signature, signer)
   }
 
   /**
@@ -215,4 +212,5 @@ class BasePolkadotApi {
   }
 }
 
-export default BasePolkadotApi
+// export default BasePolkadot
+module.exports = BasePolkadot

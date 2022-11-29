@@ -26,7 +26,9 @@ export default {
     confidentialDocuments: 'Documentos confidenciales',
     NFTCollections: 'Colecciones NFT',
     detail: 'Detalles',
-    create: 'create NFT'
+    create: 'create',
+    marketplaces: 'Marketplaces',
+    taxCredits: 'Créditos fiscales'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -180,8 +182,10 @@ export default {
       appName: 'Mercados',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Añadir Marketplace',
+      adminInput: 'El administrador del marketplace (Opcional)',
       mainOptions: {
         marketplaces: 'Mercados',
+        marketplaceDetails: 'Detalles',
         custodian: 'Custodios',
         privacy: 'Privacidad',
         nftCollections: 'Colecciones NFT'
@@ -218,7 +222,7 @@ export default {
       },
       applyForm: {
         title: 'Aplicar para unirse al marketplace',
-        subtitle: 'Llena el formulario para aplicar a este marketplace',
+        subtitle: 'Llena el formulario para aplicar a este marketplace. Cada archivo debe ser subido para ser compartido con el administrador del marketplace',
         custodian: {
           label: 'Custodio',
           placeholder: 'Dirección del custodio',
@@ -295,6 +299,7 @@ export default {
         emptyCollectionList: 'No hay colecciones aún',
         details: {
           collectionTitle: 'Detalles de la colección {class}',
+          afloatCollectionTitle: 'Créditos fiscales de Afloat',
           NFTTitle: 'Detalles unique {class}',
           admin: 'Administrador',
           user: 'Usuario',
@@ -337,13 +342,16 @@ export default {
     nfts: {
       loadingUniques: 'Cargando los NFTs...',
       createNFT: 'Crear un nuevo NFT',
+      createTaxCredit: 'Crear un nuevo crédito fiscal',
       deleteOffer: 'Eliminar oferta',
       enlistOffer: 'Enlistar oferta',
       details: 'Detalles del NFT',
+      detailsTaxCredit: 'Detalles del crédito fiscal',
       sellingLabel: 'Ingresa el precio de venta del NFT',
       submitOffer: 'Enviar oferta',
       element: {
         title: 'Único',
+        taxCreditTitle: 'Crédito fiscal',
         owner: 'Propietario',
         issuer: 'Editor'
       }

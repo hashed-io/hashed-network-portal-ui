@@ -1747,10 +1747,10 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@jmgayosso/afloat-client@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/afloat-client/-/afloat-client-0.0.4.tgz#6183e7dee639b650eb1443a1abc14efa8bb1368d"
-  integrity sha512-MEvD0OJA7nJqPmjZVmGDfu9M2Zncnz0mTWFH+P1mBLBel3Z0rU22adVUWqt+ivNALHWlcwCZ5v9Ve+5Qg9sI4A==
+"@jmgayosso/afloat-client@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@jmgayosso/afloat-client/-/afloat-client-0.0.5.tgz#2b33c598401b49e6bfdcd356e261778ab5ac1c6e"
+  integrity sha512-DeKU4RQV9KguBqAwJVYG6rW1pzXGOqKayEFrOnhfRS6COxzj3tGxDf2tQR2TR0mCbfoTKpmw+Djh8ZDgDnErYA==
   dependencies:
     "@polkadot/api" "^9.2.4"
     "@polkadot/extension-dapp" "^0.44.4"

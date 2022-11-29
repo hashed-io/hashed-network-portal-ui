@@ -32,7 +32,9 @@ export default {
     createAsset: 'Create Asset',
     getAllAssets: 'Get All Assets',
     proposalDetails: 'Proposal Details',
-    create: 'create NFT'
+    create: 'create',
+    marketplaces: 'Marketplaces',
+    taxCredits: 'Tax Credits'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -193,11 +195,14 @@ export default {
       appName: 'Marketplace',
       marketplaceTitle: 'Marketplace',
       addMarketplaceButton: 'Add Marketplace',
+      adminInput: 'The administrator of the marketplace (optional)',
       mainOptions: {
         marketplaces: 'Marketplaces',
+        marketplaceDetails: 'Details',
         custodian: 'Custodian',
         privacy: 'Privacy',
-        nftCollections: 'NFT Collections'
+        nftCollections: 'NFT Collections',
+        afloat: 'Afloat'
       },
       breadcrumbs: {
         marketplaces: 'Marketplaces',
@@ -230,7 +235,7 @@ export default {
       },
       applyForm: {
         title: 'Apply for Marketplace',
-        subtitle: 'Fill in the form to apply for the Marketplace',
+        subtitle: 'Fill in the form to apply for the Marketplace. Each document must be uploaded to share with the administrator of the Marketplace',
         custodian: {
           label: 'Custodian',
           placeholder: 'Custodian address',
@@ -307,6 +312,7 @@ export default {
         emptyCollectionList: 'No Collections yet',
         details: {
           collectionTitle: 'Details of the collection {class}',
+          afloatCollectionTitle: 'Afloat tax credits',
           NFTTitle: 'Detalles NFT {class}',
           admin: 'Administator',
           user: 'User',
@@ -348,13 +354,16 @@ export default {
     nfts: {
       loadingUniques: 'Loading the NFT(s)...',
       createNFT: 'Create a new NFT',
+      createTaxCredit: 'Create a new Tax Credit',
       deleteOffer: 'Delete offer',
       enlistOffer: 'Enlist offer',
       details: 'Details of the NFT',
+      detailsTaxCredit: 'Details of the Tax Credit',
       sellingLabel: 'Enter the selling price of the NFT',
       submitOffer: 'Submit offer',
       element: {
         title: 'Unique',
+        taxCreditTitle: 'Tax Credit',
         owner: 'Owner',
         issuer: 'Issuer'
       }
