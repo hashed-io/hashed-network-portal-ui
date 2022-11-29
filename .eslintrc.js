@@ -64,7 +64,7 @@ module.exports = {
     "indent": ["error", 2],
     "semi": [2, "never"],
     "no-else-return": 1,
-    "consistent-return": "off",
+    "consistent-return": 2,
     "space-before-blocks": [2, "always"],
     "space-infix-ops": [2, { int32Hint: false }],
     "arrow-spacing": [2, { before: true, after: true }],
