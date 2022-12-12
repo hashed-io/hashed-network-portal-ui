@@ -12,6 +12,16 @@ q-card.full-width
         typeProp="number"
         testid="HInput"
       )
+      .label {{'Where marketplace does you want to sell your Tax Credit?'}}
+      q-select.q-pt-lg(
+        outlined
+        v-model="marketplace"
+        :options="marketOptions"
+        label="Choose a marketplace"
+        emit-value
+        map-options
+        :rules="[rules.required]"
+      )
       .row.justify-start.q-py-md
         q-btn(
           type="submit"
@@ -34,21 +44,30 @@ export default {
     instanceId: {
       type: String,
       default: '0'
+    },
+    marketOptions: {
+      type: Array,
+      default: () => [
+        {
+          label: 'Label marketplace',
+          value: '0x00'
+        }
+      ]
     }
   },
   emits: ['onSubmitForm'],
   data () {
     return {
-      offerInput: undefined
+      offerInput: undefined,
+      marketplace: undefined
     }
   },
   methods: {
     onSubmitForm () {
-      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput })
+      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput, marketplace: this.marketplace })
     }
   }
 }
 </script>
 <style lang='stylus' scoped>
-
 </style>

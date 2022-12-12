@@ -53,6 +53,7 @@
     q-dialog(v-model="dialog.openModal")
       OfferForm(
         :collectionId="dialog.collectionId"
+        :marketOptions="marketOptions"
         :instanceId="dialog.instanceId"
         @onSubmitForm="onEnlistOffer"
       )
@@ -63,7 +64,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import NFTTable from '~/components/marketplace/NFTs/NFT-table.vue'
 import OfferForm from '~/components/marketplace/collections/OfferForm.vue'
 export default {
-  name: 'DetailsCollectionPage',
+  name: 'TaxCreditsCollections',
   components: {
     AccountItem,
     NFTTable,
@@ -73,6 +74,7 @@ export default {
     return {
       collectionData: [],
       uniques: [],
+      marketOptions: undefined,
       dialog: {
         openModal: false,
         collectionId: undefined,
@@ -89,8 +91,25 @@ export default {
   },
   async beforeMount () {
     await this.loadCollectionInfo()
+    await this.loadMarketplaceInfo()
   },
   methods: {
+    async loadMarketplaceInfo () {
+      try {
+        const marketId = process.env.GATED_MARKETPLACE_ID
+        const { label } = await this.$store.$marketplaceApi.getMarketplaceById({
+          marketId
+        })
+        this.marketOptions = [
+          {
+            label,
+            value: marketId
+          }
+        ]
+      } catch (error) {
+        this.handlerError(error)
+      }
+    },
     async loadCollectionInfo () {
       const classId = '0'
       try {
@@ -150,11 +169,11 @@ export default {
       this.dialog.instanceId = itemId
       this.dialog.openModal = true
     },
-    async onEnlistOffer ({ collectionId, itemId, offer }) {
+    async onEnlistOffer ({ collectionId, itemId, offer, marketplace }) {
       const classId = this.$route.query?.classId
       this.dialog.openModal = false
       try {
-        const marketplaceId = process.env.GATED_MARKETPLACE_ID
+        const marketplaceId = marketplace
         const user = this.polkadotAddress
 
         await this.$store.$afloatApi.enlistSellOffer({
