@@ -2886,16 +2886,16 @@
   dependencies:
     "@smontero/hashed-crypto" "0.0.8"
 
-"@smontero/hashed-confidential-docs@0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.9.tgz#dc9024dacadb40b4397396163f03ad283850f4b6"
-  integrity sha512-R0mHfG009hKgowYiI52QAIsUgEO3EGfrKIjcQxMWTQZwYVTtel416E9VFtmUdwpgLDcP6y8Fwl0AsaaEual4Dw==
+"@smontero/hashed-confidential-docs@0.2.10":
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.10.tgz#c7da3e424184102f2fc30a5b01c84c133dc719a9"
+  integrity sha512-3E9RCRzAn6o8l0zBtRNSZoL1f8+rYmoNSeQNEOmxyrunavQfPuxA+2HlM8yXYrQ4BICF4Pkue+FyNaK9ZWMayQ==
   dependencies:
     "@polkadot/api" "^8.1.1"
     "@polkadot/extension-dapp" "^0.43.1"
     "@smontero/generated-key-cipher-providers" "0.0.6"
     "@smontero/hashed-crypto" "^0.0.8"
-    "@smontero/jwt" "^0.0.1"
+    "@smontero/jwt" "^0.0.2"
     ipfs-http-client "^55.0.0"
     it-all "^1.0.6"
     mime-types "^2.1.35"
@@ -2947,10 +2947,10 @@
     sha.js "^2.4.11"
     uint8arrays "^3.0.0"
 
-"@smontero/jwt@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@smontero/jwt/-/jwt-0.0.1.tgz#565a6a566699cd898038342d3d6fc22b9829e3c5"
-  integrity sha512-apcoEc5Ok3WwBUgFfucJtTuGe6N6LX3EyUl4S/vn7GMLbPKGvNH78T8fWQ9+6o6fvp90s5Wk3YLZ+zyKYmanWw==
+"@smontero/jwt@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@smontero/jwt/-/jwt-0.0.2.tgz#99b46e11ed4883a6c757dcb1ca80c4338973b119"
+  integrity sha512-uU5+gQyS0IpeKfI75nszYva59s9Zorsr/T3zDUmnZ9MAFEypyABZ4wApnweEfSSuW4wvhoDEf+q6dU5si+G2fQ==
   dependencies:
     jose "^4.9.2"
 
