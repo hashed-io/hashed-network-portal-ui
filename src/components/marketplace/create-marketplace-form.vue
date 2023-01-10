@@ -23,6 +23,21 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
     :label="$t('pages.marketplace.adminInput')"
     :rules="admin ? [rules.isValidPolkadotAddress] : []"
   )
+  .row
+    h-input.col-2(
+      v-model="fee"
+      :label="$t('pages.marketplace.createForm.feeLabel')"
+      :placeholder="$t('pages.marketplace.createForm.feePlaceholder')"
+      mask="#.##"
+      fill-mask="0"
+      reverse-fill-mask
+      unmasked-value
+      input-class="text-right"
+      :rules="[rules.required, rules.isFeeValid(9900,99)]"
+      data-testid="fee-input"
+    )
+      template(v-slot:append)
+        q-icon.q-pt-md.q-px-xs(name="percent")
   q-btn.float-right.q-mb-md(
     data-testid="submit_btn"
     outline
@@ -50,7 +65,8 @@ export default {
   data () {
     return {
       label: undefined,
-      admin: undefined
+      admin: undefined,
+      fee: undefined
     }
   },
   methods: {
@@ -58,7 +74,8 @@ export default {
       try {
         const data = {
           label: this.label,
-          admin: this.admin
+          admin: this.admin,
+          fee: this.fee
         }
         /**
          * This event is emitted when the form is filled and submitted
