@@ -57,6 +57,7 @@
         :collectionId="dialog.collectionId"
         :instanceId="dialog.instanceId"
         :maxWeight="'100.00%'"
+        :marketOptions="marketOptions"
         @onSubmitForm="onEnlistOffer"
       )
 </template>
@@ -76,6 +77,7 @@ export default {
     return {
       collectionData: [],
       uniques: [],
+      marketOptions: undefined,
       dialog: {
         openModal: false,
         collectionId: undefined,
@@ -92,8 +94,23 @@ export default {
   },
   async beforeMount () {
     await this.loadCollectionInfo()
+    await this.loadMarketplacesInfo()
   },
   methods: {
+    async loadMarketplacesInfo () {
+      try {
+        const allMarketplaces = await this.$store.$marketplaceApi.getAllMarketplaces({
+          startKey: undefined,
+          pageSize: undefined
+        })
+        this.marketOptions = allMarketplaces.map(market => {
+          const { value, id } = market || {}
+          return { label: value?.label, value: id }
+        })
+      } catch (e) {
+        this.handlerError(e)
+      }
+    },
     async loadCollectionInfo () {
       const classId = this.$route.query?.classId
       if (classId) {

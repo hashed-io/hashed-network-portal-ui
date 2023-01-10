@@ -25,6 +25,16 @@ q-card.full-width
       //-     label
       //-     @change="val => { percent = val}"
       //-   )
+      .label {{'Where marketplace does you want to sell your Tax Credit?'}}
+      q-select.q-pt-lg(
+        outlined
+        v-model="marketplace"
+        :options="marketOptions"
+        label="Choose a marketplace"
+        emit-value
+        map-options
+        :rules="[rules.required]"
+      )
       .row.justify-start.q-py-md
         q-btn(
           type="submit"
@@ -48,6 +58,15 @@ export default {
       type: String,
       default: '0'
     },
+    marketOptions: {
+      type: Array,
+      default: () => [
+        {
+          label: 'Label marketplace',
+          value: '0x00'
+        }
+      ]
+    },
     maxWeight: {
       type: String,
       default: '100.00%'
@@ -57,7 +76,8 @@ export default {
   data () {
     return {
       offerInput: undefined,
-      percentage: undefined
+      percentage: undefined,
+      marketplace: undefined
     }
   },
   computed: {
@@ -67,11 +87,10 @@ export default {
   },
   methods: {
     onSubmitForm () {
-      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput, percentage: this.percentage })
+      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput, marketplace: this.marketplace })
     }
   }
 }
 </script>
 <style lang='stylus' scoped>
-
 </style>
