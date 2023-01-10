@@ -6,7 +6,7 @@
         .text-h5.q-pb-md {{$t('pages.marketplace.applyForm.title')}}
         .text-subtitle.q-pb-md.text-red {{$t('pages.marketplace.applyForm.subtitle')}}
         q-form(ref="applyForm" @submit="onSubmit")
-          .row.justify-between
+          .row.justify-between.items-center
             .col-11
               h-input(
                 required
@@ -19,7 +19,7 @@
                 :rules="[rules.required,rules.lessOrEqualThanString(25)]"
               )
             .col-1
-              q-icon.q-my-md.q-mx-md.q-pt-xl(
+              q-icon.q-mx-md(
                 v-if="!form.notes.cid"
                 name="upload"
                 size="1.5rem"
@@ -29,27 +29,26 @@
                 :disable="!form.notes.label"
                 @click="onUploadNotesHCD()"
               )
-              q-icon.q-my-md.q-mx-md.q-pt-xl(
+              q-icon.q-mx-md(
                 v-else
                 name="check"
                 size="1.5rem"
                 color="primary"
               )
-          .row.justify-between
+          .row.justify-start.q-gutter-md
             div(class="q-pt-sm headline3 text-weight-regular header q-mb-xl") {{$t('pages.marketplace.applyForm.filesTitle')}}
             div
               q-btn.q-mr-sm.q-mb-md(data-testid="add_files_button" rounded no-caps color="primary" outline @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
           .container(v-for="(file, index, key) in form.files" :key="index")
             .row
-              ConfidentialDocsInput(
-                class="col-11"
+              ConfidentialDocsInput.col-11(
                 v-model:label="form.files[index].label"
                 v-model:value="form.files[index].file"
                 :rulesLabel="[rules.required, rules.lessOrEqualThanString(25)]"
                 :rulesValue="[rules.required]"
                 testid="file"
               )
-              .row.q-pl-md.justify-between
+              .row.q-pl-md.justify-between.items-start
                 q-icon(
                   v-if="!form.files[index].cid"
                   name="upload"

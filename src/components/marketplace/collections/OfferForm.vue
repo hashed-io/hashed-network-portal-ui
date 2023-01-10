@@ -12,6 +12,19 @@ q-card.full-width
         typeProp="number"
         testid="HInput"
       )
+      h-input.q-pt-lg(
+        v-model="percentage"
+        :label="'Percent of the Tax Credit'"
+      )
+      //- pre {{ percent }}
+      //- .row.justify-center
+      //-   q-slider.col-11(
+      //-     :model-value="percent"
+      //-     :max="80"
+      //-     :step="0.01"
+      //-     label
+      //-     @change="val => { percent = val}"
+      //-   )
       .row.justify-start.q-py-md
         q-btn(
           type="submit"
@@ -34,17 +47,27 @@ export default {
     instanceId: {
       type: String,
       default: '0'
+    },
+    maxWeight: {
+      type: String,
+      default: '100.00%'
     }
   },
   emits: ['onSubmitForm'],
   data () {
     return {
-      offerInput: undefined
+      offerInput: undefined,
+      percentage: undefined
     }
+  },
+  computed: {
+    // getMaxPercent () {
+    //   return
+    // }
   },
   methods: {
     onSubmitForm () {
-      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput })
+      this.$emit('onSubmitForm', { collectionId: this.collectionId, itemId: this.instanceId, offer: this.offerInput, percentage: this.percentage })
     }
   }
 }

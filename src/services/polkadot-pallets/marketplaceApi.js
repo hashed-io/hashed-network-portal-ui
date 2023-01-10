@@ -150,7 +150,8 @@ class MarketplaceApi extends BasePolkadotApi {
     const marketInfo = marketLabels.map((v, index) => {
       return {
         id: marketplacesIdJoined[index],
-        label: v?.label
+        label: v?.label,
+        fee: v?.fee
       }
     })
     // 11 Get Authorities by marketplaces given marketplacesId
@@ -167,7 +168,7 @@ class MarketplaceApi extends BasePolkadotApi {
       const owner = marketDetails[i].find(({ type }) => type === ownerTag)
       return {
         ...market,
-        value: { label: market.label },
+        value: { label: market.label, fee: market.fee },
         administrator: admin?.address,
         owner: owner?.address
       }

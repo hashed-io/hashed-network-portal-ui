@@ -56,6 +56,7 @@
       OfferForm(
         :collectionId="dialog.collectionId"
         :instanceId="dialog.instanceId"
+        :maxWeight="'100.00%'"
         @onSubmitForm="onEnlistOffer"
       )
 </template>
@@ -155,19 +156,20 @@ export default {
       this.dialog.instanceId = itemId
       this.dialog.openModal = true
     },
-    async onEnlistOffer ({ collectionId, itemId, offer }) {
+    async onEnlistOffer ({ collectionId, itemId, offer, percentage }) {
       const classId = this.$route.query?.classId
       this.dialog.openModal = false
       try {
         const marketplaceId = process.env.GATED_MARKETPLACE_ID
         const user = this.polkadotAddress
-
+        alert(percentage)
         await this.$store.$afloatApi.enlistSellOffer({
           user,
           marketplaceId,
           collectionId,
           itemId,
-          price: offer
+          price: offer,
+          percentage
         })
         this.showNotification({ message: 'Created the offer successfully' })
         await this.getNFTInfo(classId)
