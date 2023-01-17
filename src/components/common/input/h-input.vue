@@ -28,7 +28,7 @@ export default {
     label: {
       type: String,
       default: '',
-      required: true
+      required: false
     },
     // eslint-disable-next-line vue/prop-name-casing
     testid: {

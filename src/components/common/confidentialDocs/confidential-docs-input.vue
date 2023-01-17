@@ -1,11 +1,10 @@
 <template lang='pug'>
 #container
-  .row.q-col-gutter-md
+  .row.q-col-gutter-md.items-center
     .col-6
       h-input(
         v-model="labelComponent"
         :rules="[...rulesLabel]"
-        :label="$t('pages.marketplace.taxCredits.labels.attributeLabel')"
         :placeholder="$t('pages.marketplace.taxCredits.placeholders.label')"
         dense
         testid="filename"
