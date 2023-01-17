@@ -221,6 +221,10 @@ export default {
         applicationApproved: 'La solicitud fue aprovada',
         applicationRejected: 'La solicitud fue rechazada'
       },
+      offerTable: {
+        createSellOffer: 'Crear oferta de venta',
+        createBuyOffer: 'Crear oferta de compra'
+      },
       applyForm: {
         title: 'Aplicar para unirse al marketplace',
         subtitle: 'Llena el formulario para aplicar a este marketplace. Cada archivo debe ser subido para ser compartido con el administrador del marketplace',

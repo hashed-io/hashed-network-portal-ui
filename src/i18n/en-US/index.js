@@ -234,6 +234,10 @@ export default {
         applicationApproved: 'Application approved',
         applicationRejected: 'Application rejected'
       },
+      offerTable: {
+        createSellOffer: 'Create a new sell offer',
+        createBuyOffer: 'Create a new buy offer'
+      },
       applyForm: {
         title: 'Apply for Marketplace',
         subtitle: 'Fill in the form to apply for the Marketplace. Each document must be uploaded to share with the administrator of the Marketplace',
