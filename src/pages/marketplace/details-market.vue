@@ -162,7 +162,7 @@ export default {
         }
         this.participants = participants
         await this.getApplication()
-        this.market = market
+        this.market = { ...market, marketId: this.marketId }
         this.market.authorities = authorities
       } catch (e) {
         this.handlerError(e)
