@@ -17277,6 +17277,11 @@ uuid@^8.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
+v-money3@^3.22.3:
+  version "3.22.3"
+  resolved "https://registry.yarnpkg.com/v-money3/-/v-money3-3.22.3.tgz#a0c16d142fbfb06d2df648d525403fbb37017d96"
+  integrity sha512-eLl+tg6iffrEBt55u6mIlzx+rvxJQLQYGaNTvwh9S4hzgz8oIhbTfNOsgHJjaoLD86zGuH+22YDELy4teddV5g==
+
 v8-compile-cache@^2.0.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"

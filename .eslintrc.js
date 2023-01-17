@@ -52,6 +52,7 @@ module.exports = {
     // allow paren-less arrow functions
     'arrow-parens': 'off',
     'one-var': 'off',
+    'no-unused-vars': 'off',
     // "vue/require-explicit-emits": 'off',
     "vue/custom-event-name-casing": 'off',
     "vue/component-tags-order": ["error", { "order": ["template", "script", "style"] }],
