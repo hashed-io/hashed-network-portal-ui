@@ -19,7 +19,7 @@
                 :rules="[rules.required,rules.lessOrEqualThanString(25)]"
               )
             .col-1
-              q-icon.q-mx-md(
+              q-icon.q-mx-md.q-pt-md(
                 v-if="!form.notes.cid"
                 name="upload"
                 size="1.5rem"
@@ -41,6 +41,8 @@
               q-btn.q-mr-sm.q-mb-md(data-testid="add_files_button" rounded no-caps color="primary" outline @click="onMoreFiles") {{ $t('pages.marketplace.applyForm.addFilesButton') }}
           .container(v-for="(file, index, key) in form.files" :key="index")
             .row
+              div {{$t('pages.marketplace.taxCredits.labels.attributeLabel')}}
+            .row
               ConfidentialDocsInput.col-11(
                 v-model:label="form.files[index].label"
                 v-model:value="form.files[index].file"
@@ -48,7 +50,7 @@
                 :rulesValue="[rules.required]"
                 testid="file"
               )
-              .row.q-pl-md.justify-between.items-start
+              .row.q-pl-md.justify-between.items-start.q-pt-sm
                 q-icon(
                   v-if="!form.files[index].cid"
                   name="upload"

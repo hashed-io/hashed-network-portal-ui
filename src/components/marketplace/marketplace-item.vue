@@ -39,8 +39,7 @@ export default {
   emits: ['onClickItem'],
   computed: {
     getFee () {
-      const decimals = 100
-      return this.marketplace?.value.fee / decimals + '%'
+      return this.marketplace?.value?.fee || '0%'
     }
   },
   methods: {

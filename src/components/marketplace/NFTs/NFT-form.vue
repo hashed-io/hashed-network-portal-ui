@@ -179,7 +179,6 @@ export default {
         this.showLoading()
 
         const { label, value } = this.attributes[index]
-        console.log({ label, value })
 
         const { cid } = this.adminMarketAddress
           ? await this.$store.$hcd.shareData({ toUserAddress: this.adminMarketAddress, name: label, description: label, payload: value })

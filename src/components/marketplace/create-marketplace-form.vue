@@ -28,12 +28,12 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       v-model="fee"
       :label="$t('pages.marketplace.createForm.feeLabel')"
       :placeholder="$t('pages.marketplace.createForm.feePlaceholder')"
-      mask="#.##"
+      mask="#"
       fill-mask="0"
       reverse-fill-mask
       unmasked-value
       input-class="text-right"
-      :rules="[rules.required, rules.isFeeValid(9900,99)]"
+      :rules="[rules.required, rules.isFeeValid(100,100)]"
       data-testid="fee-input"
     )
       template(v-slot:append)
