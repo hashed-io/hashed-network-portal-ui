@@ -50,7 +50,6 @@ export default {
     }
   },
   async mounted () {
-    console.log('tester---------------------')
     try {
       await this.connectPolkadot()
       await this.requestUsers()
@@ -85,7 +84,6 @@ export default {
       }
     },
     onSelectAccount (account) {
-      console.log('onSelectAccount', account)
       this.setSelectedAccount(account)
     },
     async loginUser () {
