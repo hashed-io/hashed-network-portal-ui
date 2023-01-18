@@ -10,8 +10,8 @@ import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/
 // const { NbvStorageApi } = require('../../../nbv-client-api')
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
-const { AfloatApi } = require('../../../afloat-client-api')
-// import { AfloatApi } from '@jmgayosso/afloat-client'
+// const { AfloatApi } = require('../../../afloat-client-api')
+import { AfloatApi } from '@jmgayosso/afloat-client'
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -23,7 +23,6 @@ export default async ({ app, store }) => {
 
     // Hashed Confidential Docs
     const ipfsAuthHeader = `Basic ${Buffer.from(`${process.env.IPFS_PROJECT_ID}:${process.env.IPFS_PROJECT_SECRET}`).toString('base64')}`
-    console.log({ wss: process.env.WSS })
     const hashedConfidentialDocs = new ConfidentialDocs({
       ipfsURL: process.env.IPFS_URL,
       ipfsAuthHeader,
