@@ -9,6 +9,14 @@
         .col-6
           .text-subtitle1.text-weight-regular.q-my-md {{ $t('pages.marketplace.details.numberPaparticipantsTitle') }}
             .headline2(data-testid="number_participants") {{participants.length}}
+          q-btn(
+            label="invite an account"
+            no-caps
+            color="primary"
+            outline
+            size="sm"
+            @click="() => {this.modal.show = true}"
+          )
         .col-6
           .row.q-col-gutter-md
             .col-6.q-pb-md
@@ -43,13 +51,38 @@
       .row.q-gutter-md(v-else)
         .col-12
           .text-subtitle2.text-weight-regular(data-testid="no_participants") {{$t('pages.marketplace.details.noParticipants')}}
+  q-dialog(v-model="modal.show")
+    q-card
+      q-card-section
+          .q-pa-xl
+            .text-subtitle1 Enter the address of the participant to invite him into the marketplace
+              q-form(ref="inviteForm" @submit="onInvite")
+                AccountInput.q-pt-xl(
+                  v-model="modal.address"
+                  outlined
+                  label="Enter the address of the participant"
+                  :rules="[rules.isValidPolkadotAddress]"
+                )
+                .row.justify-center
+                  q-btn(
+                    type="submit"
+                    label="Invite the account"
+                    color="primary"
+                    outline
+                    no-caps
+                    size="md"
+                  )
+
 </template>
 
 <script>
 import AccountItem from '~/components/common/account-item.vue'
+import AccountInput from '~/components/common/account-input.vue'
+import { validation } from '~/mixins/validation'
 export default {
   name: 'MarketInfoCard',
-  components: { AccountItem },
+  components: { AccountItem, AccountInput },
+  mixins: [validation],
   props: {
     /**
      * This props contains the market information to display [Required]
@@ -71,11 +104,33 @@ export default {
   },
   data () {
     return {
+      modal: {
+        show: false,
+        address: undefined
+      },
       marketInfo: {
         owner: undefined,
         admin: undefined,
         appraiser: undefined,
         label: undefined
+      }
+    }
+  },
+  methods: {
+    async onInvite () {
+      try {
+        await this.$store.$afloatApi.inviteToMarketplace({
+          marketplaceId: this.market.marketId,
+          account: this.modal.address,
+          fields: [['Invited of the admin', 'invited']],
+          custodiansFields: null
+        })
+      } catch (error) {
+        console.error(error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+      } finally {
+        this.hideLoading()
+        this.modal.show = false
       }
     }
   }

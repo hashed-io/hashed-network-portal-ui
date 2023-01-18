@@ -158,7 +158,7 @@ const routes = [
             path: '/afloat/TaxCredit/details',
             name: 'taxCreditDetails',
             props: true,
-            component: () => import('pages/marketplace/afloat-example/TaxCreditDetails.vue'),
+            component: () => import('pages/marketplace/afloat-example/TaxCreditScreen.vue'),
             meta: {
               breadcrumb: [
                 { name: 'taxCredits', icon: 'library_books', to: { name: 'afloat' } },

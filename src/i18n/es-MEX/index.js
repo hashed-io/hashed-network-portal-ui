@@ -52,7 +52,8 @@ export default {
       greaterOrEqualThanString: 'La longitud debe ser mayor o igual a {value}',
       lessOrEqualThanString: 'La longitud debe ser menor o igual a {value}',
       notEqual: 'El valor no debe ser igual al propietario',
-      betweenString: 'El valor debe estar entre {min} y {max} caracteres'
+      betweenString: 'El valor debe estar entre {min} y {max} caracteres',
+      feeValid: 'La tarifa debe ser menor a {maxInPercent}%'
     }
   },
   pages: {
@@ -220,6 +221,10 @@ export default {
         applicationApproved: 'La solicitud fue aprovada',
         applicationRejected: 'La solicitud fue rechazada'
       },
+      offerTable: {
+        createSellOffer: 'Crear oferta de venta',
+        createBuyOffer: 'Crear oferta de compra'
+      },
       applyForm: {
         title: 'Aplicar para unirse al marketplace',
         subtitle: 'Llena el formulario para aplicar a este marketplace. Cada archivo debe ser subido para ser compartido con el administrador del marketplace',
@@ -239,7 +244,9 @@ export default {
       createForm: {
         title: 'Crear un nuevo Marketplace',
         label: 'Etiqueta',
+        feeLabel: 'Tarifa del Marketplace',
         placeholder: 'Escriba una descripción para el marketplace',
+        feePlaceholder: 'Escriba la tarifa del marketplace',
         button: 'Crear una nueva tienda',
         marketplacecreatedSuccessfully: 'Mercado creado con éxito',
         loggedToCreate: 'Debe iniciar sesión para crear un mercado'

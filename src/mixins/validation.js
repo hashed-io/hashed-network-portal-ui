@@ -26,6 +26,7 @@ export const validation = {
         lessOrEqualThanString: value => val => val.length <= value || this.$t('forms.errors.lessOrEqualThanString', { value }),
         betweenLengthString: (min, max) => val => (val.length >= min && val.length <= max) || this.$t('forms.errors.betweenString', { min, max }),
         notEqual: value => val => !(value === val) || this.$t('forms.errors.notEqual'),
+        isFeeValid: (maxUnmasked, maxInPercent) => val => val <= maxUnmasked || this.$t('forms.errors.feeValid', { maxInPercent }),
         // eslint-disable-next-line no-useless-escape
         password: value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[.!@#\$%\^&\*])(?=.{8,})/.test(value) || this.$t('forms.errors.password')
       }

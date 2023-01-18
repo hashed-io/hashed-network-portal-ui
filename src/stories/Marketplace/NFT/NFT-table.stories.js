@@ -55,7 +55,8 @@ BaseComponent.args = {
       data: 'Hirving Lozano',
       isFrozen: false
     }
-  ]
+  ],
+  isTaxCredit: false
 
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve(), ms))
@@ -66,20 +67,9 @@ BaseComponent.play = async ({ args, canvasElement }) => {
   const accountIcon = await canvas.getAllByTestId('account-icon')
   const onSaleChip = await canvas.getAllByTestId('on-sale-chip')
   const notOnSaleChip = await canvas.getAllByTestId('not-on-sale-chip')
-  const deleteButton = await canvas.getAllByTestId('delete-button')
-  const enlistButton = await canvas.getAllByTestId('enlist-button')
 
   await expect(nftName.length).toBeGreaterThan(0)
   await expect(accountIcon.length).toBeGreaterThan(0)
   await expect(notOnSaleChip.length).toBeGreaterThan(0)
   await expect(onSaleChip.length).toBeGreaterThan(0)
-  await expect(deleteButton.length).toBeGreaterThan(0)
-  await expect(enlistButton.length).toBeGreaterThan(0)
-
-  await userEvent.click(deleteButton[0])
-  await sleep(300)
-  await expect(args.onClickDeleteOffer).toBeCalledTimes(1)
-  await userEvent.click(enlistButton[0])
-  await sleep(300)
-  await expect(args.onClickEnlistSellOffer).toBeCalledTimes(1)
 }

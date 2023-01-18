@@ -13,53 +13,37 @@
             color="primary"
             data-testid="nft-name"
             ) {{isTaxCredit ? $t('pages.nfts.element.taxCreditTitle') : $t('pages.nfts.element.title')}} {{props.row.instance}} {{props.row.data}}
+
         q-td.cursor-pointer(key="owner" :props="props" @click="onClickRow(props.rowIndex)")
           AccountItem(
             inherit
             flat
+            shortDisplay
             :address="props.row.owner"
             :label="$t('pages.marketplace.taxCredits.details.user')"
             data-testid="account-icon"
           )
         q-td(key="onSale" :props="props")
-          q-chip.text-white(
-            v-if="props.row.onSale"
-            label="On Sale"
-            color="green"
-            :ripple="false"
-            data-testid="on-sale-chip"
-          )
-          q-chip.text-white(
-            v-if="!props.row.onSale"
-            label="Not On Sale"
-            color="blue"
-            :ripple="false"
-            data-testid="not-on-sale-chip"
-          )
-        q-td(key="actions" :props="props")
-          q-btn.text-white(
-            v-if="props.row.onSale && isOwner(props.row.owner)"
-            :label="$t('pages.nfts.deleteOffer')"
-            color="red"
-            outline
-            size="sm"
-            :ripple="false"
-            @click="onDeleteOffer(props.row)"
-            data-testid="delete-button"
-          )
-          q-btn.text-white(
-            v-if="!props.row.onSale && isOwner(props.row.owner)"
-            :label="$t('pages.nfts.enlistOffer')"
-            color="blue"
-            outline
-            size="sm"
-            @click="onEnlistOffer(props.row)"
-            data-testid="enlist-button"
-          )
+          div(v-if="isOnSale(props.row.onSale)" )
+            q-chip.text-white(
+              v-if="!props.row.onSale"
+              label="Not On Sale"
+              color="blue"
+              :ripple="false"
+              data-testid="not-on-sale-chip"
+            )
+            q-chip.text-white(
+              v-if="props.row.onSale"
+              label="On Sale"
+              color="green"
+              :ripple="false"
+              data-testid="on-sale-chip"
+            )
 </template>
 <script>
 import AccountItem from '~/components/common/account-item.vue'
 import { mapGetters } from 'vuex'
+import { OfferType } from '~/const'
 export default {
   name: 'NFTTable',
   components: {
@@ -82,9 +66,10 @@ export default {
       default: false
     }
   },
-  emits: ['onClickRow', 'onClickDeleteOffer', 'onClickEnlistSellOffer'],
+  emits: ['onClickRow', 'onClickDeleteOffer', 'onClickEnlistSellOffer', 'onClickEnlistBuyOffer'],
   data () {
     return {
+      offerType: OfferType,
       columns: [
         {
           name: 'instance',
@@ -113,40 +98,40 @@ export default {
   computed: {
     ...mapGetters('profile', ['polkadotAddress'])
   },
-  watch: {
-    uniquesList: {
-      handler (newVal) {
-        const atLeastOneOwner = this.uniquesList.some((unique) => {
-          return unique.owner === this.polkadotAddress
-        })
-        const length = this.columns.length
-        if (this.columns[length - 1].name === 'actions') this.columns.pop()
-        if (atLeastOneOwner) {
-          this.columns.push({
-            name: 'actions',
-            label: 'Actions',
-            value: 'actions',
-            align: 'justify'
-          })
-        }
-      },
-      immediate: true
-    }
-  },
   methods: {
-
     onClickRow (index) {
       this.$emit('onClickRow', this.uniquesList[index].instance)
     },
     isOwner (owner) {
       return owner === this.polkadotAddress
     },
-    onEnlistOffer ({ collection, instance }) {
-      this.$emit('onClickEnlistSellOffer', { collectionId: collection, itemId: instance })
+    onEnlistOffer ({ collection, instance, weight }) {
+      this.$emit('onClickEnlistSellOffer', { collectionId: collection, itemId: instance, showMarket: true, weight })
     },
     onDeleteOffer ({ onSale, collection, instance }) {
       this.$emit('onClickDeleteOffer', { offerId: onSale.offerId, collection, instance })
+    },
+    async onTakeSellOffer (row) {
+      const { offerInfo } = row || {}
+      const { offerId } = offerInfo || {}
+      try {
+        const response = await this.$store.$afloatApi.takeSellOffer({
+          offerId
+        })
+      } catch (error) {
+        console.error(error)
+        this.showNotification({ message: error.message || error, color: 'negative' })
+      } finally {
+        this.hideLoading()
+      }
+    },
+    onEnlistBuyOffer ({ collection, instance, weight }) {
+      this.$emit('onClickEnlistBuyOffer', { collectionId: collection, itemId: instance, showMarket: false, weight })
+    },
+    isOnSale (obj) {
+      return JSON.stringify(obj) !== '{}'
     }
+
   }
 }
 </script>
