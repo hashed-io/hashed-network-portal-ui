@@ -10,7 +10,7 @@ q-card(
     .row.justify-center
       .text-subtitle2.text-weight-bold {{ marketplace?.value.label }}
     .row.justify-center
-      .text-caption.text-weight-bold.text-red fee: {{ getFee}}
+      .text-caption.text-weight-bold.text-red fee: {{ getFee }}
     q-separator.q-my-sm
     .text-subtitle2.text-weight-bold {{ $t('pages.marketplace.role.administrator') }}
     account-item(:address="marketplace?.administrator" flat shortDisplay inherit)

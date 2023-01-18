@@ -11,7 +11,7 @@ q-card.full-width
         isMoney
         :rules="[rules.required, rules.greaterOrEqualThan(1001)]"
         :label="$t('pages.nfts.sellingLabel')"
-        testid="HInput"
+        testId="price-input"
 
       )
       .label(v-if="showMarketSelect") {{'Where marketplace does you want to sell your Tax Credit?'}}
@@ -22,6 +22,7 @@ q-card.full-width
         :options="marketOptions"
         label="Choose a marketplace"
         :rules="[rules.required]"
+        data-testid="selector-market"
       )
         template(v-slot:option='scope')
           q-item(v-bind='scope.itemProps')
@@ -38,6 +39,7 @@ q-card.full-width
           inner-track-color="blue-grey-12"
           :label-value="percentage + ' %'"
           label-always
+          data-testid="slider-percent"
         )
         .col-4.text-primary.q-pt-xl of the {{getMaxLimit + '%'}} of the {{taxCredit || 'tax credit'}}
       .row.justify-start.q-py-md
