@@ -10,13 +10,13 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
   )
   .text-h4.q-mb-lg {{ $t('pages.marketplace.createForm.title') }}
   h-input(
-    data-testid
     :label="$t('pages.marketplace.createForm.label')"
     v-model="label"
     outlined
     :rules="[rules.required]"
     :placeholder="$t('pages.marketplace.createForm.placeholder')"
     autofocus
+    testid="label-input"
   )
   AccountInput(
     v-model="admin"
@@ -34,7 +34,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm")
       unmasked-value
       input-class="text-right"
       :rules="[rules.required, rules.isFeeValid(100,100)]"
-      data-testid="fee-input"
+      testid="fee-input"
     )
       template(v-slot:append)
         q-icon.q-pt-md.q-px-xs(name="percent")

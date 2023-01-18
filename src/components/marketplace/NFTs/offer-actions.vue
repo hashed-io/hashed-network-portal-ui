@@ -34,7 +34,7 @@
       size="sm"
       :ripple="false"
       @click="onTakeSellOffer()"
-      data-testid="take-offer-button"
+      data-testid="take-sell-offer-button"
     )
 
 </template>

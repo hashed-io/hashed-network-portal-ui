@@ -186,6 +186,10 @@ export default {
       type: Boolean,
       default: true
     },
+    /**
+     * Use Blob ['blob:adasdsd.pdf'] or URL
+     * Do not use Type File
+     */
     file: {
       type: String,
       default: undefined
@@ -251,59 +255,6 @@ export default {
     }
   },
   methods: {
-    isFile (props) {
-      if (!props.value || typeof props.value === 'object') return true
-      else if (typeof props.value === 'string') return this.identifiers.some(identifier => props.value.includes(identifier))
-      return false
-    },
-    async downloadFile (file) {
-      try {
-        this.showLoading({ message: this.$t('pages.marketplace.taxCredits.details.downloading') })
-        const isFile = file?.payload instanceof File
-        const isIPFS = typeof file === 'string' ? file.includes(this.identifiers[0]) : false
-        let isBlob = false
-        let blob
-        if (isIPFS) {
-          const stringSplittedArray = file.split(this.identifiers[0])
-          const { type, payload } = await this.$store.$afloatApi.getFromIPFS(stringSplittedArray[1])
-          blob = new Blob([payload], { type: type })
-          isBlob = true
-        }
-        if (isFile) {
-          blob = new Blob([file.payload], { type: file.type })
-          isBlob = true
-        }
-        if (isBlob) {
-          const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          window.open(link.href)
-
-          return
-        }
-      } catch (e) {
-        this.handlerError(e)
-      } finally {
-        this.hideLoading()
-      }
-      const isHCD = typeof file === 'string' ? file.includes(this.identifiers[1]) : false
-      const stringSplittedArray = file.split(this.identifiers[1])
-      const cid = stringSplittedArray[1]
-      let response
-      try {
-        if (isHCD) {
-          response = await this.$store.$hcd.viewSharedDataByCID(cid)
-        }
-      } catch (error) {
-        response = await this.$store.$hcd.viewOwnedDataByCID(cid)
-      } finally {
-        if (response) {
-          const blob = new Blob([response.payload], { type: response.payload.type })
-          const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          window.open(link.href)
-        }
-      }
-    }
   }
 }
 </script>

@@ -16,7 +16,7 @@
           no-caps
           size="sm"
           @click="onEnlistSellOffer()"
-          data-testid="enlist-button"
+          data-testid="enlist-sell-button"
         )
         q-btn(
           v-if="showEnlistBuyButton"
@@ -27,6 +27,8 @@
           size="sm"
           @click="onEnlistBuyOffer()"
           :ripple="false"
+          data-testid="enlist-buy-button"
+
         )
     template(v-slot:body="props")
       q-tr(:props="props")
@@ -176,15 +178,15 @@ const showEnlistBuyButton = computed(() => {
   return false
 })
 // Emits
-const emits = defineEmits(['onDeleteOffer', 'onTakeBuyOffer', 'onTakeSellOffer', 'openModalSell', 'openModalBuy'])
+const emits = defineEmits(['onDeleteOffer', 'onTakeBuyOffer', 'onTakeSellOffer', 'onOpenModalSell', 'onOpenModalBuy'])
 const getOfferId = (index) => {
   return offers.value?.[index]?.offerId
 }
 const onDeleteOffer = (index) => emits('onDeleteOffer', getOfferId(index))
 const onTakeBuyOffer = (index) => emits('onTakeBuyOffer', getOfferId(index))
 const onTakeSellOffer = (index) => emits('onTakeSellOffer', getOfferId(index))
-const onEnlistSellOffer = () => emits('openModalSell')
-const onEnlistBuyOffer = () => emits('openModalBuy')
+const onEnlistSellOffer = () => emits('onOpenModalSell', true)
+const onEnlistBuyOffer = () => emits('onOpenModalBuy', true)
 </script>
 <style lang='stylus' scoped>
 </style>

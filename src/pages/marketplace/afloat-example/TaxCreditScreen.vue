@@ -13,8 +13,8 @@ q-card
       @onDeleteOffer="onDeleteOffer"
       @onTakeSellOffer="onTakeSellOffer"
       @onTakeBuyOffer="onTakeBuyOffer"
-      @openModalSell="onOpenModal('sell')"
-      @openModalBuy="onOpenModal('buy')"
+      @onOpenModalSell="onOpenModal('sell')"
+      @onOpenModalBuy="onOpenModal('buy')"
     )
   q-dialog(v-model="dialog.openModal")
     OfferForm(
