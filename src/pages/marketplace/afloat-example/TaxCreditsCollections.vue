@@ -101,6 +101,7 @@ export default {
     return {
       collectionData: [],
       uniques: [],
+      redemptionsIds: [],
       marketOptions: undefined,
       dialog: {
         show: false,
@@ -111,32 +112,26 @@ export default {
   computed: {
     ...mapGetters('profile', ['polkadotAddress']),
     getNFTs () {
-      const filtered = this.uniques.filter(unique => unique.parent === null)
-      return filtered
+      return this.uniques.map(unique => {
+        const instance = unique?.instance
+        const inRedemptionArray = this.redemptionsIds.find(el => {
+          return el === instance
+        })
+        return {
+          ...unique,
+          data: unique?.data + ' ' + unique?.instance,
+          // TODO: Delete the line below when the Backend is already
+          redeem: false,
+          askingForRedemption: !!inRedemptionArray
+        }
+      })
     }
   },
   async beforeMount () {
     await this.loadCollectionInfo()
-    // await this.loadMarketplaceInfo()
+    await this.getRedemptionsRequested()
   },
   methods: {
-    // async loadMarketplaceInfo () {
-    //   try {
-    //     const marketId = process.env.GATED_MARKETPLACE_ID
-    //     const market = await this.$store.$marketplaceApi.getMarketplaceById({
-    //       marketId
-    //     }) || {}
-    //     this.marketOptions = [
-    //       {
-    //         label: market?.label,
-    //         description: market?.fee,
-    //         value: marketId
-    //       }
-    //     ]
-    //   } catch (error) {
-    //     this.handlerError(error)
-    //   }
-    // },
     async onInviteCollaborator () {
       try {
         await this.$store.$afloatApi.inviteCollaboratorCollection({
@@ -172,7 +167,8 @@ export default {
     async getNFTInfo (classId) {
       try {
         const offers = await this.$store.$afloatApi.getOffersByCollection({ collectionId: classId })
-        const uniques = await this.$store.$afloatApi.getInstancesFromCollection({
+
+        const uniques = await this.$store.$afloatApi.getFruniqueRoots({
           collectionId: classId
         })
         this.uniques = uniques.map((unique, i) => {
@@ -203,81 +199,24 @@ export default {
           classId: this.$route.query?.classId
         }
       })
+    },
+    async getRedemptionsRequested () {
+      const collectionId = process.env.AFLOAT_COLLECTION_ID || '0'
+      try {
+        const response = await this.$store.$afloatApi.askingForRedemption({
+          marketplaceId: process.env.GATED_MARKETPLACE_ID,
+          collectionId
+        })
+        this.redemptionsIds = [...response]
+      } catch (error) {
+        this.handlerError(error)
+      } finally {
+        this.hideLoading()
+      }
     }
-    // onOpenModal ({ collectionId, itemId, showMarket, weight }) {
-    //   this.dialog.collectionId = collectionId
-    //   this.dialog.instanceId = itemId
-    //   this.dialog.openModal = true
-    //   this.dialog.showMarketSelector = showMarket
-    //   this.dialog.text = showMarket ? 'Create an offer for your tax credit' : 'Propose an offer'
-    //   this.dialog.maxWeight = weight
-    // },
-    // async onCreateOffer ({ collectionId, itemId, offer, marketplace, percentage }) {
-    //   if (marketplace) {
-    //     await this.onEnlistSellOffer({ collectionId, itemId, offer, marketplace, percentage })
-    //   }
-    //   await this.onEnlistBuyOffer({ collectionId, itemId, offer, percentage })
-    // },
-    // async onEnlistSellOffer ({ collectionId, itemId, offer, marketplace, percentage }) {
-    //   const classId = this.$route.query?.classId
-    //   this.dialog.openModal = false
-    //   try {
-    //     const marketplaceId = marketplace
-    //     const user = this.polkadotAddress
-
-    //     await this.$store.$afloatApi.enlistSellOffer({
-    //       user,
-    //       marketplaceId,
-    //       collectionId,
-    //       itemId,
-    //       price: offer,
-    //       percentage
-    //     })
-    //     this.showNotification({ message: 'Created the offer successfully' })
-    //     await this.getNFTInfo(classId)
-    //   } catch (error) {
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //   } finally {
-    //     this.hideLoading()
-    //   }
-    // },
-    // async onEnlistBuyOffer ({ collectionId, itemId, offer, percentage }) {
-    //   const classId = this.$route.query?.classId
-    //   this.dialog.openModal = false
-    //   try {
-    //     const marketplaceId = '0x8260bdcc3438d65fad38db474477ef3ba6ef8038a6d50161888885c7e90f4565'
-
-    //     await this.$store.$afloatApi.enlistBuyOffer({
-    //       marketplaceId,
-    //       collectionId,
-    //       itemId,
-    //       price: offer,
-    //       percentage
-    //     })
-    //     this.showNotification({ message: 'Created the buy offer successfully' })
-    //     await this.getNFTInfo(classId)
-    //   } catch (error) {
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //   } finally {
-    //     this.hideLoading()
-    //   }
-    // }
-    // async onDeleteOffer ({ offerId }) {
-    //   const classId = this.$route.query?.classId
-    //   try {
-    //     await this.$store.$afloatApi.removeOffer({
-    //       offerId
-    //     })
-    //     this.showNotification({ message: 'The offer was deleted' })
-    //     await this.getNFTInfo(classId)
-    //   } catch (error) {
-    //     this.showNotification({ message: error.message || error, color: 'negative' })
-    //   } finally {
-    //     this.hideLoading()
-    //   }
-    // }
   }
 }
+
 </script>
 <style lang='stylus' scoped>
 
