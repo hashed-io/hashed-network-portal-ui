@@ -1,8 +1,12 @@
 import ApplicationStatus from './ApplicationStatus'
 import OfferStatus from './OfferStatus'
 import OfferType from './OfferType'
+import RedeemStatus from './RedeemStatus'
+import Roles from './Roles'
 export {
   OfferStatus,
   ApplicationStatus,
-  OfferType
+  OfferType,
+  RedeemStatus,
+  Roles
 }
