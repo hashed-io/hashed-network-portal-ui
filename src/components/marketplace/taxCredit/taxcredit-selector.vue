@@ -85,16 +85,7 @@ export default {
       this.$refs.taxCreditForm.validate().then(success => {
         if (success) {
           this.$emit('onSubmit', this.form)
-        // yay, models are correct
-        } else {
-          // oh no, user has filled in
-          // at least one invalid value
         }
-        console.log({ success })
-      // const isValid = this.$refs.taxCreditForm.validate()
-      // console.log({ isValid })
-      // if (isValid) {
-      // }
       })
     }
   }

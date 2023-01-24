@@ -1,8 +1,13 @@
 <template lang='pug'>
-.text-h5.q-pa-md {{$t('pages.nfts.detailsTaxCredit')}}
 .row.justify-between.q-py-lg.q-pa-md
   .col-5
     #header.text-subtitle1.q-pb-lg Tax Credit Information
+    .text-subtitle2 Owner of the Tax Credit
+    AccountItem.q-mb-md(
+      :address="uniquesData.owner"
+      flat
+      bordered
+    )
     .row.q-col-gutter-sm
       h-input.col-auto(
         label="Title of the Tax Credit"
@@ -162,20 +167,24 @@
           dense
         )
   .col-6
-    #header.text-subtitle1.q-pb-lg Tax Credit Grant
-    .pdf-viewer.full-width.full-height(v-if="!isLoading")
+    #header.text-h6.q-pb-lg Tax Credit Grant
+    div(v-if="isLoading") Loading the Tax Credit
+    .pdf-viewer.full-width.full-height(v-else-if="!isLoading && file")
       embed(
         v-if="file"
         :src="file"
         height="600px"
         width="100%"
       )
-    .not-file.text-red.text-subtitle1(v-else) You do not have access to the Tax Credit File
+    .not-file.text-red.text-h6.text-bold(v-else-if="!isLoading && file === undefined")
+      | You do not have access to the Tax Credit File
 </template>
 <script>
+import AccountItem from '~/components/common/account-item.vue'
 export default {
   name: 'TaxCreditDetails',
   components: {
+    AccountItem
   },
   props: {
     uniquesData: {
@@ -248,16 +257,16 @@ export default {
       ]
     },
     isCalifornia () {
-      return this.getAttributes.state === 'California'
+      return this.getAttributes.state === 'California' || this.getAttributes.rootState === 'California'
     },
     isWisconsin () {
-      return this.getAttributes.state === 'Wisconsin'
+      return this.getAttributes.state === 'Wisconsin' || this.getAttributes.rootState === 'Wisconsin'
     }
   },
   methods: {
   }
 }
 </script>
-  <style lang='stylus' scoped>
+<style lang='stylus' scoped>
 
-  </style>
+</style>
