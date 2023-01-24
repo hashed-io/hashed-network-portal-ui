@@ -32,3 +32,8 @@ Loading.args = {
   message: 'Hello this is an important message',
   status: 'loading'
 }
+export const Frozen = Template.bind({})
+Frozen.args = {
+  message: 'Hello this is an important message',
+  status: 'frozen'
+}
