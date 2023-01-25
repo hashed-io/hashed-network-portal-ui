@@ -17,7 +17,7 @@
       :label="'Request redemption'", color="green"
       :ripple="false", outline
       no-caps, size="md"
-      disable, data-testid="request-redeem-button"
+      data-testid="request-redeem-button"
       @click="onRequestRedeem()"
     )
 

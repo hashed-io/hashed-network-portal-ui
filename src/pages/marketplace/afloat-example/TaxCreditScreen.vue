@@ -53,7 +53,7 @@ import TaxCreditDetails from '~/components/marketplace/taxCredit/TaxCreditDetail
 import OffersTable from '~/components/marketplace/NFTs/offers-table.vue'
 import OfferForm from '~/components/marketplace/collections/OfferForm.vue'
 import RedeemInfo from '~/components/marketplace/taxCredit/redeem-info.vue'
-import { RedeemStatus, Roles } from '~/const'
+import { RedeemStatus, Roles, RedeemArgs } from '~/const'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useNotifications } from '~/mixins/notifications'
@@ -121,7 +121,7 @@ const getAdminMarketComputed = computed(() => {
 })
 const getRedeemStatus = computed(() => {
   let redeemValue
-  const redeem = uniquesData?.data?.redeem
+  const redeem = uniquesData?.data?.redeemed
   const askingForRedemption = uniquesData?.data?.askingForRedemption
   if (askingForRedemption) {
     redeemValue = redeem
@@ -245,7 +245,7 @@ const getFruniqueData = async () => {
     const inRedemptionArray = redemptionsIds.value.find(el => el === instanceId)
     uniquesData.data = response
     // TODO: Delete the hardcoded data [Redeem property]
-    uniquesData.data.redeem = false
+    // uniquesData.data.redeem = false
     uniquesData.data.askingForRedemption = !!inRedemptionArray
   } catch (e) {
     console.error(e)
@@ -316,6 +316,8 @@ const onTakeBuyOffer = async (offerId) => {
   } finally {
     hideLoading()
     await getOfferData()
+    await getRedemptionsRequested()
+    await getFruniqueData()
   }
 }
 const onTakeSellOffer = async (offerId) => {
@@ -330,6 +332,8 @@ const onTakeSellOffer = async (offerId) => {
   } finally {
     hideLoading()
     await getOfferData()
+    await getRedemptionsRequested()
+    await getFruniqueData()
   }
 }
 const onOpenModal = (type) => {
@@ -377,11 +381,16 @@ const onEnlistOffer = async ({ collectionId, itemId, offer, marketplace, percent
 const onRequestRedeem = async () => {
   try {
     await $store.$afloatApi.requestRedeem({
-      collectionId,
-      instanceId: classId
+      marketplaceId: process.env.GATED_MARKETPLACE_ID,
+      [RedeemArgs.ASK_FOR_REDEMPION]: {
+        collectionId,
+        itemId: classId
+      }
     })
   } catch (error) {
     handlerError(error)
+  } finally {
+    hideLoading()
   }
 }
 const onApproveRedeem = async () => {
@@ -442,8 +451,16 @@ const canRequestRedemption = computed(() => {
 const getRole = computed(() => {
   const ownerRole = 'owner'
   const adminRole = 'admin'
-  const isAdmin = getAdminMarketComputed.value === polkadotAddress.value
-  const isOwner = getOwnerTax.value === polkadotAddress.value
+
+  const admin = getAdminMarketComputed.value
+  const owner = getOwnerTax.value
+
+  if (admin === undefined || owner === undefined) {
+    return 'other'
+  }
+
+  const isAdmin = admin === polkadotAddress.value
+  const isOwner = owner === polkadotAddress.value
 
   if (isAdmin && isOwner) {
     return 'admin'

@@ -222,7 +222,7 @@ export default {
             ...resolvedChildrenInfo[i],
             onSale: resolvedChildrenOffers[i].length > 0 ? { data: true } : undefined,
             // TODO: Delete when the backend is already [Only redeem]
-            redeem: true,
+            // redeem: true,
             data: resolvedChildren[i]?.metadata + ' ' + classId,
             askingForRedemption: !!inRedemptionArray,
             lazy: true

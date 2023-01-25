@@ -113,15 +113,15 @@ export default {
     ...mapGetters('profile', ['polkadotAddress']),
     getNFTs () {
       return this.uniques.map(unique => {
-        const instance = unique?.instance
+        const instance = unique?.instance?.id?.[1]
         const inRedemptionArray = this.redemptionsIds.find(el => {
           return el === instance
         })
         return {
           ...unique,
-          data: unique?.data + ' ' + unique?.instance,
+          data: unique?.data + ' ' + unique?.instance?.id?.[1],
           // TODO: Delete the line below when the Backend is already
-          redeem: false,
+          // redeem: false,
           askingForRedemption: !!inRedemptionArray
         }
       })
@@ -172,7 +172,10 @@ export default {
           collectionId: classId
         })
         this.uniques = uniques.map((unique, i) => {
-          const onSale = offers.find(offer => offer.instance === unique.instance)
+          const onSale = offers.find(offer => {
+            const uniqueInstance = unique?.instance?.id?.[1]
+            return offer?.instance === uniqueInstance
+          })
           return {
             ...unique,
             onSale: onSale?.offerId ? onSale : undefined
@@ -183,12 +186,13 @@ export default {
       }
     },
     onClickNFT (i) {
+      const instance = i?.id?.[1] || i
       const classId = '0'
       this.$router.push({
         name: 'taxCreditDetails',
         query: {
           classId,
-          instanceId: i
+          instanceId: instance
         }
       })
     },
