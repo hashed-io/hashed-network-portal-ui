@@ -56,7 +56,7 @@
 
   q-tab-panels(v-model="tab" keep-alive)
     q-tab-panel(name="market-info" v-if="isEnrolled || isAdmin" class="tabPanel bg-inherit")
-      market-info-card(:market="{...market, admin, owner}" :participants="participants")
+      market-info-card(:market="{...market, admin, owner}" :participants="participants" @onInviteSuccess="onInviteSuccess")
     q-tab-panel(name="enrollment" v-if="isAdmin" class="tabPanel bg-inherit")
       applicants-list(:applicants="applicants" :showActions="true" @onEnrollApplicant="enrollApplicant" @onRejectApplicant="rejectApplicant")
 </template>
@@ -314,6 +314,10 @@ export default {
         custodianElements
       ]
       return { fields: fieldsToSend, custodianFields }
+    },
+    async onInviteSuccess () {
+      this.syncParams()
+      this.getMarketplaceInfo()
     }
   }
 

@@ -3,13 +3,13 @@
   .row
     banner.q-my-md(
       v-if="status === RedeemStatus.REDEEM_REQUESTED && role === Roles.OWNER"
-      message="The process of redemption is in progress"
+      message="The redemption was sent. Waiting for the admin confirmation"
       :status="'loading'"
     )
     banner.q-my-md(
       v-if="status === RedeemStatus.REDEEM_REQUESTED && role === Roles.ADMIN"
       message="The owner requested the redeem of this element"
-      :status="'error'"
+      :status="'loading'"
     )
   .row.q-gutter-md.justify-start
     q-btn(
@@ -20,22 +20,13 @@
       data-testid="request-redeem-button"
       @click="onRequestRedeem()"
     )
-
     q-btn(
       v-if="status === RedeemStatus.REDEEM_REQUESTED && role === Roles.ADMIN"
       :label="'Approve redemption'", color="green"
       :ripple="false", outline
-      no-caps, size="md", disable
+      no-caps, size="md"
       data-testid="approve-redeem-button"
       @click="onApproveRedeem()"
-    )
-    q-btn(
-      v-if="status === RedeemStatus.REDEEM_APPROVED && role === Roles.ADMIN"
-      :label="'Lock the Tax credit'", color="blue-4"
-      :ripple="false", size="md"
-      outline, no-caps, disable
-      data-testid="lock-tax-button"
-      @click="onFreezeCredit()"
     )
 </template>
 <script setup>

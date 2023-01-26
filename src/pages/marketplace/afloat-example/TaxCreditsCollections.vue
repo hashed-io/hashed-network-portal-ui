@@ -50,6 +50,7 @@
         @click="onCreateNFT"
       )
       q-btn.q-mt-md(
+        v-if="isAdmin"
         :label="'Invite to collaborate'"
         color="primary"
         outline
@@ -103,6 +104,7 @@ export default {
       uniques: [],
       redemptionsIds: [],
       marketOptions: undefined,
+      adminMarket: undefined,
       dialog: {
         show: false,
         account: undefined
@@ -115,21 +117,27 @@ export default {
       return this.uniques.map(unique => {
         const instance = unique?.instance?.id?.[1]
         const inRedemptionArray = this.redemptionsIds.find(el => {
-          return el === instance
+          const { itemId, isRedeemed } = el || {}
+          return itemId === instance && !isRedeemed
         })
         return {
           ...unique,
           data: unique?.data + ' ' + unique?.instance?.id?.[1],
+          instance: unique?.instance?.id?.[1],
           // TODO: Delete the line below when the Backend is already
           // redeem: false,
           askingForRedemption: !!inRedemptionArray
         }
       })
+    },
+    isAdmin () {
+      return this.adminMarket?.address === this.polkadotAddress
     }
   },
   async beforeMount () {
     await this.loadCollectionInfo()
     await this.getRedemptionsRequested()
+    await this.getAdminMarket()
   },
   methods: {
     async onInviteCollaborator () {
@@ -138,6 +146,7 @@ export default {
           classId: process.env.AFLOAT_COLLECTION_ID || '0',
           invitee: this.dialog.account
         })
+        this.showNotification({ message: 'The collaborator was invited successfully' })
       } catch (e) {
         this.handlerError(e)
       } finally {
@@ -212,6 +221,21 @@ export default {
           collectionId
         })
         this.redemptionsIds = [...response]
+      } catch (error) {
+        this.handlerError(error)
+      } finally {
+        this.hideLoading()
+      }
+    },
+    async getAdminMarket () {
+      const adminType = 'Admin'
+      try {
+        const response = await this.$store.$afloatApi.getAuthoritiesByMarketplace({
+          marketId: process.env.GATED_MARKETPLACE_ID,
+          palletId: process.env.GATED_PALLET_ID
+        })
+        const adminInfo = response.find(authority => authority.type === adminType)
+        this.adminMarket = adminInfo
       } catch (error) {
         this.handlerError(error)
       } finally {

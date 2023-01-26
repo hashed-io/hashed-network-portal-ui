@@ -65,7 +65,7 @@
         q-td.cursor-pointer(key="price" :props="props")
           q-chip.text-white.text-bold(
             color="primary"
-          ) {{ props.row.price }}
+          ) {{ getPrice(props.row.price) }}
         q-td.cursor-pointer(key="actions" :props="props")
           OfferActions(
             :offerInfo="props.row"
@@ -90,7 +90,7 @@ import {
 } from 'vue'
 import AccountItem from '~/components/common/account-item.vue'
 import { useNotifications } from '~/mixins/notifications'
-import { OfferType, OfferStatus, RedeemStatus } from '~/const'
+import { OfferType, OfferStatus, RedeemStatus, BalanceUnits } from '~/const'
 import OfferActions from '~/components/marketplace/NFTs/offer-actions.vue'
 import { useStore } from 'vuex'
 // props
@@ -179,6 +179,10 @@ const showEnlistBuyButton = computed(() => {
   }
   return false
 })
+const getPrice = (price) => {
+  const _price = price.replaceAll(',', '')
+  return _price / BalanceUnits.UNITS + ' ' + BalanceUnits.UNIT
+}
 // Emits
 
 const emits = defineEmits([

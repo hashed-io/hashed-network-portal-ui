@@ -3,7 +3,7 @@ q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loadin
   //- template(v-slot:avatar v-if="status")
   q-item(dense)
     q-item-section(avatar v-if="status")
-      q-spinner-tail(v-if="loading" color="white" size="md")
+      q-icon(v-if="loading" color="white" size="md" name="notification_important")
       q-icon(v-else-if="error" name="notification_important" color="white" size="md")
       q-icon(v-else-if="frozen" name="ac_unit" color="white" size="md")
     q-item-section

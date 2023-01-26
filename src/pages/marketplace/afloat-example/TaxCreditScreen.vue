@@ -4,13 +4,17 @@ q-card
     .text-h5.q-pa-md {{$t('pages.nfts.detailsTaxCredit')}}
       |
       .text-italic {{ uniquesData?.data?.metadata }}
+    q-chip.text-white.q-mx-md(
+      v-if="isRedeemed"
+      label="Redeemed"
+      color="red"
+    )
     RedeemInfo.q-px-md(
       v-if="getRole !== Roles.OTHER"
       :status="getRedeemStatus"
       :role="getRole"
       @onRequestRedeem="onRequestRedeem"
       @onApproveRedeem="onApproveRedeem"
-      @onFreezeCredit="onFreezeTaxCredit"
     )
     banner.q-mx-md.q-my-md(v-if="isFrozen" message="Tax Credit frozen" :status="'frozen'")
     TaxCreditDetails(
@@ -20,7 +24,7 @@ q-card
       :file="taxFile"
     )
     offers-table.q-mx-md(
-      v-if="!isFrozen"
+      v-if="!isFrozen && !isRedeemed"
       :offers="offers.data"
       :ownerTax="getOwnerTax"
       @onDeleteOffer="onDeleteOffer"
@@ -80,11 +84,7 @@ const {
 const { t } = useI18n({})
 
 onBeforeMount(async () => {
-  await getRedemptionsRequested()
-  await getFruniqueData()
-  await loadMarketplaceInfo()
-  await getOfferData()
-  await getAdminMarket()
+  await getInfoOfPage()
 })
 
 const dialog = reactive({
@@ -113,6 +113,8 @@ const uniquesData = reactive({
   data: undefined
 })
 
+const redeemId = ref(undefined)
+
 const getOwnerTax = computed(() => {
   return uniquesData.data?.owner
 })
@@ -135,6 +137,13 @@ const getRedeemStatus = computed(() => {
 
   return redeemValue
 })
+const getInfoOfPage = async () => {
+  await getRedemptionsRequested()
+  await getFruniqueData()
+  await loadMarketplaceInfo()
+  await getOfferData()
+  await getAdminMarket()
+}
 const getAdminMarket = async () => {
   const adminType = 'Admin'
   try {
@@ -242,11 +251,18 @@ const getFruniqueData = async () => {
       const file = await getTaxFile(cid)
       taxFile.value = file || undefined
     }
-    const inRedemptionArray = redemptionsIds.value.find(el => el === instanceId)
+    const inRedemptionArray = redemptionsIds.value.find(el => {
+      const { itemId } = el || {}
+      return itemId === instanceId
+    })
     uniquesData.data = response
     // TODO: Delete the hardcoded data [Redeem property]
     // uniquesData.data.redeem = false
     uniquesData.data.askingForRedemption = !!inRedemptionArray
+    if (inRedemptionArray) {
+      const { redeemId: redeem } = inRedemptionArray
+      redeemId.value = redeem
+    }
   } catch (e) {
     console.error(e)
     showNotification({ message: e.message || e, color: 'negative' })
@@ -382,11 +398,15 @@ const onRequestRedeem = async () => {
   try {
     await $store.$afloatApi.requestRedeem({
       marketplaceId: process.env.GATED_MARKETPLACE_ID,
-      [RedeemArgs.ASK_FOR_REDEMPION]: {
-        collectionId,
-        itemId: classId
+      redeem: {
+        [RedeemArgs.ASK_FOR_REDEMPION]: {
+          collectionId,
+          itemId: classId
+        }
       }
     })
+    await getInfoOfPage()
+    showNotification({ message: 'The request was sent to the admin of the marketplace' })
   } catch (error) {
     handlerError(error)
   } finally {
@@ -395,20 +415,15 @@ const onRequestRedeem = async () => {
 }
 const onApproveRedeem = async () => {
   try {
+    if (!redeemId.value) return
     await $store.$afloatApi.approveRedeem({
-      collectionId,
-      instanceId: classId
+      marketplaceId: process.env.GATED_MARKETPLACE_ID,
+      redeem: {
+        [RedeemArgs.ACCEPT_REDEMPTION]: redeemId.value
+      }
     })
-  } catch (error) {
-    handlerError(error)
-  }
-}
-const onFreezeTaxCredit = async () => {
-  try {
-    await $store.$afloatApi.freezeFrunique({
-      collectionId,
-      instanceId: classId
-    })
+    await getInfoOfPage()
+    showNotification({ message: 'The redemption was approved successfully' })
   } catch (error) {
     handlerError(error)
   }
@@ -428,26 +443,8 @@ const getRedemptionsRequested = async () => {
   }
 }
 
-const redeemButtons = computed(() => {
-  return {
-    canRequest: canRequestRedemption.value,
-    canApprove: canApproveRedemption.value,
-    canLock: canLockTax.value
-  }
-})
-
 const polkadotAddress = computed(() => $store.getters['profile/polkadotAddress'])
 
-const canLockTax = computed(() => {
-  return true
-})
-const canApproveRedemption = computed(() => {
-  return true
-})
-const canRequestRedemption = computed(() => {
-  return getOwnerTax.value === polkadotAddress.value
-  // return getOwnerTax.value === polkadotAddress.value && redemptionStatus === NULL
-})
 const getRole = computed(() => {
   const ownerRole = 'owner'
   const adminRole = 'admin'
@@ -474,6 +471,12 @@ const getRole = computed(() => {
 
 const isFrozen = computed(() => {
   return uniquesData?.data?.isFrozen
+})
+const isRedeemed = computed(() => {
+  return uniquesData?.data?.redeemed
+})
+const isVerified = computed(() => {
+  return uniquesData?.data?.verified
 })
 const redeemInProgress = computed(() => {
   // return uniquesData?.data?.redeem === 'IN_PROGRESS'

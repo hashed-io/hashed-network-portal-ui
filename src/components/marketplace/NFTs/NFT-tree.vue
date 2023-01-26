@@ -30,7 +30,6 @@
         selected-color="green"
         :filter="filter"
         :filter-method="getTaxCredit"
-        dense
         @lazy-load="onLazyLoad"
       )
         template(v-slot:default-header="prop")
@@ -86,6 +85,11 @@
                   color="red"
                   label="Asking for Redemption"
                 )
+                q-chip.text-white.q-pt-xs(
+                  v-if="prop.node.redeemed"
+                  color="secondary"
+                  label="Redeemed"
+                )
 </template>
 <script>
 import AccountItem from '~/components/common/account-item.vue'
@@ -119,7 +123,7 @@ export default {
   data () {
     return {
       offerType: OfferType,
-      selected: 'California Port Volume',
+      selected: 'initial',
       filter: undefined,
       adminInfo: undefined,
       redemptionsIds: []
@@ -213,7 +217,8 @@ export default {
           const { collectionId, childId: classId } = child || {}
           const instance = child?.childId
           const inRedemptionArray = this.redemptionsIds.find(el => {
-            return el === instance
+            const { itemId, isRedeemed } = el || {}
+            return itemId === instance && !isRedeemed
           })
           return {
             collection: collectionId,
@@ -269,7 +274,7 @@ export default {
         return message + node.weight
       }
       const { parentWeight } = parent || {}
-      return message + weight + ' of ' + parentWeight + ' parent'
+      return message + weight + ' of parent\'s ' + parentWeight
     },
     getTaxCredit (node, filter) {
       const filt = filter.toLowerCase()
@@ -293,5 +298,4 @@ export default {
 }
 </script>
 <style lang='stylus' scoped>
-
 </style>

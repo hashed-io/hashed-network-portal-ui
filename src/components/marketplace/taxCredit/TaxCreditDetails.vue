@@ -55,50 +55,50 @@
               type="radio"
               :options="optionsLLC"
               inline
-              readonly
+              disable
             )
         .row.justify-between.items-center.q-col-gutter-sm
           h-input.col-6.q-py-sm(
             v-model="getAttributes.CFCTaxCreditCertificate"
             label="Name on CFC Tax Credit Certificate (Legal Name)"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.creditHolderIDNumber"
             label="Credit Holder Identification Number"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.streetAddress"
             label="Street Address or P.O. Box Number"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.CASecretaryNumber"
             label="CA Secretary of State File Number"
-            readonly
+            disable
             dense
             maxlength="12"
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.city"
             label="City"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.state"
             label="State"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.zipCode"
             label="Zip Code"
-            readonly
+            disable
             dense
             maxlength="5"
           )
@@ -107,55 +107,55 @@
         h-input.col-6.q-py-sm(
           v-model="getAttributes.entityLegalName"
           label="Entity Legal Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.federalEmployerIDNumber"
           label="Federal Employer ID Number (last 4 digits)"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.legalFirstName"
           label="Legal First Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.legalLastName"
           label="Legal Last Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.MI"
           label="M.I."
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.city"
           label="City"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.state"
           label="State"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.zipCode"
           label="Zip Code"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.email"
           label="Email"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
@@ -163,7 +163,7 @@
           label="Phone Number"
           fill-mask
           mask="(###) ### - ####"
-          readonly
+          disable
           dense
         )
   .col-6
