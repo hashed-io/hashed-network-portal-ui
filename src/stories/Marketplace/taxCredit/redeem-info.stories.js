@@ -1,8 +1,4 @@
-// import { expect } from '@storybook/jest'
 import RedeemInfo from '~/components/marketplace/taxCredit/redeem-info.vue'
-import { within, userEvent } from '@storybook/testing-library'
-import { ref } from 'vue'
-import { expect } from '@storybook/jest'
 import { RedeemStatus, Roles } from '~/const'
 export default {
   title: 'TaxCredits/RedeemInfo',
@@ -17,7 +13,7 @@ const Template = (args) => ({
     return { args }
   },
   // Then, the spread values can be accessed directly in the template
-  template: '<QCard flat bordered><RedeemInfo v-bind="args" class="q-pa-md"/><QCard> '
+  template: '<QCard flat bordered><RedeemInfo v-bind="args" class="q-pa-md"/></QCard>'
 })
 
 export const OwnerRequest = Template.bind({})
