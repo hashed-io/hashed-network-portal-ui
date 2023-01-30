@@ -62,6 +62,14 @@
           .text-overline Actions
           .q-gutter-y-sm
             q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proposals.signPSBTUsingHCD')"
+              color="secondary"
+              no-caps
+              @click="showSignPSBTHCD"
+              :disabled="isOffchainError || !hasPsbt"
+              v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
+            )
+            q-btn.full-width.no-padding(
               :label="$t('pages.nbv.proposals.signPSBT')"
               color="secondary"
               icon="qr_code"
@@ -103,6 +111,20 @@
           @onFinalizePsbt="finalizePsbt"
           @onBroadcastPsbt="broadcastPsbt"
         )
+    q-dialog(v-model="isShowingSignPsbtHCD" persistent)
+      q-card.modalSize.q-pa-sm
+        sign-proposal-hcd(
+          :psbt="psbt"
+          :canFinalize="canFinalize"
+          :canBroadcast="canBroadcast"
+          :alreadySigned="alreadySigned"
+          :isBroadcasted="isBroadcasted"
+          :isFinalized="isFinalized"
+          :vaultName="vaultParentName"
+          @onSignPsbt="signPsbt"
+          @onSavePsbt="savePsbt"
+          @onBroadcastPsbt="broadcastPsbt"
+        )
 
 </template>
 
@@ -111,12 +133,13 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
+import SignProposalHcd from '~/components/nbv/proposals/sign-proposal-hcd'
 // eslint-disable-next-line no-var
 var interval
 
 export default {
   name: 'ProposalDetails',
-  components: { AccountItem, CosignersList, Banner, SignProposalStepper },
+  components: { AccountItem, CosignersList, Banner, SignProposalStepper, SignProposalHcd },
   data () {
     return {
       vaultId: undefined,
@@ -133,6 +156,7 @@ export default {
       signedPsbts: [],
       cosigners: [],
       isShowingSignPsbt: false,
+      isShowingSignPsbtHCD: false,
       psbtQR: undefined,
       offchainMessage: undefined,
       threshold: undefined,
@@ -141,7 +165,7 @@ export default {
   },
   computed: {
     // ...mapGetters('polkadotWallet', ['selectedAccount']),
-    ...mapGetters('profile', ['polkadotAddress']),
+    ...mapGetters('profile', ['polkadotAddress', 'isHCDLogged']),
     labelActionBtn () {
       switch (this.labelStatus) {
       case 'Pending':
@@ -316,6 +340,20 @@ export default {
     showSignPSBT () {
       this.isShowingSignPsbt = true
     },
+    showSignPSBTHCD () {
+      this.isShowingSignPsbtHCD = true
+    },
+    async signPsbt ({ psbt, next }) {
+      try {
+        this.showLoading()
+        await this.$store.$hcd.signPSBT({ psbt })
+        next()
+      } catch (e) {
+        this.handlerError(e)
+      } finally {
+        this.hideLoading()
+      }
+    },
     async broadcastPsbt () {
       try {
         this.showLoading()
@@ -425,6 +463,7 @@ export default {
         this.handlerError(e)
       } finally {
         this.isShowingSignPsbt = false
+        this.isShowingSignPsbtHCD = false
         this.hideLoading()
         this.updateProposal()
       }

@@ -143,7 +143,8 @@ export default {
         updatingProposal: 'Actualizando Propuesta',
         proposalCreated: 'Propuesta Creada',
         proposalDetails: 'Detalles de la propuesta',
-        signPSBT: 'Firmar PSBT',
+        signPSBT: 'Firmar PSBT (BW)',
+        signPSBTUsingHCD: 'Firmar PSBT (HCD)',
         deleteProposal: 'Eliminar Propuesta',
         proposalId: 'Proposal Id',
         status: 'Status',
@@ -162,7 +163,12 @@ export default {
         creatingPSBT: 'Por favor, espere un momento, estamos creando el PSBT',
         description: 'Descripción',
         recipientAddress: 'Recipient address',
-        amountInSatoshi: 'Cantidad en Satoshi'
+        amountInSatoshi: 'Cantidad en Satoshi',
+        exitWithoutSave: 'Salir sin guardar',
+        signPsbt: 'Firmar PSBT',
+        signPsbtDescription: 'Click en continuar para firmar PSBT.',
+        saveSignedPsbt: 'Guardar PSBT firmado',
+        saveSignedPsbtDescription: 'Click en continuar para guardar PSBT firmado.'
         // signPsbtStep1: ''
       },
       list: {

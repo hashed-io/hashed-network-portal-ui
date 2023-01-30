@@ -157,7 +157,8 @@ export default {
         updatingProposal: 'Updating proposal',
         proposalCreated: 'Proposal created',
         proposalDetails: 'Proposal Details',
-        signPSBT: 'Sign PSBT',
+        signPSBT: 'Sign PSBT (BW)',
+        signPSBTUsingHCD: 'Sign PSBT (HCD)',
         deleteProposal: 'Delete Proposal',
         proposalId: 'Proposal Id',
         status: 'Status',
@@ -180,7 +181,12 @@ export default {
         pendingStatus: 'Waiting on signatures',
         finalizedStatus: 'Finalized, waiting for broadcast',
         broadcastedStatus: 'Broadcasted',
-        readyToFinalize: 'Ready to finalize'
+        readyToFinalize: 'Ready to finalize',
+        exitWithoutSave: 'Exit without save',
+        signPsbt: 'Sign PSBT',
+        signPsbtDescription: 'Click continue to sign PSBT.',
+        saveSignedPsbt: 'Save signed PSBT',
+        saveSignedPsbtDescription: 'Click continue to save signed PSBT.'
         // signPsbtStep1: ''
       },
       list: {

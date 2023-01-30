@@ -7,7 +7,7 @@ import {
   Polkadot,
   HashedFaucet
 } from '@smontero/hashed-confidential-docs'
-// } from '../../../../hashed-confidential-docs-client-api/src/index'
+// } = require('../../../../hashed-confidential-docs-client-api/src/index')
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {
@@ -111,6 +111,14 @@ class ConfidentialDocs {
       return this._hcd.sharedData().updateMetadata({ cid, name, description })
     }
     return this._hcd.ownedData().updateMetadata({ cid, name, description })
+  }
+
+  /**
+   * @name signPsbt
+   * @param {String} psbt text
+   */
+  signPSBT ({ psbt }) {
+    return this._hcd.btc().signPSBT(psbt)
   }
 }
 
