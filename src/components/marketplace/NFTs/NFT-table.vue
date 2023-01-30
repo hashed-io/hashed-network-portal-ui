@@ -27,14 +27,14 @@
           div(v-if="isOnSale(props.row.onSale)" )
             q-chip.text-white(
               v-if="!props.row.onSale"
-              label="Not On Sale"
+              :label="$t('pages.nfts.notForSale')"
               color="blue"
               :ripple="false"
               data-testid="not-on-sale-chip"
             )
             q-chip.text-white(
               v-if="props.row.onSale"
-              label="On Sale"
+              :label="$t('pages.nfts.forSale')"
               color="green"
               :ripple="false"
               data-testid="on-sale-chip"
