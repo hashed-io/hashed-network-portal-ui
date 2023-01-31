@@ -59,7 +59,8 @@ export default {
       lessOrEqualThanString: 'The length must be less than or equal to {value}',
       notEqual: 'The value must be different to the Owner address',
       password: 'The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character',
-      betweenString: 'The length must be between {min} and {max} letters'
+      betweenString: 'The length must be between {min} and {max} letters',
+      feeValid: 'The fee must be less than {maxInPercent}%'
     }
   },
   pages: {
@@ -239,6 +240,10 @@ export default {
         applicationApproved: 'Application approved',
         applicationRejected: 'Application rejected'
       },
+      offerTable: {
+        createSellOffer: 'Create a new sell offer',
+        createBuyOffer: 'Create a new buy offer'
+      },
       applyForm: {
         title: 'Apply for Marketplace',
         subtitle: 'Fill in the form to apply for the Marketplace. Each document must be uploaded to share with the administrator of the Marketplace',
@@ -258,7 +263,9 @@ export default {
       createForm: {
         title: 'Create new marketplace',
         label: 'Label',
+        feeLabel: 'Fee of the Marketplace',
         placeholder: 'Please write a description',
+        feePlaceholder: 'Please write the fee for the marketplace',
         button: 'Create marketplace',
         marketplacecreatedSuccessfully: 'Marketplace created successfully',
         loggedToCreate: 'You must be logged in to create a marketplace'

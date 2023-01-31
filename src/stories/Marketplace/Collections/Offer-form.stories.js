@@ -29,10 +29,14 @@ BaseComponent.args = {
 BaseComponent.play = async ({ args, canvasElement }) => {
   const canvas = within(canvasElement)
 
-  const HInput = await canvas.getByTestId('HInput')
+  const PriceInput = await canvas.getByTestId('price-input')
+  const SelectMarket = await canvas.getByTestId('selector-market')
+  const SliderPercent = await canvas.getByTestId('slider-percent')
+
   const submitBtn = await canvas.getByTestId('btn')
 
-  await userEvent.type(HInput, '5000', { delay: 10 })
+  await userEvent.type(PriceInput, '5000', { delay: 10 })
+  await userEvent.click(SelectMarket)
 
   await userEvent.click(submitBtn)
 

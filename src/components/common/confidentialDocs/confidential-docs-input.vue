@@ -1,16 +1,15 @@
 <template lang='pug'>
 #container
-  .row.q-col-gutter-md
+  .row.q-col-gutter-md.items-center
     .col-6
       h-input(
         v-model="labelComponent"
         :rules="[...rulesLabel]"
-        :label="$t('pages.marketplace.taxCredits.labels.attributeLabel')"
         :placeholder="$t('pages.marketplace.taxCredits.placeholders.label')"
         dense
         testid="filename"
       )
-    .col-6.padding-top
+    .col-6
       q-file(
         outlined
         dense
@@ -121,9 +120,5 @@ export default {
   }
 }
 </script>
-  <style lang='stylus' scoped>
-  .padding-top
-    padding-top 37px
-  .margin-top
-    margin-top 22px
-  </style>
+<style lang='stylus' scoped>
+</style>

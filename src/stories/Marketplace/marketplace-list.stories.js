@@ -32,7 +32,9 @@ ListingMarketplaces.args = {
       key: 'Uint8Array',
       id: '0x13af37a45160c31bd5818ea3ceefbfdac4d72d1d571d4a69f0ecddb9f0949586',
       value: {
-        label: 'Marketplace lorem'
+        label: 'Marketplace lorem',
+        fee: '7.00%',
+        creator: '5HeCZWDcdSrsV4YPVg9vDLBjV1nHDrzXb79UdA7DytiiZPVB'
       },
       administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym',
       owner: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
@@ -41,7 +43,9 @@ ListingMarketplaces.args = {
       key: 'Uint8Array',
       id: '0x13af37a45160c31bd5818ea3ceefbfdac4d72d1d571d4a69f0ecddb9f0949586',
       value: {
-        label: 'Marketplace ipsum'
+        label: 'Marketplace ipsum',
+        fee: '9.00%',
+        creator: '5HeCZWDcdSrsV4YPVg9vDLBjV1nHDrzXb79UdA7DytiiZPVB'
       },
       administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym',
       owner: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'
@@ -66,7 +70,9 @@ ListingMarketplacesFiltering.args = {
       key: 'Uint8Array',
       id: '0x13af37a45160c31bd5818ea3ceefbfdac4d72d1d571d4a69f0ecddb9f0949586',
       value: {
-        label: 'Marketplace lorem'
+        label: 'Marketplace lorem',
+        fee: '3.00%',
+        creator: '5HeCZWDcdSrsV4YPVg9vDLBjV1nHDrzXb79UdA7DytiiZPVB'
       },
       administrator: '5HGZfBpqUUqGY7uRCYA6aRwnRHJVhrikn8to31GcfNcifkym',
       owner: '5GEEZx22MqCvBDKtFPgTiKAVkoHp1vMTsw8e7fjtRH8Ldzsu'

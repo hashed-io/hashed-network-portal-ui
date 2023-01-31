@@ -100,6 +100,14 @@ const errorMaps = [
   {
     message: 'This vault cant take proposals due to structural failures',
     code: 'InvalidVault'
+  },
+  {
+    message: 'The item is not for sale',
+    code: 'ItemNotForSale'
+  },
+  {
+    message: 'Your user do not have the specified role for the transaction',
+    code: 'NotAuthorized'
   }
 ]
 
