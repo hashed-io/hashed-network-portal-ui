@@ -374,6 +374,8 @@ export default {
       detailsTaxCredit: 'Details of the Tax Credit',
       sellingLabel: 'Enter the selling price of the NFT',
       submitOffer: 'Submit offer',
+      forSale: 'For sale',
+      notForSale: 'Not for sale',
       element: {
         title: 'Unique',
         taxCreditTitle: 'Tax Credit',

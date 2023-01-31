@@ -1,13 +1,30 @@
 <template lang='pug'>
 q-card
   q-card-section
+    .text-h5.q-pa-md {{$t('pages.nfts.detailsTaxCredit')}}
+      |
+      .text-italic {{ uniquesData?.data?.metadata }}
+    q-chip.text-white.q-mx-md(
+      v-if="isRedeemed"
+      label="Redeemed"
+      color="red"
+    )
+    RedeemInfo.q-px-md(
+      v-if="getRole !== Roles.OTHER"
+      :status="getRedeemStatus"
+      :role="getRole"
+      @onRequestRedeem="onRequestRedeem"
+      @onApproveRedeem="onApproveRedeem"
+    )
+    banner.q-mx-md.q-my-md(v-if="isFrozen" message="Tax Credit frozen" :status="'frozen'")
     TaxCreditDetails(
       v-if="uniquesData.data"
       :uniquesData="uniquesData.data",
       :isLoading="isLoadingFile"
       :file="taxFile"
     )
-    offers-table(
+    offers-table.q-mx-md(
+      v-if="!isFrozen && !isRedeemed"
       :offers="offers.data"
       :ownerTax="getOwnerTax"
       @onDeleteOffer="onDeleteOffer"
@@ -39,6 +56,8 @@ import {
 import TaxCreditDetails from '~/components/marketplace/taxCredit/TaxCreditDetails.vue'
 import OffersTable from '~/components/marketplace/NFTs/offers-table.vue'
 import OfferForm from '~/components/marketplace/collections/OfferForm.vue'
+import RedeemInfo from '~/components/marketplace/taxCredit/redeem-info.vue'
+import { RedeemStatus, Roles, RedeemArgs } from '~/const'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useNotifications } from '~/mixins/notifications'
@@ -65,9 +84,7 @@ const {
 const { t } = useI18n({})
 
 onBeforeMount(async () => {
-  await getFruniqueData()
-  await loadMarketplaceInfo()
-  await getOfferData()
+  await getInfoOfPage()
 })
 
 const dialog = reactive({
@@ -85,18 +102,63 @@ const dialog = reactive({
 const offers = reactive({
   data: undefined
 })
-
+const redemptionsIds = ref([])
 const marketOptions = reactive({
   data: undefined
 })
+
 const isLoadingFile = ref(undefined)
 const taxFile = ref(undefined)
 const uniquesData = reactive({
   data: undefined
 })
+
+const redeemId = ref(undefined)
+
 const getOwnerTax = computed(() => {
   return uniquesData.data?.owner
 })
+const getAdminMarketComputed = computed(() => {
+  return uniquesData?.data?.adminInfo?.address
+})
+const getRedeemStatus = computed(() => {
+  let redeemValue
+  const redeem = uniquesData?.data?.redeemed
+  const askingForRedemption = uniquesData?.data?.askingForRedemption
+  if (askingForRedemption) {
+    redeemValue = redeem
+      ? undefined
+      : RedeemStatus.REDEEM_REQUESTED
+  } else {
+    redeemValue = redeem
+      ? RedeemStatus.REDEEM_APPROVED
+      : RedeemStatus.REDEEM_NOT_REQUESTED
+  }
+
+  return redeemValue
+})
+const getInfoOfPage = async () => {
+  await getRedemptionsRequested()
+  await getFruniqueData()
+  await loadMarketplaceInfo()
+  await getOfferData()
+  await getAdminMarket()
+}
+const getAdminMarket = async () => {
+  const adminType = 'Admin'
+  try {
+    const response = await $store.$afloatApi.getAuthoritiesByMarketplace({
+      marketId: process.env.GATED_MARKETPLACE_ID,
+      palletId: process.env.GATED_PALLET_ID
+    })
+    const adminInfo = response.find(authority => authority.type === adminType)
+    uniquesData.data.adminInfo = adminInfo
+  } catch (error) {
+    handlerError(error)
+  } finally {
+    hideLoading()
+  }
+}
 const getOfferData = async () => {
   // Bug: Creator of the offer is the owner of the Tax credit
   try {
@@ -189,7 +251,18 @@ const getFruniqueData = async () => {
       const file = await getTaxFile(cid)
       taxFile.value = file || undefined
     }
+    const inRedemptionArray = redemptionsIds.value.find(el => {
+      const { itemId } = el || {}
+      return itemId === instanceId
+    })
     uniquesData.data = response
+    // TODO: Delete the hardcoded data [Redeem property]
+    // uniquesData.data.redeem = false
+    uniquesData.data.askingForRedemption = !!inRedemptionArray
+    if (inRedemptionArray) {
+      const { redeemId: redeem } = inRedemptionArray
+      redeemId.value = redeem
+    }
   } catch (e) {
     console.error(e)
     showNotification({ message: e.message || e, color: 'negative' })
@@ -259,6 +332,8 @@ const onTakeBuyOffer = async (offerId) => {
   } finally {
     hideLoading()
     await getOfferData()
+    await getRedemptionsRequested()
+    await getFruniqueData()
   }
 }
 const onTakeSellOffer = async (offerId) => {
@@ -273,6 +348,8 @@ const onTakeSellOffer = async (offerId) => {
   } finally {
     hideLoading()
     await getOfferData()
+    await getRedemptionsRequested()
+    await getFruniqueData()
   }
 }
 const onOpenModal = (type) => {
@@ -315,6 +392,96 @@ const onEnlistOffer = async ({ collectionId, itemId, offer, marketplace, percent
     hideLoading()
   }
 }
+
+// Redeem
+const onRequestRedeem = async () => {
+  try {
+    await $store.$afloatApi.requestRedeem({
+      marketplaceId: process.env.GATED_MARKETPLACE_ID,
+      redeem: {
+        [RedeemArgs.ASK_FOR_REDEMPION]: {
+          collectionId,
+          itemId: classId
+        }
+      }
+    })
+    await getInfoOfPage()
+    showNotification({ message: 'The request was sent to the admin of the marketplace' })
+  } catch (error) {
+    handlerError(error)
+  } finally {
+    hideLoading()
+  }
+}
+const onApproveRedeem = async () => {
+  try {
+    if (!redeemId.value) return
+    await $store.$afloatApi.approveRedeem({
+      marketplaceId: process.env.GATED_MARKETPLACE_ID,
+      redeem: {
+        [RedeemArgs.ACCEPT_REDEMPTION]: redeemId.value
+      }
+    })
+    await getInfoOfPage()
+    showNotification({ message: 'The redemption was approved successfully' })
+  } catch (error) {
+    handlerError(error)
+  }
+}
+const getRedemptionsRequested = async () => {
+  const collectionId = process.env.AFLOAT_COLLECTION_ID || '0'
+  try {
+    const response = await $store.$afloatApi.askingForRedemption({
+      marketplaceId: process.env.GATED_MARKETPLACE_ID,
+      collectionId
+    })
+    redemptionsIds.value = [...response]
+  } catch (error) {
+    handlerError(error)
+  } finally {
+    hideLoading()
+  }
+}
+
+const polkadotAddress = computed(() => $store.getters['profile/polkadotAddress'])
+
+const getRole = computed(() => {
+  const ownerRole = 'owner'
+  const adminRole = 'admin'
+
+  const admin = getAdminMarketComputed.value
+  const owner = getOwnerTax.value
+
+  if (admin === undefined || owner === undefined) {
+    return 'other'
+  }
+
+  const isAdmin = admin === polkadotAddress.value
+  const isOwner = owner === polkadotAddress.value
+
+  if (isAdmin && isOwner) {
+    return 'admin'
+  } else if (isAdmin) {
+    return 'admin'
+  } else if (isOwner) {
+    return 'owner'
+  }
+  return 'other'
+})
+
+const isFrozen = computed(() => {
+  return uniquesData?.data?.isFrozen
+})
+const isRedeemed = computed(() => {
+  return uniquesData?.data?.redeemed
+})
+const isVerified = computed(() => {
+  return uniquesData?.data?.verified
+})
+const redeemInProgress = computed(() => {
+  // return uniquesData?.data?.redeem === 'IN_PROGRESS'
+  return false
+})
 </script>
 <style lang='stylus' scoped>
 </style>

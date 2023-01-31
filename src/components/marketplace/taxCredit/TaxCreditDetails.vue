@@ -1,8 +1,13 @@
 <template lang='pug'>
-.text-h5.q-pa-md {{$t('pages.nfts.detailsTaxCredit')}}
 .row.justify-between.q-py-lg.q-pa-md
   .col-5
     #header.text-subtitle1.q-pb-lg Tax Credit Information
+    .text-subtitle2 Owner of the Tax Credit
+    AccountItem.q-mb-md(
+      :address="uniquesData.owner"
+      flat
+      bordered
+    )
     .row.q-col-gutter-sm
       h-input.col-auto(
         label="Title of the Tax Credit"
@@ -50,50 +55,50 @@
               type="radio"
               :options="optionsLLC"
               inline
-              readonly
+              disable
             )
         .row.justify-between.items-center.q-col-gutter-sm
           h-input.col-6.q-py-sm(
             v-model="getAttributes.CFCTaxCreditCertificate"
             label="Name on CFC Tax Credit Certificate (Legal Name)"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.creditHolderIDNumber"
             label="Credit Holder Identification Number"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.streetAddress"
             label="Street Address or P.O. Box Number"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.CASecretaryNumber"
             label="CA Secretary of State File Number"
-            readonly
+            disable
             dense
             maxlength="12"
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.city"
             label="City"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.state"
             label="State"
-            readonly
+            disable
             dense
           )
           h-input.col-6.q-py-sm(
             v-model="getAttributes.zipCode"
             label="Zip Code"
-            readonly
+            disable
             dense
             maxlength="5"
           )
@@ -102,55 +107,55 @@
         h-input.col-6.q-py-sm(
           v-model="getAttributes.entityLegalName"
           label="Entity Legal Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.federalEmployerIDNumber"
           label="Federal Employer ID Number (last 4 digits)"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.legalFirstName"
           label="Legal First Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.legalLastName"
           label="Legal Last Name"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.MI"
           label="M.I."
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.city"
           label="City"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.state"
           label="State"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.zipCode"
           label="Zip Code"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
           v-model="getAttributes.email"
           label="Email"
-          readonly
+          disable
           dense
         )
         h-input.col-6.q-py-sm(
@@ -158,24 +163,28 @@
           label="Phone Number"
           fill-mask
           mask="(###) ### - ####"
-          readonly
+          disable
           dense
         )
   .col-6
-    #header.text-subtitle1.q-pb-lg Tax Credit Grant
-    .pdf-viewer.full-width.full-height(v-if="!isLoading")
+    #header.text-h6.q-pb-lg Tax Credit Grant
+    div(v-if="isLoading") Loading the Tax Credit
+    .pdf-viewer.full-width.full-height(v-else-if="!isLoading && file")
       embed(
         v-if="file"
         :src="file"
         height="600px"
         width="100%"
       )
-    .not-file.text-red.text-subtitle1(v-else) You do not have access to the Tax Credit File
+    .not-file.text-red.text-h6.text-bold(v-else-if="!isLoading && file === undefined")
+      | You do not have access to the Tax Credit File
 </template>
 <script>
+import AccountItem from '~/components/common/account-item.vue'
 export default {
   name: 'TaxCreditDetails',
   components: {
+    AccountItem
   },
   props: {
     uniquesData: {
@@ -248,16 +257,16 @@ export default {
       ]
     },
     isCalifornia () {
-      return this.getAttributes.state === 'California'
+      return this.getAttributes.state === 'California' || this.getAttributes.rootState === 'California'
     },
     isWisconsin () {
-      return this.getAttributes.state === 'Wisconsin'
+      return this.getAttributes.state === 'Wisconsin' || this.getAttributes.rootState === 'Wisconsin'
     }
   },
   methods: {
   }
 }
 </script>
-  <style lang='stylus' scoped>
+<style lang='stylus' scoped>
 
-  </style>
+</style>

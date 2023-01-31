@@ -5,7 +5,10 @@
     :columns="data.columns"
     class="bg-white"
     :separator="'none'"
-  ).q-my-xl
+    flat
+    bordered
+    dense
+  )
     template(v-slot:top)
       .row.justify-start.items-center.q-gutter-md
         q-btn.text-white(
@@ -28,7 +31,6 @@
           @click="onEnlistBuyOffer()"
           :ripple="false"
           data-testid="enlist-buy-button"
-
         )
     template(v-slot:body="props")
       q-tr(:props="props")
@@ -63,7 +65,7 @@
         q-td.cursor-pointer(key="price" :props="props")
           q-chip.text-white.text-bold(
             color="primary"
-          ) {{ props.row.price }}
+          ) {{ getPrice(props.row.price) }}
         q-td.cursor-pointer(key="actions" :props="props")
           OfferActions(
             :offerInfo="props.row"
@@ -88,7 +90,7 @@ import {
 } from 'vue'
 import AccountItem from '~/components/common/account-item.vue'
 import { useNotifications } from '~/mixins/notifications'
-import { OfferType, OfferStatus } from '~/const'
+import { OfferType, OfferStatus, RedeemStatus, BalanceUnits } from '~/const'
 import OfferActions from '~/components/marketplace/NFTs/offer-actions.vue'
 import { useStore } from 'vuex'
 // props
@@ -177,16 +179,27 @@ const showEnlistBuyButton = computed(() => {
   }
   return false
 })
+const getPrice = (price) => {
+  const _price = price.replaceAll(',', '')
+  return _price / BalanceUnits.UNITS + ' ' + BalanceUnits.UNIT
+}
 // Emits
-const emits = defineEmits(['onDeleteOffer', 'onTakeBuyOffer', 'onTakeSellOffer', 'onOpenModalSell', 'onOpenModalBuy'])
+
+const emits = defineEmits([
+  'onDeleteOffer',
+  'onTakeBuyOffer',
+  'onTakeSellOffer',
+  'onOpenModalSell',
+  'onOpenModalBuy'
+])
 const getOfferId = (index) => {
   return offers.value?.[index]?.offerId
 }
 const onDeleteOffer = (index) => emits('onDeleteOffer', getOfferId(index))
 const onTakeBuyOffer = (index) => emits('onTakeBuyOffer', getOfferId(index))
 const onTakeSellOffer = (index) => emits('onTakeSellOffer', getOfferId(index))
-const onEnlistSellOffer = () => emits('onOpenModalSell', true)
-const onEnlistBuyOffer = () => emits('onOpenModalBuy', true)
+const onEnlistSellOffer = () => emits('onOpenModalSell')
+const onEnlistBuyOffer = () => emits('onOpenModalBuy')
 </script>
 <style lang='stylus' scoped>
 </style>

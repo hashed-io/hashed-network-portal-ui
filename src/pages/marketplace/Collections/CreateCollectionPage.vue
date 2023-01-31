@@ -28,6 +28,9 @@ export default {
           description: name
         })
         this.showNotification({ message: 'Collection created successfully' })
+        this.$router.push({
+          name: 'collections'
+        })
       } catch (e) {
         this.handlerError(e)
       } finally {

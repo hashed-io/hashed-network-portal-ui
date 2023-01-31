@@ -38,7 +38,7 @@
 <script setup>
 import { Money3Component } from 'v-money3'
 import { debounce } from 'quasar'
-
+import { BalanceUnits } from '~/const'
 import {
   defineComponent,
   defineProps,

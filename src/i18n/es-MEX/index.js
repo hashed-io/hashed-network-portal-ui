@@ -361,6 +361,8 @@ export default {
       details: 'Detalles del NFT',
       detailsTaxCredit: 'Detalles del crédito fiscal',
       sellingLabel: 'Ingresa el precio de venta del NFT',
+      forSale: 'En venta',
+      notForSale: 'No en venta',
       submitOffer: 'Enviar oferta',
       element: {
         title: 'Único',

@@ -108,6 +108,10 @@ const errorMaps = [
   {
     message: 'Your user do not have the specified role for the transaction',
     code: 'NotAuthorized'
+  },
+  {
+    message: 'The user already has the role',
+    code: 'UserAlreadyHasRole'
   }
 ]
 
