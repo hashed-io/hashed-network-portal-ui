@@ -25,7 +25,13 @@
       q-stepper-navigation
         .row.justify-end.q-gutter-sm
           q-btn(color="negative" :label="$t('pages.nbv.proposals.exitWithoutSave')" no-caps v-close-popup)
-          q-btn(@click="dispatchStep" color="primary" :label="step === 4 ? 'Finish' : 'Continue'" no-caps)
+          q-btn(
+            @click="dispatchStep"
+            color="primary"
+            :label="step === steps.uploadPsbt ? 'Finish' : 'Continue'"
+            no-caps
+            data-testId="stepTriggerBtn"
+          )
 </template>
 
 <script setup>

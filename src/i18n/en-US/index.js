@@ -187,7 +187,7 @@ export default {
         signPsbt: 'Sign PSBT',
         signPsbtDescription: 'Click continue to sign PSBT.',
         saveSignedPsbt: 'Save signed PSBT',
-        saveSignedPsbtDescription: 'Click continue to save signed PSBT.'
+        saveSignedPsbtDescription: 'Click finish to save signed PSBT.'
         // signPsbtStep1: ''
       },
       list: {

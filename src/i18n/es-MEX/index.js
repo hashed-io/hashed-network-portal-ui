@@ -169,7 +169,7 @@ export default {
         signPsbt: 'Firmar PSBT',
         signPsbtDescription: 'Click en continuar para firmar PSBT.',
         saveSignedPsbt: 'Guardar PSBT firmado',
-        saveSignedPsbtDescription: 'Click en continuar para guardar PSBT firmado.'
+        saveSignedPsbtDescription: 'Click en finalizar para guardar el PSBT firmado.'
         // signPsbtStep1: ''
       },
       list: {
