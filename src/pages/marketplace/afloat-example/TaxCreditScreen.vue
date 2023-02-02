@@ -25,7 +25,7 @@ q-card
       :file="taxFile"
     )
     offers-table.q-mx-md(
-      v-if="isFrozen && !isRedeemed"
+      v-if="!isRedeemed"
       :offers="offers.data"
       :ownerTax="getOwnerTax"
       @onDeleteOffer="onDeleteOffer"
