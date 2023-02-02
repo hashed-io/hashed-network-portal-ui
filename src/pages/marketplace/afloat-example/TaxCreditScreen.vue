@@ -16,7 +16,8 @@ q-card
       @onRequestRedeem="onRequestRedeem"
       @onApproveRedeem="onApproveRedeem"
     )
-    banner.q-mx-md.q-my-md(v-if="isFrozen" message="Tax Credit frozen" :status="'frozen'")
+    .row
+      banner.col-5.q-mx-md.q-my-md(v-if="isFrozen" message="Tax Credit frozen" :status="'frozen'")
     TaxCreditDetails(
       v-if="uniquesData.data"
       :uniquesData="uniquesData.data",
@@ -57,6 +58,7 @@ import TaxCreditDetails from '~/components/marketplace/taxCredit/TaxCreditDetail
 import OffersTable from '~/components/marketplace/NFTs/offers-table.vue'
 import OfferForm from '~/components/marketplace/collections/OfferForm.vue'
 import RedeemInfo from '~/components/marketplace/taxCredit/redeem-info.vue'
+import banner from '~/components/common/banner.vue'
 import { RedeemStatus, Roles, RedeemArgs } from '~/const'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -470,7 +472,7 @@ const getRole = computed(() => {
 })
 
 const isFrozen = computed(() => {
-  return uniquesData?.data?.isFrozen
+  return uniquesData?.data?.frozen
 })
 const isRedeemed = computed(() => {
   return uniquesData?.data?.redeemed

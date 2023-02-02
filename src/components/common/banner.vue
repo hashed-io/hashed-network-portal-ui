@@ -1,5 +1,5 @@
 <template lang="pug">
-q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loading, 'bg-primary': normal, 'bg-blue': frozen }")
+q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loading, 'bg-primary': normal, 'bg-info': frozen }")
   //- template(v-slot:avatar v-if="status")
   q-item(dense)
     q-item-section(avatar v-if="status")

@@ -57,7 +57,7 @@ export default {
         instance: '0',
         owner: undefined,
         approved: null,
-        isFrozen: false,
+        frozen: false,
         onSale: false
       }]
     },

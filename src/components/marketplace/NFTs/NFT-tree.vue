@@ -70,8 +70,8 @@
                 )
                   q-tooltip Tax credit verified
                 q-chip.text-white.q-pt-xs(
-                  v-if="prop.node.isFrozen"
-                  color="blue"
+                  v-if="prop.node.frozen"
+                  color="info"
                   label="Frozen"
                 )
                 q-chip.text-white(
@@ -110,7 +110,7 @@ export default {
         instance: '0',
         owner: undefined,
         approved: null,
-        isFrozen: false,
+        frozen: false,
         onSale: false
       }]
     },
