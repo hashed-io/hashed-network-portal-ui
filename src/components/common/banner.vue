@@ -1,10 +1,11 @@
 <template lang="pug">
-q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loading, 'bg-primary': normal }")
+q-banner.text-white(rounded :class="{ 'bg-negative': error, 'bg-warning': loading, 'bg-primary': normal, 'bg-info': frozen }")
   //- template(v-slot:avatar v-if="status")
   q-item(dense)
     q-item-section(avatar v-if="status")
-      q-spinner-tail(v-if="loading" color="white" size="md")
+      q-icon(v-if="loading" color="white" size="md" name="notification_important")
       q-icon(v-else-if="error" name="notification_important" color="white" size="md")
+      q-icon(v-else-if="frozen" name="ac_unit" color="white" size="md")
     q-item-section
       .text-body2 {{ message }}
 </template>
@@ -37,6 +38,9 @@ export default {
     },
     loading () {
       return !!(this.status && this.status.toLowerCase() === 'loading')
+    },
+    frozen () {
+      return !!(this.status && this.status.toLowerCase() === 'frozen')
     },
     normal () {
       return !!(!this.status || this.status.toLowerCase() === '')

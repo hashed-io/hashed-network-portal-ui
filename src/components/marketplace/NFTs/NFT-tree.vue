@@ -2,6 +2,22 @@
 #container
   q-card
     q-card-section
+      .row.justify-start
+        h-input.col-4(
+          label="Search Tax Credit"
+          v-model="filter"
+          outlined
+          dense
+          testid="search-input"
+          debounce="400"
+        )
+    q-card-section
+      .row.justify-center.full-width.items-center
+        .col-4.q-pl-lg.text-subtitle2 Tax Credit
+        .col-4.q-pl-lg.text-subtitle2 Creator
+        .col-4.q-px-md.text-subtitle2
+          .row.q-gutter-md.justify-center
+            div {{ isTaxCredit ? 'Tax credit Information' : 'NFT Information' }}
       q-tree(
         v-model:selected="selected"
         :nodes="getUniqueList"
@@ -12,15 +28,17 @@
         no-selection-unset
         icon="arrow_forward_ios"
         selected-color="green"
+        :filter="filter"
+        :filter-method="getTaxCredit"
         @lazy-load="onLazyLoad"
       )
         template(v-slot:default-header="prop")
           .row.justify-between.full-width.items-center
-            .col-4
+            .col-4(data-testid="node")
               q-chip.text-white.text-bold(
                 color="primary"
                 data-testid="nft-name"
-                ) {{$t('pages.nfts.element.taxCreditTitle')}} {{prop.node.instance}} {{prop.node.data || prop.node.metadata}}
+                ) {{prop.node.data || prop.node.metadata}}
             AccountItem.col-4(
               inherit
               flat
@@ -29,33 +47,48 @@
               :label="$t('pages.marketplace.taxCredits.details.user')"
               data-testid="account-icon"
             )
-            .col-4(v-if="isOnSale(prop.node.onSale)" )
-              .row.q-gutter-md.justify-between
+            .col-4
+              .row.q-gutter-md.justify-start
                 q-chip.text-white(
                   v-if="!prop.node.onSale"
-                  label="Not On Sale"
+                  :label="$t('pages.nfts.notForSale')"
                   color="blue"
                   :ripple="false"
                   data-testid="not-on-sale-chip"
                 )
                 q-chip.text-white(
                   v-if="prop.node.onSale"
-                  label="On Sale"
+                  :label="$t('pages.nfts.forSale')"
                   color="green"
                   :ripple="false"
                   data-testid="on-sale-chip"
                 )
                 q-icon.q-pt-xs(
-                  v-if="prop.node.aproved"
+                  v-if="prop.node.approved"
                   name="verified_user"
                   color="blue"
                 )
                   q-tooltip Tax credit verified
+                q-chip.text-white.q-pt-xs(
+                  v-if="prop.node.frozen"
+                  color="info"
+                  label="Frozen"
+                )
                 q-chip.text-white(
                   :label="getPercentageLabel(prop.node)"
                   color="purple"
                   :ripple="false"
                   data-testid="percent_available"
+                )
+                q-chip.text-white.q-pt-xs(
+                  v-if="prop.node.askingForRedemption && (isAdmin || isOwner(prop.node.owner))"
+                  color="red"
+                  label="Asking for Redemption"
+                )
+                q-chip.text-white.q-pt-xs(
+                  v-if="prop.node.redeemed"
+                  color="secondary"
+                  label="Redeemed"
                 )
 </template>
 <script>
@@ -63,6 +96,7 @@ import AccountItem from '~/components/common/account-item.vue'
 import { mapGetters } from 'vuex'
 import { OfferType } from '~/const'
 import { uniques } from '@polkadot/types/interfaces/definitions'
+import { onMounted } from 'vue'
 export default {
   name: 'NFTTree',
   components: {
@@ -76,7 +110,7 @@ export default {
         instance: '0',
         owner: undefined,
         approved: null,
-        isFrozen: false,
+        frozen: false,
         onSale: false
       }]
     },
@@ -89,10 +123,14 @@ export default {
   data () {
     return {
       offerType: OfferType,
-      selected: 'California Port Volume'
+      selected: 'initial',
+      filter: undefined,
+      adminInfo: undefined,
+      redemptionsIds: []
     }
   },
   computed: {
+    ...mapGetters('profile', ['polkadotAddress']),
     getUniqueList: {
       get () {
         return this.uniquesList.map((unique, i) => {
@@ -110,6 +148,9 @@ export default {
       set () {
 
       }
+    },
+    isAdmin () {
+      return this.polkadotAddress === this.adminInfo?.address
     }
   },
   watch: {
@@ -117,7 +158,28 @@ export default {
       this.onClickRow(newSelected)
     }
   },
+  async mounted () {
+    await this.getAdminMarket()
+  },
   methods: {
+    isOwner (nodeOwner) {
+      return this.polkadotAddress === nodeOwner
+    },
+    async getAdminMarket () {
+      const adminType = 'Admin'
+      try {
+        const response = await this.$store?.$afloatApi?.getAuthoritiesByMarketplace({
+          marketId: process.env.GATED_MARKETPLACE_ID,
+          palletId: process.env.GATED_PALLET_ID
+        })
+        const adminInfo = response?.find(authority => authority.type === adminType)
+        this.adminInfo = adminInfo || undefined
+      } catch (error) {
+        this.handlerError(error)
+      } finally {
+        this.hideLoading()
+      }
+    },
     onClickRow (index) {
       this.$emit('onClickRow', index)
     },
@@ -129,6 +191,9 @@ export default {
         const { children } = node || {}
 
         if (!children) { done() }
+        if (this.redemptionsIds.length === 0) {
+          await this.getRedemptionsRequested()
+        }
         const childrenPromises = []
         const childrenInfoPromises = []
         const childrenOffersPromises = []
@@ -141,7 +206,7 @@ export default {
             this.getUniqueInfo({ collectionId, classId })
           )
           childrenOffersPromises.push(
-            this.$store.$afloatApi.getOffersByItem({ collectionId, classId })
+            this.$store.$afloatApi?.getOffersByItem({ collectionId, classId })
           )
         })
         const resolvedChildren = await Promise.all(childrenPromises)
@@ -150,24 +215,34 @@ export default {
 
         const dataChild = children.map((child, i) => {
           const { collectionId, childId: classId } = child || {}
+          const instance = child?.childId
+          const inRedemptionArray = this.redemptionsIds.find(el => {
+            const { itemId, isRedeemed } = el || {}
+            return itemId === instance && !isRedeemed
+          })
           return {
             collection: collectionId,
             instance: classId,
             ...resolvedChildren[i],
             ...resolvedChildrenInfo[i],
             onSale: resolvedChildrenOffers[i].length > 0 ? { data: true } : undefined,
+            // TODO: Delete when the backend is already [Only redeem]
+            // redeem: true,
+            data: resolvedChildren[i]?.metadata + ' ' + classId,
+            askingForRedemption: !!inRedemptionArray,
             lazy: true
           }
         })
         done([...dataChild])
       } catch (error) {
         this.handlerError(error)
+        fail(error)
       }
     },
     async getFruniqueInfo ({ collectionId, classId }) {
       let fruniqueInfo
       try {
-        fruniqueInfo = this.$store.$afloatApi.getFruniqueInfoByClass({
+        fruniqueInfo = this.$store.$afloatApi?.getFruniqueInfoByClass({
           collectionId,
           classId
         })
@@ -181,7 +256,7 @@ export default {
     async getUniqueInfo ({ collectionId, classId }) {
       let uniqueInfo
       try {
-        uniqueInfo = this.$store.$afloatApi.getAssetInfo({
+        uniqueInfo = this.$store.$afloatApi?.getAssetInfo({
           collectionId,
           classId
         })
@@ -199,11 +274,28 @@ export default {
         return message + node.weight
       }
       const { parentWeight } = parent || {}
-      return message + weight + ' of ' + parentWeight + ' parent'
+      return message + weight + ' of parent\'s ' + parentWeight
+    },
+    getTaxCredit (node, filter) {
+      const filt = filter.toLowerCase()
+      return node.data && node.data.toLowerCase().indexOf(filt) > -1
+    },
+    async getRedemptionsRequested () {
+      const collectionId = process.env.AFLOAT_COLLECTION_ID || '0'
+      try {
+        const response = await this.$store.$afloatApi?.askingForRedemption({
+          marketplaceId: process.env.GATED_MARKETPLACE_ID,
+          collectionId
+        })
+        this.redemptionsIds = [...response]
+      } catch (error) {
+        this.handlerError(error)
+      } finally {
+        this.hideLoading()
+      }
     }
   }
 }
 </script>
 <style lang='stylus' scoped>
-
 </style>

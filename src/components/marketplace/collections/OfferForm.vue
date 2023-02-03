@@ -9,11 +9,12 @@ q-card.full-width
       MoneyInput(
         v-model="offerInput"
         isMoney
-        :rules="[rules.required, rules.greaterOrEqualThan(1001)]"
+        :rules="[rules.required, rules.greaterOrEqualThan(1)]"
         :label="$t('pages.nfts.sellingLabel')"
         testId="price-input"
-
       )
+        template(v-slot:append)
+          .text-caption {{ getUnit }}
       .label(v-if="showMarketSelect") {{'Where marketplace does you want to sell your Tax Credit?'}}
       q-select.q-pt-lg(
         v-if="showMarketSelect"
@@ -54,6 +55,7 @@ q-card.full-width
 <script>
 import { validation } from '~/mixins/validation'
 import MoneyInput from '~/components/common/input/money-input.vue'
+import { BalanceUnits } from '~/const'
 export default {
   name: 'OfferForm',
   mixins: [validation],
@@ -106,14 +108,18 @@ export default {
     },
     hasFee () {
       return this.marketplace?.description
+    },
+    getUnit () {
+      return BalanceUnits.UNIT
     }
   },
   methods: {
     onSubmitForm () {
+      const offer = this.offerInput * BalanceUnits.UNITS
       this.$emit('onSubmitForm', {
         collectionId: this.collectionId,
         itemId: this.instanceId,
-        offer: this.offerInput,
+        offer,
         marketplace: this.marketplace?.value,
         percentage: this.percentage
       })

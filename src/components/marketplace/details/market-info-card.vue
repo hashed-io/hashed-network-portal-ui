@@ -102,6 +102,7 @@ export default {
       default: () => []
     }
   },
+  emits: ['onInviteSuccess'],
   data () {
     return {
       modal: {
@@ -125,6 +126,8 @@ export default {
           fields: [['Invited of the admin', 'invited']],
           custodiansFields: null
         })
+        this.showNotification({ message: 'The invitee is part of the market now' })
+        this.$emit('onInviteSuccess')
       } catch (error) {
         console.error(error)
         this.showNotification({ message: error.message || error, color: 'negative' })

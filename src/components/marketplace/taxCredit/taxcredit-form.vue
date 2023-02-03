@@ -320,8 +320,8 @@ export default {
       const formObj = { ...this.form }
       delete formObj.file
       const form = this.state === 'California'
-        ? { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.recipient, file: this.fileHCD } }
-        : { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.transferorInfo, file: this.fileHCD } }
+        ? { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.recipient, rootState: this.state, file: this.fileHCD } }
+        : { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.transferorInfo, rootState: this.state, file: this.fileHCD } }
 
       console.log({ form })
       if (!this.fileHCD) {
