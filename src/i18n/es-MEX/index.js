@@ -75,6 +75,7 @@ export default {
         labelDesc: 'Desactivado temporalmente',
         extendedPublicKeyInfo: 'Una clave pública extendida, o xpub, es una clave pública que puede utilizarse para derivar claves públicas secundarias como parte de un monedero determinista jerárquico (HD). Una clave pública extendida es un estándar de Bitcoin establecido por BIP 32 y se utiliza principalmente por un monedero entre bastidores para derivar claves públicas.',
         textInfo: 'Introduzca su clave pública ampliada escaneando el código QR de BlueWallet (lo más fácil) o a través del formulario de entrada.',
+        textInfoHCD: 'Asociar XPUB generada por HCD.',
         masterFingerPrint: 'Huella dactilar principal',
         pubicKeyDesc: 'Por favor, inserte una clave pública extendida con el prefijo "Zpub"',
         fingerprintDesc: 'La huella digital de la clave extendida se define como los primeros 8 caracteres alfanuméricos',

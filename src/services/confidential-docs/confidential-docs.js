@@ -11,13 +11,15 @@ const {
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {
-    this._polkadot = new Polkadot({ wss: chainURI, appName })
     this._ipfsURL = ipfsURL
     this._faucetServerUrl = faucetServerUrl
     this._ipfsAuthHeader = ipfsAuthHeader
+    this._wss = chainURI
+    this._appName = appName
   }
 
   async init () {
+    this._polkadot = new Polkadot({ wss: this._wss, appName: this._appName })
     await this._polkadot.connect()
 
     const faucet = new HashedFaucet(this._faucetServerUrl)
@@ -56,6 +58,7 @@ class ConfidentialDocs {
   logout () {
     this._hcd.logout()
     this._polkadot.setWallet()
+    // this.init()
   }
 
   getPolkadotAddress () {
@@ -119,6 +122,10 @@ class ConfidentialDocs {
    */
   signPSBT ({ psbt }) {
     return this._hcd.btc().signPSBT(psbt)
+  }
+
+  getFullXpub () {
+    return this._hcd.btc().fullXPUBMultisig()
   }
 }
 

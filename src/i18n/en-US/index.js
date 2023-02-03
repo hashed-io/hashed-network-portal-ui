@@ -85,6 +85,7 @@ export default {
         labelDesc: 'Disabled temporally',
         extendedPublicKeyInfo: 'An extended public key, or xpub, is a public key which can be used to derive child public keys as part of a Hierarchical Deterministic (HD) wallet. An extended public key is a Bitcoin standard established by BIP 32 and is mainly used by a wallet behind the scenes in order to derive public keys.',
         textInfo: 'Create a new extended public key and self custody your seed.',
+        textInfoHCD: 'Link XPUB generated from HCD.',
         textInfoIHaveAnXpub: 'Enter your extended public key by scanning the QR code from BlueWallet (easiest) or via the input form.',
         masterFingerPrint: 'Master fingerprint',
         pubicKeyDesc: 'Please Insert an extended public key with "Zpub" prefix',

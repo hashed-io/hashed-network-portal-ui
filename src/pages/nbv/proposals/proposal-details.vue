@@ -122,7 +122,7 @@
           :isFinalized="isFinalized"
           :vaultName="vaultParentName"
           @onSignPsbt="signPsbt"
-          @onSavePsbt="savePsbt"
+          @onSavePsbt="(payload) => savePsbt(signedPsbt)"
           @onBroadcastPsbt="broadcastPsbt"
         )
 
@@ -153,6 +153,7 @@ export default {
       offchainStatus: undefined,
       txId: undefined,
       psbt: undefined,
+      signedPsbt: undefined,
       signedPsbts: [],
       cosigners: [],
       isShowingSignPsbt: false,
@@ -188,19 +189,19 @@ export default {
         click: false
       }
       try {
-        if (this.status && this.canFinalize && this.status.toLowerCase() !== 'broadcasted') {
+        if (this.status && this.canFinalize && this.status?.toLowerCase() !== 'broadcasted') {
           return chip
         }
-        if (this.status && this.status.toLowerCase() === 'pending') {
+        if (this.status && this.status?.toLowerCase() === 'pending') {
           return chip
-        } else if (this.status && this.status.toLowerCase() === 'finalized') {
+        } else if (this.status && this.status?.toLowerCase() === 'finalized') {
           return {
             ...chip,
             color: 'positive',
             // icon: 'cloud_done',
             label: this.$t('pages.nbv.proposals.finalizedStatus')
           }
-        } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
+        } else if (this.status && this.status?.toLowerCase() === 'broadcasted') {
           return {
             ...chip,
             color: 'positive',
@@ -346,7 +347,8 @@ export default {
     async signPsbt ({ psbt, next }) {
       try {
         this.showLoading()
-        await this.$store.$hcd.signPSBT({ psbt })
+        const signedPSBT = await this.$store.$hcd.signPSBT({ psbt })
+        this.signedPsbt = signedPSBT
         next()
       } catch (e) {
         this.handlerError(e)
