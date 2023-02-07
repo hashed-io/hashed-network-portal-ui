@@ -197,6 +197,10 @@ export default {
       actions: {
         refresh: 'refresh',
         copyToClipboard: 'Copy to clipboard'
+      },
+      proofOfReserves: {
+        proofOfReserves: 'Proof of reserves',
+        goToProofOfReserves: 'Test'
       }
     },
     marketplace: {

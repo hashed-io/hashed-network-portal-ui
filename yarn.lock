@@ -3407,21 +3407,26 @@
   dependencies:
     "@smontero/hashed-crypto" "0.0.8"
 
-"@smontero/hashed-confidential-docs@0.2.10":
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.10.tgz#c7da3e424184102f2fc30a5b01c84c133dc719a9"
-  integrity sha512-3E9RCRzAn6o8l0zBtRNSZoL1f8+rYmoNSeQNEOmxyrunavQfPuxA+2HlM8yXYrQ4BICF4Pkue+FyNaK9ZWMayQ==
+"@smontero/hashed-confidential-docs@0.2.18":
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.18.tgz#504b4abb8f62a00c41ebd20327e1972bd12c5d9b"
+  integrity sha512-0DTL5Xe7cm48Aqd94LHk/7p5bhr+vcnXeCCUefYjsl1BWRKF0va0eEzbwAeExJ8fx+b07QtR15bPAUHpMRhKAg==
   dependencies:
     "@polkadot/api" "^8.1.1"
     "@polkadot/extension-dapp" "^0.43.1"
     "@smontero/generated-key-cipher-providers" "0.0.6"
     "@smontero/hashed-crypto" "^0.0.8"
     "@smontero/jwt" "^0.0.2"
+    bip32 "^3.1.0"
+    bip39 "^3.0.4"
+    bitcoinjs-lib "^6.0.2"
     ipfs-http-client "^55.0.0"
     it-all "^1.0.6"
     mime-types "^2.1.35"
     sha.js "^2.4.11"
+    tiny-secp256k1 "^2.2.1"
     uint8arrays "^3.0.0"
+    xpub-converter "^1.0.2"
 
 "@smontero/hashed-confidential-docs@^0.1.8":
   version "0.1.8"
@@ -6584,7 +6589,7 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bip174@^2.0.1:
+bip174@^2.0.1, bip174@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/bip174/-/bip174-2.1.0.tgz#cd3402581feaa5116f0f00a0eaee87a5843a2d30"
   integrity sha512-lkc0XyiX9E9KiVAS1ZiOqK1xfiwvf4FXDDdkDq5crcDzOq+xGytY+14qCsqz7kCiy8rpN1CRNfacRhf9G3JNSA==
@@ -6618,6 +6623,20 @@ bitcoinjs-lib@^6.0.1:
   dependencies:
     bech32 "^2.0.0"
     bip174 "^2.0.1"
+    bs58check "^2.1.2"
+    create-hash "^1.1.0"
+    ripemd160 "^2.0.2"
+    typeforce "^1.11.3"
+    varuint-bitcoin "^1.1.2"
+    wif "^2.0.1"
+
+bitcoinjs-lib@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.0.tgz#2e3123d63eab5e8e752fd7e2f237314f35ed738f"
+  integrity sha512-eupi1FBTJmPuAZdChnzTXLv2HBqFW2AICpzXZQLniP0V9FWWeeUQSMKES6sP8isy/xO0ijDexbgkdEyFVrsuJw==
+  dependencies:
+    bech32 "^2.0.0"
+    bip174 "^2.1.0"
     bs58check "^2.1.2"
     create-hash "^1.1.0"
     ripemd160 "^2.0.2"
@@ -19294,6 +19313,13 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
+
+xpub-converter@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/xpub-converter/-/xpub-converter-1.0.2.tgz#71e1c2a50b8c78238054d5aefd7a03264683e800"
+  integrity sha512-YafJO7rMs9JY8r12BiOfRQF9kXzcMYTa/UPVIllkDu0yWas3i6iEJNUcQSiQUCDSljKzEVScgyG5uMFyMuefkA==
+  dependencies:
+    bs58check "^2.1.2"
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@^4.0.2, xtend@~4.0.1:
   version "4.0.2"

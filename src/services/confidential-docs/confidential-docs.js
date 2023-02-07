@@ -1,13 +1,13 @@
 // See HashedConfidentialDocs on https://github.com/hashed-io/hashed-confidential-docs-client-api
-const {
+import {
   HashedConfidentialDocs,
   GoogleDrive,
   Google,
   createGoogleVaultAuthProvider,
   Polkadot,
   HashedFaucet
-// } from '@smontero/hashed-confidential-docs'
-} = require('../../../../hashed-confidential-docs-client-api/src/index')
+} from '@smontero/hashed-confidential-docs'
+// } = require('../../../../hashed-confidential-docs-client-api/src/index')
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {

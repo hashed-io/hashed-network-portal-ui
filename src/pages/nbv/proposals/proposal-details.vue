@@ -59,6 +59,12 @@
           .text-overline {{ $t('pages.nbv.vaults.threshold') }}
           .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
           hr
+          .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReserves') }}
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proofOfReserves.goToProofOfReserves')"
+              color="secondary"
+              no-caps
+            )
           .text-overline Actions
           .q-gutter-y-sm
             q-btn.full-width.no-padding(
