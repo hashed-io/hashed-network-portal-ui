@@ -79,6 +79,7 @@ export default {
         width: '300'
       }
     )
+    this.getContributors()
   },
   async beforeMount () {
     try {

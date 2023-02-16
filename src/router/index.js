@@ -28,6 +28,9 @@ export default route(function ({ store }) {
 
   Router.beforeEach(async (to, from, next) => {
     // console.log('params', { to, from })
+    if (to.name === 'contributes') {
+      next()
+    }
     const isAuthenticated = store.getters['profile/isLogged']
     // console.log(isAuthenticated, 'Authenticated')
 

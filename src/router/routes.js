@@ -216,6 +216,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/contributes',
+    component: () => import('pages/Crowdloans.vue'),
+    name: 'contributes'
+  },
   // {
   //   path: '/examples',
   //   component: () => import('layouts/MainLayout.vue'),
