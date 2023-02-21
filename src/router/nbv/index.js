@@ -42,6 +42,19 @@ const routes = {
         app: 'nbv'
       }
     },
+    {
+      path: 'vaults/proof_of_reserves',
+      name: 'vaultProofOfReserves',
+      props: true,
+      component: () => import('pages/nbv/vaults/vault-proof-of-reserves.vue'),
+      meta: {
+        breadcrumb: [
+          { name: 'myVaults', icon: 'storage', to: { name: 'manageVaults' } },
+          { name: 'proofOfReserves', icon: 'summarize' }
+        ],
+        app: 'nbv'
+      }
+    },
     // Proposals Details
     {
       path: 'proposal',

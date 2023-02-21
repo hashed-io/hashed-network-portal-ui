@@ -28,7 +28,8 @@ export default {
     detail: 'Detalles',
     create: 'create',
     marketplaces: 'Marketplaces',
-    taxCredits: 'Créditos fiscales'
+    taxCredits: 'Créditos fiscales',
+    proofOfReserves: 'Prueba de reservas'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',

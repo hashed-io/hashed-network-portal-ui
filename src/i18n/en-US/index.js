@@ -34,7 +34,8 @@ export default {
     proposalDetails: 'Proposal Details',
     create: 'create',
     marketplaces: 'Marketplaces',
-    taxCredits: 'Tax Credits'
+    taxCredits: 'Tax Credits',
+    proofOfReserves: 'Proof of Reserves'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
