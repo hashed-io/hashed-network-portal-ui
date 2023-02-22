@@ -27,7 +27,7 @@
         )
 
   q-table.contributorsTable.q-mt-md(
-    title="Contributions"
+    title="Participants"
     v-if="rowsToShow.length > 0"
     :rows="rowsToShow"
     :columns="columnsToShow"
