@@ -32,6 +32,8 @@
 <script setup>
 import axios from 'axios'
 import { onMounted, reactive, ref, computed } from 'vue'
+import csvDownload from 'json-to-csv-export'
+
 import { useNotifications } from '~/mixins/notifications'
 import AmountUtils from '~/utils/AmountUtils'
 
@@ -72,7 +74,8 @@ const funds = reactive({
     fund54: [],
     fund58: [],
     both: []
-  }
+  },
+  participants: []
 })
 
 const hashPerDot = 480
@@ -85,7 +88,7 @@ const initialPagination = {
   sortBy: 'desc',
   descending: false,
   page: 0,
-  rowsPerPage: 100
+  rowsPerPage: 0
   // rowsNumber: xx if getting data from a server
 }
 
@@ -201,12 +204,8 @@ async function refresh () {
       c58,
       both: funds.contributors.both
     })
-    const duplicated54 = findDuplicated(c54, 'who')
-    console.log('duplicated54', duplicated54)
-    const duplicated58 = findDuplicated(c58, 'who')
-    console.log('duplicated58', duplicated58)
-    const duplicatedt = findDuplicated(columnsForBoth, 'name')
-    console.log('duplicatedt', duplicatedt)
+    // convertToCSV({ data: c54, name: 'fund_54' })
+    // convertToCSV({ data: c58, name: 'fund_58' })
   } catch (e) {
     console.error(e)
   } finally {
@@ -288,6 +287,16 @@ async function getContributors ({ fundId, page }) {
     contributors: realContributors,
     hasMore
   }
+}
+
+function convertToCSV ({ data, name }) {
+  const dataToConvert = {
+    data,
+    filename: name,
+    delimiter: ',',
+    headers: ['fund_id', 'para_id', 'who', 'contributed', 'contributing', 'block_num', 'block_timestamp', 'extrinsic_index', 'event_index', 'status', 'memo', 'who_display']
+  }
+  csvDownload(dataToConvert)
 }
 </script>
 
