@@ -171,6 +171,7 @@ export default {
         let message = e.message || e
         message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
         this.showNotification({ message, color: 'negative' })
+        console.error(e)
         // this.handlerError(e)
       } finally {
         this.hideLoading()

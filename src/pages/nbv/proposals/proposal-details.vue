@@ -58,9 +58,16 @@
           hr
           .text-overline {{ $t('pages.nbv.vaults.threshold') }}
           .text-body2 {{ `${threshold} of ${cosigners.length} Multisignature` }}
-          hr
           .text-overline Actions
           .q-gutter-y-sm
+            q-btn.full-width.no-padding(
+              :label="$t('pages.nbv.proposals.signPSBTUsingHCD')"
+              color="secondary"
+              no-caps
+              @click="showSignPSBTHCD"
+              :disabled="isOffchainError || !hasPsbt"
+              v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
+            )
             q-btn.full-width.no-padding(
               :label="$t('pages.nbv.proposals.signPSBT')"
               color="secondary"
@@ -103,6 +110,20 @@
           @onFinalizePsbt="finalizePsbt"
           @onBroadcastPsbt="broadcastPsbt"
         )
+    q-dialog(v-model="isShowingSignPsbtHCD" persistent)
+      q-card.modalSize.q-pa-sm
+        sign-proposal-hcd(
+          :psbt="psbt"
+          :canFinalize="canFinalize"
+          :canBroadcast="canBroadcast"
+          :alreadySigned="alreadySigned"
+          :isBroadcasted="isBroadcasted"
+          :isFinalized="isFinalized"
+          :vaultName="vaultParentName"
+          @onSignPsbt="signPsbt"
+          @onSavePsbt="(payload) => savePsbt(signedPsbt)"
+          @onBroadcastPsbt="broadcastPsbt"
+        )
 
 </template>
 
@@ -111,12 +132,13 @@ import { mapGetters } from 'vuex'
 import { AccountItem, Banner } from '~/components/common'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
+import SignProposalHcd from '~/components/nbv/proposals/sign-proposal-hcd'
 // eslint-disable-next-line no-var
 var interval
 
 export default {
   name: 'ProposalDetails',
-  components: { AccountItem, CosignersList, Banner, SignProposalStepper },
+  components: { AccountItem, CosignersList, Banner, SignProposalStepper, SignProposalHcd },
   data () {
     return {
       vaultId: undefined,
@@ -130,9 +152,11 @@ export default {
       offchainStatus: undefined,
       txId: undefined,
       psbt: undefined,
+      signedPsbt: undefined,
       signedPsbts: [],
       cosigners: [],
       isShowingSignPsbt: false,
+      isShowingSignPsbtHCD: false,
       psbtQR: undefined,
       offchainMessage: undefined,
       threshold: undefined,
@@ -141,7 +165,7 @@ export default {
   },
   computed: {
     // ...mapGetters('polkadotWallet', ['selectedAccount']),
-    ...mapGetters('profile', ['polkadotAddress']),
+    ...mapGetters('profile', ['polkadotAddress', 'isHCDLogged']),
     labelActionBtn () {
       switch (this.labelStatus) {
       case 'Pending':
@@ -164,19 +188,19 @@ export default {
         click: false
       }
       try {
-        if (this.status && this.canFinalize && this.status.toLowerCase() !== 'broadcasted') {
+        if (this.status && this.canFinalize && this.status?.toLowerCase() !== 'broadcasted') {
           return chip
         }
-        if (this.status && this.status.toLowerCase() === 'pending') {
+        if (this.status && this.status?.toLowerCase() === 'pending') {
           return chip
-        } else if (this.status && this.status.toLowerCase() === 'finalized') {
+        } else if (this.status && this.status?.toLowerCase() === 'finalized') {
           return {
             ...chip,
             color: 'positive',
             // icon: 'cloud_done',
             label: this.$t('pages.nbv.proposals.finalizedStatus')
           }
-        } else if (this.status && this.status.toLowerCase() === 'broadcasted') {
+        } else if (this.status && this.status?.toLowerCase() === 'broadcasted') {
           return {
             ...chip,
             color: 'positive',
@@ -316,6 +340,21 @@ export default {
     showSignPSBT () {
       this.isShowingSignPsbt = true
     },
+    showSignPSBTHCD () {
+      this.isShowingSignPsbtHCD = true
+    },
+    async signPsbt ({ psbt, next }) {
+      try {
+        this.showLoading()
+        const signedPSBT = await this.$store.$hcd.signPSBT({ psbt })
+        this.signedPsbt = signedPSBT
+        next()
+      } catch (e) {
+        this.handlerError(e)
+      } finally {
+        this.hideLoading()
+      }
+    },
     async broadcastPsbt () {
       try {
         this.showLoading()
@@ -425,6 +464,7 @@ export default {
         this.handlerError(e)
       } finally {
         this.isShowingSignPsbt = false
+        this.isShowingSignPsbtHCD = false
         this.hideLoading()
         this.updateProposal()
       }

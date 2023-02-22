@@ -7,17 +7,19 @@ import {
   Polkadot,
   HashedFaucet
 } from '@smontero/hashed-confidential-docs'
-// } from '../../../../hashed-confidential-docs-client-api/src/index'
+// } = require('../../../../hashed-confidential-docs-client-api/src/index')
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {
-    this._polkadot = new Polkadot({ wss: chainURI, appName })
     this._ipfsURL = ipfsURL
     this._faucetServerUrl = faucetServerUrl
     this._ipfsAuthHeader = ipfsAuthHeader
+    this._wss = chainURI
+    this._appName = appName
   }
 
   async init () {
+    this._polkadot = new Polkadot({ wss: this._wss, appName: this._appName })
     await this._polkadot.connect()
 
     const faucet = new HashedFaucet(this._faucetServerUrl)
@@ -56,6 +58,7 @@ class ConfidentialDocs {
   logout () {
     this._hcd.logout()
     this._polkadot.setWallet()
+    // this.init()
   }
 
   getPolkadotAddress () {
@@ -111,6 +114,18 @@ class ConfidentialDocs {
       return this._hcd.sharedData().updateMetadata({ cid, name, description })
     }
     return this._hcd.ownedData().updateMetadata({ cid, name, description })
+  }
+
+  /**
+   * @name signPsbt
+   * @param {String} psbt text
+   */
+  signPSBT ({ psbt }) {
+    return this._hcd.btc().signPSBT(psbt)
+  }
+
+  getFullXpub () {
+    return this._hcd.btc().fullXPUBMultisig()
   }
 }
 

@@ -25,22 +25,33 @@
       )
         q-tooltip {{ $t('pages.nbv.xpub.removeYourXPUB') }}
   #NotXPUB(v-else)
-    .text-body2.text-bold Create a new Xpub
-    .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.nbv.xpub.textInfo')  }}
-    q-btn.q-ma-md(
-      label="Generate a new XPUB"
-      color="primary"
-      icon="key"
-      no-caps
-      @click="generateXPUB"
-    )
-    q-dialog(v-model="modals.showingConfirmationSeed" persistent)
-      q-card.modalSize
-        seed-viewer(:seed="newXpub.seed" @onConfirm="onSeedSavedConfirmed" @onCancel="modals.showingConfirmationSeed = false")
-    hr
-    .text-body2.text-bold I have an Xpub
-    .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.nbv.xpub.textInfoIHaveAnXpub')  }}
-    set-xpub-form.q-ma-md( :userAddress="polkadotAddress" @onSubmitted="setXpub")
+    #hcd(v-if="isHCDLogged")
+      .text-body2.text-bold Link XPUB
+      .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.nbv.xpub.textInfoHCD')  }}
+      q-btn.q-ma-md(
+        label="Link XPUB"
+        color="primary"
+        icon="key"
+        no-caps
+        @click="linkHCDXPUB"
+      )
+    #normal-flow(v-else)
+      .text-body2.text-bold Create a new Xpub
+      .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.nbv.xpub.textInfo')  }}
+      q-btn.q-ma-md(
+        label="Generate a new XPUB"
+        color="primary"
+        icon="key"
+        no-caps
+        @click="generateXPUB"
+      )
+      q-dialog(v-model="modals.showingConfirmationSeed" persistent)
+        q-card.modalSize
+          seed-viewer(:seed="newXpub.seed" @onConfirm="onSeedSavedConfirmed" @onCancel="modals.showingConfirmationSeed = false")
+      hr
+      .text-body2.text-bold I have an Xpub
+      .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.nbv.xpub.textInfoIHaveAnXpub')  }}
+      set-xpub-form.q-ma-md( :userAddress="polkadotAddress" @onSubmitted="setXpub")
 </template>
 
 <script>
@@ -68,7 +79,7 @@ export default {
   },
   computed: {
     ...mapGetters('polkadotWallet', ['selectedAccount']),
-    ...mapGetters('profile', ['polkadotAddress']),
+    ...mapGetters('profile', ['polkadotAddress', 'isHCDLogged']),
     userHasXpub () {
       return !!this.userXpub
     }
@@ -126,19 +137,42 @@ export default {
       try {
         this.showLoading()
         this.userXpub = undefined
+        // if (this.isHCDLogged) {
+        //   // this.getHCDXpub()
+        // } else {
         const xpubId = await this.$store.$nbvStorageApi.getXpubByUser(this.polkadotAddress)
         if (xpubId && xpubId.value) {
           const xpub = await this.$store.$nbvStorageApi.getXpubById(xpubId.value)
           this.userXpub = xpub.isEmpty ? undefined : xpub.value.toHuman()
         }
         this.$store.dispatch('profile/getXpub')
+        // }
       } catch (e) {
         this.handlerError(e)
       } finally {
         this.hideLoading()
       }
     },
+    async getHCDXpub () {
+      try {
+        // this.showLoading()
+        const xpub = await this.$store.$hcd.getFullXpub()
+        // console.log('getHCDXpub', xpub)
+        // this.userXpub = xpub
+        return xpub
+      } catch (e) {
+        this.handlerError(e)
+        return undefined
+      }
+    },
+    async linkHCDXPUB () {
+      await this.setXpub({
+        XPUB: await this.getHCDXpub()
+      })
+      this.getXpub()
+    },
     async setXpub (payload) {
+      console.log('setXpub', payload)
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.submitXPUB({
@@ -158,7 +192,8 @@ export default {
     async removeXpub () {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        await this.$store.$nbvStorageApi.removeXpub({ user: this.polkadotAddress })
+        console.log('removeXpub', this.polkadotAddress)
+        await this.$store.$nbvStorageApi.removeXpub()
         this.showNotification({ message: this.$t('pages.nbv.xpub.yourXpubWasRemoved') })
         // this.showLoading({ message: this.$t('general.waitingSub') })
         this.getXpub()

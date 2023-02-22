@@ -17,3 +17,7 @@ export function polkadotAddress ({ polkadotAddress }) {
 export function loginType ({ loginType }) {
   return loginType
 }
+
+export function isHCDLogged ({ loginType }) {
+  return (loginType === 'hcd')
+}

@@ -34,7 +34,8 @@ export default {
     proposalDetails: 'Proposal Details',
     create: 'create',
     marketplaces: 'Marketplaces',
-    taxCredits: 'Tax Credits'
+    taxCredits: 'Tax Credits',
+    proofOfReserves: 'Proof of Reserves'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -85,6 +86,7 @@ export default {
         labelDesc: 'Disabled temporally',
         extendedPublicKeyInfo: 'An extended public key, or xpub, is a public key which can be used to derive child public keys as part of a Hierarchical Deterministic (HD) wallet. An extended public key is a Bitcoin standard established by BIP 32 and is mainly used by a wallet behind the scenes in order to derive public keys.',
         textInfo: 'Create a new extended public key and self custody your seed.',
+        textInfoHCD: 'Link XPUB generated from HCD.',
         textInfoIHaveAnXpub: 'Enter your extended public key by scanning the QR code from BlueWallet (easiest) or via the input form.',
         masterFingerPrint: 'Master fingerprint',
         pubicKeyDesc: 'Please Insert an extended public key with "Zpub" prefix',
@@ -158,7 +160,8 @@ export default {
         updatingProposal: 'Updating proposal',
         proposalCreated: 'Proposal created',
         proposalDetails: 'Proposal Details',
-        signPSBT: 'Sign PSBT',
+        signPSBT: 'Sign PSBT (BW)',
+        signPSBTUsingHCD: 'Sign PSBT (HCD)',
         deleteProposal: 'Delete Proposal',
         proposalId: 'Proposal Id',
         status: 'Status',
@@ -181,7 +184,12 @@ export default {
         pendingStatus: 'Waiting on signatures',
         finalizedStatus: 'Finalized, waiting for broadcast',
         broadcastedStatus: 'Broadcasted',
-        readyToFinalize: 'Ready to finalize'
+        readyToFinalize: 'Ready to finalize',
+        exitWithoutSave: 'Exit without save',
+        signPsbt: 'Sign PSBT',
+        signPsbtDescription: 'Click continue to sign PSBT.',
+        saveSignedPsbt: 'Save signed PSBT',
+        saveSignedPsbtDescription: 'Click finish to save signed PSBT.'
         // signPsbtStep1: ''
       },
       list: {
@@ -190,6 +198,10 @@ export default {
       actions: {
         refresh: 'refresh',
         copyToClipboard: 'Copy to clipboard'
+      },
+      proofOfReserves: {
+        proofOfReserves: 'Proof of reserves',
+        goToProofOfReserves: 'Test'
       }
     },
     marketplace: {

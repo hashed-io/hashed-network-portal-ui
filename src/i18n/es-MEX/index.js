@@ -28,7 +28,8 @@ export default {
     detail: 'Detalles',
     create: 'create',
     marketplaces: 'Marketplaces',
-    taxCredits: 'Créditos fiscales'
+    taxCredits: 'Créditos fiscales',
+    proofOfReserves: 'Prueba de reservas'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -75,6 +76,7 @@ export default {
         labelDesc: 'Desactivado temporalmente',
         extendedPublicKeyInfo: 'Una clave pública extendida, o xpub, es una clave pública que puede utilizarse para derivar claves públicas secundarias como parte de un monedero determinista jerárquico (HD). Una clave pública extendida es un estándar de Bitcoin establecido por BIP 32 y se utiliza principalmente por un monedero entre bastidores para derivar claves públicas.',
         textInfo: 'Introduzca su clave pública ampliada escaneando el código QR de BlueWallet (lo más fácil) o a través del formulario de entrada.',
+        textInfoHCD: 'Asociar XPUB generada por HCD.',
         masterFingerPrint: 'Huella dactilar principal',
         pubicKeyDesc: 'Por favor, inserte una clave pública extendida con el prefijo "Zpub"',
         fingerprintDesc: 'La huella digital de la clave extendida se define como los primeros 8 caracteres alfanuméricos',
@@ -144,7 +146,8 @@ export default {
         updatingProposal: 'Actualizando Propuesta',
         proposalCreated: 'Propuesta Creada',
         proposalDetails: 'Detalles de la propuesta',
-        signPSBT: 'Firmar PSBT',
+        signPSBT: 'Firmar PSBT (BW)',
+        signPSBTUsingHCD: 'Firmar PSBT (HCD)',
         deleteProposal: 'Eliminar Propuesta',
         proposalId: 'Proposal Id',
         status: 'Status',
@@ -163,7 +166,12 @@ export default {
         creatingPSBT: 'Por favor, espere un momento, estamos creando el PSBT',
         description: 'Descripción',
         recipientAddress: 'Recipient address',
-        amountInSatoshi: 'Cantidad en Satoshi'
+        amountInSatoshi: 'Cantidad en Satoshi',
+        exitWithoutSave: 'Salir sin guardar',
+        signPsbt: 'Firmar PSBT',
+        signPsbtDescription: 'Click en continuar para firmar PSBT.',
+        saveSignedPsbt: 'Guardar PSBT firmado',
+        saveSignedPsbtDescription: 'Click en finalizar para guardar el PSBT firmado.'
         // signPsbtStep1: ''
       },
       list: {

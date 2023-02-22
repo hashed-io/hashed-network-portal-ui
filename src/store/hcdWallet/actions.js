@@ -1,7 +1,7 @@
 export const logout = async function ({ commit }) {
   try {
     await this.$hcd.logout()
-    commit('cleanAccount')
+    // commit('cleanAccount')
   } catch (error) {
     console.error('Authenticator logout error', error)
   }
