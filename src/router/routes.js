@@ -217,7 +217,7 @@ const routes = [
     ]
   },
   {
-    path: '/contributes',
+    path: '/participants',
     component: () => import('pages/Crowdloans.vue'),
     name: 'contributes'
   },

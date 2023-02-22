@@ -2,21 +2,29 @@
 #List.q-pa-xl
   //- q-btn(label="refresh" @click="refresh")
   q-card.q-pa-lg
-    .text-bold Filters
     .row.q-col-gutter-md
-      .col-3
-        q-select(
-          label="Filter by fund"
-          v-model="selectedFilter"
-          :options="funds.options"
-          map-options
-          emit-value
-          outlined
-        )
-      .col-3
+      //- .col-3
+      //-   q-select(
+      //-     label="Filter by fund"
+      //-     v-model="selectedFilter"
+      //-     :options="funds.options"
+      //-     map-options
+      //-     emit-value
+      //-     outlined
+      //-   )
+      .col-sm-12.col-md-6
+        .text-bold Details
+        .text-subtitle2 HASH reward per DOT: {{ hashPerDot }}
+        .text-subtitle2 2nd-time Bonus: 20%
+      .col-sm-12.col-md-6
+        .text-bold Filters
         q-input(outlined debounce="300" v-model="filter" placeholder="Search" label="Search")
           template(v-slot:append)
             q-icon(name="search")
+        q-toggle(
+          label="Show just eligibles for bonus"
+          v-model="isShowingJustEligibles"
+        )
 
   q-table.contributorsTable.q-mt-md(
     title="Contributions"
@@ -32,6 +40,8 @@
 <script setup>
 import axios from 'axios'
 import { onMounted, reactive, ref, computed } from 'vue'
+import csvDownload from 'json-to-csv-export'
+
 import { useNotifications } from '~/mixins/notifications'
 import AmountUtils from '~/utils/AmountUtils'
 
@@ -49,6 +59,7 @@ const {
 } = useNotifications()
 
 const filter = ref(undefined)
+const isShowingJustEligibles = ref(false)
 const selectedFilter = ref('both')
 
 const funds = reactive({
@@ -72,7 +83,8 @@ const funds = reactive({
     fund54: [],
     fund58: [],
     both: []
-  }
+  },
+  participants: []
 })
 
 const hashPerDot = 480
@@ -85,13 +97,15 @@ const initialPagination = {
   sortBy: 'desc',
   descending: false,
   page: 0,
-  rowsPerPage: 100
+  rowsPerPage: 0
   // rowsNumber: xx if getting data from a server
 }
 
 const rowsToShow = computed(() => {
-  if (selectedFilter.value === funds.fund54Id) return funds.contributors.fund54
-  else if (selectedFilter.value === funds.fund58Id) return funds.contributors.fund58
+  // if (selectedFilter.value === funds.fund54Id) return funds.contributors.fund54
+  // else if (selectedFilter.value === funds.fund58Id) return funds.contributors.fund58
+  // return funds.contributors.both
+  if (isShowingJustEligibles.value === true) return funds.contributors.both.filter(v => v.isEligibleForBonus)
   return funds.contributors.both
 })
 
@@ -140,37 +154,90 @@ const columnsForBoth = [
     label: 'Who',
     required: true,
     align: 'left',
-    field: row => row.fund54.who_display,
-    format: who => who?.display ? `${who?.display} (${who.address})` : `${who.address}`,
+    field: row => row.who,
     sortable: true
   },
+  // {
+  //   name: 'who',
+  //   label: 'Who',
+  //   required: true,
+  //   align: 'left',
+  //   field: row => row.fund54.who_display,
+  //   format: who => who?.display ? `${who?.display} (${who.address})` : `${who.address}`,
+  //   sortable: true
+  // },
   {
-    name: 'contributed54',
+    name: 'round 1',
     label: 'DOT Contributed for fund 2093-54',
-    required: true,
+    required: false,
     align: 'left',
-    field: row => row.fund54.contributed,
+    field: row => row.round1,
     format: val => `${AmountUtils.formatToUSLocale(val)}`,
     sortable: true
   },
   {
     name: 'contributed58',
     label: 'DOT Contributed for fund 2093-58',
-    required: true,
+    required: false,
     align: 'left',
-    field: row => row.fund58.contributed,
+    field: row => row.round2,
     format: val => `${AmountUtils.formatToUSLocale(val)}`,
     sortable: true
   },
   {
-    name: 'rewards',
-    label: 'Total Hash Rewards (Increased in 20%)',
+    name: 'isEligible',
+    label: 'Eligible for bonus',
     required: true,
     align: 'left',
-    field: row => row.totalRewards,
+    field: row => row.isEligibleForBonus,
+    format: val => `${val}`,
+    sortable: true
+  },
+  {
+    name: 'baseReward',
+    label: 'Base Reward',
+    required: true,
+    align: 'left',
+    field: row => row.baseReward,
+    format: val => `${AmountUtils.formatToUSLocale(val)}`,
+    sortable: true
+  },
+  {
+    name: 'minContrib',
+    label: 'Min.Contrib',
+    required: true,
+    align: 'left',
+    field: row => row.minContribution,
+    format: val => `${AmountUtils.formatToUSLocale(val)}`,
+    sortable: true
+  },
+  {
+    name: 'bonus',
+    label: 'Bonus HASH',
+    required: false,
+    align: 'left',
+    field: row => row.bonusHash,
+    format: val => `${AmountUtils.formatToUSLocale(val)}`,
+    sortable: true
+  },
+  {
+    name: 'totalReward',
+    label: 'Total Reward',
+    required: false,
+    align: 'left',
+    field: row => row.totalReward,
     format: val => `${AmountUtils.formatToUSLocale(val)}`,
     sortable: true
   }
+  // {
+  //   name: 'rewards',
+  //   label: 'Total Hash Rewards (Increased in 20%)',
+  //   required: true,
+  //   align: 'left',
+  //   field: row => row.totalRewards,
+  //   format: val => `${AmountUtils.formatToUSLocale(val)}`,
+  //   sortable: true
+  // }
   // {
   //   name: 'block_timestamp',
   //   label: 'block_timestamp',
@@ -188,25 +255,34 @@ const columnsToShow = computed(() => {
   return columnsForBoth
 })
 
+const filteredParticipants = computed(() => {
+  if (isShowingJustEligibles.value === true) return funds.contributors.both.filter(v => v.isEligibleForBonus)
+  return funds.contributors.both
+})
 async function refresh () {
   try {
     showLoading()
+    // Get contributions for both funds
     const promises = [loadAllPagination({ fundId: funds.fund54Id }), loadAllPagination({ fundId: funds.fund58Id })]
     const [c54, c58] = await Promise.all(promises)
     funds.contributors.fund54 = c54
     funds.contributors.fund58 = c58
-    funds.contributors.both = await getCoincidences(c54, c58)
+
+    // Get all diferents participants
+    funds.participants = [...new Set([...c54.map(v => v.who), ...c58.map(v => v.who)])]
     console.log('data', {
       c54,
       c58,
-      both: funds.contributors.both
+      both: funds.contributors.both,
+      participants: funds.participants
     })
-    const duplicated54 = findDuplicated(c54, 'who')
-    console.log('duplicated54', duplicated54)
-    const duplicated58 = findDuplicated(c58, 'who')
-    console.log('duplicated58', duplicated58)
-    const duplicatedt = findDuplicated(columnsForBoth, 'name')
-    console.log('duplicatedt', duplicatedt)
+
+    // Get computed Data
+    funds.contributors.both = await getComputed()
+
+    // Download Data
+    // convertToCSV({ data: c54, name: 'fund_54' })
+    // convertToCSV({ data: c58, name: 'fund_58' })
   } catch (e) {
     console.error(e)
   } finally {
@@ -229,28 +305,42 @@ function findDuplicated (array, param) {
   return duplicated
 }
 
-async function getCoincidences () {
+async function getComputed () {
   const contributions1 = funds.contributors.fund54
   const contributions2 = funds.contributors.fund58
-  // eslint-disable-next-line consistent-return, array-callback-return
-  const matches = contributions1.map(c1 => {
-    const c2 = contributions2.find(v => v.who === c1.who)
-    let totalContributed = parseFloat(c1.contributed)
-    if (c2) totalContributed += parseFloat(c2.contributed)
+  const participants = funds.participants
+
+  const computed = participants.map(address => {
+    // Find funds
+    const fund54 = contributions1.find(v => v.who === address)
+    const fund58 = contributions2.find(v => v.who === address)
+    // Evaluate if is eligible
+    const isEligibleForBonus = !!(fund58)
+    // Get data
+    const round1 = fund54?.contributed | 0
+    const round2 = fund58?.contributed | 0
+    const display = (fund54 || fund58).who_display
+    const who = display.display ? `${display?.display} (${display.address})` : `${display.address}`
+    const baseReward = round2 * hashPerDot
+    const minContribution = Math.min(round1, round2)
+    const bonusHash = isEligibleForBonus ? minContribution * hashPerDot * 0.2 : 0
+    const totalReward = baseReward + bonusHash
     return {
-      address: c1.who,
-      totalContributed,
-      fund54: c1,
-      fund58: c2
-    }
-  }).filter(v => (v.fund54 && v.fund58))
-  return matches.map(v => {
-    return {
-      ...v,
-      totalRewards: (v.totalContributed * hashPerDot) * 1.2,
-      increaseRewardsPerc: 20
+      address,
+      who,
+      isEligibleForBonus,
+      round1,
+      round2,
+      baseReward,
+      minContribution,
+      bonusHash,
+      totalReward
+      // fund54,
+      // fund58
     }
   })
+
+  return computed
 }
 
 async function loadAllPagination ({ fundId }) {
@@ -288,6 +378,16 @@ async function getContributors ({ fundId, page }) {
     contributors: realContributors,
     hasMore
   }
+}
+
+function convertToCSV ({ data, name }) {
+  const dataToConvert = {
+    data,
+    filename: name,
+    delimiter: ',',
+    headers: ['fund_id', 'para_id', 'who', 'contributed', 'contributing', 'block_num', 'block_timestamp', 'extrinsic_index', 'event_index', 'status', 'memo', 'who_display']
+  }
+  csvDownload(dataToConvert)
 }
 </script>
 
