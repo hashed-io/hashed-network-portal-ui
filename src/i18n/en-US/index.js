@@ -201,7 +201,10 @@ export default {
       },
       proofOfReserves: {
         proofOfReserves: 'Proof of reserves',
-        goToProofOfReserves: 'Test'
+        goToProofOfReserves: 'Test',
+        status: 'Status',
+        message: 'Message',
+        psbt: 'PSBT'
       }
     },
     marketplace: {
