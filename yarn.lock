@@ -2280,10 +2280,10 @@
     stream-browserify "^3.0.0"
     uint8arrays "^3.0.0"
 
-"@jmgayosso/nbv-client-api@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.2.tgz#2a91e37122599d95adc3ec4f09525ea09cc764b0"
-  integrity sha512-kbfu613mOjeVJLP7gqm2W6395b6+beRvBAOCRlCa5CINg3RPljwNQLzwDmUxMtNVU+ThUu7uM+GV1ft/aAEk3Q==
+"@jmgayosso/nbv-client-api@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.3.tgz#a855b384bdac625fd409b713281eda9d65a0e360"
+  integrity sha512-po1rEcP7OoJgD4gQl1fptVMu7eod25Rej/OLpWdQR7h1PJvB36yrIQWpYGO6o2Td0AqJSLlAz0x1FIZipmwCGg==
   dependencies:
     "@polkadot/api" "^9.2.4"
     "@polkadot/extension-dapp" "^0.44.4"

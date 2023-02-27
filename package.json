@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@jmgayosso/afloat-client": "^0.0.7",
-    "@jmgayosso/nbv-client-api": "^0.0.2",
+    "@jmgayosso/nbv-client-api": "^0.0.3",
     "@jmgayosso/test-btn": "^1.0.1",
     "@polkadot/api": "^8.1.1",
     "@polkadot/extension-dapp": "^0.43.1",
