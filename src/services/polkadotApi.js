@@ -122,6 +122,16 @@ class PolkadotApi {
   }
 
   /**
+   * @name parseAddressToss58
+   * @description Parse address to ss58
+   * @param {String} address Public Address
+   * @return String Polkadot address in ss58
+   */
+  parseAddressToss58 (address) {
+    return encodeAddress(address, 0)
+  }
+
+  /**
    * @name isValidPolkadotAddress
    * @description Return a boolean to indicate if is a valid polkadot address
    * @param {String} address polkadot Address

@@ -3,7 +3,7 @@
   //- q-btn(label="refresh" @click="refresh")
   q-card.q-pa-lg
     .row.q-col-gutter-md
-      //- .col-3
+      //- .col-3q
       //-   q-select(
       //-     label="Filter by fund"
       //-     v-model="selectedFilter"

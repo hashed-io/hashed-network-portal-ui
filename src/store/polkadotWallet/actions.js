@@ -6,6 +6,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
+      this.$fruniquesApi.parseAddress(userAddress)
       commit('profile/setProfile', {
         loginType: 'polkadotjs',
         polkadotAddress: userAddress,
@@ -23,6 +24,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
         profileName: meta.name
       }, { root: true })
       this.$nbvStorageApi.setSigner(userAddress)
+      this.$fruniquesApi.parseAddress(userAddress)
       this.$router.push(to)
     }
   } catch (e) {

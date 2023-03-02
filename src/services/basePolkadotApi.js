@@ -192,6 +192,10 @@ class BasePolkadot {
     return this.polkadot.verifyMessage(message, signature, signer)
   }
 
+  parseAddressToss58 (address) {
+    return this.polkadot.parseAddressToss58(address)
+  }
+
   /**
    * @description Just a function to map entries response
    * @param {Array} entries Entries query response
