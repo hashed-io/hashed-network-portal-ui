@@ -48,7 +48,7 @@ jobs:
           APP_NAME: 'Hashed Portal Client'
           WSS: 'wss://n1.main.hashed.systems'
           IPFS_URL: 'https://ipfs.infura.io:5001/'
-          PRIVATE_URI: 'https://hp-gql-dev.hashed.systems/v1/graphql'
+          PRIVATE_URI: 'https://hp-dev.hashed.systems/v1/graphql'
           BDK_SERVICES_URL: 'https://bdk.hashed.systems'
           GOOGLE_CLIENT_ID: '${{ secrets.GOOGLE_CLIENT_ID }}'
           IPFS_PROJECT_ID: '${{ secrets.IPFS_PROJECT_ID }}'
