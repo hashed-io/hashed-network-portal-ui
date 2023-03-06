@@ -54,7 +54,7 @@ export default {
         {
           label: 'pages.hashed.wallet',
           icon: 'account_balance_wallet',
-          key: 'wallet',
+          key: 'hashed',
           to: {
             name: 'wallet'
           },

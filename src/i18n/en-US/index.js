@@ -35,7 +35,8 @@ export default {
     create: 'create',
     marketplaces: 'Marketplaces',
     taxCredits: 'Tax Credits',
-    proofOfReserves: 'Proof of Reserves'
+    proofOfReserves: 'Proof of Reserves',
+    wallet: 'Wallet'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
