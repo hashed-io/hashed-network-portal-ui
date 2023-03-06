@@ -3,7 +3,7 @@
   q-card(v-if="data.vestingData")
     q-card-section
       .row
-        .col-6
+        .col-3
             .text-body2.text-bold Current Block:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm # {{ AmountUtils.formatToUSLocale(data.currentBlock) }}
             .text-body2.text-bold Contributions:
@@ -13,7 +13,7 @@
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.vestingData?.baseReward) }} HASH
             .text-body2.text-bold Bonus:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.vestingData?.bonusHash) }} HASH
-        .col-6
+        .col-3
             .text-body2.text-bold Total Rewards:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.locked) }} HASH
             .text-body2.text-bold HASH per block:
@@ -22,6 +22,9 @@
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(vestedToDate) }} HASH
             .text-body2.text-bold Remaining to vest:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(remainingToVest) }} HASH
+        .col-6
+            .row.justify-center
+                Pie.pieChart(v-bind="pieChartConfig")
 </template>
 
 <script setup>
@@ -30,6 +33,10 @@ import { useStore } from 'vuex'
 import { useVesting } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
 import AmountUtils from '~/utils/AmountUtils'
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Pie } from 'vue-chartjs'
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 // Use composables
 const {
@@ -55,10 +62,10 @@ const data = reactive({
 let unsubForCurrentBlock
 
 // Logic
-onBeforeMount(() => {
+onBeforeMount(async () => {
   try {
     loadMyVestingData()
-    unsubForCurrentBlock = subscribeToCurrentBlock(head => {
+    unsubForCurrentBlock = await subscribeToCurrentBlock(head => {
       const { number } = head.toHuman()
       data.currentBlock = parseFloat(number.replaceAll(',', ''))
     })
@@ -101,5 +108,29 @@ const vestedToDate = computed(() => {
 const remainingToVest = computed(() => {
   return (data.locked - vestedToDate.value)
 })
-// -
+
+// Charts
+const pieChartConfig = computed(() => {
+  return {
+    data: {
+      labels: ['Vested to date', 'Remaining to vest'],
+      datasets: [
+        {
+          backgroundColor: ['#41B883', '#00D8FF'],
+          data: [vestedToDate.value, remainingToVest.value]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  }
+})
 </script>
+
+<style lang="stylus" scoped>
+.pieChart
+    width: 50%
+    // height: 70%
+</style>
