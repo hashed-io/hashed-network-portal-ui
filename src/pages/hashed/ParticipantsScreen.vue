@@ -16,6 +16,9 @@
         .text-bold Details
         .text-subtitle2 HASH reward per DOT: {{ hashPerDot }}
         .text-subtitle2 2nd-time Bonus: 20%
+        .text-subtitle2 Blocks per Minute: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
+        .text-subtitle2 Blocks per Week: {{ AmountUtils.formatToUSLocale(blocksPerWeek) }}
+        .text-subtitle2 Blocks for Lease: {{ AmountUtils.formatToUSLocale(blocksForLease) }}
       .col-sm-12.col-md-6
         .text-bold Filters
         q-input(outlined debounce="300" v-model="filter" placeholder="Search" label="Search")
@@ -91,6 +94,12 @@ const funds = reactive({
   },
   participants: []
 })
+
+const blocksPerMinute = ref(5)
+// const blocksData = reactive({
+//   blocksPerWeek: 5,
+//   blocksPerMinute: 5,
+// })
 
 const hashPerDot = 480
 
@@ -233,6 +242,15 @@ const columnsForBoth = [
     field: row => row.totalReward,
     format: val => `${AmountUtils.formatToUSLocale(val)}`,
     sortable: true
+  },
+  {
+    name: 'hashPerBlock',
+    label: 'HASH per Block',
+    required: false,
+    align: 'left',
+    field: row => row.hashPerBlock,
+    format: val => `${val}`,
+    sortable: true
   }
   // {
   //   name: 'rewards',
@@ -318,7 +336,7 @@ async function getComputed () {
   const participants = funds.participants
 
   const computed = participants.map(address => {
-    // const polkadotAddress = $store.$fruniquesApi.parseAddress(address)
+    const polkadotAddress = $store.$fruniquesApi.parseAddress(address)
     // Find funds
     const fund54 = contributions1.find(v => v.who === address)
     const fund58 = contributions2.find(v => v.who === address)
@@ -333,6 +351,8 @@ async function getComputed () {
     const minContribution = Math.min(round1, round2)
     const bonusHash = isEligibleForBonus ? minContribution * hashPerDot * 0.2 : 0
     const totalReward = baseReward + bonusHash
+    const hashPerBlock = totalReward / blocksForLease.value
+
     return {
       address,
       who,
@@ -342,8 +362,9 @@ async function getComputed () {
       baseReward,
       minContribution,
       bonusHash,
-      totalReward
-      // polkadotAddress
+      totalReward,
+      polkadotAddress,
+      hashPerBlock
       // fund54,
       // fund58
     }
@@ -403,6 +424,15 @@ function saveInJSON (data, fileName) {
   const dataJson = JSON.stringify(data)
   copyTextToClipboard(dataJson, `copied data for ${fileName}`)
 }
+
+const blocksPerWeek = computed(() => {
+  return blocksPerMinute.value * 60 * 24 * 7
+})
+
+const blocksForLease = computed(() => {
+  return blocksPerWeek.value * 104
+})
+
 </script>
 
 <style lang="sass">
