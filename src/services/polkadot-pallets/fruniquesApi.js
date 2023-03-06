@@ -4,6 +4,12 @@ class FruniquesApi extends BasePolkadotApi {
     super(polkadotApi, 'fruniques', notify)
   }
 
+  parseAddress (address) {
+    const parsed = this.parseAddressToss58(address)
+    // console.log('parseAddress', { address, parsed })
+    return parsed
+  }
+
   createWithAttributes ({ user, classId, instanceId, numericValue, admin, attributes }, subTrigger) {
     return this.callTx('createWithAttributes', user, [classId, instanceId, numericValue, admin, attributes], subTrigger)
   }

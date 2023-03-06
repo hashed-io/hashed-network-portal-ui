@@ -35,7 +35,8 @@ export default {
     create: 'create',
     marketplaces: 'Marketplaces',
     taxCredits: 'Tax Credits',
-    proofOfReserves: 'Proof of Reserves'
+    proofOfReserves: 'Proof of Reserves',
+    wallet: 'Wallet'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -65,6 +66,9 @@ export default {
     }
   },
   pages: {
+    hashed: {
+      wallet: 'Wallet'
+    },
     login: {
       googleDriveError: 'An error has occurred trying to get access to Google Drive'
     },
@@ -201,7 +205,10 @@ export default {
       },
       proofOfReserves: {
         proofOfReserves: 'Proof of reserves',
-        goToProofOfReserves: 'Test'
+        goToProofOfReserves: 'Test',
+        status: 'Status',
+        message: 'Message',
+        psbt: 'PSBT'
       }
     },
     marketplace: {

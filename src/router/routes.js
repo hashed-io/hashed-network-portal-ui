@@ -1,5 +1,6 @@
 import MarketPlacesRoutes from './marketplaces'
 import NvbRoutes from './nbv'
+import HashedRoutes from './hashed'
 
 const routes = [
   {
@@ -16,6 +17,7 @@ const routes = [
     children: [
       NvbRoutes,
       MarketPlacesRoutes,
+      HashedRoutes,
       // Hashed Confidential Documents
       {
         path: '/hcd',
@@ -218,8 +220,8 @@ const routes = [
   },
   {
     path: '/participants',
-    component: () => import('pages/Crowdloans.vue'),
-    name: 'contributes'
+    component: () => import('pages/hashed/ParticipantsScreen.vue'),
+    name: 'participantsRewards'
   },
   // {
   //   path: '/examples',

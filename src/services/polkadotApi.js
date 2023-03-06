@@ -13,7 +13,7 @@ class PolkadotApi {
     this.wss = wss || process.env.WSS
     // this.wss = 'wss://n4.hashed.systems'
     // console.log('polkadotApi constructor', wss, process.env.WSS)
-    this.api = undefined
+    this._api = undefined
   }
 
   /**
@@ -29,7 +29,7 @@ class PolkadotApi {
 
       // Create the API and wait until ready
       const api = new ApiPromise({ provider })
-      this.api = api
+      this._api = api
       // const api = await ApiPromise.create({ provider })
 
       await new Promise((resolve, reject) => {
@@ -71,6 +71,15 @@ class PolkadotApi {
       console.error('connect polkadot Api', e)
       throw new Error(e)
     }
+  }
+
+  /**
+   * @name disconnect
+   * @description Close the conection with chain
+   * @returns Promise
+   */
+  async disconnect () {
+    return this._api.disconnect()
   }
 
   /**
@@ -122,6 +131,17 @@ class PolkadotApi {
   }
 
   /**
+   * @name parseAddressToss58
+   * @description Parse address to ss58
+   * @param {String} address Public Address
+   * @return String Polkadot address in ss58
+   */
+  parseAddressToss58 (address) {
+    // return encodeAddress(address, 0)
+    return encodeAddress(address)
+  }
+
+  /**
    * @name isValidPolkadotAddress
    * @description Return a boolean to indicate if is a valid polkadot address
    * @param {String} address polkadot Address
@@ -148,7 +168,7 @@ class PolkadotApi {
    * { identity }
    */
   getAccountInfo (user) {
-    return this.api.derive.accounts.info(user)
+    return this._api.derive.accounts.info(user)
   }
 
   /**
@@ -162,7 +182,7 @@ class PolkadotApi {
     // Get injector to call a Extrinsic
     const injector = await web3FromAddress(user)
     // Set signer
-    this.api.setSigner(injector.signer)
+    this._api.setSigner(injector.signer)
   }
 }
 

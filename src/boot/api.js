@@ -6,12 +6,12 @@ import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
+import { AfloatApi } from '@jmgayosso/afloat-client'
 
 // const { NbvStorageApi } = require('../../../nbv-client-api')
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
 // const { AfloatApi } = require('../../../afloat-client-api')
-import { AfloatApi } from '@jmgayosso/afloat-client'
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -44,13 +44,14 @@ export default async ({ app, store }) => {
     showGlobalLoading({
       message: 'Connecting with Hashed Private Server'
     })
+    // console.log('api', api)
     try {
       const hashedPrivateApi = new HashedPrivateApi({
         ipfsURL: process.env.IPFS_URL,
         ipfsAuthHeader,
         privateURI: process.env.PRIVATE_URI,
         signFn: async (address, message) => {
-          const { signature } = await marketplaceApi.signMessage(message, address)
+          const { signature } = await api.signMessage(message, address)
           return signature
         }
       })

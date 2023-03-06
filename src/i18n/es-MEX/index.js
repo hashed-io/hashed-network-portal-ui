@@ -29,7 +29,8 @@ export default {
     create: 'create',
     marketplaces: 'Marketplaces',
     taxCredits: 'Créditos fiscales',
-    proofOfReserves: 'Prueba de reservas'
+    proofOfReserves: 'Prueba de reservas',
+    wallet: 'Cartera'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -58,6 +59,9 @@ export default {
     }
   },
   pages: {
+    hashed: {
+      wallet: 'Cartera'
+    },
     nbv: {
       appName: 'NVB',
       mainOptions: {

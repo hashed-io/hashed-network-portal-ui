@@ -193,6 +193,23 @@ class BasePolkadot {
   }
 
   /**
+   * @name parseAddressToss58
+   * @description Parse address to ss58
+   * @param {String} address Public Address
+   * @return String Polkadot address in ss58
+   */
+  parseAddressToss58 (address) {
+    return this.polkadot.parseAddressToss58(address)
+  }
+
+  getHeader (subTrigger) {
+    if (subTrigger) {
+      return this.polkadot._api.rpc.chain.subscribeNewHeads(subTrigger)
+    }
+    return this.polkadot._api.rpc.chain.getHeader()
+  }
+
+  /**
    * @description Just a function to map entries response
    * @param {Array} entries Entries query response
    * @returns Array
