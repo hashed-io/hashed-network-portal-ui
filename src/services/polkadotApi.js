@@ -74,6 +74,15 @@ class PolkadotApi {
   }
 
   /**
+   * @name disconnect
+   * @description Close the conection with chain
+   * @returns Promise
+   */
+  async disconnect () {
+    return this.api.disconnect()
+  }
+
+  /**
    * @name signMessage
    * @description Sign a message
    * @param {String} message Message to sign
