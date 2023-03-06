@@ -10,7 +10,10 @@ class VestingApi extends BasePolkadotApi {
     return scopes.toHuman()
   }
 
-  async getCurrentBlock () {
+  async getCurrentBlock (subTrigger) {
+    if (subTrigger) {
+      return this.getHeader(subTrigger)
+    }
     const header = await this.getHeader()
     const { number: currentBlock } = header.toHuman()
     return parseFloat(currentBlock.replaceAll(',', ''))

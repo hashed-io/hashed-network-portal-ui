@@ -33,8 +33,16 @@ export const useVesting = () => {
     }
   }
 
+  const subscribeToCurrentBlock = async (subTrigger) => {
+    const polkadotApi = new PolkadotApi(process.env.WSS_PARACHAIN)
+    await polkadotApi.connect()
+    const vestingApi = new VestingApi(polkadotApi, showNotification)
+    return vestingApi.getCurrentBlock(subTrigger)
+  }
+
   return {
     getVestingData,
-    getVestingFromChainByAccount
+    getVestingFromChainByAccount,
+    subscribeToCurrentBlock
   }
 }

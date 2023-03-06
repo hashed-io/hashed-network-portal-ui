@@ -202,7 +202,10 @@ class BasePolkadot {
     return this.polkadot.parseAddressToss58(address)
   }
 
-  getHeader () {
+  getHeader (subTrigger) {
+    if (subTrigger) {
+      return this.polkadot._api.rpc.chain.subscribeNewHeads(subTrigger)
+    }
     return this.polkadot._api.rpc.chain.getHeader()
   }
 

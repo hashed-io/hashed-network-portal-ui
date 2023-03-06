@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, computed, ref, reactive } from 'vue'
+import { onBeforeMount, computed, ref, reactive, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { useVesting } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
@@ -39,7 +39,7 @@ const {
   copyTextToClipboard
 } = useNotifications()
 
-const { getVestingData, getVestingFromChainByAccount } = useVesting()
+const { getVestingData, getVestingFromChainByAccount, subscribeToCurrentBlock } = useVesting()
 
 const $store = useStore()
 
@@ -52,9 +52,27 @@ const data = reactive({
   locked: undefined
 })
 
+let unsubForCurrentBlock
+
 // Logic
 onBeforeMount(() => {
-  loadMyVestingData()
+  try {
+    loadMyVestingData()
+    unsubForCurrentBlock = subscribeToCurrentBlock(head => {
+      const { number } = head.toHuman()
+      data.currentBlock = parseFloat(number.replaceAll(',', ''))
+    })
+  } catch (e) {
+    console.error(e)
+  }
+})
+
+onBeforeUnmount(() => {
+  try {
+    unsubForCurrentBlock()
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 const loadMyVestingData = async () => {
