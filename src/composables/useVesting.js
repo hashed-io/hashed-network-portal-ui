@@ -13,17 +13,23 @@ export const useVesting = () => {
   }
 
   const getVestingFromChainByAccount = async ({ address }) => {
-    const api = new PolkadotApi(process.env.WSS_PARACHAIN)
+    const polkadotApi = new PolkadotApi(process.env.WSS_PARACHAIN)
     try {
-      await api.connect()
-      const vestingApi = new VestingApi(api, showNotification)
-      const vesting = await vestingApi.getVestingByAccount({ address })
-      console.log('getVestingFromChainByAccount', vesting)
+      await polkadotApi.connect()
+      const vestingApi = new VestingApi(polkadotApi, showNotification)
+      const [vesting] = await vestingApi.getVestingByAccount({ address })
+      const currentBlock = await vestingApi.getCurrentBlock()
+      return {
+        ...vesting,
+        perBlock: vesting.perBlock.replaceAll(',', '') / (10 ** 18),
+        locked: vesting.locked.replaceAll(',', '') / (10 ** 18),
+        currentBlock
+      }
     // eslint-disable-next-line no-useless-catch
     } catch (e) {
       throw e
     } finally {
-      await api.disconnect()
+      await polkadotApi.disconnect()
     }
   }
 

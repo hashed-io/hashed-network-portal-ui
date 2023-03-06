@@ -202,6 +202,10 @@ class BasePolkadot {
     return this.polkadot.parseAddressToss58(address)
   }
 
+  getHeader () {
+    return this.polkadot._api.rpc.chain.getHeader()
+  }
+
   /**
    * @description Just a function to map entries response
    * @param {Array} entries Entries query response

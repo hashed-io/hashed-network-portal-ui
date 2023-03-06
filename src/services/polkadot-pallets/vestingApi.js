@@ -9,6 +9,12 @@ class VestingApi extends BasePolkadotApi {
     const scopes = await this.exQuery('vesting', [address], subTrigger)
     return scopes.toHuman()
   }
+
+  async getCurrentBlock () {
+    const header = await this.getHeader()
+    const { number: currentBlock } = header.toHuman()
+    return parseFloat(currentBlock.replaceAll(',', ''))
+  }
 }
 
 export default VestingApi

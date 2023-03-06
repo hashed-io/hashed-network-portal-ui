@@ -13,7 +13,7 @@ class PolkadotApi {
     this.wss = wss || process.env.WSS
     // this.wss = 'wss://n4.hashed.systems'
     // console.log('polkadotApi constructor', wss, process.env.WSS)
-    this.api = undefined
+    this._api = undefined
   }
 
   /**
@@ -29,7 +29,7 @@ class PolkadotApi {
 
       // Create the API and wait until ready
       const api = new ApiPromise({ provider })
-      this.api = api
+      this._api = api
       // const api = await ApiPromise.create({ provider })
 
       await new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ class PolkadotApi {
    * @returns Promise
    */
   async disconnect () {
-    return this.api.disconnect()
+    return this._api.disconnect()
   }
 
   /**
@@ -168,7 +168,7 @@ class PolkadotApi {
    * { identity }
    */
   getAccountInfo (user) {
-    return this.api.derive.accounts.info(user)
+    return this._api.derive.accounts.info(user)
   }
 
   /**
@@ -182,7 +182,7 @@ class PolkadotApi {
     // Get injector to call a Extrinsic
     const injector = await web3FromAddress(user)
     // Set signer
-    this.api.setSigner(injector.signer)
+    this._api.setSigner(injector.signer)
   }
 }
 
