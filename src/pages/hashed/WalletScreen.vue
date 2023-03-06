@@ -1,7 +1,9 @@
 <template lang="pug">
 #WalletScreen
-  q-card(v-if="data.vestingData")
-    q-card-section
+  q-card()
+    q-card-section(v-if="loading")
+        general-table-skeleton(:rowsNumber="5" :columnsNumber="3")
+    q-card-section(v-else-if="loaded")
       .row
         .col-3
             .text-body2.text-bold Current Block:
@@ -25,6 +27,9 @@
         .col-6
             .row.justify-center
                 Pie.pieChart(v-bind="pieChartConfig")
+    q-card-section(v-else)
+        .text-body2.text-center You don't have Hashed vesting
+
 </template>
 
 <script setup>
@@ -33,6 +38,7 @@ import { useStore } from 'vuex'
 import { useVesting } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
 import AmountUtils from '~/utils/AmountUtils'
+import GeneralTableSkeleton from '~/components/common/skeletons/general-table-skeleton'
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Pie } from 'vue-chartjs'
@@ -58,6 +64,9 @@ const data = reactive({
   currentBlock: undefined,
   locked: undefined
 })
+
+const loaded = ref(true)
+const loading = ref(true)
 
 let unsubForCurrentBlock
 
@@ -92,10 +101,13 @@ const loadMyVestingData = async () => {
     data.startingBlock = fromChain.startingBlock
     data.currentBlock = fromChain.currentBlock
     data.locked = fromChain.locked
+    loaded.value = true
   } catch (e) {
     console.error(e)
+    loaded.value = false
   } finally {
     hideLoading()
+    loading.value = false
   }
 }
 
