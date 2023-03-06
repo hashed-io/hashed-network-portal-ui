@@ -58,6 +58,9 @@ export default {
     }
   },
   pages: {
+    hashed: {
+      wallet: 'Cartera'
+    },
     nbv: {
       appName: 'NVB',
       mainOptions: {

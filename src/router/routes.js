@@ -1,5 +1,6 @@
 import MarketPlacesRoutes from './marketplaces'
 import NvbRoutes from './nbv'
+import HashedRoutes from './hashed'
 
 const routes = [
   {
@@ -16,6 +17,7 @@ const routes = [
     children: [
       NvbRoutes,
       MarketPlacesRoutes,
+      HashedRoutes,
       // Hashed Confidential Documents
       {
         path: '/hcd',

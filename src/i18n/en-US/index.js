@@ -65,6 +65,9 @@ export default {
     }
   },
   pages: {
+    hashed: {
+      wallet: 'Wallet'
+    },
     login: {
       googleDriveError: 'An error has occurred trying to get access to Google Drive'
     },

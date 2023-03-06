@@ -24,7 +24,7 @@
     "@polkadot/vue-identicon": "^2.0.1",
     "@quasar/extras": "^1.14.2",
     "@smontero/hashed-confidential-docs": "0.2.18",
-    "@smontero/hashed-private-client-api": "^0.0.7",
+    "@smontero/hashed-private-client-api": "^0.1.13",
     "@smontero/nbv-ur-codec": "1.0.4",
     "@storybook/addon-interactions": "^6.5.15",
     "@storybook/jest": "^0.0.10",

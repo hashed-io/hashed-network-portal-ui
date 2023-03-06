@@ -43,6 +43,8 @@ import { onMounted, reactive, ref, computed } from 'vue'
 import csvDownload from 'json-to-csv-export'
 
 import { useNotifications } from '~/mixins/notifications'
+import { useStore } from 'vuex'
+
 import AmountUtils from '~/utils/AmountUtils'
 
 const request = axios.create({
@@ -52,10 +54,13 @@ const request = axios.create({
   }
 })
 
+const $store = useStore()
+
 const {
   showNotification,
   showLoading,
-  hideLoading
+  hideLoading,
+  copyTextToClipboard
 } = useNotifications()
 
 const filter = ref(undefined)
@@ -279,7 +284,9 @@ async function refresh () {
 
     // Get computed Data
     funds.contributors.both = await getComputed()
-
+    const computed = await getComputed()
+    saveInJSON(computed, 'computed.json')
+    // saveInJSON(c58, 'c58.json')
     // Download Data
     // convertToCSV({ data: c54, name: 'fund_54' })
     // convertToCSV({ data: c58, name: 'fund_58' })
@@ -311,6 +318,7 @@ async function getComputed () {
   const participants = funds.participants
 
   const computed = participants.map(address => {
+    // const polkadotAddress = $store.$fruniquesApi.parseAddress(address)
     // Find funds
     const fund54 = contributions1.find(v => v.who === address)
     const fund58 = contributions2.find(v => v.who === address)
@@ -335,6 +343,7 @@ async function getComputed () {
       minContribution,
       bonusHash,
       totalReward
+      // polkadotAddress
       // fund54,
       // fund58
     }
@@ -388,6 +397,11 @@ function convertToCSV ({ data, name }) {
     headers: ['fund_id', 'para_id', 'who', 'contributed', 'contributing', 'block_num', 'block_timestamp', 'extrinsic_index', 'event_index', 'status', 'memo', 'who_display']
   }
   csvDownload(dataToConvert)
+}
+
+function saveInJSON (data, fileName) {
+  const dataJson = JSON.stringify(data)
+  copyTextToClipboard(dataJson, `copied data for ${fileName}`)
 }
 </script>
 

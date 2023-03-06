@@ -128,7 +128,8 @@ class PolkadotApi {
    * @return String Polkadot address in ss58
    */
   parseAddressToss58 (address) {
-    return encodeAddress(address, 0)
+    // return encodeAddress(address, 0)
+    return encodeAddress(address)
   }
 
   /**

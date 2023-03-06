@@ -192,6 +192,12 @@ class BasePolkadot {
     return this.polkadot.verifyMessage(message, signature, signer)
   }
 
+  /**
+   * @name parseAddressToss58
+   * @description Parse address to ss58
+   * @param {String} address Public Address
+   * @return String Polkadot address in ss58
+   */
   parseAddressToss58 (address) {
     return this.polkadot.parseAddressToss58(address)
   }

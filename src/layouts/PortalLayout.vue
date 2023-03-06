@@ -20,7 +20,7 @@ q-layout(view="lHh lpR lFf")
         )
             //- v-if="(option.login === loginType || !option.login)"
             q-item-section(avatar)
-                q-icon(:name="option.icon")
+                q-icon(class="material-icons-outlined" :name="option.icon")
             q-item-section(avatar) {{ $t(option.label) }}
       .fixed-bottom.q-mb-md.q-px-md
         q-btn.text-primary.full-width.q-ma-md(:label="selectedLang.label" color="white" icon-right="arrow_drop_down" no-caps)
@@ -52,6 +52,16 @@ export default {
       drawerLeft: false,
       optionsMenu: [
         {
+          label: 'pages.hashed.wallet',
+          icon: 'account_balance_wallet',
+          key: 'wallet',
+          to: {
+            name: 'wallet'
+          },
+          // login: 'polkadotjs'
+          login: 'all'
+        },
+        {
           label: 'pages.nbv.appName',
           icon: 'currency_bitcoin',
           key: 'nbv',
@@ -61,15 +71,15 @@ export default {
           // login: 'polkadotjs'
           login: 'all'
         },
-        {
-          label: 'pages.marketplace.appName',
-          icon: 'store',
-          key: 'marketplace',
-          to: {
-            name: 'marketplacesList'
-          },
-          login: 'polkadotjs'
-        },
+        // {
+        //   label: 'pages.marketplace.appName',
+        //   icon: 'store',
+        //   key: 'marketplace',
+        //   to: {
+        //     name: 'marketplacesList'
+        //   },
+        //   login: 'hcd'
+        // },
         // {
         //   label: 'pages.sign.appName',
         //   icon: 'border_color',
@@ -166,4 +176,18 @@ export default {
   width: 15px
   height: 15px
   background: $accent
+// .material-icons-outlined
+//   font-family: "Material Icons Outlined"
+//   font-weight: normal
+//   font-style: normal
+//   font-size: 24px /* ajuste el tamaño del icono según sea necesario */
+//   line-height: 1
+//   letter-spacing: normal
+//   text-transform: none
+//   display: inline-block
+//   white-space: nowrap
+//   word-wrap: normal
+//   direction: ltr
+//   -webkit-font-feature-settings: "liga"
+//   -webkit-font-smoothing: antialiased
 </style>
