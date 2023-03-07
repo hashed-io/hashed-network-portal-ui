@@ -14,6 +14,8 @@
             .text-body2.text-bold Bonus:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(bonusHash) }} HASH
     .col-3
+        .text-body2.text-bold Estimated time to fully vest:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ estimatedTime }}
         .text-body2.text-bold Total Rewards:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(locked) }} HASH
         .text-body2.text-bold HASH per block:
@@ -102,5 +104,13 @@ const pieChartConfig = computed(() => {
       maintainAspectRatio: false
     }
   }
+})
+
+const estimatedTime = computed(() => {
+  const seconds = remainingToVest.value / perBlock.value * 12
+  const days = Math.floor(seconds / (24 * 60 * 60))
+  const minutes = Math.floor((seconds % (24 * 60 * 60)) / 60)
+  return `${days} days, ${minutes} minutes`
+//   return time
 })
 </script>
