@@ -1,40 +1,48 @@
 <template lang="pug">
 #wallet-item
   .row
-    .col-3
+    .col
         .text-body2.text-bold Current Block:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm # {{ AmountUtils.formatToUSLocale(currentBlock) }}
+        .text-body2.text-bold HASH per block:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ perBlock }} HASH
         .text-body2.text-bold Contributions:
         .text-body2.text-weight-light.q-mt-sm Fund 54: {{ AmountUtils.formatToUSLocale(contributionFund54) }} DOT
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm Fund 58: {{ AmountUtils.formatToUSLocale(contributionFund58) }} DOT
+    .col
+        .text-body2.text-bold Estimated time to fully vest:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ estimatedTime }}
+        .text-body2.text-bold Vested to date:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(vestedToDate) }} HASH
+        .text-body2.text-bold Remaining to vest:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(remainingToVest) }} HASH
+    .col
+        .text-body2.text-bold Total Rewards:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(locked) }} HASH
         template(v-if="isFirstElement")
             .text-body2.text-bold Base Rewards:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(baseReward) }} HASH
         template(v-if="isFirstElement")
             .text-body2.text-bold Bonus:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(bonusHash) }} HASH
-    .col-3
-        .text-body2.text-bold Estimated time to fully vest:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ estimatedTime }}
-        .text-body2.text-bold Total Rewards:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(locked) }} HASH
-        .text-body2.text-bold HASH per block:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ perBlock }} HASH
-        .text-body2.text-bold Vested to date:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(vestedToDate) }} HASH
-        .text-body2.text-bold Remaining to vest:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(remainingToVest) }} HASH
-    .col-6
-        .row.justify-center
-            Pie.pieChart(v-bind="pieChartConfig")
+  .row.justify-center
+    Bar.pieChart(v-bind="pieChartConfig")
 </template>
 
 <script setup>
 import { defineProps, computed, toRefs } from 'vue'
 import AmountUtils from '~/utils/AmountUtils'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, LinearScale } from 'chart.js'
-import { Pie } from 'vue-chartjs'
-ChartJS.register(ArcElement, Tooltip, Legend, LinearScale)
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
+import { Pie, Bar } from 'vue-chartjs'
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const props = defineProps({
   perBlock: {
@@ -94,14 +102,22 @@ const pieChartConfig = computed(() => {
       labels: ['Vested to date', 'Remaining to vest'],
       datasets: [
         {
-          backgroundColor: ['#41B883', '#00D8FF'],
+          label: 'HASH',
+          backgroundColor: ['#41B883', '#51aab5'],
           data: [vestedToDate.value, remainingToVest.value]
         }
       ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      scales: {
+        x: {
+          min: 0,
+          max: locked.value
+        }
+      }
     }
   }
 })
