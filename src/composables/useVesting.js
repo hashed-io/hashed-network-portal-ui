@@ -17,14 +17,18 @@ export const useVesting = () => {
     try {
       await polkadotApi.connect()
       const vestingApi = new VestingApi(polkadotApi, showNotification)
-      const [vesting] = await vestingApi.getVestingByAccount({ address })
+      const vesting = await vestingApi.getVestingByAccount({ address })
       const currentBlock = await vestingApi.getCurrentBlock()
-      return {
-        ...vesting,
-        perBlock: vesting.perBlock.replaceAll(',', '') / (10 ** 18),
-        locked: vesting.locked.replaceAll(',', '') / (10 ** 18),
-        currentBlock
-      }
+
+      return vesting.map(v => {
+        return {
+          ...v,
+          perBlock: v.perBlock.replaceAll(',', '') / (10 ** 18),
+          locked: v.locked.replaceAll(',', '') / (10 ** 18),
+          startingBlock: Number(v.startingBlock.replaceAll(',', '')),
+          currentBlock
+        }
+      })
     // eslint-disable-next-line no-useless-catch
     } catch (e) {
       throw e

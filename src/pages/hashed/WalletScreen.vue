@@ -1,33 +1,17 @@
 <template lang="pug">
 #WalletScreen
-  q-card()
-    q-card-section(v-if="loading")
+    q-card(v-if="loading")
+      q-card-section
         general-table-skeleton(:rowsNumber="5" :columnsNumber="3")
-    q-card-section(v-else-if="loaded")
-      .row
-        .col-3
-            .text-body2.text-bold Current Block:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm # {{ AmountUtils.formatToUSLocale(data.currentBlock) }}
-            .text-body2.text-bold Contributions:
-            .text-body2.text-weight-light.q-mt-sm Fund 54: {{ AmountUtils.formatToUSLocale(data.vestingData?.round1) }} DOT
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm Fund 58: {{ AmountUtils.formatToUSLocale(data.vestingData?.round2) }} DOT
-            .text-body2.text-bold Base Rewards:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.vestingData?.baseReward) }} HASH
-            .text-body2.text-bold Bonus:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.vestingData?.bonusHash) }} HASH
-        .col-3
-            .text-body2.text-bold Total Rewards:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(data.locked) }} HASH
-            .text-body2.text-bold HASH per block:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ data.perBlock }} HASH
-            .text-body2.text-bold Vested to date:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(vestedToDate) }} HASH
-            .text-body2.text-bold Remaining to vest:
-            .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(remainingToVest) }} HASH
-        .col-6
-            .row.justify-center
-                Pie.pieChart(v-bind="pieChartConfig")
-    q-card-section(v-else)
+    q-card.q-mb-md(v-else-if="loaded" v-for="(vesting, index) in vestingList")
+      q-card-section
+        wallet-item(
+          v-bind="vesting"
+          :currentBlock="data.currentBlock"
+          :isFirstElement="index === 0"
+        )
+    q-card(v-else)
+      q-card-section
         .text-body2.text-center You don't have Hashed vesting
 
 </template>
@@ -39,10 +23,7 @@ import { useVesting } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
 import AmountUtils from '~/utils/AmountUtils'
 import GeneralTableSkeleton from '~/components/common/skeletons/general-table-skeleton'
-
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, LinearScale } from 'chart.js'
-import { Pie } from 'vue-chartjs'
-ChartJS.register(ArcElement, Tooltip, Legend, LinearScale)
+import WalletItem from '~/components/hashed/wallet/wallet-item'
 
 // Use composables
 const {
@@ -59,10 +40,8 @@ const $store = useStore()
 // Data
 const data = reactive({
   vestingData: undefined,
-  perBlock: undefined,
-  startingBlock: undefined,
-  currentBlock: undefined,
-  locked: undefined
+  currentBlock: 1,
+  vestingList: []
 })
 
 const loaded = ref(true)
@@ -93,14 +72,11 @@ onBeforeUnmount(() => {
 
 const loadMyVestingData = async () => {
   try {
+    loading.value = true
     showLoading()
     const vestingData = await getVestingData()
     data.vestingData = vestingData.find(v => v.polkadotAddress === selectedAccount.value)
-    const fromChain = await getVestingFromChainByAccount({ address: selectedAccount.value })
-    data.perBlock = fromChain.perBlock
-    data.startingBlock = fromChain.startingBlock
-    data.currentBlock = fromChain.currentBlock
-    data.locked = fromChain.locked
+    data.vestingList = await getVestingFromChainByAccount({ address: selectedAccount.value })
     loaded.value = true
   } catch (e) {
     console.error(e)
@@ -111,33 +87,19 @@ const loadMyVestingData = async () => {
   }
 }
 
-const selectedAccount = computed(() => $store.getters['profile/polkadotAddress'])
+// const selectedAccount = computed(() => $store.getters['profile/polkadotAddress'])
+const selectedAccount = ref('5CMhinFmhCkybhc1QNH4m7W8nc43PYvmi9mGBE6VDgSxk15r')
 
-const vestedToDate = computed(() => {
-  return (data.currentBlock - data.startingBlock) * data.perBlock
-})
-
-const remainingToVest = computed(() => {
-  return (data.locked - vestedToDate.value)
-})
-
-// Charts
-const pieChartConfig = computed(() => {
-  return {
-    data: {
-      labels: ['Vested to date', 'Remaining to vest'],
-      datasets: [
-        {
-          backgroundColor: ['#41B883', '#00D8FF'],
-          data: [vestedToDate.value, remainingToVest.value]
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
+const vestingList = computed(() => {
+  return data.vestingList.map(vesting => {
+    console.log('vesting', vesting)
+    return {
+      ...vesting,
+      ...data.vestingData,
+      contributionFund54: data.vestingData.round1,
+      contributionFund58: data.vestingData.round2
     }
-  }
+  })
 })
 </script>
 
