@@ -96,10 +96,6 @@ const funds = reactive({
 })
 
 const blocksPerMinute = ref(5)
-// const blocksData = reactive({
-//   blocksPerWeek: 5,
-//   blocksPerMinute: 5,
-// })
 
 const hashPerDot = 480
 

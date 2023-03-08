@@ -1,5 +1,5 @@
 const routes = {
-  path: 'hashed',
+  path: '',
   name: 'hashed',
   // component: () => import('layouts/MainLayout.vue'),
   component: () => import('layouts/ConfidentialDocsLayout'),
