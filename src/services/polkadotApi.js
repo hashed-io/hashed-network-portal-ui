@@ -134,11 +134,11 @@ class PolkadotApi {
    * @name parseAddressToss58
    * @description Parse address to ss58
    * @param {String} address Public Address
+   * @param {String} prefix ss58 prefix (Use 0 for polkadot and 9072 for hashed)
    * @return String Polkadot address in ss58
    */
-  parseAddressToss58 (address) {
-    // return encodeAddress(address, 0)
-    return encodeAddress(address)
+  parseAddressToss58 (address, prefix) {
+    return encodeAddress(address, prefix)
   }
 
   /**

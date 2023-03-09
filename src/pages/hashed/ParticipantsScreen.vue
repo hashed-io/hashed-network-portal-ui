@@ -1,35 +1,26 @@
 <template lang="pug">
-#List.q-pa-xl
-  //- q-btn(label="refresh" @click="refresh")
-  q-card.q-pa-lg
-    .row.q-col-gutter-md
-      //- .col-3q
-      //-   q-select(
-      //-     label="Filter by fund"
-      //-     v-model="selectedFilter"
-      //-     :options="funds.options"
-      //-     map-options
-      //-     emit-value
-      //-     outlined
-      //-   )
-      .col-sm-12.col-md-6
-        .text-bold Details
-        .text-subtitle2 HASH reward per DOT: {{ hashPerDot }}
-        .text-subtitle2 2nd-time Bonus: 20%
-        .text-subtitle2 Blocks per Minute: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
-        .text-subtitle2 Blocks per Week: {{ AmountUtils.formatToUSLocale(blocksPerWeek) }}
-        .text-subtitle2 Blocks for Lease: {{ AmountUtils.formatToUSLocale(blocksForLease) }}
-      .col-sm-12.col-md-6
-        .text-bold Filters
-        q-input(outlined debounce="300" v-model="filter" placeholder="Search" label="Search")
-          template(v-slot:append)
-            q-icon(name="search")
-        q-toggle(
-          label="Show just eligibles for bonus"
-          v-model="isShowingJustEligibles"
-        )
+#List
+  q-card.q-mb-md
+    q-card-section
+      .row.q-col-gutter-md
+        .col-sm-12.col-md-6
+          .text-bold Details
+          .text-subtitle2 HASH reward per DOT: {{ hashPerDot }}
+          .text-subtitle2 2nd-time Bonus: 20%
+          .text-subtitle2 Blocks per Minute: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
+          .text-subtitle2 Blocks per Week: {{ AmountUtils.formatToUSLocale(blocksPerWeek) }}
+          .text-subtitle2 Blocks for Lease: {{ AmountUtils.formatToUSLocale(blocksForLease) }}
+        .col-sm-12.col-md-6
+          .text-bold Filters
+          q-input(outlined debounce="300" v-model="filter" placeholder="Search" label="Search")
+            template(v-slot:append)
+              q-icon(name="search")
+          q-toggle(
+            label="Show just eligibles for bonus"
+            v-model="isShowingJustEligibles"
+          )
 
-  q-table.contributorsTable.q-mt-md(
+  q-table.contributorsTable(
     title="Participants"
     v-if="rowsToShow.length > 0"
     :rows="rowsToShow"
@@ -38,17 +29,22 @@
     :pagination="initialPagination"
     :filter="filter"
   )
+  q-card(v-else)
+    q-card-section
+      general-table-skeleton(:rowsNumber="5" :columnsNumber="3")
 </template>
 
 <script setup>
 import axios from 'axios'
-import { onMounted, reactive, ref, computed } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, computed } from 'vue'
 import csvDownload from 'json-to-csv-export'
 
 import { useNotifications } from '~/mixins/notifications'
+import { useVesting } from '~/composables'
 import { useStore } from 'vuex'
 
 import AmountUtils from '~/utils/AmountUtils'
+import GeneralTableSkeleton from '~/components/common/skeletons/general-table-skeleton'
 
 const request = axios.create({
   baseURL: 'https://polkadot.webapi.subscan.io/api',
@@ -65,6 +61,10 @@ const {
   hideLoading,
   copyTextToClipboard
 } = useNotifications()
+
+const {
+  getSavedVestingApiData
+} = useVesting()
 
 const filter = ref(undefined)
 const isShowingJustEligibles = ref(false)
@@ -96,14 +96,10 @@ const funds = reactive({
 })
 
 const blocksPerMinute = ref(5)
-// const blocksData = reactive({
-//   blocksPerWeek: 5,
-//   blocksPerMinute: 5,
-// })
 
 const hashPerDot = 480
 
-onMounted(() => {
+onBeforeMount(() => {
   refresh()
 })
 
@@ -286,8 +282,9 @@ async function refresh () {
   try {
     showLoading()
     // Get contributions for both funds
-    const promises = [loadAllPagination({ fundId: funds.fund54Id }), loadAllPagination({ fundId: funds.fund58Id })]
-    const [c54, c58] = await Promise.all(promises)
+    // const promises = [loadAllPagination({ fundId: funds.fund54Id }), loadAllPagination({ fundId: funds.fund58Id })]
+    // const [c54, c58] = await Promise.all(promises)
+    const { fund54: c54, fund58: c58 } = await getSavedVestingApiData()
     funds.contributors.fund54 = c54
     funds.contributors.fund58 = c58
 
@@ -303,7 +300,7 @@ async function refresh () {
     // Get computed Data
     funds.contributors.both = await getComputed()
     const computed = await getComputed()
-    saveInJSON(computed, 'computed.json')
+    // saveInJSON(computed, 'computed.json')
     // saveInJSON(c58, 'c58.json')
     // Download Data
     // convertToCSV({ data: c54, name: 'fund_54' })

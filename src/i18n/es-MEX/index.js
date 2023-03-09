@@ -30,7 +30,8 @@ export default {
     marketplaces: 'Marketplaces',
     taxCredits: 'Créditos fiscales',
     proofOfReserves: 'Prueba de reservas',
-    wallet: 'Cartera'
+    wallet: 'Cartera',
+    vesting: 'Vesting'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
