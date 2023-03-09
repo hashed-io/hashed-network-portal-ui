@@ -1,3 +1,5 @@
+import PolkadotApi from '~/services/polkadotApi'
+
 export function isLogged ({ profileName, loginType, polkadotAddress }) {
   return !!(polkadotAddress && profileName && loginType)
 }
@@ -12,6 +14,11 @@ export function xpub (state) {
 
 export function polkadotAddress ({ polkadotAddress }) {
   return polkadotAddress
+}
+
+export function encodedAddress ({ polkadotAddress }) {
+  const polkadotApi = new PolkadotApi()
+  return polkadotApi.parseAddressToss58(polkadotAddress, '9072')
 }
 
 export function loginType ({ loginType }) {

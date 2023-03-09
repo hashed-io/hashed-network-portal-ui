@@ -36,7 +36,8 @@ export default {
     marketplaces: 'Marketplaces',
     taxCredits: 'Tax Credits',
     proofOfReserves: 'Proof of Reserves',
-    wallet: 'Wallet'
+    wallet: 'Wallet',
+    vesting: 'Vesting'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',

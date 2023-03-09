@@ -35,6 +35,8 @@
           q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
         q-toolbar-title
         .text-caption(v-if="xpub && $route && $route.meta?.app === 'nbv'") XPUB: ...{{ xpub.substr(-8) }}
+        .text-caption(v-if="$route && $route.meta?.app === 'hashed'") {{ encodedAddress }}
+          q-tooltip Polkadot address encoded with prefix '9072'
     q-page-container
       .row.justify-center
         .col-12
@@ -76,6 +78,7 @@ export default defineComponent({
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
     const xpub = computed(() => $store.getters['profile/xpub'])
+    const encodedAddress = computed(() => $store.getters['profile/encodedAddress'])
 
     const ssoAccountInfo = computed(() => {
       if ($store.getters['hcdWallet/isLogged']) {
@@ -102,6 +105,18 @@ export default defineComponent({
 
     // Dynamic options for each app
     const pageOptionsDictionary = {
+      hashed: [
+        {
+          to: { name: 'wallet' },
+          keyActive: 'wallet',
+          label: 'Wallet'
+        },
+        {
+          to: { name: 'vesting' },
+          keyActive: 'vesting',
+          label: 'Vesting'
+        }
+      ],
       nbv: [
         {
           to: { name: 'manageVaults' },
@@ -244,7 +259,8 @@ export default defineComponent({
       ssoAccountInfo,
       copyTextToClipboard,
       polkadotUserInfo,
-      xpub
+      xpub,
+      encodedAddress
     }
   }
 })
