@@ -1,7 +1,7 @@
 export const hashedLogin = async function ({ commit }, { userAddress, meta, returnTo }) {
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
-    const to = returnTo || { name: 'root' }
+    const to = returnTo || { name: 'wallet' }
     // console.log('store', this)
     if (isLoggedIn) {
       commit('setIsHashedLoggedIn', isLoggedIn)
