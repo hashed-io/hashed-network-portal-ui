@@ -163,6 +163,7 @@ export default {
             clientId: process.env.GOOGLE_CLIENT_ID
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
+          await this.$store.dispatch('polkadotWallet/isHoldingHash', { address: polkadotAddress })
           this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,
@@ -184,6 +185,13 @@ export default {
         message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
         this.showNotification({ message, color: 'negative' })
         console.error(e)
+        // Modal logic
+        if (e.type && e.type === 'NotHashBalance') {
+          this.notBalanceInfo = {
+            address: e.address
+          }
+          this.showNotBalanceModal = true
+        }
         // this.handlerError(e)
       } finally {
         this.hideLoading()

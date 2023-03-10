@@ -29,6 +29,7 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
       this.$router.push(to)
     }
   } catch (e) {
+    dispatch('hashedLogout')
     throw e
   }
 }
