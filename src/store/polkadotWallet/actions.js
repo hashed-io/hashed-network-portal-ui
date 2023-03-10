@@ -60,7 +60,7 @@ export const hashedLogout = async function ({ commit }) {
     await this.$hashedPrivateApi.logout()
     this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
-    commit('profile/setProfile', undefined, { root: true })
+    commit('profile/cleanProfile', undefined, { root: true })
   } catch (error) {
     console.error('Authenticator logout error', error)
   }
