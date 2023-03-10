@@ -6,7 +6,6 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
     // console.log('store', this)
     if (isLoggedIn) {
       await dispatch('isHoldingHash', { address: userAddress })
-      // await isHoldingHash({ address: userAddress })
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
       commit('profile/setProfile', {
@@ -17,8 +16,8 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
       this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
+      await this.$hashedPrivateApi.login(userAddress)
       await dispatch('isHoldingHash', { address: userAddress })
-      // await isHoldingHash({ address: userAddress })
       commit('setIsHashedLoggedIn', true)
       localStorage.setItem('autoLoginAccount', userAddress)
       commit('profile/setProfile', {
@@ -60,6 +59,7 @@ export const hashedLogout = async function ({ commit }) {
     await this.$hashedPrivateApi.logout()
     this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
+    commit('profile/setProfile', undefined, { root: true })
   } catch (error) {
     console.error('Authenticator logout error', error)
   }
