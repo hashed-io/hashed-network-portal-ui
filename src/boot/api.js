@@ -1,6 +1,6 @@
 /* eslint-disable dot-notation */
 import PolkadotApi from '~/services/polkadotApi'
-import { MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
+import { MarketplaceApi, FruniquesApi, UniquesApi, SystemApi, VestingApi } from '~/services/polkadot-pallets'
 // import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
 import HashedPrivateApi from '~/services/HashedPrivateApi'
@@ -70,6 +70,13 @@ export default async ({ app, store }) => {
       notify: showGlobalLoading
     })
 
+    const parachainPolkadotApi = new PolkadotApi(process.env.WSS_PARACHAIN)
+    await parachainPolkadotApi.connect()
+    const systemApi = new SystemApi(parachainPolkadotApi, showGlobalLoading)
+    const vestingApi = new VestingApi(parachainPolkadotApi, showGlobalLoading)
+
+    store['$systemApi'] = systemApi
+    store['$vestingApi'] = vestingApi
     store['$afloatApi'] = afloatApi
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi

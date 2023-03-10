@@ -18,6 +18,10 @@ class VestingApi extends BasePolkadotApi {
     const { number: currentBlock } = header.toHuman()
     return parseFloat(currentBlock.replaceAll(',', ''))
   }
+
+  // async getBalanceByAccount ({ address }, subTrigger) {
+  //   const balance = await this.exQuery('system', [])
+  // }
 }
 
 export default VestingApi

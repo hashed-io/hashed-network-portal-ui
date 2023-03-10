@@ -97,7 +97,10 @@ export default {
       }
     },
     login: {
-      googleDriveError: 'An error has occurred trying to get access to Google Drive'
+      googleDriveError: 'An error has occurred trying to get access to Google Drive',
+      hashedClubAccessibility: 'Hashed Club is only accessible to those that hold HASH. Contact to join.',
+      yourHashedAddress: 'Your HASHED address',
+      contactUs: 'Contact us'
     },
     nbv: {
       appName: 'Bitcoin Vaults',
