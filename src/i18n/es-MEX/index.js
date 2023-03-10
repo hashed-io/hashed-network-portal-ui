@@ -89,6 +89,12 @@ export default {
         members: 'Miembros'
       }
     },
+    login: {
+      googleDriveError: 'Ocurrio un error tratando de acceder a Google Drive',
+      hashedClubAccessibility: 'Hashed Club es solo accesible para los holders de HASH. Contactanos para unirte.',
+      yourHashedAddress: 'Tu direccion de  HASHED',
+      contactUs: 'Contactanos'
+    },
     nbv: {
       appName: 'Vaules de Bitcoin',
       mainOptions: {

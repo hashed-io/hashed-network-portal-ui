@@ -4,7 +4,7 @@
     q-card-section
       .row.q-col-gutter-md
         .col-sm-12.col-md-6
-          .text-bold {{ $t('pages.hashed.members.details') }}
+          .text-bold.titleStyle {{ $t('pages.hashed.members.details') }}
           .text-subtitle2 {{ $t('pages.hashed.members.hashRewardPerDot') }}: {{ hashPerDot }}
           .text-subtitle2 {{ $t('pages.hashed.members.secondTimeBonus') }}: 20%
           .text-subtitle2 {{ $t('pages.hashed.members.blocksPerMinute') }}: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
@@ -28,7 +28,12 @@
     row-key="who"
     :pagination="initialPagination"
     :filter="filter"
+    virtual-scroll
   )
+    template(v-slot:body-cell-who="props")
+      q-td(:props="props") {{ `${props.value?.substr(0, 6)}...${props.value?.substr(-6)}` }}
+    template(v-slot:body-cell-hashedAddress="props")
+      q-td(:props="props") {{ `${props.value?.substr(0, 6)}...${props.value?.substr(-6)}` }}
   q-card(v-else)
     q-card-section
       general-table-skeleton(:rowsNumber="5" :columnsNumber="8")
@@ -130,6 +135,15 @@ const columnsForFunds = [
     sortable: true
   },
   {
+    name: 'hashedAddress',
+    label: 'Hashed Address',
+    required: true,
+    align: 'left',
+    field: row => row.hashedAddress,
+    format: who => who?.display ? `${who?.display} (${who.address})` : `${who.address}`,
+    sortable: true
+  },
+  {
     name: 'contributed',
     label: 'DOT Contributed',
     required: true,
@@ -166,6 +180,16 @@ const columnsForBoth = [
     align: 'left',
     field: row => row.who,
     sortable: true
+    // format: val => `${val.substr(0, 6)}...${val.substr(-6)}`
+  },
+  {
+    name: 'hashedAddress',
+    label: 'Hashed address',
+    required: true,
+    align: 'left',
+    field: row => row.hashedAddress,
+    sortable: true
+    // format: val => `${val.substr(0, 6)}...${val.substr(-6)}`
   },
   // {
   //   name: 'who',
@@ -178,7 +202,7 @@ const columnsForBoth = [
   // },
   {
     name: 'round 1',
-    label: 'DOT Contributed for fund 2093-54',
+    label: 'DOT Cont. 2093-54',
     required: false,
     align: 'left',
     field: row => row.round1,
@@ -187,7 +211,7 @@ const columnsForBoth = [
   },
   {
     name: 'contributed58',
-    label: 'DOT Contributed for fund 2093-58',
+    label: 'DOT Cont. 2093-58',
     required: false,
     align: 'left',
     field: row => row.round2,
@@ -349,6 +373,7 @@ async function getComputed () {
     const bonusHash = isEligibleForBonus ? minContribution * hashPerDot * 0.2 : 0
     const totalReward = baseReward + bonusHash
     const hashPerBlock = totalReward / blocksForLease.value
+    const hashedAddress = $store.$polkadotApi.parseAddressToss58(display.address, '9072')
 
     return {
       address,
@@ -361,7 +386,8 @@ async function getComputed () {
       bonusHash,
       totalReward,
       polkadotAddress,
-      hashPerBlock
+      hashPerBlock,
+      hashedAddress
       // fund54,
       // fund58
     }
@@ -430,9 +456,12 @@ const blocksForLease = computed(() => {
   return blocksPerWeek.value * 104
 })
 
+// -
 </script>
 
-<style lang="sass">
+<style lang="stylus">
+.titleStyle
+  text-decoration: underline
 
 .contributorsTable
   /* height or max-height is important */

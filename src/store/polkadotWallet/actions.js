@@ -1,12 +1,13 @@
-export const hashedLogin = async function ({ commit }, { userAddress, meta, returnTo }) {
+export const hashedLogin = async function ({ commit, dispatch }, { userAddress, meta, returnTo }) {
+  // eslint-disable-next-line no-useless-catch
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     const to = returnTo || { name: 'wallet' }
     // console.log('store', this)
     if (isLoggedIn) {
+      await dispatch('isHoldingHash', { address: userAddress })
       commit('setIsHashedLoggedIn', isLoggedIn)
       localStorage.setItem('autoLoginAccount', userAddress)
-      // this.$polkadotApi.parseAddress(userAddress, '9072')
       commit('profile/setProfile', {
         loginType: 'polkadotjs',
         polkadotAddress: userAddress,
@@ -16,6 +17,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
       this.$router.push(to)
     } else if (!isLoggedIn && userAddress) {
       await this.$hashedPrivateApi.login(userAddress)
+      await dispatch('isHoldingHash', { address: userAddress })
       commit('setIsHashedLoggedIn', true)
       localStorage.setItem('autoLoginAccount', userAddress)
       commit('profile/setProfile', {
@@ -24,11 +26,21 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
         profileName: meta.name
       }, { root: true })
       this.$nbvStorageApi.setSigner(userAddress)
-      // this.$polkadotApi.parseAddress(userAddress, '9072')
       this.$router.push(to)
     }
   } catch (e) {
-    throw new Error(e)
+    dispatch('hashedLogout')
+    throw e
+  }
+}
+
+export const isHoldingHash = async function ({ dispatch }, { address }) {
+  const balance = await this.$systemApi.getBalanceByAccount({ address })
+  if (!balance || balance <= 0) {
+    const error = new Error(`Not HASH balance: The ${address} address is not holding HASH`)
+    error.type = 'NotHashBalance'
+    error.address = address
+    throw error
   }
 }
 
@@ -48,6 +60,7 @@ export const hashedLogout = async function ({ commit }) {
     await this.$hashedPrivateApi.logout()
     this.$nbvStorageApi.setSigner(undefined)
     commit('setIsHashedLoggedIn', false)
+    commit('profile/cleanProfile', undefined, { root: true })
   } catch (error) {
     console.error('Authenticator logout error', error)
   }

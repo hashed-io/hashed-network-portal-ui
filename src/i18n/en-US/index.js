@@ -84,12 +84,12 @@ export default {
         bonus: 'Bonus'
       },
       members: {
-        details: 'Details',
+        details: 'Calculations Parameters',
         hashRewardPerDot: 'HASH reward per DOT',
-        secondTimeBonus: '2nd-time bonus',
+        secondTimeBonus: 'Repeat participants reward (leaser of two)',
         blocksPerMinute: 'Blocks per minute',
         blocksPerWeek: 'Blocks per week',
-        blocksForLease: 'Blocks for lease',
+        blocksForLease: 'Blocks for the lease term',
         filters: 'Filters',
         search: 'Search',
         showEligibles: 'Show just eligibles for bonus',
@@ -97,7 +97,10 @@ export default {
       }
     },
     login: {
-      googleDriveError: 'An error has occurred trying to get access to Google Drive'
+      googleDriveError: 'An error has occurred trying to get access to Google Drive',
+      hashedClubAccessibility: 'Hashed Club is only accessible to those that hold HASH. Contact to join.',
+      yourHashedAddress: 'Your HASHED address',
+      contactUs: 'Contact us'
     },
     nbv: {
       appName: 'Bitcoin Vaults',

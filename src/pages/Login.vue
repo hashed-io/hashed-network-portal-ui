@@ -28,22 +28,28 @@
     q-dialog(v-model="showHCDPasswordModal" persistent)
       q-card.modalSize.q-pa-md.bg-white
         password-confidential-docs(v-bind="hcdPasswordProps" @onSubmit="onPasswordSet")
+    q-dialog(v-model="showNotBalanceModal")
+      q-card.modalFit
+        not-balance-card(v-bind="notBalanceInfo")
 </template>
 
 <script>
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import PasswordConfidentialDocs from '~/components/common/login/password-confidential-docs'
+import NotBalanceCard from '~/components/common/login/not-balance-card'
 import { mapGetters } from 'vuex'
 import Jwt from '~/utils/Jwt'
 
 export default {
   name: 'LoginPage',
-  components: { AccountsMenu, SelectedAccountBtn, PasswordConfidentialDocs },
+  components: { AccountsMenu, SelectedAccountBtn, PasswordConfidentialDocs, NotBalanceCard },
   data () {
     return {
       hcdPasswordProps: {},
       hcdPassword: undefined,
-      showHCDPasswordModal: false
+      showHCDPasswordModal: false,
+      notBalanceInfo: {},
+      showNotBalanceModal: false
     }
   },
   computed: {
@@ -112,7 +118,7 @@ export default {
         this.showLoading({
           message: 'Please sign message to login with private Hashed service'
         })
-        this.$store.dispatch('polkadotWallet/hashedLogin', {
+        await this.$store.dispatch('polkadotWallet/hashedLogin', {
           userAddress: this.selectedAccount.address,
           meta: this.selectedAccount.meta,
           type: this.selectedAccount.type,
@@ -121,6 +127,12 @@ export default {
         await this.$store.$afloatApi.setSigner(this.selectedAccount.address)
       } catch (e) {
         this.handlerError(e)
+        if (e.type && e.type === 'NotHashBalance') {
+          this.notBalanceInfo = {
+            address: e.address
+          }
+          this.showNotBalanceModal = true
+        }
       } finally {
         this.hideLoading()
       }
@@ -151,6 +163,7 @@ export default {
             clientId: process.env.GOOGLE_CLIENT_ID
           })
           const polkadotAddress = await this.$store.$hcd.getPolkadotAddress()
+          await this.$store.dispatch('polkadotWallet/isHoldingHash', { address: polkadotAddress })
           this.$store.commit('hcdWallet/setAccount', {
             ssoProvider: 'google',
             ssoUserId: account.sub,
@@ -172,6 +185,13 @@ export default {
         message = (message.includes('failed calling method: list of google client:drive.files')) ? this.$t('pages.login.googleDriveError') : message
         this.showNotification({ message, color: 'negative' })
         console.error(e)
+        // Modal logic
+        if (e.type && e.type === 'NotHashBalance') {
+          this.notBalanceInfo = {
+            address: e.address
+          }
+          this.showNotBalanceModal = true
+        }
         // this.handlerError(e)
       } finally {
         this.hideLoading()
@@ -212,6 +232,10 @@ export default {
 #container
   background: transparent linear-gradient(147deg, var(--unnamed-color-290266) 0%, #150133 100%) 0% 0% no-repeat padding-box
   background: transparent linear-gradient(147deg, #290266 0%, #150133 100%) 0% 0% no-repeat padding-box
+
+.modalFit
+  width: 'fit-content'
+  min-width: 38vw
 
 .luhn-image
   background-image: url('../assets/portal/luhnLights.png')
