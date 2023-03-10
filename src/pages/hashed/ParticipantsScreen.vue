@@ -4,24 +4,24 @@
     q-card-section
       .row.q-col-gutter-md
         .col-sm-12.col-md-6
-          .text-bold Details
-          .text-subtitle2 HASH reward per DOT: {{ hashPerDot }}
-          .text-subtitle2 2nd-time Bonus: 20%
-          .text-subtitle2 Blocks per Minute: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
-          .text-subtitle2 Blocks per Week: {{ AmountUtils.formatToUSLocale(blocksPerWeek) }}
-          .text-subtitle2 Blocks for Lease: {{ AmountUtils.formatToUSLocale(blocksForLease) }}
+          .text-bold {{ $t('pages.hashed.members.details') }}
+          .text-subtitle2 {{ $t('pages.hashed.members.hashRewardPerDot') }}: {{ hashPerDot }}
+          .text-subtitle2 {{ $t('pages.hashed.members.secondTimeBonus') }}: 20%
+          .text-subtitle2 {{ $t('pages.hashed.members.blocksPerMinute') }}: {{ AmountUtils.formatToUSLocale(blocksPerMinute) }}
+          .text-subtitle2 {{ $t('pages.hashed.members.blocksPerWeek') }}: {{ AmountUtils.formatToUSLocale(blocksPerWeek) }}
+          .text-subtitle2 {{ $t('pages.hashed.members.blocksForLease') }}: {{ AmountUtils.formatToUSLocale(blocksForLease) }}
         .col-sm-12.col-md-6
-          .text-bold Filters
-          q-input(outlined debounce="300" v-model="filter" placeholder="Search" label="Search")
+          .text-bold {{ $t('pages.hashed.members.filters') }}
+          q-input(outlined debounce="300" v-model="filter" :placeholder="$t('pages.hashed.members.search')" :label="$t('pages.hashed.members.search')")
             template(v-slot:append)
               q-icon(name="search")
           q-toggle(
-            label="Show just eligibles for bonus"
+            :label="$t('pages.hashed.members.showEligibles')"
             v-model="isShowingJustEligibles"
           )
 
   q-table.contributorsTable(
-    title="Participants"
+    :title="$t('pages.hashed.members.members')"
     v-if="rowsToShow.length > 0"
     :rows="rowsToShow"
     :columns="columnsToShow"
@@ -31,7 +31,7 @@
   )
   q-card(v-else)
     q-card-section
-      general-table-skeleton(:rowsNumber="5" :columnsNumber="3")
+      general-table-skeleton(:rowsNumber="5" :columnsNumber="8")
 </template>
 
 <script setup>
@@ -245,7 +245,7 @@ const columnsForBoth = [
     required: false,
     align: 'left',
     field: row => row.hashPerBlock,
-    format: val => `${val}`,
+    format: val => `${val?.toFixed(8)}`,
     sortable: true
   }
   // {
@@ -290,12 +290,12 @@ async function refresh () {
 
     // Get all diferents participants
     funds.participants = [...new Set([...c54.map(v => v.who), ...c58.map(v => v.who)])]
-    console.log('data', {
-      c54,
-      c58,
-      both: funds.contributors.both,
-      participants: funds.participants
-    })
+    // console.log('data', {
+    //   c54,
+    //   c58,
+    //   both: funds.contributors.both,
+    //   participants: funds.participants
+    // })
 
     // Get computed Data
     funds.contributors.both = await getComputed()

@@ -17,7 +17,7 @@ export const useVesting = () => {
     const fund58 = await require('../services/hashed/const/fund_58.json')
     await new Promise(resolve => setTimeout(() => {
       resolve()
-    }, 50))
+    }, 100))
     return { fund54, fund58 }
   }
 
