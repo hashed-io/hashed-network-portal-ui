@@ -84,12 +84,12 @@ export default {
         bonus: 'Bonus'
       },
       members: {
-        details: 'Details',
+        details: 'Calculations Parameters',
         hashRewardPerDot: 'HASH reward per DOT',
-        secondTimeBonus: '2nd-time bonus',
+        secondTimeBonus: 'Repeat participants reward (leaser of two)',
         blocksPerMinute: 'Blocks per minute',
         blocksPerWeek: 'Blocks per week',
-        blocksForLease: 'Blocks for lease',
+        blocksForLease: 'Blocks for the lease term',
         filters: 'Filters',
         search: 'Search',
         showEligibles: 'Show just eligibles for bonus',

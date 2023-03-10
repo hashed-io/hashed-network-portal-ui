@@ -18,7 +18,7 @@ export function polkadotAddress ({ polkadotAddress }) {
 
 export function encodedAddress ({ polkadotAddress }) {
   const polkadotApi = new PolkadotApi()
-  return polkadotApi.parseAddressToss58(polkadotAddress, '9072')
+  return polkadotAddress && polkadotApi.parseAddressToss58(polkadotAddress, '9072')
 }
 
 export function loginType ({ loginType }) {
