@@ -52,7 +52,7 @@ export default {
       drawerLeft: false,
       optionsMenu: [
         {
-          label: 'pages.hashed.wallet',
+          label: 'pages.hashed.wallet.wallet',
           icon: 'account_balance_wallet',
           key: 'hashed',
           to: {

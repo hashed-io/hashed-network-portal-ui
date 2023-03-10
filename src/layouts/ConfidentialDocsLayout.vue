@@ -13,7 +13,7 @@
             dense
           )
             q-item-section.q-pa-sm
-              q-item-label {{ $t(option.label) }}
+              q-item-label {{ option.label }}
         q-space
         q-btn.q-mr-md(v-if="loginType === 'polkadotjs'" flat padding="0px 0px 0px 0px" no-caps text-color="white")
             selected-account-btn(v-bind="polkadotUserInfo")
@@ -35,8 +35,13 @@
           q-breadcrumbs-el.q-ml-md(v-for="(breadcrumb, index) in breadcrumbList" :label="$t(`breadcrumb.${breadcrumb.name}`)" :icon="breadcrumb.icon" tag="div" :to="breadcrumb.to"  :class="{ 'hasLink': (!!breadcrumb.to || breadcrumb.back), }" @click="handlerBreadcrumb(index)")
         q-toolbar-title
         .text-caption(v-if="xpub && $route && $route.meta?.app === 'nbv'") XPUB: ...{{ xpub.substr(-8) }}
-        .text-caption(v-if="$route && $route.meta?.app === 'hashed'") {{ encodedAddress }}
-          q-tooltip Polkadot address encoded with prefix '9072'
+          q-tooltip {{ xpub }}
+        q-toolbar-title
+        .text-caption.q-mr-md(v-if="$route && ['hashed','nbv'].includes($route.meta?.app)") {{ encodedAddress }}
+            q-tooltip Polkadot address encoded with prefix '9072'
+      q-toolbar(class="bg-white text-warning text-center" v-if="$route && ['nbv'].includes($route.meta?.app)")
+        q-toolbar-title.text-center
+          .text-caption.warningText WARNING: BETA grade - do not use with large amounts
     q-page-container
       .row.justify-center
         .col-12
@@ -51,7 +56,7 @@ import { defineComponent, ref, computed, onMounted, watchEffect } from 'vue'
 import { useNotifications } from '~/mixins/notifications'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-// import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 import { AccountsMenu, SelectedAccountBtn } from '~/components/common/index.js'
 import NotAccounts from '~/pages/NotAccounts.vue'
 import NotConnected from '~/pages/NotConnected.vue'
@@ -73,7 +78,7 @@ export default defineComponent({
     const $store = useStore()
     const $route = useRoute()
     const $router = useRouter()
-    // const { t } = useI18n({})
+    const { t: $t } = useI18n()
     const selectedAccount = computed(() => $store.getters['polkadotWallet/selectedAccount'])
     const availableAccounts = computed(() => $store.getters['polkadotWallet/availableAccounts'])
     const isConnectedToServer = computed(() => $store.$connectedToServer)
@@ -109,12 +114,12 @@ export default defineComponent({
         {
           to: { name: 'wallet' },
           keyActive: 'wallet',
-          label: 'Wallet'
+          label: $t('pages.hashed.wallet.wallet')
         },
         {
-          to: { name: 'vesting' },
-          keyActive: 'vesting',
-          label: 'Vesting'
+          to: { name: 'members' },
+          keyActive: 'members',
+          label: $t('pages.hashed.members.members')
         }
       ],
       nbv: [
@@ -268,6 +273,9 @@ export default defineComponent({
 
 <style lang="stylus" scoped>
 @import '~/css/app.styl'
+
+.warningText
+  font-size: 1.2rem
 
 .routerItems
   border-radius: 5px

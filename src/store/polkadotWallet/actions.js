@@ -10,7 +10,7 @@ export const hashedLogin = async function ({ commit }, { userAddress, meta, retu
       commit('profile/setProfile', {
         loginType: 'polkadotjs',
         polkadotAddress: userAddress,
-        profileName: meta.name
+        profileName: meta?.name
       }, { root: true })
       this.$nbvStorageApi.setSigner(userAddress)
       this.$router.push(to)

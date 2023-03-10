@@ -18,12 +18,12 @@ const routes = {
       }
     },
     {
-      path: '/vesting',
+      path: '/members',
       component: () => import('pages/hashed/ParticipantsScreen.vue'),
-      name: 'vesting',
+      name: 'members',
       meta: {
         breadcrumb: [
-          { name: 'vesting', icon: 'account_balance_wallet' }
+          { name: 'members', icon: 'people' }
         ],
         app: 'hashed'
       }

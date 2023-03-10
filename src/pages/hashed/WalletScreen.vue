@@ -12,7 +12,7 @@
         )
     q-card(v-else)
       q-card-section
-        .text-body2.text-center You don't have Hashed vesting
+        .text-body2.text-center {{ $t('pages.hashed.wallet.emptyVestingList') }}
 
 </template>
 

@@ -37,7 +37,7 @@ export default {
     taxCredits: 'Tax Credits',
     proofOfReserves: 'Proof of Reserves',
     wallet: 'Wallet',
-    vesting: 'Vesting'
+    members: 'Members'
   },
   layouts: {
     polkadotAddress: 'Polkadot Address',
@@ -68,13 +68,39 @@ export default {
   },
   pages: {
     hashed: {
-      wallet: 'Wallet'
+      wallet: {
+        wallet: 'Wallet',
+        emptyVestingList: "You don't have Hashed vesting",
+        currentBlock: 'Current block',
+        hashPerBlock: 'HASH per block',
+        contributions: 'Contributions',
+        fund54: 'Fund 54',
+        fund58: 'Fund 58',
+        estimatedTime: 'Estimated time to fully vest',
+        vestedToDate: 'Vested to date',
+        remainingToVest: 'Remaining to vest',
+        totalRewards: 'Total rewards',
+        baseRewards: 'Base rewards',
+        bonus: 'Bonus'
+      },
+      members: {
+        details: 'Details',
+        hashRewardPerDot: 'HASH reward per DOT',
+        secondTimeBonus: '2nd-time bonus',
+        blocksPerMinute: 'Blocks per minute',
+        blocksPerWeek: 'Blocks per week',
+        blocksForLease: 'Blocks for lease',
+        filters: 'Filters',
+        search: 'Search',
+        showEligibles: 'Show just eligibles for bonus',
+        members: 'Members'
+      }
     },
     login: {
       googleDriveError: 'An error has occurred trying to get access to Google Drive'
     },
     nbv: {
-      appName: 'NBV',
+      appName: 'Bitcoin Vaults',
       mainOptions: {
         myVaults: 'My Vaults',
         extendedKeys: 'Extended Keys'

@@ -2,28 +2,28 @@
 #wallet-item
   .row
     .col
-        .text-body2.text-bold Current Block:
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.currentBlock') }}:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm # {{ AmountUtils.formatToUSLocale(currentBlock) }}
-        .text-body2.text-bold HASH per block:
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ perBlock }} HASH
-        .text-body2.text-bold Contributions:
-        .text-body2.text-weight-light.q-mt-sm Fund 54: {{ AmountUtils.formatToUSLocale(contributionFund54) }} DOT
-        .text-body2.text-weight-light.q-mb-lg.q-mt-sm Fund 58: {{ AmountUtils.formatToUSLocale(contributionFund58) }} DOT
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.hashPerBlock') }}:
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ perBlock?.toFixed(8) }} HASH
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.contributions') }}:
+        .text-body2.text-weight-light.q-mt-sm {{ $t('pages.hashed.wallet.fund54') }}: {{ AmountUtils.formatToUSLocale(contributionFund54) }} DOT
+        .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ $t('pages.hashed.wallet.fund58') }}: {{ AmountUtils.formatToUSLocale(contributionFund58) }} DOT
     .col
-        .text-body2.text-bold Estimated time to fully vest:
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.estimatedTime') }}:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ estimatedTime }}
-        .text-body2.text-bold Vested to date:
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.vestedToDate') }}:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(vestedToDate) }} HASH
-        .text-body2.text-bold Remaining to vest:
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.remainingToVest') }}:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(remainingToVest) }} HASH
     .col
-        .text-body2.text-bold Total Rewards:
+        .text-body2.text-bold {{ $t('pages.hashed.wallet.totalRewards') }}:
         .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(locked) }} HASH
         template(v-if="isFirstElement")
-            .text-body2.text-bold Base Rewards:
+            .text-body2.text-bold {{ $t('pages.hashed.wallet.baseRewards') }}:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(baseReward) }} HASH
         template(v-if="isFirstElement")
-            .text-body2.text-bold Bonus:
+            .text-body2.text-bold {{ $t('pages.hashed.wallet.bonus') }}:
             .text-body2.text-weight-light.q-mb-lg.q-mt-sm {{ AmountUtils.formatToUSLocale(bonusHash) }} HASH
   .row.justify-center
     Bar.pieChart(v-bind="pieChartConfig")
@@ -88,11 +88,11 @@ const { perBlock, startingBlock, locked, currentBlock, contributionFund54, contr
 const vestedToDate = computed(() => {
   const vestedToDate = (currentBlock.value - startingBlock.value) * perBlock.value
   if (vestedToDate >= locked.value) return locked.value
-  return vestedToDate
+  return vestedToDate?.toFixed(2)
 })
 
 const remainingToVest = computed(() => {
-  return (locked.value - vestedToDate.value)
+  return (locked.value - vestedToDate.value)?.toFixed(2)
 })
 
 // Charts
@@ -116,6 +116,11 @@ const pieChartConfig = computed(() => {
         x: {
           min: 0,
           max: locked.value
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
         }
       }
     }

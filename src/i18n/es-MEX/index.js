@@ -31,7 +31,7 @@ export default {
     taxCredits: 'Créditos fiscales',
     proofOfReserves: 'Prueba de reservas',
     wallet: 'Cartera',
-    vesting: 'Vesting'
+    members: 'Miembros'
   },
   layouts: {
     polkadotAddress: 'Dirección de Polkadot',
@@ -61,10 +61,36 @@ export default {
   },
   pages: {
     hashed: {
-      wallet: 'Cartera'
+      wallet: {
+        wallet: 'Cartera',
+        emptyVestingList: 'No se encontraron registros de vesting para Hashed',
+        currentBlock: 'Bloque actual',
+        hashPerBlock: 'HASH por bloque',
+        contributions: 'Contribuciones',
+        fund54: 'Fondo 54',
+        fund58: 'Fondo 58',
+        estimatedTime: 'Tiempo estimado para adquisición completa',
+        vestedToDate: 'Adquirido hasta ahora',
+        remainingToVest: 'Restante por adquirir',
+        totalRewards: 'Recompensa total',
+        baseRewards: 'Recompensa de base',
+        bonus: 'Bonos'
+      },
+      members: {
+        details: 'Detalles',
+        hashRewardPerDot: 'Recompensa en HASH por cada DOT',
+        secondTimeBonus: 'Bonos por segundo intento',
+        blocksPerMinute: 'Bloques por minuto',
+        blocksPerWeek: 'Bloques por semana',
+        blocksForLease: 'Bloques a producir',
+        filters: 'Filtros',
+        search: 'Buscar',
+        showEligibles: 'Mostrar solo direcciones elegibles para bonos',
+        members: 'Miembros'
+      }
     },
     nbv: {
-      appName: 'NVB',
+      appName: 'Vaules de Bitcoin',
       mainOptions: {
         myVaults: 'Mis Baules',
         extendedKeys: 'Llaves extendidas'
