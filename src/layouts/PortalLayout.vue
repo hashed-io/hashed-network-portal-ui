@@ -30,16 +30,16 @@ q-layout(view="lHh lpR lFf")
                 q-item(clickable @click="changeLanguage(lang.key)") {{ lang.label }}
                 q-separator
 
-        .row.full-width.justify-around
-          q-icon(
-              name="discord"
-              color="accent"
-          )
-          q-icon(
-              name="telegram"
-              color="accent"
-          )
-          i.twitterIcon.icon
+        //- .row.full-width.justify-around
+        //-   q-icon(
+        //-       name="discord"
+        //-       color="accent"
+        //-   )
+        //-   q-icon(
+        //-       name="telegram"
+        //-       color="accent"
+        //-   )
+        //-   i.twitterIcon.icon
     q-page-container
         router-view
 </template>
