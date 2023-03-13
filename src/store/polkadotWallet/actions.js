@@ -3,6 +3,7 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     const to = returnTo || { name: 'wallet' }
+    console.log('to', to)
     // console.log('store', this)
     if (isLoggedIn) {
       await dispatch('isHoldingHash', { address: userAddress })

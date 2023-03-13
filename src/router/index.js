@@ -30,6 +30,11 @@ export default route(function ({ store }) {
     // console.log('params', { to, from })
     if (to.name === 'participantsRewards') {
       next()
+      return
+    }
+    if (to.name === 'hashed') {
+      next({ name: 'wallet' })
+      return
     }
     const isAuthenticated = store.getters['profile/isLogged']
     // console.log(isAuthenticated, 'Authenticated')
