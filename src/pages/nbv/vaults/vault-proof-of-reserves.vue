@@ -31,19 +31,21 @@
               @click="modals.isShowingSignPsbt = true"
               icon="qr_code"
               no-caps
+              v-if="false"
             )
             q-btn.full-width.no-padding(
               :label="$t('pages.nbv.proposals.signPSBTUsingHCD')"
               color="secondary"
               no-caps
               @click="modals.isShowingSignPsbtHCD = true"
-              v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
             )
+              //- v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
             q-btn.full-width.no-padding(
               :label="$t('pages.nbv.proposals.finalizeBtn')"
               color="secondary"
               icon="cloud_done"
               no-caps
+              @click="finalizeProofOfR"
             )
   #modals
     q-dialog(v-model="modals.isShowingSignPsbt")
@@ -68,8 +70,8 @@
           :isFinalized="isFinalized"
           :vaultName="data.vault.description"
           @onSignPsbt="onSignPsbt"
+          @onSavePsbt="savePsbt(signedPSBT)"
         )
-          //- @onSavePsbt="(payload) => savePsbt(signedPsbt)"
           //- @onBroadcastPsbt="broadcastPsbt"
 </template>
 
@@ -94,7 +96,8 @@ const {
   getProofOfReserves,
   createProofOfReserves,
   saveProofOfReservesPSBT,
-  signPsbt
+  signPsbt,
+  finalizeProofOfReserves
 } = useProofOfReserves()
 
 // Data
@@ -107,6 +110,8 @@ const modals = reactive({
   isShowingSignPsbtHCD: false,
   isShowingSignPsbt: false
 })
+
+const signedPSBT = ref(undefined)
 
 let unsub
 
@@ -161,13 +166,14 @@ async function updateData (proofOfReserves) {
 async function onCreateProofOfReserves () {
   try {
     showLoading()
+    const message = `${data.vault.description}_proofOfReserves`
     const payload = {
       vaultId: route.query.vault,
       descriptors: {
         descriptor: data.vault.descriptors.outputDescriptor,
         change_descriptor: data.vault.descriptors.changeDescriptor
       },
-      message: 'This is a test'
+      message
     }
     const response = await createProofOfReserves(payload)
     console.log('createProofOfReserves', response)
@@ -182,14 +188,67 @@ async function onCreateProofOfReserves () {
 async function onSignPsbt ({ psbt, next }) {
   try {
     showLoading()
-    const signedPSBT = await signPsbt({ psbt, next })
-    console.log('signedPSBT', signedPSBT)
-    // next()
+    signedPSBT.value = await signPsbt({ psbt, next })
   } catch (e) {
     handlerError(e)
   } finally {
     hideLoading()
   }
+}
+
+async function savePsbt (signedPSBT) {
+  try {
+    showLoading()
+    console.log('savePSBT', signedPSBT)
+    const descriptors = {
+      descriptor: data.vault.descriptors.outputDescriptor,
+      change_descriptor: data.vault.descriptors.changeDescriptor
+    }
+    await saveProofOfReservesPSBT({
+      psbt: signedPSBT,
+      descriptors,
+      vaultId: route.query.vault
+      // isFinalized
+    })
+    modals.isShowingSignPsbtHCD = false
+  } catch (e) {
+    handlerError(e)
+  } finally {
+    hideLoading()
+  }
+}
+
+async function finalizeProofOfR () {
+  try {
+    showLoading()
+    const descriptors = {
+      descriptor: data.vault.descriptors.outputDescriptor,
+      change_descriptor: data.vault.descriptors.changeDescriptor
+    }
+    const psbts = data.proofOfReserves.signedPsbts.map(v => v.signature)
+    const finalizedPSBT = await finalizeProofOfReserves({
+      descriptors,
+      psbts
+    })
+    const fileName = `${data.vault.description}_${data.proofOfReserves.message}_Finalized`
+    downloadPSBT(finalizedPSBT, fileName)
+  } catch (e) {
+    handlerError(e)
+  } finally {
+    hideLoading()
+  }
+}
+
+function downloadPSBT (psbt, fileName) {
+  const file = new Blob([psbt], { type: 'text/plain' })
+  const fileURL = window.URL.createObjectURL(file)
+  const downloadLink = document.createElement('a')
+  downloadLink.href = fileURL
+  downloadLink.download = `${fileName}.psbt`
+  document.body.appendChild(downloadLink)
+  downloadLink.click()
+  document.body.removeChild(downloadLink)
+  window.URL.revokeObjectURL(fileURL)
 }
 
 // Computed

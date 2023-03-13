@@ -47,6 +47,7 @@ export default route(function ({ store }) {
           returnQuery: JSON.stringify(to.query)
         }
       })
+      return
     }
     // console.log('beforeEach', to)
     if (to.name === 'root' || to.name === 'home') {
