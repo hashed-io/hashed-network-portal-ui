@@ -7,15 +7,21 @@
       .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReserves') }}
       #ProofOfReservesDetails(v-if="data.proofOfReserves")
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proofOfReserves.status') }}
-        .text-body2 {{ data.proofOfReserves.status }}
+        .text-body2 {{ labelStatus }}
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proofOfReserves.message') }}
         .text-body2 {{ data.proofOfReserves.message }}
-        //- .text-subtitle2.q-mt-md {{ $t('pages.nbv.proofOfReserves.psbt') }}
-        //- .text-body2 {{ data.proofOfReserves.psbt }}
+      q-card#Empty(v-else)
+        q-card-section
+          .text-body2.text-center Have not been created a Proof of reserves for this vault.
+
       cosigners-list.q-mt-md(:cosigners="proposalCosigners")
     .col#rightMenu
       q-card
         q-card-section.actionsCard
+          template(v-if="data.vault")
+            .text-overline {{ $t('pages.nbv.vaults.threshold') }}
+            .text-body2 {{ `${data.vault.threshold} of ${data.vault.cosigners.length} Multisignature` }}
+            hr
           .text-overline Actions
           .q-gutter-y-sm
             q-btn.full-width.no-padding(
@@ -38,9 +44,10 @@
               color="secondary"
               no-caps
               @click="modals.isShowingSignPsbtHCD = true"
+              v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
             )
-              //- v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
             q-btn.full-width.no-padding(
+              v-if="canFinalize"
               :label="$t('pages.nbv.proposals.finalizeBtn')"
               color="secondary"
               icon="cloud_done"
@@ -48,6 +55,12 @@
               @click="finalizeProofOfR"
             )
   #modals
+    q-dialog(v-model="modals.isShowingVerifiedPsbt")
+      q-card
+        q-card-section
+          .text-body2.text-bold.q-mb-sm Proof of reserves response
+          .text-body2.text-weight-light.text-center.q-mt-md(style="fontSize: 2rem") {{ AmountUtils.formatToUSLocale(verificationResponse) }} sats
+
     q-dialog(v-model="modals.isShowingSignPsbt")
       q-card.modalSize.q-pa-sm
         sign-proposal-stepper(
@@ -86,6 +99,7 @@ import { useI18n } from 'vue-i18n'
 import CosignersList from '~/components/nbv/proposals/cosigners-list'
 import SignProposalStepper from '~/components/nbv/proposals/sign-proposal-stepper'
 import SignProposalHcd from '~/components/nbv/proposals/sign-proposal-hcd'
+import AmountUtils from '~/utils/AmountUtils'
 
 const route = useRoute()
 const $store = useStore()
@@ -97,7 +111,8 @@ const {
   createProofOfReserves,
   saveProofOfReservesPSBT,
   signPsbt,
-  finalizeProofOfReserves
+  finalizeProofOfReserves,
+  verifyProofOfReserves
 } = useProofOfReserves()
 
 // Data
@@ -108,10 +123,12 @@ const data = reactive({
 
 const modals = reactive({
   isShowingSignPsbtHCD: false,
-  isShowingSignPsbt: false
+  isShowingSignPsbt: false,
+  isShowingVerifiedPsbt: false
 })
 
 const signedPSBT = ref(undefined)
+const verificationResponse = ref(undefined)
 
 let unsub
 
@@ -154,7 +171,6 @@ async function subscribeProofOfReserves () {
 async function updateData (proofOfReserves) {
   try {
     showLoading()
-    console.log('updateData', proofOfReserves.toHuman())
     data.proofOfReserves = proofOfReserves.toHuman()
   } catch (e) {
     handlerError(e)
@@ -230,8 +246,14 @@ async function finalizeProofOfR () {
       descriptors,
       psbts
     })
-    const fileName = `${data.vault.description}_${data.proofOfReserves.message}_Finalized`
-    downloadPSBT(finalizedPSBT, fileName)
+    verificationResponse.value = await verifyProofOfReserves({
+      descriptors,
+      message: data.proofOfReserves.message,
+      psbt: finalizedPSBT
+    })
+    modals.isShowingVerifiedPsbt = true
+    // const fileName = `${data.vault.description}_${data.proofOfReserves.message}_Finalized`
+    // downloadPSBT(finalizedPSBT, fileName)
   } catch (e) {
     handlerError(e)
   } finally {
@@ -253,10 +275,10 @@ function downloadPSBT (psbt, fileName) {
 
 // Computed
 const proposalCosigners = computed(() => {
-  return data.vault?.cosigners.map(cosigner => {
+  return data.vault?.cosigners?.map(cosigner => {
     return {
       address: cosigner,
-      signed: data.proofOfReserves?.signedPsbts.find(v => v.signer === cosigner)
+      signed: data.proofOfReserves?.signedPsbts?.find(v => v.signer === cosigner)
     }
   })
 })
@@ -265,8 +287,8 @@ const polkadotAddress = computed(() => $store.getters['profile/polkadotAddress']
 const isHCDLogged = computed(() => $store.getters['profile/isHCDLogged'])
 
 const canFinalize = computed(() => {
-  const signers = proposalCosigners.value.filter(v => v.signed)
-  return !!(signers.length >= data.vault.threshold)
+  const signers = proposalCosigners.value?.filter(v => v.signed)
+  return !!(signers?.length >= data.vault?.threshold)
 })
 const canBroadcast = computed(() => {
   return !!(data.proofOfReserves?.status === 'Finalized')
@@ -279,6 +301,20 @@ const isFinalized = computed(() => {
 })
 const alreadySigned = computed(() => {
   return !!data.proofOfReserves?.signedPsbts.find(v => v.signer === polkadotAddress.value)
+})
+const labelStatus = computed(() => {
+  const status = data.proofOfReserves?.status
+  if (canFinalize.value && status && status !== 'Broadcasted') {
+    return $t('pages.nbv.proposals.readyToFinalize')
+  }
+  if (status && status.ReadyToFinalize === true) {
+    return $t('pages.nbv.proposals.finalizing')
+  } else if (status && status.ReadyToFinalize === false) {
+    return $t('pages.nbv.proposals.broadcasting')
+  } else if (status === 'Pending') {
+    return $t('pages.nbv.proposals.pendingStatus')
+  }
+  return status
 })
 //
 </script>

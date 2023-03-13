@@ -94,11 +94,21 @@ export const useProofOfReserves = () => {
     // return $store.$nbvStorageApi.createProofOfReserves({ vaultId, message, psbt })
   }
 
+  async function verifyProofOfReserves ({ descriptors, message, psbt }) {
+    const { data } = await $store.$bdkApi.verifyProofOfReserves({
+      descriptors,
+      message,
+      psbt
+    })
+    return data
+  }
+
   return {
     createProofOfReserves,
     getProofOfReserves,
     saveProofOfReservesPSBT,
     signPsbt,
-    finalizeProofOfReserves
+    finalizeProofOfReserves,
+    verifyProofOfReserves
   }
 }
