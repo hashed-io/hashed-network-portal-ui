@@ -36,8 +36,7 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
 }
 
 export const isHoldingHash = async function ({ dispatch }, { address }) {
-  // const balance = await this.$systemApi.getBalanceByAccount({ address })
-  const balance = 10
+  const balance = await this.$systemApi.getBalanceByAccount({ address })
   if (!balance || balance <= 0) {
     const error = new Error(`Not HASH balance: The ${address} address is not holding HASH`)
     error.type = 'NotHashBalance'
