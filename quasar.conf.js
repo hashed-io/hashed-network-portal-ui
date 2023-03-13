@@ -213,8 +213,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Hashed Network Portal',
-        short_name: 'Hashed Network Portal',
+        name: 'Hashed Club - Members Only',
+        short_name: 'Hashed Club - Members Only',
         description: 'This is a template developed by HASHED',
         display: 'standalone',
         orientation: 'portrait',

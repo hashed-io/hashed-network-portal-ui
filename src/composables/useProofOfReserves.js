@@ -46,7 +46,7 @@ export const useProofOfReserves = () => {
 
   async function _getXpub () {
     try {
-      const polkadotAddress = 'you need add this before'
+      const polkadotAddress = $store.getters['profile/polkadotAddress']
       //   showLoading()
       let userXpub
       const xpubId = await $store.$nbvStorageApi.getXpubByUser(polkadotAddress)
@@ -85,10 +85,30 @@ export const useProofOfReserves = () => {
     return signedPSBT
   }
 
+  async function finalizeProofOfReserves ({ descriptors, psbts }) {
+    const { data } = await $store.$bdkApi.finalizeProofOfReserves({
+      descriptors,
+      psbts
+    })
+    return data
+    // return $store.$nbvStorageApi.createProofOfReserves({ vaultId, message, psbt })
+  }
+
+  async function verifyProofOfReserves ({ descriptors, message, psbt }) {
+    const { data } = await $store.$bdkApi.verifyProofOfReserves({
+      descriptors,
+      message,
+      psbt
+    })
+    return data
+  }
+
   return {
     createProofOfReserves,
     getProofOfReserves,
     saveProofOfReservesPSBT,
-    signPsbt
+    signPsbt,
+    finalizeProofOfReserves,
+    verifyProofOfReserves
   }
 }

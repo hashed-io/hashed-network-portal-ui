@@ -3412,27 +3412,6 @@
   dependencies:
     "@smontero/hashed-crypto" "0.0.8"
 
-"@smontero/hashed-confidential-docs@0.2.18":
-  version "0.2.18"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.18.tgz#504b4abb8f62a00c41ebd20327e1972bd12c5d9b"
-  integrity sha512-0DTL5Xe7cm48Aqd94LHk/7p5bhr+vcnXeCCUefYjsl1BWRKF0va0eEzbwAeExJ8fx+b07QtR15bPAUHpMRhKAg==
-  dependencies:
-    "@polkadot/api" "^8.1.1"
-    "@polkadot/extension-dapp" "^0.43.1"
-    "@smontero/generated-key-cipher-providers" "0.0.6"
-    "@smontero/hashed-crypto" "^0.0.8"
-    "@smontero/jwt" "^0.0.2"
-    bip32 "^3.1.0"
-    bip39 "^3.0.4"
-    bitcoinjs-lib "^6.0.2"
-    ipfs-http-client "^55.0.0"
-    it-all "^1.0.6"
-    mime-types "^2.1.35"
-    sha.js "^2.4.11"
-    tiny-secp256k1 "^2.2.1"
-    uint8arrays "^3.0.0"
-    xpub-converter "^1.0.2"
-
 "@smontero/hashed-confidential-docs@^0.1.8":
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.1.8.tgz#647d2f2d6bab4fcfde9c020959e8c620ba809edf"
@@ -3447,6 +3426,27 @@
     mime-types "^2.1.35"
     sha.js "^2.4.11"
     uint8arrays "^3.0.0"
+
+"@smontero/hashed-confidential-docs@^0.2.20":
+  version "0.2.20"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.20.tgz#8ec98938010e39c5ed3f1241044fb30f91d697c4"
+  integrity sha512-gt7vxseFRBFcqUqsF31ZTaVT3djweU/jqx6qMxH+u2Cw7YRluHmZtwaL6LPQWCzz0u/dG0vjPU39Mz6PKmhQcw==
+  dependencies:
+    "@polkadot/api" "^8.1.1"
+    "@polkadot/extension-dapp" "^0.43.1"
+    "@smontero/generated-key-cipher-providers" "0.0.6"
+    "@smontero/hashed-crypto" "^0.0.8"
+    "@smontero/jwt" "^0.0.2"
+    bip32 "^3.1.0"
+    bip39 "^3.0.4"
+    bitcoinjs-lib "^6.1.0"
+    ipfs-http-client "^55.0.0"
+    it-all "^1.0.6"
+    mime-types "^2.1.35"
+    sha.js "^2.4.11"
+    tiny-secp256k1 "^2.2.1"
+    uint8arrays "^3.0.0"
+    xpub-converter "^1.0.2"
 
 "@smontero/hashed-crypto@0.0.8", "@smontero/hashed-crypto@^0.0.8":
   version "0.0.8"
@@ -6633,7 +6633,7 @@ bitcoinjs-lib@^6.0.1:
     varuint-bitcoin "^1.1.2"
     wif "^2.0.1"
 
-bitcoinjs-lib@^6.0.2:
+bitcoinjs-lib@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.0.tgz#2e3123d63eab5e8e752fd7e2f237314f35ed738f"
   integrity sha512-eupi1FBTJmPuAZdChnzTXLv2HBqFW2AICpzXZQLniP0V9FWWeeUQSMKES6sP8isy/xO0ijDexbgkdEyFVrsuJw==

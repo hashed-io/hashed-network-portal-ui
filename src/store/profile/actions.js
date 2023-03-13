@@ -1,6 +1,7 @@
 export const getXpub = async function ({ commit, state }) {
   try {
     const loggedUser = state.polkadotAddress
+    // if (!loggedUser) return
     const xpubId = await this.$nbvStorageApi.getXpubByUser(loggedUser)
     if (xpubId && xpubId.value) {
       const xpub = await this.$nbvStorageApi.getXpubById(xpubId.value)

@@ -71,7 +71,7 @@ jobs:
       - name: Deploy Chromatic
         uses: chromaui/action-next@v1
         env:
-          APP_NAME: 'Hashed Portal Client'
+          APP_NAME: 'Hashed Club - Members Only'
           WSS: 'wss://n1.hashed.systems'
           BDK_SERVICES_URL: 'https://bdk.hashed.systems'
         with:
