@@ -195,7 +195,6 @@ export default {
       }
       let flag = true
       data.fields.forEach(field => {
-        console.log({ field })
         if (!field.cid) flag = false
       })
       if (flag) {

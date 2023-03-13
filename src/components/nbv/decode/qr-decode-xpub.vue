@@ -57,7 +57,6 @@ export default {
             console.error(e)
           }
         }
-        // console.log('response ref', permissions, this.$refs.qrReader.camera)
       }
     }
   },

@@ -133,7 +133,6 @@ export default {
   },
   watch: {
     isShowingInBTC (v) {
-      // console.log('isShowingInBTC', v)
       this.changeAmountTo()
     }
   },

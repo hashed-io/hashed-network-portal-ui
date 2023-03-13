@@ -54,7 +54,6 @@ export const usePSBT = () => {
   }
 
   function syncData (proposal) {
-    // console.log('proposal syncData', proposal)
     data.vaultId = proposal.vaultId
     data.proposalId = proposal.proposalId
     data.toAddress = proposal.toAddress

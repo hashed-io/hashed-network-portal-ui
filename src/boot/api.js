@@ -44,7 +44,6 @@ export default async ({ app, store }) => {
     showGlobalLoading({
       message: 'Connecting with Hashed Private Server'
     })
-    // console.log('api', api)
     try {
       const hashedPrivateApi = new HashedPrivateApi({
         ipfsURL: process.env.IPFS_URL,

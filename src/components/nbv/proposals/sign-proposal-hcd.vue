@@ -68,11 +68,9 @@ const dispatchStep = () => {
     const next = stepper.value.next
 
     if (step.value === steps.value.signPsbt) {
-      console.log('step 1', step.value)
       emits('onSignPsbt', { next, psbt: psbt.value })
     } else if (step.value === steps.value.uploadPsbt) {
       emits('onSavePsbt', { next, psbt: psbt.value })
-      console.log('step 2', step.value)
     }
   } catch (e) {
     console.error(e)

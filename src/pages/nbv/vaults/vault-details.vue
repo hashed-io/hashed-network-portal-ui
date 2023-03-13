@@ -287,7 +287,6 @@ export default {
       }
     },
     syncData (vault) {
-      // console.log('vault syncData', vault)
       this.vaultId = vault.vaultId
       this.owner = vault.owner
       this.description = vault?.description

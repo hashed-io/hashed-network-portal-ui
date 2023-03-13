@@ -3,8 +3,6 @@ export const hashedLogin = async function ({ commit, dispatch }, { userAddress, 
   try {
     const isLoggedIn = await this.$hashedPrivateApi.isLoggedIn()
     const to = returnTo || { name: 'wallet' }
-    // console.log('to', to)
-    // console.log('store', this)
     if (isLoggedIn) {
       await dispatch('isHoldingHash', { address: userAddress })
       commit('setIsHashedLoggedIn', isLoggedIn)
@@ -47,7 +45,6 @@ export const isHoldingHash = async function ({ dispatch }, { address }) {
 
 export const hashedAutoLogin = async function ({ commit, dispatch }, { returnTo }) {
   try {
-    // console.log('hashedAutoLogin')
     if (localStorage.getItem('autoLoginAccount')) {
       await dispatch('hashedLogin', { returnTo, userAddress: localStorage.getItem('autoLoginAccount') })
     }

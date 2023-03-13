@@ -323,7 +323,6 @@ export default {
         ? { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.recipient, rootState: this.state, file: this.fileHCD } }
         : { publicData: { ...formObj, typeCredit: this.typeCredit }, toEncrypt: { ...this.transferorInfo, rootState: this.state, file: this.fileHCD } }
 
-      console.log({ form })
       if (!this.fileHCD) {
         this.showNotification({ message: 'You need to upload the file to Confidential Docs', color: 'negative' })
         return

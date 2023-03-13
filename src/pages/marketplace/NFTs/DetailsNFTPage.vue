@@ -123,11 +123,9 @@ export default {
       try {
         if (isHCD) {
           response = await this.$store.$hcd.viewSharedDataByCID(cid)
-          console.log({ response })
         }
       } catch (error) {
         response = await this.$store.$hcd.viewOwnedDataByCID(cid)
-        console.log({ response })
       } finally {
         if (response) {
           const blob = new Blob([response.payload], { type: response.payload.type })
