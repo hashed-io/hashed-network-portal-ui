@@ -1,4 +1,163 @@
-<template lang="pug">
+<template lang='pug'>
 #coinstrBlockly
     p This is an encapsulation for blockly
+    #blocklyCointainer(style='height: 480px width: 600px')
 </template>
+
+<script setup>
+import { onMounted, onUpdated } from 'vue'
+import Blockly from 'blockly'
+
+const toolboxExample = {
+  kind: 'flyoutToolbox',
+  contents: [
+    {
+      kind: 'block',
+      type: 'controls_if'
+    },
+    {
+      kind: 'block',
+      type: 'controls_repeat_ext'
+    },
+    {
+      kind: 'block',
+      type: 'logic_compare'
+    },
+    {
+      kind: 'block',
+      type: 'math_number'
+    },
+    {
+      kind: 'block',
+      type: 'math_arithmetic'
+    },
+    {
+      kind: 'block',
+      type: 'text'
+    },
+    {
+      kind: 'block',
+      type: 'text_print'
+    }
+  ]
+}
+
+const toolbox = {
+  kind: 'categoryToolbox',
+  contents: [
+    {
+      kind: 'category',
+      name: 'Control Flow',
+      contents: [
+        {
+          kind: 'block',
+          type: 'custom_and'
+        },
+        {
+          kind: 'block',
+          type: 'custom_or'
+        },
+        {
+          kind: 'block',
+          type: 'custom_thresh'
+        }
+      ]
+    },
+    {
+      kind: 'category',
+      name: 'Leaves',
+      contents: [
+
+      ]
+    },
+    {
+      kind: 'category',
+      name: 'Keys',
+      contents: [
+        {
+          kind: 'block',
+          type: 'logic_boolean'
+        }
+      ]
+    }
+  ]
+}
+
+onMounted(() => {
+  loadBlockly()
+})
+
+onUpdated(() => {
+  loadBlockly()
+})
+
+const loadBlockly = () => {
+  Blockly.Blocks.text.newQuote_ = function () {
+    return this.SINGLE_QUOTE ? Blockly.Msg.TEXT_APPEND_VARIABLE : Blockly.Msg.TEXT_APPEND_TEXT
+  }
+  Blockly.Blocks.custom_and = {
+    init: function () {
+      this.setColour(230)
+      this.appendStatementInput('A')
+        .setCheck('Policy')
+      this.appendDummyInput()
+        .appendField('AND')
+      this.appendStatementInput('B')
+        .setCheck('Policy')
+      this.setInputsInline(false)
+      this.setTooltip('Requires both sub-policies to be satisfied')
+    }
+  }
+
+  Blockly.Blocks.custom_or = {
+    init: function () {
+      this.setColour(230)
+      this.appendDummyInput()
+        .appendField('Weight')
+        .appendField(new Blockly.FieldNumber(1, 0, Infinity, 1), 'A_weight')
+        .appendField(this.newQuote_())
+        .appendField(new Blockly.FieldLabelSerializable(' '), 'SPACE')
+      this.appendStatementInput('A')
+        .setCheck('Policy')
+      this.appendDummyInput()
+        .appendField('OR')
+      this.appendDummyInput()
+        .appendField('Weight')
+        .appendField(new Blockly.FieldNumber(1, 0, Infinity, 1), 'B_weight')
+        .appendField(this.newQuote_())
+        .appendField(new Blockly.FieldLabelSerializable(' '), 'SPACE')
+      this.appendStatementInput('B')
+        .setCheck('Policy')
+      this.setInputsInline(false)
+      this.setTooltip('Requires either one of the two sub-policies to be satisfied. Weights can be used to indicate the relative probability of each sub-policy')
+    },
+    newQuote_: Blockly.Blocks.text.newQuote_
+  }
+
+  Blockly.Blocks.custom_thresh = {
+    init: function () {
+      this.setColour(230)
+      this.appendDummyInput()
+        .appendField('Threshold')
+        .appendField(new Blockly.FieldNumber(1, 1, Infinity, 1), 'Threshold')
+        .appendField(this.newQuote_())
+        .appendField(new Blockly.FieldLabelSerializable(' '), 'SPACE')
+      this.appendStatementInput('Statements')
+        .setCheck('Policy')
+      this.setInputsInline(false)
+      this.setTooltip("Creates a threshold element (m-of-n), where the 'm' field is manually set and 'n' is implied by the number of sub-policies added")
+    },
+    newQuote_: Blockly.Blocks.text.newQuote_
+  }
+
+  Blockly.inject('blocklyCointainer', { toolbox })
+  console.warn('Blockly was injected')
+}
+// -
+</script>
+
+<style lang="stylus" scoped>
+#blocklyCointainer
+  width: 50vw
+  height: 80vh
+</style>
