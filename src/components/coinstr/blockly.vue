@@ -79,7 +79,15 @@ const toolbox = {
       contents: [
         {
           kind: 'block',
-          type: 'logic_boolean'
+          type: 'my_key'
+        },
+        {
+          kind: 'block',
+          type: 'key'
+        },
+        {
+          kind: 'block',
+          type: 'my_block'
         }
       ]
     }
@@ -157,8 +165,6 @@ const loadBlockly = () => {
     newQuote_: Blockly.Blocks.text.newQuote_
   }
 
-  Blockly.Msg.START_HAT = 'start'
-
   Blockly.Blocks.custom_begin = {
     init: function () {
       this.singleton = true
@@ -180,6 +186,74 @@ const loadBlockly = () => {
     newQuote_: Blockly.Blocks.text.newQuote_
   }
 
+  Blockly.Blocks.my_key = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('My Key')
+      this.setOutput(true, 'KeyType')
+      this.setColour(22)
+      this.setTooltip('My private key')
+      this.setInputsInline(false)
+    }
+  }
+
+  Blockly.Blocks.key = {
+    init: function () {
+      this.appendValueInput('Key')
+        .setCheck('Number')
+        .appendField('%1')
+      this.setOutput(true, 'KeyType')
+      this.setColour(65)
+      this.setTooltip("Somebody else's public key")
+      this.setInputsInline(false)
+      this.setPreviousStatement(null, null)
+      this.setNextStatement(null, null)
+      this.extensions = ['dynamic_options']
+      this.updateShape_('Nuevo valors')
+    },
+    // Define la función para generar las opciones dinámicas
+    updateShape_: function (newValue) {
+      // Elimina el valor de entrada actual
+      this.removeInput('Key')
+
+      // Crea un nuevo valor de entrada con el nuevo valor
+      this.appendValueInput('Key')
+        .setCheck('Number')
+        .appendField('%1')
+        .appendField(newValue)
+
+      // Actualiza la forma del bloque
+      this.initSvg()
+      this.render()
+    }
+  }
+
+  Blockly.Blocks.my_block = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Cosigner:')
+        .appendField(new Blockly.FieldDropdown(this.generateOptions), 'Cosigner')
+      this.setOutput(true, 'KeyType')
+      this.setColour(230)
+      this.setTooltip('')
+      this.setHelpUrl('')
+      this.extensions = ['dynamic_options']
+    },
+    generateOptions: function () {
+      const options = [
+        ['Chema', 'pk1'],
+        ['Chuy', 'pk2']
+      ]
+      //   var now = Date.now()
+      //   for (var i = 0; i < 7; i++) {
+      //     var dateString = String(new Date(now)).substring(0, 3)
+      //     options.push([dateString, dateString.toUpperCase()])
+      //     now += 24 * 60 * 60 * 1000
+      //   }
+      return options
+    }
+  }
+
   const ws = Blockly.inject('blocklyCointainer', { toolbox })
 
   //   console.log('custom_begin', Blockly.Blocks.custom_begin)
@@ -196,7 +270,7 @@ const loadBlockly = () => {
 
   const workspace2 = Blockly.getMainWorkspace()
   const block = workspace2.getAllBlocks() // Obtener el bloque por su ID
-  block[0].moveBy(50, 0)
+  block[0].moveBy(250, 0)
 }
 // -
 </script>
