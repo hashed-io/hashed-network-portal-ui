@@ -228,7 +228,6 @@ const getFruniqueData = async () => {
       classId: instanceId,
       withAttributes: true
     })
-    console.log({ response, instanceId })
     let flag = response?.parent !== null || response?.parent?.isHierarchical
     const parentAttributes = []
     let { collectionId, parentId } = response?.parent || {}

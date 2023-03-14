@@ -10,6 +10,25 @@ const routes = [
     component: () => import('pages/Login.vue')
   },
   {
+    // COINSTR
+    name: 'coinstr',
+    path: '/coinstr',
+    component: () => import('layouts/CoinstrLayout.vue'),
+    meta: {
+      app: 'coinstr'
+    },
+    children: [
+      {
+        name: 'coinstrPolicies',
+        path: '',
+        component: () => import('pages/coinstr/PoliciesScreen.vue'),
+        meta: {
+          app: 'coinstr'
+        }
+      }
+    ]
+  },
+  {
     // Portal Layout
     path: '/',
     component: () => import('layouts/PortalLayout.vue'),

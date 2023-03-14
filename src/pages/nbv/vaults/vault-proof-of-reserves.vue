@@ -139,7 +139,6 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   unsub()
-  console.log('unsub executed')
   // if (unsub) unsub()
 })
 
@@ -160,7 +159,6 @@ async function subscribeProofOfReserves () {
   try {
     showLoading()
     unsub = await getProofOfReserves({ vaultId: route.query.vault }, updateData)
-    console.log('unsub', unsub)
   } catch (e) {
     handlerError(e)
   } finally {
@@ -192,7 +190,6 @@ async function onCreateProofOfReserves () {
       message
     }
     const response = await createProofOfReserves(payload)
-    console.log('createProofOfReserves', response)
     showNotification({ message: $t('pages.nbv.proposals.psbtSavedSuccessfully') })
   } catch (e) {
     handlerError(e)
@@ -215,7 +212,6 @@ async function onSignPsbt ({ psbt, next }) {
 async function savePsbt (signedPSBT) {
   try {
     showLoading()
-    console.log('savePSBT', signedPSBT)
     const descriptors = {
       descriptor: data.vault.descriptors.outputDescriptor,
       change_descriptor: data.vault.descriptors.changeDescriptor

@@ -27,8 +27,8 @@ export default route(function ({ store }) {
   })
 
   Router.beforeEach(async (to, from, next) => {
-    // console.log('params', { to, from })
-    if (to.name === 'participantsRewards') {
+    const app = to.meta.app
+    if (to.name === 'participantsRewards' || app === 'coinstr') {
       next()
       return
     }
@@ -37,7 +37,6 @@ export default route(function ({ store }) {
       return
     }
     const isAuthenticated = store.getters['profile/isLogged']
-    // console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
       next({
@@ -49,12 +48,10 @@ export default route(function ({ store }) {
       })
       return
     }
-    // console.log('beforeEach', to)
     if (to.name === 'root' || to.name === 'home') {
       next({ name: 'manageVaults' })
     } else {
       // Validation by Apps
-      const app = to.meta.app
       const loginType = store.getters['profile/loginType']
 
       if (app === 'nbv' && store.getters['profile/xpub'] === undefined) {

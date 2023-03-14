@@ -41,7 +41,6 @@ class BasePolkadot {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exQuery (queryName, params, subTrigger) {
-    // console.log('polkadot', this.polkadot._api)
     return this.polkadot._api.query[this.palletName][queryName](...params, subTrigger)
   }
 
@@ -66,7 +65,6 @@ class BasePolkadot {
    * @returns Query response or unsubscribe function from polkadot api
    */
   async exEntriesQuery (queryName, params, pagination, subTrigger) {
-    console.log('exEntriesQuery params', { queryName, params, pagination, subTrigger })
     if (!params) {
       return this.polkadot._api.query[this.palletName][queryName].entries()
     }
@@ -95,24 +93,22 @@ class BasePolkadot {
       type: 'listening'
     })
     const { events = [], status } = e
-    console.log('events', events)
-    console.log('status', status)
+
     if (status.isFinalized || status.isInBlock) {
       // console.log(`Transaction included at blockHash ${status.asFinalized}`)
 
       // Loop through Vec<EventRecord> to display all events
-      events.forEach(({ phase, event: { data, method, section } }) => {
-        console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
-      })
+      // events.forEach(({ phase, event: { data, method, section } }) => {
+      //   console.log(`\t' ${phase}: ${section}.${method}:: ${data}`)
+      // })
 
       events.filter(({ event: { section } }) => section === 'system').forEach(({ event: { method, data } }) => {
         if (method === 'ExtrinsicFailed') {
           // txFailedCb(result);
-          console.log('ExtrinsicFailed', data)
+          console.error('ExtrinsicFailed', data)
           const [dispatchError] = data
           let errorInfo
 
-          console.log('ExtrinsicFailed error', data)
           // decode the error
           if (dispatchError.isModule) {
             const decoded = data.registry.findMetaError(dispatchError.asModule)
@@ -122,17 +118,12 @@ class BasePolkadot {
             errorInfo = dispatchError.toString()
           }
 
-          // console.error('errorInfo', errorInfo)
-          console.log('unsub', unsub)
           unsub()
           reject(`Extrinsic failed: ${errorInfo}`)
           // const mod = data[0].asModule
         } else if (method === 'ExtrinsicSuccess') {
-          console.log('ExtrinsicSuccess', data)
-          console.log('unsub', unsub)
           unsub()
           resolve(data)
-          // txSuccessCb(result);
         }
       })
     }
@@ -217,7 +208,6 @@ class BasePolkadot {
   mapEntries (entries) {
     if (!entries.isEmpty) {
       return entries.map(e => {
-        // console.log('IDDDD', e[0], e[0].toHuman())
         return {
           key: e[0],
           id: e[0].toHuman(),

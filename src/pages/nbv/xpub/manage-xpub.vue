@@ -157,7 +157,6 @@ export default {
       try {
         // this.showLoading()
         const xpub = await this.$store.$hcd.getFullXpub()
-        // console.log('getHCDXpub', xpub)
         // this.userXpub = xpub
         return xpub
       } catch (e) {
@@ -172,14 +171,12 @@ export default {
       this.getXpub()
     },
     async setXpub (payload) {
-      console.log('setXpub', payload)
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
         await this.$store.$nbvStorageApi.submitXPUB({
           user: this.polkadotAddress,
           XPUB: payload.XPUB
         })
-        // console.log('setXpub', response)
         this.showNotification({ message: this.$t('pages.nbv.xpub.yourXpubWasAdded') })
         this.getXpub()
         // this.showLoading({ message: this.$t('general.waitingSub') })
@@ -192,7 +189,6 @@ export default {
     async removeXpub () {
       try {
         this.showLoading({ message: this.$t('general.waitingWeb3') })
-        console.log('removeXpub', this.polkadotAddress)
         await this.$store.$nbvStorageApi.removeXpub()
         this.showNotification({ message: this.$t('pages.nbv.xpub.yourXpubWasRemoved') })
         // this.showLoading({ message: this.$t('general.waitingSub') })

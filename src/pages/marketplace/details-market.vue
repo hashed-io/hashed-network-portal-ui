@@ -173,7 +173,6 @@ export default {
     async onSubmitApplyForm ({ fields: formFields }) {
       try {
         this.showLoading()
-        console.log({ formFields })
         const fields = formFields.map(({ label, cid }) => {
           return [label, cid]
         })

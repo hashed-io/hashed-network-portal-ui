@@ -40,7 +40,6 @@ export const useProofOfReserves = () => {
       descriptors,
       message
     })
-    console.log('psbt', psbt)
     return $store.$nbvStorageApi.createProofOfReserves({ vaultId, message, psbt })
   }
 
@@ -79,7 +78,6 @@ export const useProofOfReserves = () => {
   }
 
   async function signPsbt ({ psbt, next }) {
-    console.log('signPsbt', { psbt, next })
     const signedPSBT = await $store.$hcd.signPSBT({ psbt })
     if (next) next()
     return signedPSBT
