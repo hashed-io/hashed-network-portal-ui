@@ -27,7 +27,8 @@ export default route(function ({ store }) {
   })
 
   Router.beforeEach(async (to, from, next) => {
-    if (to.name === 'participantsRewards') {
+    const app = to.meta.app
+    if (to.name === 'participantsRewards' || app === 'coinstr') {
       next()
       return
     }
@@ -51,7 +52,6 @@ export default route(function ({ store }) {
       next({ name: 'manageVaults' })
     } else {
       // Validation by Apps
-      const app = to.meta.app
       const loginType = store.getters['profile/loginType']
 
       if (app === 'nbv' && store.getters['profile/xpub'] === undefined) {

@@ -30,6 +30,7 @@
     "@storybook/jest": "^0.0.10",
     "@storybook/testing-library": "^0.0.13",
     "axios": "^0.21.1",
+    "blockly": "^9.2.1",
     "chart.js": "^4.2.1",
     "core-js": "^3.6.5",
     "eslint-loader": "^4.0.2",
