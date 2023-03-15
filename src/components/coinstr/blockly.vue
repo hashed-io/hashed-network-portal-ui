@@ -96,16 +96,15 @@ const readBlockly = () => {
     children: beginBlock.getChildren()
   }
   const tree = readTree(beginBlock)
-  console.log('beginBlock', beginBlock)
-  console.log('children', children)
-  console.log('tree', tree)
   console.log('============')
+  console.log('tree', tree)
   printTree(tree)
   console.log('============')
   return beginBlock
 }
 
 function readTree (beginBlock) {
+  // temporalBlocksInfo = []
   const childrenList = {
     blockId: beginBlock.id,
     blockType: beginBlock.type,
@@ -116,8 +115,8 @@ function readTree (beginBlock) {
 }
 
 function printTree (node, indentLevel = 0) {
-  const indent = '=='.repeat(indentLevel)
-  console.log(`${indent}${node.blockType}: Id: ${node.blockId} | parentId: ${node.parentId} | nextBlock: ${node.nextBlock?.id}`)
+  const indent = '=' + '=='.repeat(indentLevel)
+  console.log(`${indent}${node.blockType}: Id: ${node.blockId} | parentId: ${node.parentId} | nextBlock: ${node.nextBlockId} | parentNext: ${node.parentNextBlockId}`)
   if (node.children.length > 0) {
     node.children.forEach(child => {
       printTree(child, indentLevel + 1)
@@ -125,23 +124,64 @@ function printTree (node, indentLevel = 0) {
   }
 }
 
-function readChildren (block) {
+const temporalBlocksInfo = []
+
+function readChildren (block, parentBlock) {
   const children = block.getChildren()
   const childrenList = []
   if (children) {
     children.forEach(child => {
+      const parentBlockId = child.parentBlock_?.id
+      // const workspace = Blockly.getMainWorkspace()
+      // const parentBlock = workspace.getBlockById(parentBlockId)
+      const parentNextBlockId = parentBlock?.nextBlockId
+      // console.log('prentBlock', { parentBlockId, parentBlock })
       const childData = {
         blockId: child.id,
-        parentId: child.parentBlock_?.id,
+        parentId: parentBlockId,
         blockType: child.type,
-        nextBlock: child.getNextBlock(),
+        nextBlockId: child.getNextBlock()?.id,
         value: child.getFieldValue('VALUE'),
-        children: readChildren(child)
+        parentNextBlockId,
+        children: []
       }
-      childrenList.push(childData)
+      childData.children = childData.children.concat(readChildren(child, childData))
+      const workspace = Blockly.getMainWorkspace()
+      if (childData.nextBlockId !== undefined) {
+        // debugger
+        const nextBlock = workspace.getBlockById(childData.nextBlockId)
+        const nextData = {
+          blockId: nextBlock.id,
+          parentId: parentBlockId,
+          blockType: nextBlock.type,
+          nextBlockId: nextBlock.getNextBlock()?.id,
+          value: nextBlock.getFieldValue('VALUE'),
+          parentNextBlockId,
+          children: []
+        }
+        // debugger
+        nextData.children = readChildren(nextBlock, parentBlock)
+        // const newChildren = parentBlock.children.concat([nextData])
+        // parentBlock.children = newChildren
+        childrenList.push(nextData)
+        // childData.children = readChildren(nextBlock, parentBlock)
+      }
+      // if (block.type === 'pk') debugger
+      if (childData.blockId !== parentNextBlockId) {
+        childrenList.push(childData)
+      }
     })
   }
   return childrenList
+}
+
+function findBlock (node, blockId) {
+  if (node.children?.length > 0) {
+    node.children.forEach(child => {
+      if (node.blockId === blockId) return node
+      findBlock(node, blockId)
+    })
+  }
 }
 
 const loadBlockly = () => {
