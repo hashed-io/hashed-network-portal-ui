@@ -67,10 +67,18 @@ const toolbox = {
       kind: 'category',
       name: 'Leaves',
       contents: [
-        // {
-        //   kind: 'block',
-        //   type: 'custom_begin'
-        // }
+        {
+          kind: 'block',
+          type: 'pk'
+        },
+        {
+          kind: 'block',
+          type: 'older'
+        },
+        {
+          kind: 'block',
+          type: 'after'
+        }
       ]
     },
     {
@@ -84,10 +92,6 @@ const toolbox = {
         {
           kind: 'block',
           type: 'key'
-        },
-        {
-          kind: 'block',
-          type: 'my_block'
         }
       ]
     }
@@ -117,6 +121,7 @@ const loadBlockly = () => {
         .setCheck('Policy')
       this.setInputsInline(false)
       this.setPreviousStatement(true, 'Policy')
+      this.setNextStatement(true, 'Policy')
       this.setTooltip('Requires both sub-policies to be satisfied')
     }
   }
@@ -159,6 +164,7 @@ const loadBlockly = () => {
       this.appendStatementInput('Statements')
         .setCheck('Policy')
       this.setPreviousStatement(true, 'Policy')
+      this.setNextStatement(true, 'Policy')
       this.setInputsInline(false)
       this.setTooltip("Creates a threshold element (m-of-n), where the 'm' field is manually set and 'n' is implied by the number of sub-policies added")
     },
@@ -190,7 +196,7 @@ const loadBlockly = () => {
     init: function () {
       this.appendDummyInput()
         .appendField('My Key')
-      this.setOutput(true, 'KeyType')
+      this.setOutput(true, 'Key')
       this.setColour(22)
       this.setTooltip('My private key')
       this.setInputsInline(false)
@@ -199,42 +205,13 @@ const loadBlockly = () => {
 
   Blockly.Blocks.key = {
     init: function () {
-      this.appendValueInput('Key')
-        .setCheck('Number')
-        .appendField('%1')
-      this.setOutput(true, 'KeyType')
-      this.setColour(65)
-      this.setTooltip("Somebody else's public key")
-      this.setInputsInline(false)
-      this.setPreviousStatement(null, null)
-      this.setNextStatement(null, null)
-      this.extensions = ['dynamic_options']
-      this.updateShape_('Nuevo valors')
-    },
-    // Define la función para generar las opciones dinámicas
-    updateShape_: function (newValue) {
-      // Elimina el valor de entrada actual
-      this.removeInput('Key')
-
-      // Crea un nuevo valor de entrada con el nuevo valor
-      this.appendValueInput('Key')
-        .setCheck('Number')
-        .appendField('%1')
-        .appendField(newValue)
-
-      // Actualiza la forma del bloque
-      this.initSvg()
-      this.render()
-    }
-  }
-
-  Blockly.Blocks.my_block = {
-    init: function () {
       this.appendDummyInput()
         .appendField('Cosigner:')
         .appendField(new Blockly.FieldDropdown(this.generateOptions), 'Cosigner')
-      this.setOutput(true, 'KeyType')
-      this.setColour(230)
+      this.setOutput(true, 'Key')
+      this.setInputsInline(false)
+      this.setNextStatement(false)
+      this.setColour(65)
       this.setTooltip('')
       this.setHelpUrl('')
       this.extensions = ['dynamic_options']
@@ -244,13 +221,49 @@ const loadBlockly = () => {
         ['Chema', 'pk1'],
         ['Chuy', 'pk2']
       ]
-      //   var now = Date.now()
-      //   for (var i = 0; i < 7; i++) {
-      //     var dateString = String(new Date(now)).substring(0, 3)
-      //     options.push([dateString, dateString.toUpperCase()])
-      //     now += 24 * 60 * 60 * 1000
-      //   }
       return options
+    }
+  }
+
+  Blockly.Blocks.pk = {
+    init: function () {
+      this.appendValueInput('Key')
+        .setCheck('Key')
+        .appendField('Key')
+      this.setPreviousStatement(true, 'Policy')
+      this.setNextStatement(true, 'Policy')
+      this.setColour(120)
+      this.setTooltip('Require a signature from a given key to satisfy this fragment')
+      this.setInputsInline(false)
+      this.extensions = ['allow_chain_in_thresh']
+    }
+  }
+
+  Blockly.Blocks.older = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Older')
+        .appendField(new Blockly.FieldNumber(6), 'value')
+      this.setPreviousStatement(true, 'Policy')
+      this.setNextStatement(true, 'Policy')
+      this.setColour(150)
+      this.setTooltip('Add a relative timelock expressed in number of blocks')
+      this.setHelpUrl('')
+      this.extensions = ['allow_chain_in_thresh']
+    }
+  }
+
+  Blockly.Blocks.after = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('After')
+        .appendField(new Blockly.FieldNumber(10000), 'value')
+      this.setPreviousStatement(true, 'Policy')
+      this.setNextStatement(true, 'Policy')
+      this.setColour(150)
+      this.setTooltip('Add a relative timelock expressed in absolute block height')
+      this.setHelpUrl('')
+      this.extensions = ['allow_chain_in_thresh']
     }
   }
 
