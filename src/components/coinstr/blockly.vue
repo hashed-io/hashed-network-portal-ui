@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, defineExpose } from 'vue'
+import { onMounted, onUpdated, defineExpose, ref } from 'vue'
 import * as Blockly from 'blockly'
 
 const toolbox = {
@@ -68,15 +68,80 @@ onMounted(() => {
   loadBlockly()
 })
 
-onUpdated(() => {
-  loadBlockly()
-})
+// onUpdated(() => {
+//   loadBlockly()
+// })
 
 const readBlockly = () => {
   const workspace = Blockly.getMainWorkspace()
-  const [beginBlock] = workspace.getAllBlocks()
+  const allBlocks = workspace.getAllBlocks()
+  // console.log('beginBlock', beginBlock)
+  // allBlocks.forEach((block) => {
+  //   console.log('=====================================')
+  //   console.log('block type:', block.type)
+  //   console.log('block id:', block.id)
+  //   console.log('block input names:', block.inputList.map((input) => input.name))
+  //   console.log('statementInputCount:', block.statementInputCount)
+  //   console.log('statementInputCount2:', block.getFieldValue('Threshold'))
+  //   console.log('block next block:', block.getNextBlock() ? block.getNextBlock().type : null)
+  //   console.log('block previous block:', block.getPreviousBlock() ? block.getPreviousBlock().type : null)
+  //   console.log('block parent block:', block.getParent() ? block.getParent().type : null)
+  //   console.log('block child blocks:', block.getChildren().map((child) => child.type))
+  //   console.log('block', block)
+  // })
+  const beginBlock = allBlocks.find(block => block.type === 'begin')
+  const children = beginBlock.getChildren()
+  const policy = {
+    blockType: beginBlock.type,
+    children: beginBlock.getChildren()
+  }
+  const tree = readTree(beginBlock)
   console.log('beginBlock', beginBlock)
+  console.log('children', children)
+  console.log('tree', tree)
+  console.log('============')
+  printTree(tree)
+  console.log('============')
   return beginBlock
+}
+
+function readTree (beginBlock) {
+  const childrenList = {
+    blockId: beginBlock.id,
+    blockType: beginBlock.type,
+    children: readChildren(beginBlock)
+  }
+
+  return childrenList
+}
+
+function printTree (node, indentLevel = 0) {
+  const indent = '=='.repeat(indentLevel)
+  console.log(`${indent}${node.blockType}: Id: ${node.blockId} | parentId: ${node.parentId} | nextBlock: ${node.nextBlock?.id}`)
+  if (node.children.length > 0) {
+    node.children.forEach(child => {
+      printTree(child, indentLevel + 1)
+    })
+  }
+}
+
+function readChildren (block) {
+  const children = block.getChildren()
+  const childrenList = []
+  if (children) {
+    children.forEach(child => {
+      const childData = {
+        blockId: child.id,
+        parentId: child.parentBlock_?.id,
+        blockType: child.type,
+        nextBlock: child.getNextBlock(),
+        value: child.getFieldValue('VALUE'),
+        children: readChildren(child)
+      }
+      childrenList.push(childData)
+    })
+  }
+  return childrenList
 }
 
 const loadBlockly = () => {
