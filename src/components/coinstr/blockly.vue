@@ -1,46 +1,12 @@
 <template lang='pug'>
 #coinstrBlockly
     p This is an encapsulation for blockly
-    #blocklyCointainer(style='height: 480px width: 600px')
+    #blocklyContainer(style='height: 480px width: 600px')
 </template>
 
 <script setup>
-import { onMounted, onUpdated } from 'vue'
-import Blockly from 'blockly'
-
-const toolboxExample = {
-  kind: 'flyoutToolbox',
-  contents: [
-    {
-      kind: 'block',
-      type: 'controls_if'
-    },
-    {
-      kind: 'block',
-      type: 'controls_repeat_ext'
-    },
-    {
-      kind: 'block',
-      type: 'logic_compare'
-    },
-    {
-      kind: 'block',
-      type: 'math_number'
-    },
-    {
-      kind: 'block',
-      type: 'math_arithmetic'
-    },
-    {
-      kind: 'block',
-      type: 'text'
-    },
-    {
-      kind: 'block',
-      type: 'text_print'
-    }
-  ]
-}
+import { onMounted, onUpdated, defineExpose } from 'vue'
+import * as Blockly from 'blockly'
 
 const toolbox = {
   kind: 'categoryToolbox',
@@ -51,15 +17,15 @@ const toolbox = {
       contents: [
         {
           kind: 'block',
-          type: 'custom_and'
+          type: 'and'
         },
         {
           kind: 'block',
-          type: 'custom_or'
+          type: 'or'
         },
         {
           kind: 'block',
-          type: 'custom_thresh'
+          type: 'tresh'
         }
       ]
     },
@@ -106,11 +72,20 @@ onUpdated(() => {
   loadBlockly()
 })
 
+const readBlockly = () => {
+  const workspace = Blockly.getMainWorkspace()
+  const [beginBlock] = workspace.getAllBlocks()
+  console.log('beginBlock', beginBlock)
+  return beginBlock
+}
+
 const loadBlockly = () => {
   Blockly.Blocks.text.newQuote_ = function () {
     return this.SINGLE_QUOTE ? Blockly.Msg.TEXT_APPEND_VARIABLE : Blockly.Msg.TEXT_APPEND_TEXT
   }
-  Blockly.Blocks.custom_and = {
+
+  // Set AND custom block
+  Blockly.Blocks.and = {
     init: function () {
       this.setColour(230)
       this.appendStatementInput('A')
@@ -126,7 +101,8 @@ const loadBlockly = () => {
     }
   }
 
-  Blockly.Blocks.custom_or = {
+  // Set OR custom block
+  Blockly.Blocks.or = {
     init: function () {
       this.setColour(230)
       this.appendDummyInput()
@@ -153,7 +129,8 @@ const loadBlockly = () => {
     newQuote_: Blockly.Blocks.text.newQuote_
   }
 
-  Blockly.Blocks.custom_thresh = {
+  // Set TRESH custom block
+  Blockly.Blocks.tresh = {
     init: function () {
       this.setColour(230)
       this.appendDummyInput()
@@ -171,7 +148,8 @@ const loadBlockly = () => {
     newQuote_: Blockly.Blocks.text.newQuote_
   }
 
-  Blockly.Blocks.custom_begin = {
+  // Set BEGIN custom block
+  Blockly.Blocks.begin = {
     init: function () {
       this.singleton = true
       this.startHat = true
@@ -182,16 +160,17 @@ const loadBlockly = () => {
         .appendField(this.newQuote_())
         .appendField(new Blockly.FieldLabelSerializable(' '), 'SPACE')
       this.setDeletable(false)
+      this.setEditable(false)
       this.setPreviousStatement(false)
       this.setNextStatement(true, 'Policy')
       this.setInputsInline(false)
       this.setTooltip('Sets the beginning of the policy')
-      console.log('block', this)
     },
     startHat: true,
     newQuote_: Blockly.Blocks.text.newQuote_
   }
 
+  // Set MY_KEY custom block
   Blockly.Blocks.my_key = {
     init: function () {
       this.appendDummyInput()
@@ -203,6 +182,7 @@ const loadBlockly = () => {
     }
   }
 
+  // Set KEY custom block
   Blockly.Blocks.key = {
     init: function () {
       this.appendDummyInput()
@@ -225,6 +205,7 @@ const loadBlockly = () => {
     }
   }
 
+  // Set PK custom block
   Blockly.Blocks.pk = {
     init: function () {
       this.appendValueInput('Key')
@@ -239,6 +220,7 @@ const loadBlockly = () => {
     }
   }
 
+  // Set OLDER custom block
   Blockly.Blocks.older = {
     init: function () {
       this.appendDummyInput()
@@ -253,6 +235,7 @@ const loadBlockly = () => {
     }
   }
 
+  // Set AFTER custom block
   Blockly.Blocks.after = {
     init: function () {
       this.appendDummyInput()
@@ -267,29 +250,26 @@ const loadBlockly = () => {
     }
   }
 
-  const ws = Blockly.inject('blocklyCointainer', { toolbox })
+  // Inject blockly settings on DOM
+  const ws = Blockly.inject('blocklyContainer', { toolbox })
 
-  //   console.log('custom_begin', Blockly.Blocks.custom_begin)
-  //   console.log('ws', ws)
-  //   console.warn('Blockly was injected', Blockly)
-
-  // Crear el bloque custom_begin en formato XML
-  const xmlText = '<xml><block type="custom_begin"></block></xml>'
+  // Set in workspace begin block
+  const xmlText = '<xml><block type="begin"></block></xml>'
   const xml = Blockly.Xml.textToDom(xmlText)
-
-  // Agregar el bloque al área de trabajo en la posición (0, 0)
   const workspace = Blockly.getMainWorkspace()
   Blockly.Xml.appendDomToWorkspace(xml, workspace)
-
-  const workspace2 = Blockly.getMainWorkspace()
-  const block = workspace2.getAllBlocks() // Obtener el bloque por su ID
+  const block = workspace.getAllBlocks()
   block[0].moveBy(250, 0)
 }
+
+defineExpose({
+  readBlockly
+})
 // -
 </script>
 
 <style lang="stylus" scoped>
-#blocklyCointainer
+#blocklyContainer
   width: 50vw
   height: 80vh
 </style>
