@@ -5,6 +5,7 @@ import RedeemStatus from './RedeemStatus'
 import Roles from './Roles'
 import RedeemArgs from './RedeemArgs'
 import BalanceUnits from './BalanceUnits'
+import { EventKind, TagType } from './NostrConsts'
 export {
   OfferStatus,
   ApplicationStatus,
@@ -12,5 +13,7 @@ export {
   RedeemStatus,
   RedeemArgs,
   Roles,
-  BalanceUnits
+  BalanceUnits,
+  EventKind,
+  TagType
 }
