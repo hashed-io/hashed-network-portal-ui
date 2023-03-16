@@ -6,7 +6,15 @@
 
 <script setup>
 import { onMounted, onUpdated, defineExpose, ref } from 'vue'
-import * as Blockly from 'blockly'
+import Blockly from 'blockly'
+// import './thirdParty/blockly_compressed.js'
+// import './thirdParty/javascript_compressed.js'
+// import Blockly from 'blockly/blockly_compressed'
+import { javascriptGenerator } from 'blockly/javascript'
+// import './blockly-ext.js'
+
+Blockly.JavaScript = javascriptGenerator
+console.log('blockly.javascript', Blockly.JavaScript)
 
 const toolbox = {
   kind: 'categoryToolbox',
@@ -25,7 +33,7 @@ const toolbox = {
         },
         {
           kind: 'block',
-          type: 'tresh'
+          type: 'thresh'
         }
       ]
     },
@@ -100,7 +108,8 @@ const readBlockly = () => {
   console.log('tree', tree)
   printTree(tree)
   console.log('============')
-  return beginBlock
+  var code = Blockly.JavaScript.workspaceToCode(workspace)
+  return code
 }
 
 function readTree (beginBlock) {
@@ -124,6 +133,119 @@ function printTree (node, indentLevel = 0) {
   }
 }
 
+// Define code generation
+Blockly.JavaScript.INDENT = ''
+
+Blockly.JavaScript.pk = function (block) {
+  if (!block.getParent()) {
+    return ''
+  }
+
+  let vaulePk = Blockly.JavaScript.valueToCode(block, 'Key', Blockly.JavaScript.ORDER_ATOMIC)
+  if (vaulePk === '') {
+    vaulePk = '()'
+  }
+
+  const code = 'pk' + vaulePk
+  console.log('pk code:', code)
+  return code
+}
+
+Blockly.JavaScript.begin = function (block) {
+  return ''
+}
+
+Blockly.JavaScript.key = function (block) {
+  if (!block.getParent()) {
+    return ['', Blockly.JavaScript.ORDER_NONE]
+  }
+
+  const textKey = block.getFieldValue('Key')
+  const code = textKey
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE]
+}
+
+Blockly.JavaScript.my_key = function (block) {
+  if (!block.getParent()) {
+    return ['', Blockly.JavaScript.ORDER_NONE]
+  }
+
+  // TODO: Change ORDER_NONE to the correct strength.
+  return ['_MY_KEY', Blockly.JavaScript.ORDER_NONE]
+}
+
+Blockly.JavaScript.thresh = function (block) {
+  const numberThreshold = block.getFieldValue('Threshold')
+  let code = 'thresh(' + numberThreshold + ','
+  let child = block.getChildren(true)[0]
+  while (child) {
+    code += Blockly.JavaScript[child.type](child)
+    child = child.getNextBlock()
+    if (child) {
+      code += ','
+    }
+  }
+  code += ')'
+  return code
+}
+
+Blockly.JavaScript.older = function (block) {
+  if (!block.getParent()) {
+    return ''
+  }
+
+  const numberName = block.getFieldValue('value')
+  const code = 'older(' + numberName + ')'
+  return code
+}
+
+Blockly.JavaScript.after = function (block) {
+  if (!block.getParent()) {
+    return ''
+  }
+
+  const numberName = block.getFieldValue('value')
+  // TODO: Assemble JavaScript into code variable.
+  const code = 'after(' + numberName + ')'
+  return code
+}
+
+Blockly.JavaScript.and = function (block) {
+  if (!block.getParent()) {
+    return ''
+  }
+
+  const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
+  const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
+  const code = 'and(' + statementsA + ',' + statementsB + ')'
+  return code
+}
+
+Blockly.JavaScript.or = function (block) {
+  if (!block.getParent()) {
+    return ''
+  }
+
+  let numberAWeight = block.getFieldValue('A_weight')
+  if (numberAWeight === '1') {
+    numberAWeight = ''
+  } else {
+    numberAWeight = numberAWeight + '@'
+  }
+  const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
+  let numberBWeight = block.getFieldValue('B_weight')
+  if (numberBWeight === '1') {
+    numberBWeight = ''
+  } else {
+    numberBWeight = numberBWeight + '@'
+  }
+  const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
+  const code = 'or(' + numberAWeight + statementsA + ',' + numberBWeight + statementsB + ')'
+  return code
+}
+
+// Define other things
 const temporalBlocksInfo = []
 
 function readChildren (block, parentBlock) {
@@ -235,7 +357,7 @@ const loadBlockly = () => {
   }
 
   // Set TRESH custom block
-  Blockly.Blocks.tresh = {
+  Blockly.Blocks.thresh = {
     init: function () {
       this.setColour(230)
       this.appendDummyInput()
@@ -291,8 +413,8 @@ const loadBlockly = () => {
   Blockly.Blocks.key = {
     init: function () {
       this.appendDummyInput()
-        .appendField('Cosigner:')
-        .appendField(new Blockly.FieldDropdown(this.generateOptions), 'Cosigner')
+        .appendField('')
+        .appendField(new Blockly.FieldDropdown(this.generateOptions), 'Key')
       this.setOutput(true, 'Key')
       this.setInputsInline(false)
       this.setNextStatement(false)
@@ -303,8 +425,8 @@ const loadBlockly = () => {
     },
     generateOptions: function () {
       const options = [
-        ['Chema', 'pk1'],
-        ['Chuy', 'pk2']
+        ['Chema', '127e5ccd015578969febb42468f8d0be54c6b39331b7285d88040d5f0ba9606aa4'],
+        ['Chuy', '227e5ccd015578969febb42468f8d0be54c6b39331b7285d88040d5f0ba9606aa4']
       ]
       return options
     }
@@ -357,6 +479,7 @@ const loadBlockly = () => {
 
   // Inject blockly settings on DOM
   const ws = Blockly.inject('blocklyContainer', { toolbox })
+  console.warn('Blockly was injected')
 
   // Set in workspace begin block
   const xmlText = '<xml><block type="begin"></block></xml>'

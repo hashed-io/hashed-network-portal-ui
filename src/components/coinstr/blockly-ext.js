@@ -57,6 +57,7 @@ window.Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn
       this.inputList[0].appendField(dropdown, 'Key')
     });
   
+  // Not needed
   window.BlocklyExt = {};
   window.BlocklyExt.initJs = function(workspace, compiled_cb, dropdown_cb) {
       function myUpdateFunction(event) {
@@ -99,11 +100,12 @@ window.Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn
       beginBlock.initSvg();
       beginBlock.render();
   }
-  window.BlocklyExt.saveBlockly = function(workspace) {
-      BlocklyStorage.backupBlocks_(workspace);
-  }
-  
-  Blockly.JavaScript.INDENT = '';
+  /* eslint-disable */
+  // window.BlocklyExt.saveBlockly = function (workspace) {
+  //     BlocklyStorage.backupBlocks_(workspace);
+  // }
+  // - // Transformed
+  // Blockly.JavaScript.INDENT = '';
   Blockly.JavaScript['begin'] = function(block) {
     return '';
   };
