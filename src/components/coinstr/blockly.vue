@@ -13,6 +13,7 @@ import Blockly from 'blockly'
 import { javascriptGenerator } from 'blockly/javascript'
 // import './blockly-ext.js'
 
+javascriptGenerator.addReservedWords('code')
 Blockly.JavaScript = javascriptGenerator
 console.log('blockly.javascript', Blockly.JavaScript)
 
@@ -74,6 +75,8 @@ const toolbox = {
 
 onMounted(() => {
   loadBlockly()
+  const workspace = Blockly.getMainWorkspace()
+  workspace.addChangeListener(Blockly.Events.disableOrphans)
 })
 
 // onUpdated(() => {
@@ -82,7 +85,7 @@ onMounted(() => {
 
 const readBlockly = () => {
   const workspace = Blockly.getMainWorkspace()
-  const allBlocks = workspace.getAllBlocks()
+  // const allBlocks = workspace.getAllBlocks()
   // console.log('beginBlock', beginBlock)
   // allBlocks.forEach((block) => {
   //   console.log('=====================================')
@@ -97,17 +100,17 @@ const readBlockly = () => {
   //   console.log('block child blocks:', block.getChildren().map((child) => child.type))
   //   console.log('block', block)
   // })
-  const beginBlock = allBlocks.find(block => block.type === 'begin')
-  const children = beginBlock.getChildren()
-  const policy = {
-    blockType: beginBlock.type,
-    children: beginBlock.getChildren()
-  }
-  const tree = readTree(beginBlock)
-  console.log('============')
-  console.log('tree', tree)
-  printTree(tree)
-  console.log('============')
+  // const beginBlock = allBlocks.find(block => block.type === 'begin')
+  // const children = beginBlock.getChildren()
+  // const policy = {
+  //   blockType: beginBlock.type,
+  //   children: beginBlock.getChildren()
+  // }
+  // const tree = readTree(beginBlock)
+  // console.log('============')
+  // console.log('tree', tree)
+  // printTree(tree)
+  // console.log('============')
   var code = Blockly.JavaScript.workspaceToCode(workspace)
   return code
 }
@@ -187,6 +190,7 @@ Blockly.JavaScript.thresh = function (block) {
     }
   }
   code += ')'
+  console.log('thresh code:', code)
   return code
 }
 
@@ -228,14 +232,14 @@ Blockly.JavaScript.or = function (block) {
   }
 
   let numberAWeight = block.getFieldValue('A_weight')
-  if (numberAWeight === '1') {
+  if (numberAWeight === '1' || numberAWeight === 1) {
     numberAWeight = ''
   } else {
     numberAWeight = numberAWeight + '@'
   }
   const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
   let numberBWeight = block.getFieldValue('B_weight')
-  if (numberBWeight === '1') {
+  if (numberBWeight === '1' || numberBWeight === 1) {
     numberBWeight = ''
   } else {
     numberBWeight = numberBWeight + '@'
