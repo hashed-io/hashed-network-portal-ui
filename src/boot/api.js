@@ -12,6 +12,9 @@ import { AfloatApi } from '@jmgayosso/afloat-client'
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
 
 // const { AfloatApi } = require('../../../afloat-client-api')
+
+import NostrApi from '~/services/NostrApi'
+
 export default async ({ app, store }) => {
   try {
     showGlobalLoading({
@@ -73,9 +76,11 @@ export default async ({ app, store }) => {
     await parachainPolkadotApi.connect()
     const systemApi = new SystemApi(parachainPolkadotApi, showGlobalLoading)
     const vestingApi = new VestingApi(parachainPolkadotApi, showGlobalLoading)
+    const nostrApi = new NostrApi()
 
     store['$systemApi'] = systemApi
     store['$vestingApi'] = vestingApi
+    store['$nostrApi'] = nostrApi
     store['$afloatApi'] = afloatApi
     store['$polkadotApi'] = api
     store['$nbvStorageApi'] = nbvStorageApi
