@@ -62,7 +62,6 @@ export const useNostr = () => {
           }
         }
 
-        $store.commit('nostr/setContacts', contacts)
         return { contacts }
       }
     } catch (error) {
@@ -72,6 +71,21 @@ export const useNostr = () => {
   const isNpub = (key) => {
     const npubIdentifier = 'npub'
     return key?.substring(0, npubIdentifier.length) === npubIdentifier
+  }
+
+  const HexToNpub = (hex) => {
+    const npubIdentifier = 'npub'
+    if (!hex) return
+    if (hex?.substring(0, npubIdentifier.length) === npubIdentifier) return hex
+    nostrApi.HexToNpub({ publicKey: hex })
+  }
+
+  const NpubToHex = (npub) => {
+    const npubIdentifier = 'npub'
+    if (!npub) return
+    if (npub?.substring(0, npubIdentifier.length) === npubIdentifier) {
+      nostrApi.NpubToHex({ publicKey: npub })
+    }
   }
 
   const extensionIsAvailable = computed(() => { return !!window.nostr })
@@ -92,6 +106,8 @@ export const useNostr = () => {
     setRelay,
     clearRelays,
     getContacts,
-    extensionIsAvailable
+    extensionIsAvailable,
+    HexToNpub,
+    NpubToHex
   }
 }
