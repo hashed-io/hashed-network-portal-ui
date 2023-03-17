@@ -23,19 +23,25 @@ class NostrApi {
     this.relays.push(relay)
   }
 
+  clearRelays () {
+    this.relays = []
+  }
+
   async connect () {
-    const relay = await relayInit(this.relay)
-
-    let errorFlag = false
-    relay.on('error', () => {
-      errorFlag = true
-    })
-    if (errorFlag) throw new Error({ message: `failed to connect to ${relay.url}` })
-
-    await relay.connect()
-    console.log(`connected to ${relay.url}`)
-
-    this.relay = relay
+    let relay
+    try {
+      relay = relayInit(this.relay)
+      relay.on('connect', () => {
+        console.log(`connected to ${relay.url}`)
+      })
+      relay.on('error', () => {
+        console.log(`failed to connect to ${relay.url}`)
+      })
+      await relay.connect()
+      this.relay = relay
+    } catch (error) {
+      throw new Error(`failed to connect to ${relay.url}`)
+    }
   }
 
   async disconnect () {
@@ -66,6 +72,11 @@ class NostrApi {
 
   HexToNpub ({ publicKey }) {
     return nip19.npubEncode(publicKey)
+  }
+
+  NpubToHex ({ publicKey }) {
+    const { type, data } = nip19.decode(publicKey)
+    return { type, data }
   }
 
   getRelay () {
