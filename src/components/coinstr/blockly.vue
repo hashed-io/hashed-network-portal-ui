@@ -7,15 +7,10 @@
 <script setup>
 import { onMounted, onUpdated, defineExpose, ref } from 'vue'
 import Blockly from 'blockly'
-// import './thirdParty/blockly_compressed.js'
-// import './thirdParty/javascript_compressed.js'
-// import Blockly from 'blockly/blockly_compressed'
 import { javascriptGenerator } from 'blockly/javascript'
-// import './blockly-ext.js'
 
 javascriptGenerator.addReservedWords('code')
 Blockly.JavaScript = javascriptGenerator
-console.log('blockly.javascript', Blockly.JavaScript)
 
 const toolbox = {
   kind: 'categoryToolbox',
@@ -74,9 +69,13 @@ const toolbox = {
 }
 
 onMounted(() => {
-  loadBlockly()
-  const workspace = Blockly.getMainWorkspace()
-  workspace.addChangeListener(Blockly.Events.disableOrphans)
+  try {
+    loadBlockly()
+    const workspace = Blockly.getMainWorkspace()
+    workspace.addChangeListener(Blockly.Events.disableOrphans)
+  } catch (e) {
+    console.error('onMounted error:', e)
+  }
 })
 
 // onUpdated(() => {
@@ -85,38 +84,10 @@ onMounted(() => {
 
 const readBlockly = () => {
   const workspace = Blockly.getMainWorkspace()
-  // const allBlocks = workspace.getAllBlocks()
-  // console.log('beginBlock', beginBlock)
-  // allBlocks.forEach((block) => {
-  //   console.log('=====================================')
-  //   console.log('block type:', block.type)
-  //   console.log('block id:', block.id)
-  //   console.log('block input names:', block.inputList.map((input) => input.name))
-  //   console.log('statementInputCount:', block.statementInputCount)
-  //   console.log('statementInputCount2:', block.getFieldValue('Threshold'))
-  //   console.log('block next block:', block.getNextBlock() ? block.getNextBlock().type : null)
-  //   console.log('block previous block:', block.getPreviousBlock() ? block.getPreviousBlock().type : null)
-  //   console.log('block parent block:', block.getParent() ? block.getParent().type : null)
-  //   console.log('block child blocks:', block.getChildren().map((child) => child.type))
-  //   console.log('block', block)
-  // })
-  // const beginBlock = allBlocks.find(block => block.type === 'begin')
-  // const children = beginBlock.getChildren()
-  // const policy = {
-  //   blockType: beginBlock.type,
-  //   children: beginBlock.getChildren()
-  // }
-  // const tree = readTree(beginBlock)
-  // console.log('============')
-  // console.log('tree', tree)
-  // printTree(tree)
-  // console.log('============')
-  var code = Blockly.JavaScript.workspaceToCode(workspace)
-  return code
+  return Blockly.JavaScript.workspaceToCode(workspace)
 }
 
 function readTree (beginBlock) {
-  // temporalBlocksInfo = []
   const childrenList = {
     blockId: beginBlock.id,
     blockType: beginBlock.type,
@@ -250,8 +221,6 @@ Blockly.JavaScript.or = function (block) {
 }
 
 // Define other things
-const temporalBlocksInfo = []
-
 function readChildren (block, parentBlock) {
   const children = block.getChildren()
   const childrenList = []
@@ -301,19 +270,45 @@ function readChildren (block, parentBlock) {
   return childrenList
 }
 
-function findBlock (node, blockId) {
-  if (node.children?.length > 0) {
-    node.children.forEach(child => {
-      if (node.blockId === blockId) return node
-      findBlock(node, blockId)
-    })
-  }
-}
-
 const loadBlockly = () => {
   Blockly.Blocks.text.newQuote_ = function () {
     return this.SINGLE_QUOTE ? Blockly.Msg.TEXT_APPEND_VARIABLE : Blockly.Msg.TEXT_APPEND_TEXT
   }
+
+  Blockly.Extensions.register(
+    'allow_chain_in_thresh',
+    function () {
+      const thisBlock = this
+      this.setOnChange(function (changeEvent) {
+        let parent = thisBlock.getSurroundParent()
+
+        if (changeEvent.type === 'create') {
+          if (!parent || parent.type !== 'thresh') {
+            thisBlock.setNextStatement(true, 'AAAA')
+          }
+        }
+
+        if (changeEvent.blockId !== thisBlock.id || changeEvent.type !== 'move') {
+          return
+        }
+
+        // console.log(thisBlock.type, changeEvent.newParentId)
+        parent = thisBlock.getSurroundParent()
+        if (changeEvent.newParentId && parent && parent.type === 'thresh') {
+          thisBlock.setNextStatement(true, 'Policy')
+        } else {
+          if (thisBlock.nextConnection && thisBlock.nextConnection.isConnected()) {
+            thisBlock.nextConnection.disconnect()
+          }
+          // if (thisBlock.previousConnection && thisBlock.previousConnection.isConnected()) {
+          //     thisBlock.previousConnection.disconnect()
+          // }
+          thisBlock.setNextStatement(true, 'AAAA')
+        }
+      })
+    }
+    // }
+  )
 
   // Set AND custom block
   Blockly.Blocks.and = {
@@ -425,7 +420,8 @@ const loadBlockly = () => {
       this.setColour(65)
       this.setTooltip('')
       this.setHelpUrl('')
-      this.extensions = ['dynamic_options']
+      // this.extensions = ['dynamic_options']
+      // Blockly.Extensions.apply('dynamic_options', this)
     },
     generateOptions: function () {
       const options = [
@@ -447,7 +443,8 @@ const loadBlockly = () => {
       this.setColour(120)
       this.setTooltip('Require a signature from a given key to satisfy this fragment')
       this.setInputsInline(false)
-      this.extensions = ['allow_chain_in_thresh']
+      // this.extensions = ['allow_chain_in_thresh']
+      Blockly.Extensions.apply('allow_chain_in_thresh', this)
     }
   }
 
@@ -462,7 +459,8 @@ const loadBlockly = () => {
       this.setColour(150)
       this.setTooltip('Add a relative timelock expressed in number of blocks')
       this.setHelpUrl('')
-      this.extensions = ['allow_chain_in_thresh']
+      // this.extensions = ['allow_chain_in_thresh']
+      Blockly.Extensions.apply('allow_chain_in_thresh', this)
     }
   }
 
@@ -477,7 +475,8 @@ const loadBlockly = () => {
       this.setColour(150)
       this.setTooltip('Add a relative timelock expressed in absolute block height')
       this.setHelpUrl('')
-      this.extensions = ['allow_chain_in_thresh']
+      // this.extensions = ['allow_chain_in_thresh']
+      Blockly.Extensions.apply('allow_chain_in_thresh', this)
     }
   }
 
@@ -492,6 +491,25 @@ const loadBlockly = () => {
   Blockly.Xml.appendDomToWorkspace(xml, workspace)
   const block = workspace.getAllBlocks()
   block[0].moveBy(250, 0)
+
+  // Blockly.Extensions.apply('allow_chain_in_thresh', Blockly.Blocks.pk)
+  console.log('Blockly extensions', Blockly.Extensions)
+  // window.Blockly.Block.prototype.getMatchingConnection = function (otherBlock, conn) {
+  // Blockly.Block.prototype.getMatchingConnection = function (otherBlock, conn) {
+  //   debugger
+  //   console.log('matching connection')
+  //   const connections = this.getConnections_(true)
+  //   const otherConnections = otherBlock.getConnections_(true)
+  //   // if (connections.length !== otherConnections.length) {
+  //   //   throw Error("Connection lists did not match in length.");
+  //   // }
+  //   for (let i = 0; i < otherConnections.length; i++) {
+  //     if (otherConnections[i] === conn) {
+  //       return connections[i]
+  //     }
+  //   }
+  //   return null
+  // }
 }
 
 defineExpose({
