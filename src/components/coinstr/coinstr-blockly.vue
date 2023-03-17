@@ -1,17 +1,29 @@
 <template lang='pug'>
 #coinstrBlockly
-    p This is an encapsulation for blockly
-    #blocklyContainer(style='height: 480px width: 600px')
+    #blocklyContainer
 </template>
 
 <script setup>
-import { onMounted, onUpdated, defineExpose, ref } from 'vue'
+import { onMounted, onBeforeUnmount, defineExpose, ref, defineEmits } from 'vue'
 import Blockly from 'blockly'
 import { javascriptGenerator } from 'blockly/javascript'
+import { useErrorHandler } from '~/mixins/errorHandler'
+
+const emits = defineEmits([
+  'onChangedPolicy'
+])
+// const props
+
+const { handlerError } = useErrorHandler()
 
 javascriptGenerator.addReservedWords('code')
 Blockly.JavaScript = javascriptGenerator
 
+/**
+ * @name toolbox
+ * @description Return configuration for blockly components
+ * @returns {Object}
+ */
 const toolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -68,25 +80,43 @@ const toolbox = {
   ]
 }
 
+let disableOrphansEvent
+let onChangedPolicyEvent
 onMounted(() => {
   try {
     loadBlockly()
     const workspace = Blockly.getMainWorkspace()
-    workspace.addChangeListener(Blockly.Events.disableOrphans)
+    disableOrphansEvent = workspace.addChangeListener(Blockly.Events.disableOrphans)
+    onChangedPolicyEvent = workspace.addChangeListener(() => {
+      const code = generateCode()
+      emits('onChangedPolicy', code)
+    })
   } catch (e) {
-    console.error('onMounted error:', e)
+    handlerError(e)
   }
 })
 
-// onUpdated(() => {
-//   loadBlockly()
-// })
+onBeforeUnmount(() => {
+  try {
+    const workspace = Blockly.getMainWorkspace()
+    workspace.removeChangeListener(disableOrphansEvent)
+    workspace.removeChangeListener(onChangedPolicyEvent)
+  } catch (e) {
+    console.error('onBeforeUnmount', e)
+  }
+})
 
-const readBlockly = () => {
+/**
+ * @name generateCode
+ * @description Generate code to create policy from blockly components
+ * @returns {String} code to generate policy
+ */
+const generateCode = () => {
   const workspace = Blockly.getMainWorkspace()
   return Blockly.JavaScript.workspaceToCode(workspace)
 }
 
+// Debugger function
 function readTree (beginBlock) {
   const childrenList = {
     blockId: beginBlock.id,
@@ -97,9 +127,10 @@ function readTree (beginBlock) {
   return childrenList
 }
 
+// Debugger function
 function printTree (node, indentLevel = 0) {
   const indent = '=' + '=='.repeat(indentLevel)
-  console.log(`${indent}${node.blockType}: Id: ${node.blockId} | parentId: ${node.parentId} | nextBlock: ${node.nextBlockId} | parentNext: ${node.parentNextBlockId}`)
+  console.warn(`${indent}${node.blockType}: Id: ${node.blockId} | parentId: ${node.parentId} | nextBlock: ${node.nextBlockId} | parentNext: ${node.parentNextBlockId}`)
   if (node.children.length > 0) {
     node.children.forEach(child => {
       printTree(child, indentLevel + 1)
@@ -108,119 +139,119 @@ function printTree (node, indentLevel = 0) {
 }
 
 // Define code generation
-Blockly.JavaScript.INDENT = ''
+function defineCodeGeneration () {
+  Blockly.JavaScript.INDENT = ''
 
-Blockly.JavaScript.pk = function (block) {
-  if (!block.getParent()) {
-    return ''
-  }
-
-  let vaulePk = Blockly.JavaScript.valueToCode(block, 'Key', Blockly.JavaScript.ORDER_ATOMIC)
-  if (vaulePk === '') {
-    vaulePk = '()'
-  }
-
-  const code = 'pk' + vaulePk
-  console.log('pk code:', code)
-  return code
-}
-
-Blockly.JavaScript.begin = function (block) {
-  return ''
-}
-
-Blockly.JavaScript.key = function (block) {
-  if (!block.getParent()) {
-    return ['', Blockly.JavaScript.ORDER_NONE]
-  }
-
-  const textKey = block.getFieldValue('Key')
-  const code = textKey
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE]
-}
-
-Blockly.JavaScript.my_key = function (block) {
-  if (!block.getParent()) {
-    return ['', Blockly.JavaScript.ORDER_NONE]
-  }
-
-  // TODO: Change ORDER_NONE to the correct strength.
-  return ['_MY_KEY', Blockly.JavaScript.ORDER_NONE]
-}
-
-Blockly.JavaScript.thresh = function (block) {
-  const numberThreshold = block.getFieldValue('Threshold')
-  let code = 'thresh(' + numberThreshold + ','
-  let child = block.getChildren(true)[0]
-  while (child) {
-    code += Blockly.JavaScript[child.type](child)
-    child = child.getNextBlock()
-    if (child) {
-      code += ','
+  Blockly.JavaScript.pk = function (block) {
+    if (!block.getParent()) {
+      return ''
     }
-  }
-  code += ')'
-  console.log('thresh code:', code)
-  return code
-}
 
-Blockly.JavaScript.older = function (block) {
-  if (!block.getParent()) {
+    let vaulePk = Blockly.JavaScript.valueToCode(block, 'Key', Blockly.JavaScript.ORDER_ATOMIC)
+    if (vaulePk === '') {
+      vaulePk = '()'
+    }
+
+    const code = 'pk' + vaulePk
+    return code
+  }
+
+  Blockly.JavaScript.begin = function (block) {
     return ''
   }
 
-  const numberName = block.getFieldValue('value')
-  const code = 'older(' + numberName + ')'
-  return code
+  Blockly.JavaScript.key = function (block) {
+    if (!block.getParent()) {
+      return ['', Blockly.JavaScript.ORDER_NONE]
+    }
+
+    const textKey = block.getFieldValue('Key')
+    const code = textKey
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE]
+  }
+
+  Blockly.JavaScript.my_key = function (block) {
+    if (!block.getParent()) {
+      return ['', Blockly.JavaScript.ORDER_NONE]
+    }
+
+    // TODO: Change ORDER_NONE to the correct strength.
+    return ['_MY_KEY', Blockly.JavaScript.ORDER_NONE]
+  }
+
+  Blockly.JavaScript.thresh = function (block) {
+    const numberThreshold = block.getFieldValue('Threshold')
+    let code = 'thresh(' + numberThreshold + ','
+    let child = block.getChildren(true)[0]
+    while (child) {
+      code += Blockly.JavaScript[child.type](child)
+      child = child.getNextBlock()
+      if (child) {
+        code += ','
+      }
+    }
+    code += ')'
+    return code
+  }
+
+  Blockly.JavaScript.older = function (block) {
+    if (!block.getParent()) {
+      return ''
+    }
+
+    const numberName = block.getFieldValue('value')
+    const code = 'older(' + numberName + ')'
+    return code
+  }
+
+  Blockly.JavaScript.after = function (block) {
+    if (!block.getParent()) {
+      return ''
+    }
+
+    const numberName = block.getFieldValue('value')
+    // TODO: Assemble JavaScript into code variable.
+    const code = 'after(' + numberName + ')'
+    return code
+  }
+
+  Blockly.JavaScript.and = function (block) {
+    if (!block.getParent()) {
+      return ''
+    }
+
+    const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
+    const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
+    const code = 'and(' + statementsA + ',' + statementsB + ')'
+    return code
+  }
+
+  Blockly.JavaScript.or = function (block) {
+    if (!block.getParent()) {
+      return ''
+    }
+
+    let numberAWeight = block.getFieldValue('A_weight')
+    if (numberAWeight === '1' || numberAWeight === 1) {
+      numberAWeight = ''
+    } else {
+      numberAWeight = numberAWeight + '@'
+    }
+    const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
+    let numberBWeight = block.getFieldValue('B_weight')
+    if (numberBWeight === '1' || numberBWeight === 1) {
+      numberBWeight = ''
+    } else {
+      numberBWeight = numberBWeight + '@'
+    }
+    const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
+    const code = 'or(' + numberAWeight + statementsA + ',' + numberBWeight + statementsB + ')'
+    return code
+  }
 }
 
-Blockly.JavaScript.after = function (block) {
-  if (!block.getParent()) {
-    return ''
-  }
-
-  const numberName = block.getFieldValue('value')
-  // TODO: Assemble JavaScript into code variable.
-  const code = 'after(' + numberName + ')'
-  return code
-}
-
-Blockly.JavaScript.and = function (block) {
-  if (!block.getParent()) {
-    return ''
-  }
-
-  const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
-  const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
-  const code = 'and(' + statementsA + ',' + statementsB + ')'
-  return code
-}
-
-Blockly.JavaScript.or = function (block) {
-  if (!block.getParent()) {
-    return ''
-  }
-
-  let numberAWeight = block.getFieldValue('A_weight')
-  if (numberAWeight === '1' || numberAWeight === 1) {
-    numberAWeight = ''
-  } else {
-    numberAWeight = numberAWeight + '@'
-  }
-  const statementsA = Blockly.JavaScript.statementToCode(block, 'A')
-  let numberBWeight = block.getFieldValue('B_weight')
-  if (numberBWeight === '1' || numberBWeight === 1) {
-    numberBWeight = ''
-  } else {
-    numberBWeight = numberBWeight + '@'
-  }
-  const statementsB = Blockly.JavaScript.statementToCode(block, 'B')
-  const code = 'or(' + numberAWeight + statementsA + ',' + numberBWeight + statementsB + ')'
-  return code
-}
-
-// Define other things
+// Debugger function
 function readChildren (block, parentBlock) {
   const children = block.getChildren()
   const childrenList = []
@@ -230,7 +261,6 @@ function readChildren (block, parentBlock) {
       // const workspace = Blockly.getMainWorkspace()
       // const parentBlock = workspace.getBlockById(parentBlockId)
       const parentNextBlockId = parentBlock?.nextBlockId
-      // console.log('prentBlock', { parentBlockId, parentBlock })
       const childData = {
         blockId: child.id,
         parentId: parentBlockId,
@@ -270,45 +300,46 @@ function readChildren (block, parentBlock) {
   return childrenList
 }
 
+// Load Blockly component
 const loadBlockly = () => {
   Blockly.Blocks.text.newQuote_ = function () {
     return this.SINGLE_QUOTE ? Blockly.Msg.TEXT_APPEND_VARIABLE : Blockly.Msg.TEXT_APPEND_TEXT
   }
 
-  Blockly.Extensions.register(
-    'allow_chain_in_thresh',
-    function () {
-      const thisBlock = this
-      this.setOnChange(function (changeEvent) {
-        let parent = thisBlock.getSurroundParent()
-
-        if (changeEvent.type === 'create') {
-          if (!parent || parent.type !== 'thresh') {
+  // Register allow_chain_in_thresh extension
+  try {
+    Blockly.Extensions.register(
+      'allow_chain_in_thresh',
+      function () {
+        const thisBlock = this
+        this.setOnChange(function (changeEvent) {
+          let parent = thisBlock.getSurroundParent()
+          if (changeEvent.type === 'create') {
+            if (!parent || parent.type !== 'thresh') {
+              thisBlock.setNextStatement(true, 'AAAA')
+            }
+          }
+          if (changeEvent.blockId !== thisBlock.id || changeEvent.type !== 'move') {
+            return
+          }
+          parent = thisBlock.getSurroundParent()
+          if (changeEvent.newParentId && parent && parent.type === 'thresh') {
+            thisBlock.setNextStatement(true, 'Policy')
+          } else {
+            if (thisBlock.nextConnection && thisBlock.nextConnection.isConnected()) {
+              thisBlock.nextConnection.disconnect()
+            }
+            // if (thisBlock.previousConnection && thisBlock.previousConnection.isConnected()) {
+            //     thisBlock.previousConnection.disconnect()
+            // }
             thisBlock.setNextStatement(true, 'AAAA')
           }
-        }
-
-        if (changeEvent.blockId !== thisBlock.id || changeEvent.type !== 'move') {
-          return
-        }
-
-        // console.log(thisBlock.type, changeEvent.newParentId)
-        parent = thisBlock.getSurroundParent()
-        if (changeEvent.newParentId && parent && parent.type === 'thresh') {
-          thisBlock.setNextStatement(true, 'Policy')
-        } else {
-          if (thisBlock.nextConnection && thisBlock.nextConnection.isConnected()) {
-            thisBlock.nextConnection.disconnect()
-          }
-          // if (thisBlock.previousConnection && thisBlock.previousConnection.isConnected()) {
-          //     thisBlock.previousConnection.disconnect()
-          // }
-          thisBlock.setNextStatement(true, 'AAAA')
-        }
-      })
-    }
-    // }
-  )
+        })
+      }
+    )
+  } catch (e) {
+    console.warn(e)
+  }
 
   // Set AND custom block
   Blockly.Blocks.and = {
@@ -480,6 +511,9 @@ const loadBlockly = () => {
     }
   }
 
+  // Call define code generation
+  defineCodeGeneration()
+
   // Inject blockly settings on DOM
   const ws = Blockly.inject('blocklyContainer', { toolbox })
   console.warn('Blockly was injected')
@@ -491,29 +525,11 @@ const loadBlockly = () => {
   Blockly.Xml.appendDomToWorkspace(xml, workspace)
   const block = workspace.getAllBlocks()
   block[0].moveBy(250, 0)
-
-  // Blockly.Extensions.apply('allow_chain_in_thresh', Blockly.Blocks.pk)
-  console.log('Blockly extensions', Blockly.Extensions)
-  // window.Blockly.Block.prototype.getMatchingConnection = function (otherBlock, conn) {
-  // Blockly.Block.prototype.getMatchingConnection = function (otherBlock, conn) {
-  //   debugger
-  //   console.log('matching connection')
-  //   const connections = this.getConnections_(true)
-  //   const otherConnections = otherBlock.getConnections_(true)
-  //   // if (connections.length !== otherConnections.length) {
-  //   //   throw Error("Connection lists did not match in length.");
-  //   // }
-  //   for (let i = 0; i < otherConnections.length; i++) {
-  //     if (otherConnections[i] === conn) {
-  //       return connections[i]
-  //     }
-  //   }
-  //   return null
-  // }
 }
 
+// - Expose generateCode function
 defineExpose({
-  readBlockly
+  generateCode
 })
 // -
 </script>

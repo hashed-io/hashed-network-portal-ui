@@ -3,7 +3,7 @@
   .text Policies Screen
   .row
     .col-8
-      blockly(ref="blocklyRef")
+      coinstr-blockly(ref="blocklyRef" @onChangedPolicy="validatePolicy")
     .col
       q-btn(
         label="Generate Code"
@@ -13,11 +13,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import Blockly from '~/components/coinstr/blockly'
+import CoinstrBlockly from '~/components/coinstr/coinstr-blockly'
 
 const blocklyRef = ref(undefined)
 function generateCode () {
-  const result = blocklyRef.value.readBlockly()
+  const result = blocklyRef.value.generateCode()
   console.log('result', result)
+}
+
+function validatePolicy (code) {
+  console.log('validatingPolicy', code)
 }
 </script>
