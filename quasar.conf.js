@@ -68,7 +68,8 @@ module.exports = configure(function (ctx) {
         GATED_PALLET_ID: process.env.GATED_PALLET_ID,
         GATED_MARKETPLACE_ID: process.env.GATED_MARKETPLACE_ID,
         AFLOAT_COLLECTION_ID: process.env.AFLOAT_COLLECTION_ID,
-        WSS_PARACHAIN: process.env.WSS_PARACHAIN
+        WSS_PARACHAIN: process.env.WSS_PARACHAIN,
+        NDK_REST_URL: process.env.NDK_REST_URL
       },
       // transpile: false,
       // publicPath: '/',
