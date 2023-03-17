@@ -49,10 +49,11 @@ class NostrApi {
   }
 
   async queryProfile () {
-    return nip05.queryProfile
+    return nip05.queryProfile(('_@coinstr.app'))
   }
 
   async getProfileMetadata ({ publicKey }) {
+    // retornar sub (useProofOfReserves)
     const sub = this.relay.sub([
       {
         kinds: [EventKind.METADATA],
@@ -64,7 +65,6 @@ class NostrApi {
         resolve(event)
       })
       sub.on('eose', () => {
-        sub.unsub()
         reject('Failed to get the metadata')
       })
     })

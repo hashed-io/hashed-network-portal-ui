@@ -8,15 +8,8 @@ export const useNostr = () => {
   const $store = useStore()
   const nostrApi = $store.$nostrApi
 
-  const hasRelays = computed(() => {
-    const relays = nostrApi.getRelays
-    return relays.length > 0
-  })
-
   const connectNostr = async ({ relay = 'wss://relay.rip', publicKey }) => {
-    if (!hasRelays.value) {
-      nostrApi.addRelay(relay)
-    }
+    nostrApi.setRelay({ relay })
     await nostrApi.connect()
 
     let response
@@ -48,7 +41,8 @@ export const useNostr = () => {
 
   const getContacts = async ({ publicKey }) => {
     const ndkRest = process.env.NDK_REST_URL
-    const relay = encodeURIComponent(currentRelay.value.url)
+    const { url } = currentRelay()
+    const relay = encodeURIComponent(url)
 
     try {
       const response = await fetch(`${ndkRest}/${relay}/${publicKey}/contacts`)
@@ -59,6 +53,7 @@ export const useNostr = () => {
           if (key) {
             const npubEncode = nostrApi.HexToNpub({ publicKey: key })
             value.npub = npubEncode
+            value.bitcoinAddress = key
           }
         }
 
@@ -92,7 +87,7 @@ export const useNostr = () => {
 
   const isLoggedIn = computed(() => $store.getters['nostr/isLoggedInNostr'])
   const getActiveAccount = computed(() => $store.getters['nostr/getActiveAccount'])
-  const currentRelay = computed(() => $store.$nostrApi.relay)
+  const currentRelay = () => nostrApi.getRelay()
   const setRelay = ({ relay }) => nostrApi.setRelay({ relay })
   const clearRelays = () => nostrApi.clearRelays()
   return {
