@@ -5,7 +5,7 @@ q-item(v-if="hasMetadata")
   q-item-section(top no-wrap)
       q-item-label(lines="5")
         .row.q-gutter-xs
-          .text-weight-bold {{ _user.displayName || _user.name }}
+          .text-weight-bold {{ _user.name || _user.displayName }}
           q-icon(v-if="_user.nip05" name="verified" color="pink" size="1rem")
             q-tooltip NIP05 verified
           q-item-label(v-if="_user.nip05") {{ getNip05 }}

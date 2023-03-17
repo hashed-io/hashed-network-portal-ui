@@ -48,9 +48,9 @@ import { useNostr } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
 import { useErrorHandler } from '~/mixins/errorHandler'
 import { useQuasar } from 'quasar'
-import UsersList from '~/components/coinstr/usersList.vue'
-import UserItem from '~/components/coinstr/userItem.vue'
-import NostrForm from '~/components/coinstr/nostrForm.vue'
+import UsersList from '~/components/coinstr/users-list.vue'
+import UserItem from '~/components/coinstr/user-item.vue'
+import NostrForm from '~/components/coinstr/nostr-form.vue'
 
 const $q = useQuasar()
 

@@ -16,7 +16,7 @@ import {
   defineProps,
   toRefs
 } from 'vue'
-import UserItem from './userItem.vue'
+import UserItem from './user-item.vue'
 // props
 const props = defineProps({
   users: {
