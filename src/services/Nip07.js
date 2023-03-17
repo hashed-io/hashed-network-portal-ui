@@ -5,7 +5,7 @@ export default class Nip07 {
   }
 
   static enforceAvailable () {
-    if (!Nip07.isAvailable()) throw new Error('Nip07 support not available')
+    if (!Nip07.isAvailable()) throw new Error('Nostr account not detected within extension')
   }
 
   static getPublicKey () {
