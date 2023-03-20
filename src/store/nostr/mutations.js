@@ -11,3 +11,10 @@ export function setPrivateKey (state, pv) {
 export function clearNostrAccount (state) {
   state.account = {}
 }
+
+export function updateNostrAccount (state, dataObj) {
+  state.account.profile = {}
+  for (const prop in dataObj) {
+    state.account.profile[prop] = dataObj[prop]
+  }
+}

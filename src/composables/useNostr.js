@@ -35,8 +35,12 @@ export const useNostr = () => {
     return { content, tags }
   }
 
-  const setNostrAccount = ({ hex, npub, profile, tags }) => {
-    $store.commit('nostr/setNostrAccount', { hex, npub, profile, tags })
+  const setNostrAccount = ({ hex, npub, tags }) => {
+    $store.commit('nostr/setNostrAccount', { hex, npub, tags })
+  }
+  const updateNostrAccount = (obj) => {
+    console.log({ dataVuex: obj })
+    $store.commit('nostr/updateNostrAccount', obj)
   }
 
   const getContacts = async ({ publicKey }) => {
@@ -90,10 +94,16 @@ export const useNostr = () => {
   const currentRelay = () => nostrApi.getRelay()
   const setRelay = ({ relay }) => nostrApi.setRelay({ relay })
   const clearRelays = () => nostrApi.clearRelays()
+
+  const connectPool = async ({ relays, hexPubKey }, subTrigger) => {
+    return nostrApi.connectPool({ relays, hexPubKey }, subTrigger)
+  }
+
   return {
     connectNostr,
     getProfileMetadata,
     setNostrAccount,
+    updateNostrAccount,
     isLoggedIn,
     getActiveAccount,
     disconnectNostr,
@@ -103,6 +113,7 @@ export const useNostr = () => {
     getContacts,
     extensionIsAvailable,
     HexToNpub,
-    NpubToHex
+    NpubToHex,
+    connectPool
   }
 }

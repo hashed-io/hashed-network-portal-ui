@@ -61,15 +61,17 @@ const { handlerError } = useErrorHandler()
 
 const {
   connectNostr, disconnectNostr,
-  getProfileMetadata, setNostrAccount,
+  getProfileMetadata, setNostrAccount, updateNostrAccount,
   isLoggedIn, getActiveAccount,
   currentRelay, setRelay, clearRelays,
-  getContacts, extensionIsAvailable
+  getContacts, extensionIsAvailable,
+  connectPool
 } = useNostr()
 
 const relayInput = ref(undefined)
 const contacts = ref(undefined)
 const dialog = ref(false)
+let unsubscribe
 
 const onLoginNostr = async ({ type, relay, address }) => {
   const nostrApi = $store.$nostrApi
@@ -80,6 +82,8 @@ const onLoginNostr = async ({ type, relay, address }) => {
     setRelay({ relay })
     const { pubkey, npubKey } = await connectNostr({ relay, publicKey: type === 'key' ? address : undefined })
 
+    const { unsub } = await connectPool({ relays: ['wss://relay.rip', 'wss://relay.snort.social'], hexPubKey: pubkey }, updateData)
+    unsubscribe = unsub
     setNostrAccount({ hex: pubkey, npub: npubKey })
 
     const { content, tags } = await getProfileMetadata({ pubkey })
@@ -96,6 +100,14 @@ const onLoginNostr = async ({ type, relay, address }) => {
     hideLoading()
     dialog.value = false
   }
+}
+const updateData = (event) => {
+  const {
+    content,
+    kind
+  } = event || {}
+  const obj = JSON.parse(content)
+  updateNostrAccount(obj)
 }
 const getUserInfo = computed(() => {
   return {
