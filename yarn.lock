@@ -2280,10 +2280,10 @@
     stream-browserify "^3.0.0"
     uint8arrays "^3.0.0"
 
-"@jmgayosso/nbv-client-api@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.3.tgz#a855b384bdac625fd409b713281eda9d65a0e360"
-  integrity sha512-po1rEcP7OoJgD4gQl1fptVMu7eod25Rej/OLpWdQR7h1PJvB36yrIQWpYGO6o2Td0AqJSLlAz0x1FIZipmwCGg==
+"@jmgayosso/nbv-client-api@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@jmgayosso/nbv-client-api/-/nbv-client-api-0.0.4.tgz#0bb9571d112945deb37d8ed46099b70558f5a2fa"
+  integrity sha512-8Y24JSwOHUNqATf5UgnmWcnHzYdi9ddAtCSKtUUfM74MUd6Qr7mZTTV5VIogTnmKCTVMOc53eUGQ2vUNP841RQ==
   dependencies:
     "@polkadot/api" "^9.2.4"
     "@polkadot/extension-dapp" "^0.44.4"
@@ -18768,10 +18768,8 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
