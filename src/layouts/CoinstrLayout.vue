@@ -26,12 +26,12 @@ q-layout.containerLayout(container view="hHh lpR fFf")
                     q-item-section Logout
     q-page-container
       .row.justify-center
-        .col-8
+        .col-10
           q-page.q-py-md.q-px-lg
             router-view
-        .col-4
-          q-page.q-py-md.q-px-lg
-            UsersList(:users="contacts")
+        //- .col-4
+        //-   q-page.q-py-md.q-px-lg
+        //-     UsersList(:users="contacts")
     q-dialog(v-model="dialog")
       NostrForm(
         :extensionAvailable="extensionIsAvailable"

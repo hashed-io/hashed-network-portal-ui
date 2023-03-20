@@ -177,7 +177,7 @@ function defineCodeGeneration () {
     }
 
     // TODO: Change ORDER_NONE to the correct strength.
-    return ['_MY_KEY', Blockly.JavaScript.ORDER_NONE]
+    return ['_MY_KEY_JUST_TO_TEST', Blockly.JavaScript.ORDER_NONE]
   }
 
   Blockly.JavaScript.thresh = function (block) {
@@ -515,7 +515,7 @@ const loadBlockly = () => {
   defineCodeGeneration()
 
   // Inject blockly settings on DOM
-  const ws = Blockly.inject('blocklyContainer', { toolbox })
+  Blockly.inject('blocklyContainer', { toolbox })
   console.warn('Blockly was injected')
 
   // Set in workspace begin block
@@ -536,6 +536,6 @@ defineExpose({
 
 <style lang="stylus" scoped>
 #blocklyContainer
-  width: 50vw
+  width: 100%
   height: 80vh
 </style>
