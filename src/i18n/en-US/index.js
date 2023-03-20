@@ -238,7 +238,16 @@ export default {
         goToProofOfReserves: 'Test',
         status: 'Status',
         message: 'Message',
-        psbt: 'PSBT'
+        psbt: 'PSBT',
+        emptyProofOfReserves: 'Have not been created a Proof of reserves for this vault.',
+        createProofOfReserves: 'Create proof of reserves',
+        verifyProofOfReserves: 'Verify proof',
+        downloadPsbt: 'Download PSBT',
+        proofOfReservesResponse: 'Proof of reserves response',
+        createdProofOfReservesSuccessfully: 'Proof of reserves was created successfully',
+        psbtSavedSuccessfully: 'Proof of reserves was signed and saves successfully',
+        finalizedProofOfReservesSuccessfully: 'Finalize Proof',
+        downloadedProofOfReservesSuccessfully: 'Download PSBT'
       }
     },
     marketplace: {

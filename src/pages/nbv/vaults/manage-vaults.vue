@@ -51,7 +51,6 @@ export default {
         })
         if (!vaultsId.isEmpty) {
           const Ids = vaultsId.toJSON()
-          // console.log('vaultsId', Ids)
           const vaults = await this.$store.$nbvStorageApi.getVaultsById({ Ids })
           this.vaultList = vaults.map((v, i) => {
             return {
@@ -59,7 +58,6 @@ export default {
               vaultId: Ids[i]
             }
           })
-          // console.log('vaults', vaults, this.vaultList)
         } else this.vaultList = []
       } catch (e) {
         this.handlerError(e)
@@ -70,7 +68,6 @@ export default {
     async createNewVault (data) {
       try {
         this.showLoading()
-        // console.log('createNewVault', data)
         await this.$store.$nbvStorageApi.createVault({
           ...data,
           user: this.polkadotAddress
@@ -89,9 +86,7 @@ export default {
         this.showLoading()
         const message = 'Test To Sign'
         const response = await this.$store.$nbvStorageApi.signMessage(message, this.polkadotAddress)
-        // console.log('signMessage', response)
         const response2 = await this.$store.$nbvStorageApi.verifyMessage(message, response.signature, this.polkadotAddress)
-        // console.log('verifyMessage', response2)
         if (response2.isValid) {
           this.showNotification({ message: this.$t('pages.nbv.vaults.messageSignedAndVerified') })
         }

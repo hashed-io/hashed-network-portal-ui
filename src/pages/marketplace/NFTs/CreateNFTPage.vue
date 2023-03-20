@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     async onSubmitNFT ({ attributes, metadata }) {
-      // console.log('onSubmitTaxCredit', attributes, { containFile, lastClass: this.class, lastInstance: this.instance })
       try {
         const collectionId = this.$route.query?.classId
         const uniquesPublicAttributes = {}
@@ -62,7 +61,6 @@ export default {
           }
         }
         const admin = this.$store.$hcd.getPolkadotAddress()
-        console.log({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin })
         await this.$store.$afloatApi.createAsset({ collectionId, assetId, uniquesPublicAttributes, saveToIPFS: plaintextSaveToIPFS, cidFromHCD: encryptoThenSaveToIPFS, admin, isHierarchical: false, metadata })
         this.showNotification({ message: this.$t('pages.marketplace.taxCredits.messages.uniqueCreated'), color: 'positive' })
         this.$router.push({

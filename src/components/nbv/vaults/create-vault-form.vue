@@ -232,7 +232,6 @@ export default {
       await this.$nextTick()
       if (currentLength > newLength) {
         const diff = currentLength - newLength
-        // console.log('dif to remove', diff)
         for (let i = 0; i < diff; i++) {
           await this.$nextTick()
           this.cosigners.splice(this.cosigners.length - 1, 1)
@@ -240,7 +239,6 @@ export default {
         }
       } else if (currentLength < newLength) {
         const diff = newLength - currentLength
-        // console.log('dif to add', diff)
         for (let i = 0; i < diff; i++) {
           this.addNewCosigner()
         }

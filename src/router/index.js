@@ -27,7 +27,6 @@ export default route(function ({ store }) {
   })
 
   Router.beforeEach(async (to, from, next) => {
-    // console.log('params', { to, from })
     if (to.name === 'participantsRewards') {
       next()
       return
@@ -37,7 +36,6 @@ export default route(function ({ store }) {
       return
     }
     const isAuthenticated = store.getters['profile/isLogged']
-    // console.log(isAuthenticated, 'Authenticated')
 
     if (!isAuthenticated && to.name !== 'login') {
       next({
@@ -49,7 +47,6 @@ export default route(function ({ store }) {
       })
       return
     }
-    // console.log('beforeEach', to)
     if (to.name === 'root' || to.name === 'home') {
       next({ name: 'manageVaults' })
     } else {

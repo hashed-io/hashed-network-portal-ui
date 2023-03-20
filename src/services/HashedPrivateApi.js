@@ -20,7 +20,6 @@ class HashedPrivateApi {
         ipfsAuthHeader: this.ipfsAuthHeader,
         signFn: this.signFn
       })
-      // console.log('HP connected', this.api)
     } catch (e) {
       console.error('connect Hashed Private Api', e)
       throw new Error(e)
@@ -49,7 +48,6 @@ class HashedPrivateApi {
   async logout () {
     try {
       const response = await this.api.logout()
-      // console.log('HP logout', response)
       return response
     } catch (e) {
       console.error('Login Hashed Private Api', e)

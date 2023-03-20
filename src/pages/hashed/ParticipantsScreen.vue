@@ -314,12 +314,6 @@ async function refresh () {
 
     // Get all diferents participants
     funds.participants = [...new Set([...c54.map(v => v.who), ...c58.map(v => v.who)])]
-    // console.log('data', {
-    //   c54,
-    //   c58,
-    //   both: funds.contributors.both,
-    //   participants: funds.participants
-    // })
 
     // Get computed Data
     funds.contributors.both = await getComputed()

@@ -110,7 +110,6 @@ export default {
     }
     // async updateModel (e) {
     //   this.file = e
-    //   console.log('Update model', e)
     //   const data = {
     //     label: this.tagFile,
     //     file: e
