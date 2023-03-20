@@ -1,24 +1,27 @@
 <template lang='pug'>
-q-item(v-if="hasMetadata")
+q-item
   q-item-section(top avatar)
-    q-img.img(:src="_user.picture" width="50px" height="50px")
+    q-img.img(v-if="_user.picture" :src="_user.picture" width="50px" height="50px")
+    q-avatar.img(v-else color="secondary" text-color="white" font-size="15px" size="50px") User
   q-item-section(top no-wrap)
       q-item-label(lines="5")
         .row.q-gutter-xs
           .text-weight-bold {{ _user.name || _user.displayName }}
-          q-icon(v-if="_user.nip05" name="verified" color="pink" size="1rem")
+          q-icon(
+            v-if="_user.nip05"
+            name="verified"
+            color="pink"
+            size="1rem"
+          )
             q-tooltip NIP05 verified
           q-item-label(v-if="_user.nip05") {{ getNip05 }}
       q-item-label(lines="2")
-        .npub.cursor-pointer(@click="copyTextToClipboard(getNpub.raw)")
-          span.text-overline npub
+        .npub.cursor-pointer(
+          :class="{'q-mt-xs': !_user.name && !_user.displayName}"
+          @click="copyTextToClipboard(getNpub.raw)"
+        )
+          span.text-overline.text-weight-bolder npub
           span.text-body2 {{ getNpub.display }}
-q-item(v-else)
-  q-item-section(top)
-    q-item-label
-      .npub.cursor-pointer(@click="copyTextToClipboard(getNpub.raw)")
-        span.text-overline npub
-        span.text-body2 {{ getNpub.display }}
 </template>
 <script setup>
 import {
@@ -37,7 +40,8 @@ const props = defineProps({
       nip05: 'amanda@waterwell.ngo',
       npub: 'npub1phvpqfd8hq7x7set0tlpty2p0fq8fvhxfwvzfxg2fatsn66kvvsq2tag8v',
       picture: 'https://waterwell.ngo/profiles/amanda.png',
-      banner: 'https://nostr.build/i/nostr.build_e34050e635c540aa737baef0ae9637b90469b8b5c7102209e95de6eb32e4b7a1.jpeg'
+      banner: 'https://nostr.build/i/nostr.build_e34050e635c540aa737baef0ae9637b90469b8b5c7102209e95de6eb32e4b7a1.jpeg',
+      lud06: 'lnbc1pjpr7k2pp5p8u3h6a9k8r0gffrt8t3zd2s7glmqg262wlvlsyfj8p73tdztl4qdqqcqzzgxqyz5vqrzjqwnvuc0u4txn35cafc7w94gxvq5p3cu9dd95f7hlrh0fvs46wpvhdldjcfs3eg3jr5qqqqryqqqqthqqpyrzjqw8c7yfutqqy3kz8662fxutjvef7q2ujsxtt45csu0k688lkzu3ldldjcfs3eg3jr5qqqqryqqqqthqqpysp5y9uwpnqspjmxpngwull43q5rnktuvaq0etpth0kzpsnmeg3r48lq9qypqsqu0wyhfvz0p5nnqqawh84pppw75w4r2w9uu9av4pvwech6n7zygnxd5jxd2m0l2ru8qq8e9tnhxdva36xevv8nlhgtt6t830rngqk3pqqgkv0uh'
     })
   }
 })

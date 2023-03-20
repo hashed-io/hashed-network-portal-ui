@@ -15,7 +15,7 @@ q-layout.containerLayout(container view="hHh lpR fFf")
           .text-white Connect to Nostr
         div(v-else)
           .row.items-center.q-gutter-md
-            .text-white.text-weight-bold connected to: {{ currentRelay.url }}
+            .text-white.text-weight-bold connected to: {{ getCurrentRelay() }}
             .row
               UserItem.q-mx-md.cursor-pointer.text-white(
                 :user="getUserInfo"
@@ -86,7 +86,7 @@ const onLoginNostr = async ({ type, relay, address }) => {
 
     setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
 
-    showNotification({ message: `Connected to ${currentRelay.value.url}`, color: 'green' })
+    showNotification({ message: `Connected to ${getCurrentRelay()}`, color: 'green' })
 
     const data = await getContacts({ publicKey: pubkey })
     contacts.value = data.contacts
@@ -105,12 +105,18 @@ const getUserInfo = computed(() => {
     npub: getActiveAccount.value?.npub,
     about: getActiveAccount.value?.profile?.about,
     nip05: getActiveAccount.value?.profile?.nip05,
-    banner: getActiveAccount.value?.profile?.banner
+    banner: getActiveAccount.value?.profile?.banner,
+    lud06: getActiveAccount.value?.profile?.lud06,
+    lud16: getActiveAccount.value?.profile?.lud16
   }
 })
 const onLogout = () => {
   contacts.value = undefined
   disconnectNostr()
+}
+const getCurrentRelay = () => {
+  const { url } = currentRelay() || {}
+  return url
 }
 </script>
 <style lang="stylus" scoped>
