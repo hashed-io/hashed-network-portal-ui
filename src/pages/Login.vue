@@ -144,9 +144,7 @@ export default {
         })
         const { credential } = response
         if (credential) {
-          // console.log('JWT:', credential)
           const account = Jwt.decodeToken(credential)
-          // console.log('Decoded JWT:', account)
           this.hcdPasswordProps = {
             ssoProvider: 'Google',
             ssoUserId: account.sub,

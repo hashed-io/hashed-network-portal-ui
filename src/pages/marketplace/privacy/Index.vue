@@ -171,7 +171,6 @@ export default defineComponent({
             this.toggleDownload
               ? await hpApi.sharedViewByCID(this.query)
               : await hpApi.ownViewByCID(this.query)
-          // console.log(response)
           this.matchDataViewByCID(response)
         } catch (error) {
           console.error('download File', error)

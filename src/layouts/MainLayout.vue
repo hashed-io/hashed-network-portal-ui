@@ -126,7 +126,6 @@ export default defineComponent({
       // Dynamic options
       if (v.meta.app) {
         app.value = v.meta.app
-        // console.log('v.meta.app', v.meta.app)
         pageOptions.value = pageOptionsDictionary[v.meta.app]
       }
     }
@@ -140,7 +139,6 @@ export default defineComponent({
     }
 
     function handlerBreadcrumb (index) {
-      // console.log('handlerBreadcrumb', breadcrumb, index)
       const breadUpdated = $route.meta.breadcrumb[index]
       if (breadUpdated.back) {
         $router.back()

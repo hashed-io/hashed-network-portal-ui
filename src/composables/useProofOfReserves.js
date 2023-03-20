@@ -12,7 +12,7 @@ export const useProofOfReserves = () => {
   /**
    * @param {String} psbt Text PSBT
    */
-  async function saveProofOfReservesPSBT ({ psbt, descriptors, vaultId, isFinalized }) {
+  async function saveProofOfReservesPSBT ({ psbt, descriptors, vaultId }) {
     const signers = await $store.$bdkApi.getListSigner({
       descriptors,
       psbt
@@ -26,7 +26,20 @@ export const useProofOfReserves = () => {
       //   showNotification({ message: this.$t('pages.nbv.proposals.signThePsbtWithValidXPUB'), color: 'negative' })
       //   return
     }
-    return $store.$nbvStorageApi.saveProofOfReservesPSBT({ vaultId, psbt, isFinalized })
+    return $store.$nbvStorageApi.saveProofOfReservesPSBT({ vaultId, psbt })
+  }
+
+  /**
+   * @param {String} vaultId vaultId
+   * @param {String} descriptors Text finalized PSBT
+   * @param {String} psbts Text PSBTs
+   */
+  async function finalizeProofOfReserves ({ vaultId, descriptors, psbts }) {
+    const { data: psbt } = await $store.$bdkApi.finalizeProofOfReserves({
+      descriptors,
+      psbts
+    })
+    return $store.$nbvStorageApi.finalizeProofOfReserves({ vaultId, psbt })
   }
 
   async function getProofOfReserves ({ vaultId }, subTrigger) {
@@ -40,7 +53,6 @@ export const useProofOfReserves = () => {
       descriptors,
       message
     })
-    console.log('psbt', psbt)
     return $store.$nbvStorageApi.createProofOfReserves({ vaultId, message, psbt })
   }
 
@@ -79,19 +91,9 @@ export const useProofOfReserves = () => {
   }
 
   async function signPsbt ({ psbt, next }) {
-    console.log('signPsbt', { psbt, next })
     const signedPSBT = await $store.$hcd.signPSBT({ psbt })
     if (next) next()
     return signedPSBT
-  }
-
-  async function finalizeProofOfReserves ({ descriptors, psbts }) {
-    const { data } = await $store.$bdkApi.finalizeProofOfReserves({
-      descriptors,
-      psbts
-    })
-    return data
-    // return $store.$nbvStorageApi.createProofOfReserves({ vaultId, message, psbt })
   }
 
   async function verifyProofOfReserves ({ descriptors, message, psbt }) {

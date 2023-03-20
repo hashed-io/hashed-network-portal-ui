@@ -12,7 +12,7 @@
         .text-body2 {{ data.proofOfReserves.message }}
       q-card#Empty(v-else)
         q-card-section
-          .text-body2.text-center Have not been created a Proof of reserves for this vault.
+          .text-body2.text-center {{ $t('pages.nbv.proofOfReserves.emptyProofOfReserves') }}
 
       cosigners-list.q-mt-md(:cosigners="proposalCosigners")
     .col#rightMenu
@@ -27,7 +27,7 @@
             q-btn.full-width.no-padding(
               v-if="data.vault"
               @click="onCreateProofOfReserves"
-              label="Create proof of reserves"
+              :label="$t('pages.nbv.proofOfReserves.createProofOfReserves')"
               color="secondary"
               no-caps
             )
@@ -47,18 +47,34 @@
               v-if="!alreadySigned && !isBroadcasted && isHCDLogged"
             )
             q-btn.full-width.no-padding(
-              v-if="canFinalize"
+              v-if="canFinalize && !isFinalized"
               :label="$t('pages.nbv.proposals.finalizeBtn')"
               color="secondary"
               icon="cloud_done"
               no-caps
               @click="finalizeProofOfR"
             )
+            q-btn.full-width.no-padding(
+              v-if="isFinalized"
+              :label="$t('pages.nbv.proofOfReserves.verifyProofOfReserves')"
+              color="secondary"
+              icon="check"
+              no-caps
+              @click="verifyProofOfR"
+            )
+            q-btn.full-width.no-padding(
+              v-if="isFinalized"
+              :label="$t('pages.nbv.proofOfReserves.downloadPsbt')"
+              color="secondary"
+              icon="download"
+              no-caps
+              @click="downloadProofOfR"
+            )
   #modals
     q-dialog(v-model="modals.isShowingVerifiedPsbt")
       q-card
         q-card-section
-          .text-body2.text-bold.q-mb-sm Proof of reserves response
+          .text-body2.text-bold.q-mb-sm {{ $t('pages.nbv.proofOfReserves.proofOfReservesResponse') }}
           .text-body2.text-weight-light.text-center.q-mt-md(style="fontSize: 2rem") {{ AmountUtils.formatToUSLocale(verificationResponse) }} sats
 
     q-dialog(v-model="modals.isShowingSignPsbt")
@@ -139,7 +155,6 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   unsub()
-  console.log('unsub executed')
   // if (unsub) unsub()
 })
 
@@ -160,7 +175,6 @@ async function subscribeProofOfReserves () {
   try {
     showLoading()
     unsub = await getProofOfReserves({ vaultId: route.query.vault }, updateData)
-    console.log('unsub', unsub)
   } catch (e) {
     handlerError(e)
   } finally {
@@ -191,9 +205,8 @@ async function onCreateProofOfReserves () {
       },
       message
     }
-    const response = await createProofOfReserves(payload)
-    console.log('createProofOfReserves', response)
-    showNotification({ message: $t('pages.nbv.proposals.psbtSavedSuccessfully') })
+    await createProofOfReserves(payload)
+    showNotification({ message: $t('pages.nbv.proofOfReserves.createdProofOfReservesSuccessfully') })
   } catch (e) {
     handlerError(e)
   } finally {
@@ -215,7 +228,6 @@ async function onSignPsbt ({ psbt, next }) {
 async function savePsbt (signedPSBT) {
   try {
     showLoading()
-    console.log('savePSBT', signedPSBT)
     const descriptors = {
       descriptor: data.vault.descriptors.outputDescriptor,
       change_descriptor: data.vault.descriptors.changeDescriptor
@@ -227,6 +239,7 @@ async function savePsbt (signedPSBT) {
       // isFinalized
     })
     modals.isShowingSignPsbtHCD = false
+    showNotification({ message: $t('pages.nbv.proofOfReserves.psbtSavedSuccessfully') })
   } catch (e) {
     handlerError(e)
   } finally {
@@ -242,18 +255,43 @@ async function finalizeProofOfR () {
       change_descriptor: data.vault.descriptors.changeDescriptor
     }
     const psbts = data.proofOfReserves.signedPsbts.map(v => v.signature)
-    const finalizedPSBT = await finalizeProofOfReserves({
+    await finalizeProofOfReserves({
+      vaultId: route.query.vault,
       descriptors,
       psbts
     })
+    showNotification({ message: $t('pages.nbv.proofOfReserves.finalizedProofOfReservesSuccessfully') })
+  } catch (e) {
+    handlerError(e)
+  } finally {
+    hideLoading()
+  }
+}
+
+async function verifyProofOfR () {
+  try {
+    showLoading()
+    const descriptors = {
+      descriptor: data.vault.descriptors.outputDescriptor,
+      change_descriptor: data.vault.descriptors.changeDescriptor
+    }
     verificationResponse.value = await verifyProofOfReserves({
       descriptors,
       message: data.proofOfReserves.message,
-      psbt: finalizedPSBT
+      psbt: data.proofOfReserves.psbt
     })
     modals.isShowingVerifiedPsbt = true
-    // const fileName = `${data.vault.description}_${data.proofOfReserves.message}_Finalized`
-    // downloadPSBT(finalizedPSBT, fileName)
+  } catch (e) {
+    handlerError(e)
+  } finally {
+    hideLoading()
+  }
+}
+
+function downloadProofOfR () {
+  try {
+    const fileName = `${data.vault.description}_${data.proofOfReserves.message}_Finalized`
+    downloadPSBT(data.proofOfReserves.psbt, fileName)
   } catch (e) {
     handlerError(e)
   } finally {
@@ -271,6 +309,7 @@ function downloadPSBT (psbt, fileName) {
   downloadLink.click()
   document.body.removeChild(downloadLink)
   window.URL.revokeObjectURL(fileURL)
+  showNotification({ message: $t('pages.nbv.proofOfReserves.downloadedProofOfReservesSuccessfully') })
 }
 
 // Computed
@@ -290,14 +329,15 @@ const canFinalize = computed(() => {
   const signers = proposalCosigners.value?.filter(v => v.signed)
   return !!(signers?.length >= data.vault?.threshold)
 })
-const canBroadcast = computed(() => {
-  return !!(data.proofOfReserves?.status === 'Finalized')
-})
+// const canBroadcast = computed(() => {
+//   return !!(data.proofOfReserves?.status === 'Finalized')
+// })
 const isBroadcasted = computed(() => {
-  return !!(data.proofOfReserves?.status === 'Broadcasted')
+  // return !!(data.proofOfReserves?.status === 'Broadcasted')
+  return false
 })
 const isFinalized = computed(() => {
-  return !!(data.proofOfReserves?.status === 'Finalized')
+  return !!(data.proofOfReserves?.status === 'Broadcasted')
 })
 const alreadySigned = computed(() => {
   return !!data.proofOfReserves?.signedPsbts.find(v => v.signer === polkadotAddress.value)
@@ -306,6 +346,9 @@ const labelStatus = computed(() => {
   const status = data.proofOfReserves?.status
   if (canFinalize.value && status && status !== 'Broadcasted') {
     return $t('pages.nbv.proposals.readyToFinalize')
+  }
+  if (status === 'Broadcasted') {
+    return 'Finalized'
   }
   if (status && status.ReadyToFinalize === true) {
     return $t('pages.nbv.proposals.finalizing')

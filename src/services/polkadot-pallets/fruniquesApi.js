@@ -6,7 +6,6 @@ class FruniquesApi extends BasePolkadotApi {
 
   parseAddress (address) {
     const parsed = this.parseAddressToss58(address)
-    // console.log('parseAddress', { address, parsed })
     return parsed
   }
 

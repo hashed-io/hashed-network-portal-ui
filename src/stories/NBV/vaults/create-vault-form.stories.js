@@ -34,9 +34,7 @@ SuccessSubmit.play = async ({ args, canvasElement }) => {
 
   await userEvent.click(canvas.getByTestId('toggle-include'))
   const cosignerInputs = canvas.getAllByTestId('vault-cosigner-input')
-  console.log('cosignerInputs', cosignerInputs)
   cosignerInputs.forEach(async (input, index) => {
-    console.log('input', input, index, canvas.getAllByTestId('account_input')[index])
     await userEvent.type(canvas.getAllByTestId('account_input')[index], polkadotAddresses[index], { await: 1000 })
   })
 

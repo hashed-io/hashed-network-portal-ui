@@ -51,7 +51,6 @@ export const validation = {
       Object.keys(form).forEach((key) => this.$refs[key] && this.$refs[key].resetValidation())
     },
     isInteger (event) {
-      // console.log('IsEvent', event)
       if (event.keyCode === 46) event.preventDefault()
     }
   }
