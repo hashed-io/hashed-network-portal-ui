@@ -18,3 +18,7 @@ export function updateNostrAccount (state, dataObj) {
     state.account.profile[prop] = dataObj[prop]
   }
 }
+
+export function updateRelays (state, relays) {
+  state.relays = [...relays]
+}

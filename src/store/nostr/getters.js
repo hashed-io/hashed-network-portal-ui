@@ -1,7 +1,7 @@
 export function getActiveAccount ({ account }) {
   return account
 }
-export function getDefaultRelays ({ relays }) {
+export function getRelays ({ relays }) {
   return relays
 }
 export function isLoggedInNostr ({ account }) {
