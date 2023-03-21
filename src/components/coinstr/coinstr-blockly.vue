@@ -18,6 +18,10 @@ const props = defineProps({
   eligiblesKeys: {
     type: Array,
     required: true
+  },
+  myPublicKey: {
+    type: String,
+    default: undefined
   }
 })
 
@@ -195,7 +199,8 @@ function defineCodeGeneration () {
     }
 
     // TODO: Change ORDER_NONE to the correct strength.
-    return ['_MY_KEY_JUST_TO_TEST', Blockly.JavaScript.ORDER_NONE]
+    // return ['_MY_KEY_JUST_TO_TEST', Blockly.JavaScript.ORDER_NONE]
+    return [props.myPublicKey, Blockly.JavaScript.ORDER_NONE]
   }
 
   Blockly.JavaScript.thresh = function (block) {
@@ -469,17 +474,15 @@ const loadBlockly = () => {
       this.setColour(65)
       this.setTooltip('')
       this.setHelpUrl('')
-      // this.extensions = ['dynamic_options']
       // Blockly.Extensions.apply('dynamic_options', this)
     },
     generateOptions: function () {
-      const options = []
-      // console.log('generateOptions', props.eligiblesKeys)
       if (!props.eligiblesKeys || !props.eligiblesKeys.length === 0) return [['Please add contacts to policy', '']]
       const newOptions = props.eligiblesKeys?.map(option => {
         return [option?.display_name, option?.bitcoinAddress]
       })
-      return newOptions
+      if (newOptions.length >= 1) return newOptions
+      return [['Please add a contact to policy', '']]
     }
   }
 

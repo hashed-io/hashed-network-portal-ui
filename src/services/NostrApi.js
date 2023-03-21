@@ -32,10 +32,10 @@ class NostrApi {
     try {
       relay = relayInit(this.relay)
       relay.on('connect', () => {
-        console.log(`connected to ${relay.url}`)
+        console.warn(`connected to ${relay.url}`)
       })
       relay.on('error', () => {
-        console.log(`failed to connect to ${relay.url}`)
+        console.warn(`failed to connect to ${relay.url}`)
       })
       await relay.connect()
       this.relay = relay
