@@ -39,6 +39,7 @@
     "jose": "^4.8.3",
     "json-to-csv-export": "^2.1.1",
     "node-polyfill-webpack-plugin": "^1.1.4",
+    "nostr-tools": "^1.7.5",
     "path": "^0.12.7",
     "process": "^0.11.10",
     "quasar": "^2.7.4",

@@ -9,9 +9,8 @@ export const useNostr = () => {
   const nostrApi = $store.$nostrApi
 
   const connectNostr = async ({ relay = 'wss://relay.rip', publicKey }) => {
-    nostrApi.setRelay({ relay })
-    await nostrApi.connect()
-
+    // nostrApi.setRelay({ relay })
+    // await nostrApi.connect()
     let response
     if (publicKey && isNpub(publicKey)) {
       response = nostrApi.NpubToHex({ publicKey }) || {}
@@ -45,7 +44,11 @@ export const useNostr = () => {
 
   const getContacts = async ({ publicKey }) => {
     const ndkRest = process.env.NDK_REST_URL
-    const { url } = currentRelay()
+    let { url } = currentRelay() || {}
+    if (!url) {
+      const relays = nostrApi.getRelays()
+      url = relays[2]
+    }
     const relay = encodeURIComponent(url)
 
     try {

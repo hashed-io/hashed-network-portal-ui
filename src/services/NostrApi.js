@@ -29,26 +29,27 @@ class NostrApi {
     this.relays = []
   }
 
-  async connect () {
-    let relay
-    try {
-      relay = relayInit(this.relay)
-      relay.on('connect', () => {
-        console.log(`connected to ${relay.url}`)
-      })
-      relay.on('error', () => {
-        console.log(`failed to connect to ${relay.url}`)
-      })
-      await relay.connect()
-      this.relay = relay
-    } catch (error) {
-      throw new Error(`failed to connect to ${relay.url}`)
-    }
-  }
+  // async connect () {
+  //   let relay
+  //   try {
+  //     relay = relayInit(this.relay)
+  //     relay.on('connect', () => {
+  //       console.log(`connected to ${relay.url}`)
+  //     })
+  //     relay.on('error', () => {
+  //       console.log(`failed to connect to ${relay.url}`)
+  //     })
+  //     await relay.connect()
+  //     this.relay = relay
+  //   } catch (error) {
+  //     throw new Error(`failed to connect to ${relay.url}`)
+  //   }
+  // }
 
   async connectPool ({ relays, hexPubKey }, subTrigger) {
     if (!relays) throw new Error('Provide relays to connect')
     const pool = new SimplePool()
+    console.log({ pool })
 
     const sub = pool.sub(
       [...relays],
@@ -59,6 +60,7 @@ class NostrApi {
         }
       ]
     )
+    this.relays = [...relays]
     sub.on('event', event => {
       subTrigger(event)
     })

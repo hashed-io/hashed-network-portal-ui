@@ -82,13 +82,13 @@ const onLoginNostr = async ({ type, relay, address }) => {
     setRelay({ relay })
     const { pubkey, npubKey } = await connectNostr({ relay, publicKey: type === 'key' ? address : undefined })
 
-    const { unsub } = await connectPool({ relays: ['wss://relay.rip', 'wss://relay.snort.social'], hexPubKey: pubkey }, updateData)
+    const { unsub } = await connectPool({ relays: ['wss://relay.rip', 'wss://relay.snort.social', 'wss://relay.damus.io'], hexPubKey: pubkey }, updateData)
     unsubscribe = unsub
     setNostrAccount({ hex: pubkey, npub: npubKey })
 
-    const { content, tags } = await getProfileMetadata({ pubkey })
+    // const { content, tags } = await getProfileMetadata({ pubkey })
 
-    setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
+    // setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
 
     showNotification({ message: `Connected to ${getCurrentRelay()}`, color: 'green' })
 
