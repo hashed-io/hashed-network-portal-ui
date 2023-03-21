@@ -26,12 +26,9 @@ q-layout.containerLayout(container view="hHh lpR fFf")
                     q-item-section Logout
     q-page-container
       .row.justify-center
-        .col-10
+        .col-12
           q-page.q-py-md.q-px-lg
             router-view
-        //- .col-4
-        //-   q-page.q-py-md.q-px-lg
-        //-     UsersList(:users="contacts")
     q-dialog(v-model="dialog")
       NostrForm(
         :extensionAvailable="extensionIsAvailable"
@@ -48,7 +45,6 @@ import { useNostr } from '~/composables'
 import { useNotifications } from '~/mixins/notifications'
 import { useErrorHandler } from '~/mixins/errorHandler'
 import { useQuasar } from 'quasar'
-import UsersList from '~/components/coinstr/users-list.vue'
 import UserItem from '~/components/coinstr/user-item.vue'
 import NostrForm from '~/components/coinstr/nostr-form.vue'
 
@@ -63,16 +59,14 @@ const {
   connectNostr, disconnectNostr,
   getProfileMetadata, setNostrAccount,
   isLoggedIn, getActiveAccount,
-  currentRelay, setRelay, clearRelays,
-  getContacts, extensionIsAvailable
+  currentRelay, setRelay, clearRelays, extensionIsAvailable
 } = useNostr()
 
 const relayInput = ref(undefined)
-const contacts = ref(undefined)
+
 const dialog = ref(false)
 
 const onLoginNostr = async ({ type, relay, address }) => {
-  const nostrApi = $store.$nostrApi
   try {
     showLoading()
 
@@ -87,9 +81,6 @@ const onLoginNostr = async ({ type, relay, address }) => {
     setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
 
     showNotification({ message: `Connected to ${getCurrentRelay()}`, color: 'green' })
-
-    const data = await getContacts({ publicKey: pubkey })
-    contacts.value = data.contacts
   } catch (error) {
     handlerError(error)
   } finally {
@@ -111,16 +102,16 @@ const getUserInfo = computed(() => {
   }
 })
 const onLogout = () => {
-  contacts.value = undefined
   disconnectNostr()
 }
 const getCurrentRelay = () => {
   const { url } = currentRelay() || {}
   return url
 }
+// -
 </script>
+
 <style lang="stylus" scoped>
 .containerLayout
   height: 100vh
-
 </style>

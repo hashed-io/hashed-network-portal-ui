@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, defineExpose, ref, defineEmits } from 'vue'
+import { onMounted, onBeforeUnmount, defineExpose, ref, defineEmits, defineProps, watch, toRef } from 'vue'
 import Blockly from 'blockly'
 import { javascriptGenerator } from 'blockly/javascript'
 import { useErrorHandler } from '~/mixins/errorHandler'
@@ -12,7 +12,25 @@ import { useErrorHandler } from '~/mixins/errorHandler'
 const emits = defineEmits([
   'onChangedPolicy'
 ])
+
 // const props
+const props = defineProps({
+  eligiblesKeys: {
+    type: Array,
+    required: true
+  }
+})
+
+// const { eligiblesKeys } = toRef(props)
+
+// watch(eligiblesKeys, function (v) {
+//   console.log('props.eligiblesKeys changed', v)
+//   Blockly.Blocks.key.generateOptions = function () {
+//     return v.map(option => {
+//       return [option.display_name, option.bitcoinAddress]
+//     })
+//   }
+// })
 
 const { handlerError } = useErrorHandler()
 
@@ -455,11 +473,13 @@ const loadBlockly = () => {
       // Blockly.Extensions.apply('dynamic_options', this)
     },
     generateOptions: function () {
-      const options = [
-        ['Chema', '127e5ccd015578969febb42468f8d0be54c6b39331b7285d88040d5f0ba9606aa4'],
-        ['Chuy', '227e5ccd015578969febb42468f8d0be54c6b39331b7285d88040d5f0ba9606aa4']
-      ]
-      return options
+      const options = []
+      // console.log('generateOptions', props.eligiblesKeys)
+      if (!props.eligiblesKeys || !props.eligiblesKeys.length === 0) return [['Please add contacts to policy', '']]
+      const newOptions = props.eligiblesKeys?.map(option => {
+        return [option?.display_name, option?.bitcoinAddress]
+      })
+      return newOptions
     }
   }
 
