@@ -5,28 +5,44 @@
     bordered
     separator
   )
-    UserItem(
+    user-item(
       v-for="user in _users"
       :user="user"
+      interactive
+      @onAddUser="addUserToPolicy"
+      @onRemoveUser="removeUserToPolicy"
     )
 
 </template>
 <script setup>
 import {
   defineProps,
+  defineEmits,
   toRefs
 } from 'vue'
 import UserItem from './user-item.vue'
 // props
 const props = defineProps({
-  users: {
+  modelValue: {
     type: [Object, Array],
     default: () => ({})
   }
 })
+const { modelValue: _users } = toRefs(props)
+
 // Emits
-const { users: _users } = toRefs(props)
+const emits = defineEmits(['update:modelValue'])
+
 // Methods by Feature
+function addUserToPolicy (user) {
+  _users.value[user.bitcoinAddress].isSelectable = true
+  emits('update:modelValue', _users.value)
+}
+
+function removeUserToPolicy (user) {
+  _users.value[user.bitcoinAddress].isSelectable = false
+  emits('update:modelValue', _users.value)
+}
 </script>
 <style lang='stylus' scoped>
 </style>
