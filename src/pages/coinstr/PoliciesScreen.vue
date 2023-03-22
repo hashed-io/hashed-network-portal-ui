@@ -57,7 +57,7 @@ async function loadContacts () {
   if (isLoggedInNostr.value) {
     myPublicKey.value = pubkey.hex
     const data = await getContacts({ publicKey: pubkey.hex })
-    contacts.value = data?.contacts
+    contacts.value = data
   } else contacts.value = undefined
 }
 

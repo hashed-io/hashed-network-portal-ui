@@ -57,28 +57,30 @@ const { handlerError } = useErrorHandler()
 
 const {
   connectNostr, disconnectNostr,
-  getProfileMetadata, setNostrAccount,
+  getProfileMetadata, setNostrAccount, updateNostrAccount,
   isLoggedIn, getActiveAccount,
-  currentRelay, setRelay, clearRelays, extensionIsAvailable
+  currentRelay, setRelay, clearRelays,
+  extensionIsAvailable,
+  getRelays, setRelays,
+  connectPool
 } = useNostr()
 
 const relayInput = ref(undefined)
 
 const dialog = ref(false)
+let unsubscribe
 
-const onLoginNostr = async ({ type, relay, address }) => {
+const onLoginNostr = async ({ type, relays, address }) => {
   try {
     showLoading()
 
-    clearRelays()
-    setRelay({ relay })
-    const { pubkey, npubKey } = await connectNostr({ relay, publicKey: type === 'key' ? address : undefined })
+    setRelays({ relays })
+    const { pubkey, npubKey } = await connectNostr({ publicKey: type === 'key' ? address : undefined })
+
+    const { unsub } = await connectPool({ relays, hexPubKey: pubkey }, updateData)
+    unsubscribe = unsub
 
     setNostrAccount({ hex: pubkey, npub: npubKey })
-
-    const { content, tags } = await getProfileMetadata({ pubkey })
-
-    setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
 
     showNotification({ message: `Connected to ${getCurrentRelay()}`, color: 'green' })
   } catch (error) {
@@ -87,6 +89,14 @@ const onLoginNostr = async ({ type, relay, address }) => {
     hideLoading()
     dialog.value = false
   }
+}
+const updateData = (event) => {
+  const {
+    content,
+    kind
+  } = event || {}
+  const obj = JSON.parse(content)
+  updateNostrAccount(obj)
 }
 const getUserInfo = computed(() => {
   return {
@@ -102,11 +112,12 @@ const getUserInfo = computed(() => {
   }
 })
 const onLogout = () => {
+  unsubscribe()
   disconnectNostr()
 }
 const getCurrentRelay = () => {
-  const { url } = currentRelay() || {}
-  return url
+  // const { url } = currentRelay() || {}
+  return 'wss://lorem.ipsum'
 }
 // -
 </script>

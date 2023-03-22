@@ -11,3 +11,17 @@ export function setPrivateKey (state, pv) {
 export function clearNostrAccount (state) {
   state.account = {}
 }
+
+export function updateNostrAccount (state, dataObj) {
+  const property = 'profile'
+  if (!Object.prototype.hasOwnProperty.call(state?.account, property)) {
+    state.account[property] = {}
+  }
+  for (const prop in dataObj) {
+    state.account.profile[prop] = dataObj[prop]
+  }
+}
+
+export function updateRelays (state, relays) {
+  state.relays = [...relays]
+}

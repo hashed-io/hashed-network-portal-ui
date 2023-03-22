@@ -3,9 +3,6 @@ export default function () {
     publicKey: undefined,
     privateKey: undefined,
     account: {},
-    relays: [
-      'wss://relay.rip',
-      'wss://relay.house'
-    ]
+    relays: []
   }
 }

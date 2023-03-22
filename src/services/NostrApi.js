@@ -6,7 +6,8 @@ import {
   nip05,
   nip19,
   validateEvent,
-  verifySignature
+  verifySignature,
+  SimplePool
 } from 'nostr-tools'
 
 import Nip07 from './Nip07'
@@ -17,6 +18,7 @@ class NostrApi {
     this.relays = relays || []
     this.Nip07 = Nip07
     this.relay = undefined
+    this.pool = undefined
   }
 
   addRelay (relay) {
@@ -27,21 +29,41 @@ class NostrApi {
     this.relays = []
   }
 
-  async connect () {
-    let relay
-    try {
-      relay = relayInit(this.relay)
-      relay.on('connect', () => {
-        console.warn(`connected to ${relay.url}`)
-      })
-      relay.on('error', () => {
-        console.warn(`failed to connect to ${relay.url}`)
-      })
-      await relay.connect()
-      this.relay = relay
-    } catch (error) {
-      throw new Error(`failed to connect to ${relay.url}`)
-    }
+  // async connect () {
+  //   let relay
+  //   try {
+  //     relay = relayInit(this.relay)
+  //     relay.on('connect', () => {
+  //       console.log(`connected to ${relay.url}`)
+  //     })
+  //     relay.on('error', () => {
+  //       console.log(`failed to connect to ${relay.url}`)
+  //     })
+  //     await relay.connect()
+  //     this.relay = relay
+  //   } catch (error) {
+  //     throw new Error(`failed to connect to ${relay.url}`)
+  //   }
+  // }
+
+  async connectPool ({ relays, hexPubKey }, subTrigger) {
+    if (!relays) throw new Error('Provide relays to connect')
+    const pool = new SimplePool()
+
+    const sub = pool.sub(
+      [...relays],
+      [
+        {
+          authors: [hexPubKey],
+          kinds: [EventKind.METADATA]
+        }
+      ]
+    )
+    this.relays = [...relays]
+    sub.on('event', event => {
+      subTrigger(event)
+    })
+    return sub
   }
 
   async disconnect () {

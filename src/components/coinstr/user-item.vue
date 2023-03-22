@@ -1,7 +1,7 @@
 <template lang='pug'>
 q-item
   q-item-section(top avatar)
-    q-img.img(v-if="_user.picture" :src="_user.picture" width="50px" height="50px")
+    q-img.img(v-if="isValidPicture" :src="_user.picture" width="50px" height="50px")
     q-avatar.img(v-else color="secondary" text-color="white" font-size="15px" size="50px") User
   q-item-section(top no-wrap)
       q-item-label(lines="5")
@@ -70,6 +70,13 @@ const hasMetadata = computed(() => {
   const hasName = Object.prototype.hasOwnProperty.call(_user.value, 'name')
   return hasPicture && hasName && hasNpub
 })
+const isValidPicture = computed(() => {
+  return isValidURL(_user.value?.picture)
+})
+const isValidURL = (url) => {
+  const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i
+  return urlRegex.test(url)
+}
 const getNpub = computed(() => {
   const npub = _user.value.npub
   const prefix = 'npub'
