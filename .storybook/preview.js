@@ -68,7 +68,7 @@ app.use(store)
 import PolkadotApi from '~/services/polkadotApi.js'
 import { MarketplaceApi } from '~/services/polkadot-pallets'
 import { NbvStorageApi } from '@jmgayosso/nbv-client-api'
-const api = new PolkadotApi('wss://n1.hashed.systems')
+const api = new PolkadotApi('wss://n1.main.hashed.systems')
 api.connect().then(() => {
   const nbvStorageApi = new NbvStorageApi(api)
   const marketplaceApi = new MarketplaceApi(api)
