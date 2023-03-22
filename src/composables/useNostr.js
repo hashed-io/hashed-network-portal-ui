@@ -8,9 +8,7 @@ export const useNostr = () => {
   const $store = useStore()
   const nostrApi = $store.$nostrApi
 
-  const connectNostr = async ({ relay = 'wss://relay.rip', publicKey }) => {
-    // nostrApi.setRelay({ relay })
-    // await nostrApi.connect()
+  const connectNostr = async ({ publicKey }) => {
     let response
     if (publicKey && isNpub(publicKey)) {
       response = nostrApi.NpubToHex({ publicKey }) || {}
@@ -20,10 +18,10 @@ export const useNostr = () => {
     const npubKey = nostrApi.HexToNpub({ publicKey: pubkey })
     return { pubkey, npubKey }
   }
+
   const disconnectNostr = async () => {
     $store.commit('nostr/clearNostrAccount')
-    $store.$nostrApi.disconnect()
-    $store.$nostrApi.setRelay({ relay: undefined })
+    $store.commit('nostr/updateRelays', [])
   }
   const getProfileMetadata = async ({ pubkey }) => {
     const { content, tags } = await nostrApi.getProfileMetadata({ publicKey: pubkey })
@@ -38,19 +36,33 @@ export const useNostr = () => {
     $store.commit('nostr/setNostrAccount', { hex, npub, tags })
   }
   const updateNostrAccount = (obj) => {
-    console.log({ dataVuex: obj })
+    const currentAccount = $store.getters['nostr/getActiveAccount']
+    const rawCurrentAccount = JSON.parse(JSON.stringify(currentAccount))
+    try {
+      for (const [key, value] of Object.entries(obj)) {
+        if (!Object.prototype.hasOwnProperty.call(rawCurrentAccount, key) || !rawCurrentAccount[key]) {
+          rawCurrentAccount[key] = value
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
     $store.commit('nostr/updateNostrAccount', obj)
   }
 
   const getContacts = async ({ publicKey }) => {
+    let relays = getRelays()
+    relays = relays.map(relay => encodeURIComponent(relay))
+    const promises = []
+    relays.forEach(relay => {
+      promises.push(requestContacts({ relay, publicKey }))
+    })
+    const contacts = await Promise.all(promises)
+    const _contacts = contacts.map(contact => contact.contacts)
+    return helperFilterContacts(_contacts)
+  }
+  const requestContacts = async ({ relay, publicKey }) => {
     const ndkRest = process.env.NDK_REST_URL
-    let { url } = currentRelay() || {}
-    if (!url) {
-      const relays = nostrApi.getRelays()
-      url = relays[2]
-    }
-    const relay = encodeURIComponent(url)
-
     try {
       const response = await fetch(`${ndkRest}/${relay}/${publicKey}/contacts`)
       const { data: contacts, message, success } = await response.json()
@@ -94,14 +106,24 @@ export const useNostr = () => {
 
   const isLoggedIn = computed(() => $store.getters['nostr/isLoggedInNostr'])
   const getActiveAccount = computed(() => $store.getters['nostr/getActiveAccount'])
-  const currentRelay = () => nostrApi.getRelay()
-  const setRelay = ({ relay }) => nostrApi.setRelay({ relay })
+
+  const getRelays = () => $store.getters['nostr/getRelays']
+  const setRelays = ({ relays }) => $store.commit('nostr/updateRelays', relays)
+
   const clearRelays = () => nostrApi.clearRelays()
 
   const connectPool = async ({ relays, hexPubKey }, subTrigger) => {
     return nostrApi.connectPool({ relays, hexPubKey }, subTrigger)
   }
-
+  const helperFilterContacts = (contacts) => {
+    const contactsProcessed = {}
+    contacts.forEach(contact => {
+      for (const key in contact) {
+        contactsProcessed[key] = contact[key]
+      }
+    })
+    return contactsProcessed
+  }
   return {
     connectNostr,
     getProfileMetadata,
@@ -110,13 +132,13 @@ export const useNostr = () => {
     isLoggedIn,
     getActiveAccount,
     disconnectNostr,
-    currentRelay,
-    setRelay,
     clearRelays,
     getContacts,
     extensionIsAvailable,
     HexToNpub,
     NpubToHex,
-    connectPool
+    connectPool,
+    getRelays,
+    setRelays
   }
 }

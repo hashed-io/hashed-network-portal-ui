@@ -61,6 +61,7 @@ const {
   isLoggedIn, getActiveAccount,
   currentRelay, setRelay, clearRelays,
   extensionIsAvailable,
+  getRelays, setRelays,
   connectPool
 } = useNostr()
 
@@ -69,21 +70,17 @@ const relayInput = ref(undefined)
 const dialog = ref(false)
 let unsubscribe
 
-const onLoginNostr = async ({ type, relay, address }) => {
+const onLoginNostr = async ({ type, relays, address }) => {
   try {
     showLoading()
 
-    clearRelays()
-    setRelay({ relay })
-    const { pubkey, npubKey } = await connectNostr({ relay, publicKey: type === 'key' ? address : undefined })
+    setRelays({ relays })
+    const { pubkey, npubKey } = await connectNostr({ publicKey: type === 'key' ? address : undefined })
 
-    const { unsub } = await connectPool({ relays: ['wss://relay.rip', 'wss://relay.snort.social', 'wss://relay.damus.io'], hexPubKey: pubkey }, updateData)
+    const { unsub } = await connectPool({ relays, hexPubKey: pubkey }, updateData)
     unsubscribe = unsub
+
     setNostrAccount({ hex: pubkey, npub: npubKey })
-
-    // const { content, tags } = await getProfileMetadata({ pubkey })
-
-    // setNostrAccount({ hex: pubkey, npub: npubKey, profile: JSON.parse(content), tags })
 
     showNotification({ message: `Connected to ${getCurrentRelay()}`, color: 'green' })
   } catch (error) {
@@ -115,11 +112,12 @@ const getUserInfo = computed(() => {
   }
 })
 const onLogout = () => {
+  unsubscribe()
   disconnectNostr()
 }
 const getCurrentRelay = () => {
-  const { url } = currentRelay() || {}
-  return url
+  // const { url } = currentRelay() || {}
+  return 'wss://lorem.ipsum'
 }
 // -
 </script>

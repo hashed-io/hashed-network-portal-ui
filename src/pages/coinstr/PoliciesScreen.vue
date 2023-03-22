@@ -53,7 +53,7 @@ async function loadContacts () {
   const pubkey = $store.getters['nostr/getActiveAccount']
   if (isLoggedInNostr.value) {
     const data = await getContacts({ publicKey: pubkey.hex })
-    contacts.value = data?.contacts
+    contacts.value = data
   }
 }
 

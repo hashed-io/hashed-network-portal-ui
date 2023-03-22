@@ -49,7 +49,6 @@ class NostrApi {
   async connectPool ({ relays, hexPubKey }, subTrigger) {
     if (!relays) throw new Error('Provide relays to connect')
     const pool = new SimplePool()
-    console.log({ pool })
 
     const sub = pool.sub(
       [...relays],

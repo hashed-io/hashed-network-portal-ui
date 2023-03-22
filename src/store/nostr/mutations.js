@@ -13,7 +13,10 @@ export function clearNostrAccount (state) {
 }
 
 export function updateNostrAccount (state, dataObj) {
-  state.account.profile = {}
+  const property = 'profile'
+  if (!Object.prototype.hasOwnProperty.call(state?.account, property)) {
+    state.account[property] = {}
+  }
   for (const prop in dataObj) {
     state.account.profile[prop] = dataObj[prop]
   }
