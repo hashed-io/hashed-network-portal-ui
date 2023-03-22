@@ -88,7 +88,7 @@ const loadMyVestingData = async () => {
 }
 
 const selectedAccount = computed(() => $store.getters['profile/polkadotAddress'])
-// const selectedAccount = ref('5CMhinFmhCkybhc1QNH4m7W8nc43PYvmi9mGBE6VDgSxk15r')
+// const selectedAccount = ref('5EnLD4z5PUnmKZKZUZyiDNotLiRm2bBiPCNbVEMP63yPXWLJ')
 
 const vestingList = computed(() => {
   return data.vestingList.map(vesting => {

@@ -236,15 +236,15 @@ const columnsForBoth = [
     format: val => `${AmountUtils.formatToUSLocale(val)}`,
     sortable: true
   },
-  {
-    name: 'minContrib',
-    label: 'Min.Contrib',
-    required: true,
-    align: 'left',
-    field: row => row.minContribution,
-    format: val => `${AmountUtils.formatToUSLocale(val)}`,
-    sortable: true
-  },
+  // {
+  //   name: 'minContrib',
+  //   label: 'Min.Contrib',
+  //   required: true,
+  //   align: 'left',
+  //   field: row => row.minContribution,
+  //   format: val => `${AmountUtils.formatToUSLocale(val)}`,
+  //   sortable: true
+  // },
   {
     name: 'bonus',
     label: 'Bonus HASH',
@@ -364,7 +364,8 @@ async function getComputed () {
     const who = display.display ? `${display?.display} (${display.address})` : `${display.address}`
     const baseReward = round2 * hashPerDot
     const minContribution = Math.min(round1, round2)
-    const bonusHash = isEligibleForBonus ? minContribution * hashPerDot * 0.2 : 0
+    // const bonusHash = isEligibleForBonus ? minContribution * hashPerDot * 0.2 : 0
+    const bonusHash = isEligibleForBonus ? round1 * hashPerDot * 0.2 : 0
     const totalReward = baseReward + bonusHash
     const hashPerBlock = totalReward / blocksForLease.value
     const hashedAddress = $store.$polkadotApi.parseAddressToss58(display.address, '9072')
