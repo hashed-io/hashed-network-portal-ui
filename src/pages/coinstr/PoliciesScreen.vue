@@ -6,12 +6,15 @@
         ref="blocklyRef"
         @onChangedPolicy="validatePolicy"
         :eligiblesKeys="eligiblesContacts"
+        :myPublicKey="myPublicKey"
       )
-    .col.q-pa-md
-      .box
+      .box.full-width
         .text-body2.text-bold Policy code:
         .text-body2.text-weight-light {{ policy }}
-      users-list(v-model="contacts" v-if="contacts")
+    .col.q-pl-md
+      template(v-if="contacts")
+        .text-body2.text-bold Contacts:
+        users-list(v-model="contacts")
 </template>
 
 <script setup>
@@ -31,10 +34,10 @@ const policy = ref(undefined)
 const contacts = ref(undefined)
 
 const isLoggedInNostr = computed(() => $store.getters['nostr/isLoggedInNostr'])
+const myPublicKey = ref(undefined)
 
 watch(isLoggedInNostr, function (v) {
   try {
-    console.log('isLoggedInNostr', v)
     loadContacts()
   } catch (e) {
     console.error(e)
@@ -52,9 +55,10 @@ onMounted(() => {
 async function loadContacts () {
   const pubkey = $store.getters['nostr/getActiveAccount']
   if (isLoggedInNostr.value) {
+    myPublicKey.value = pubkey.hex
     const data = await getContacts({ publicKey: pubkey.hex })
     contacts.value = data
-  }
+  } else contacts.value = undefined
 }
 
 function generateCode () {
@@ -63,7 +67,6 @@ function generateCode () {
 }
 
 function validatePolicy (code) {
-  console.log('validatingPolicy', code)
   policy.value = code
 }
 
@@ -72,13 +75,7 @@ const eligiblesContacts = computed(() => {
   return Object.entries(contacts.value).map(v => v[1]).filter(user => user.isSelectable)
 })
 
-watch(eligiblesContacts, function (v) {
-  try {
-    console.log('eligiblesContacts changed', v)
-  } catch (e) {
-    console.error(e)
-  }
-})
+// --
 </script>
 
 <style lang="stylus" scoped>
