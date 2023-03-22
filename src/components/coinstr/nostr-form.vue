@@ -56,8 +56,8 @@ const options = ['extension', 'key', 'notSelected']
 const currentSelection = ref(options[2])
 
 const form = reactive({
-  // relay: 'wss://relay.rip',
-  relay: 'wss://relay.snort.social',
+  relay: 'wss://relay.rip',
+  // relay: 'wss://relay.snort.social',
   address: 'npub1aff8upvht8fk3f2j2vnsg48936wkunlzaxxnqttwqxppl2tnykwsahwngp'
 })
 
