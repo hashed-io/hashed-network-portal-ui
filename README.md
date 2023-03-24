@@ -1,4 +1,4 @@
-# Hashed Portal
+# Hashed Club Portal
 
 ## Quick Start
 ```bash
