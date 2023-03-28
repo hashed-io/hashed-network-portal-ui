@@ -6,7 +6,7 @@ q-card#NotBalanceCard
     .text-body2.q-mb-sm {{ $t('pages.login.yourHashedAddress') }}:
     .text-body2.text-weight-light.q-mb-sm {{ $store.$polkadotApi.parseAddressToss58(address, '9072') }}
     q-btn(
-      :label="$t('pages.login.contactUs')"
+      :label="$t('pages.login.getTokens')"
       color="primary"
       no-caps
       @click="contactUs"
@@ -26,7 +26,8 @@ defineProps({
 const $store = useStore()
 
 function contactUs () {
-  window.open('https://hashed.network/contact', '_blank')
+  // window.open('https://hashed.network/contact', '_blank')
+  window.open('https://hash-token.vercel.app', '_blank')
 }
 // -
 </script>
