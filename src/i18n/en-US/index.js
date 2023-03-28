@@ -172,7 +172,8 @@ export default {
         creatingDescriptor: 'We are creating the descriptor',
         accountDuplicated: 'This account is duplicated',
         refreshAndCopyAddress: 'Refresh and copy',
-        refreshAndShowQrAddress: 'Refresh and show qr'
+        refreshAndShowQrAddress: 'Refresh and show qr',
+        accountDontHaveXPUB: 'This user does not have an XPUB linked to their account.'
       },
       proposals: {
         create_proposal: 'Create new proposal',
