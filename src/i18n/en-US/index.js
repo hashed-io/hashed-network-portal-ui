@@ -100,7 +100,8 @@ export default {
       googleDriveError: 'An error has occurred trying to get access to Google Drive',
       hashedClubAccessibility: 'Hashed Club is only accessible to those that hold HASH. Contact to join.',
       yourHashedAddress: 'Your HASHED address',
-      contactUs: 'Contact us'
+      contactUs: 'Contact us',
+      getTokens: 'Get HASH token'
     },
     nbv: {
       appName: 'Bitcoin Vaults',
@@ -171,7 +172,8 @@ export default {
         creatingDescriptor: 'We are creating the descriptor',
         accountDuplicated: 'This account is duplicated',
         refreshAndCopyAddress: 'Refresh and copy',
-        refreshAndShowQrAddress: 'Refresh and show qr'
+        refreshAndShowQrAddress: 'Refresh and show qr',
+        accountDontHaveXPUB: 'This user does not have an XPUB linked to their account.'
       },
       proposals: {
         create_proposal: 'Create new proposal',
@@ -227,7 +229,7 @@ export default {
         // signPsbtStep1: ''
       },
       list: {
-        thereAreNotVaultsYet: 'There Are Not Vaults Yet'
+        thereAreNotVaultsYet: 'There are no vaults yet'
       },
       actions: {
         refresh: 'refresh',

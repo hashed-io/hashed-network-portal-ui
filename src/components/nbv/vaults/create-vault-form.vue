@@ -9,6 +9,10 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       size="sm"
     )
     .text-h4.q-mb-lg {{ $t('pages.nbv.vaults.createNewVault')  }}
+    banner(
+      message="You and all the cosigners will need an xpub to use Bitcoin Vaults. Xpubs are created and managed under Extended Keys."
+      status="loading"
+    )
     .row.items-center.q-col-gutter-md.q-my-sm
       .col-7
         q-input(
@@ -82,7 +86,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
       //- .col
       //-   //- .text-body2 {{ $t('pages.nbv.vaults.mOfn')  }}
       //-   .text-body2 Multisignature vault
-    #cosigners
+    #cosigners.q-pb-md.q-mb-md
       .row
         .col-7
           .row.justify-between.q-mr-sm.q-mb-sm
@@ -121,7 +125,7 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
                 :label="$t('pages.nbv.vaults.accountAddress')"
                 v-model="cosigner.address"
                 outlined
-                :rules="[rules.required, rules.isValidPolkadotAddress, rules.notOwnAccount(signer), notDuplicatedAccounts]"
+                :rules="[rules.required, rules.isValidPolkadotAddress, rules.notOwnAccount(signer), notDuplicatedAccounts, hasXpub]"
               )
             q-icon.icon-btn.q-mb-md(
               size="md"
@@ -148,13 +152,14 @@ q-form.q-pa-xl.q-gutter-y-md(@submit="submitForm" ref="form")
 <script>
 import { validation } from '~/mixins/validation'
 import AccountInput from '~/components/common/account-input'
+import { Banner } from '~/components/common'
 
 /**
  * Form to create a new vault
  */
 export default {
   name: 'CreateProposalForm',
-  components: { AccountInput },
+  components: { AccountInput, Banner },
   mixins: [validation],
   props: {
     /**
@@ -223,6 +228,7 @@ export default {
   mounted () {
     this.thresholdRange.max = 2
     this.ownerAddress = this.signer
+    // this.showNotification({ message: 'You and all the cosigners will need an xpub to use Bitcoin Vaults. Xpubs are created and managed under Extended Keys.' })
   },
   methods: {
     async setCosigners () {
@@ -276,6 +282,13 @@ export default {
       const exist = this.cosigners.filter(e => e.address === account)
       if (exist && exist.length > 1) {
         return this.$t('pages.nbv.vaults.accountDuplicated')
+      } return true
+    },
+    async hasXpub (account) {
+      let xpub = await this.$store.$nbvStorageApi.getXpubByUser(account)
+      xpub = xpub?.toHuman()
+      if (!xpub) {
+        return this.$t('pages.nbv.vaults.accountDontHaveXPUB')
       } return true
     }
   }
