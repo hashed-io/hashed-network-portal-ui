@@ -65,9 +65,9 @@
             @click="copyTextToClipboard(data.outputDescriptor, 'Output Descriptor copied to clipboard')"
           )
       //- Proposals
-      #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
+      #proofOfReserves.row.justify-between.items-center.q-mt-lg.q-mb-sm
         .text-subtitle2.q-mt-md Proof of reserves
-      proof-of-reserves-list
+      proof-of-reserves-list(:proofOfReserves="data.proofOfReserves" @onProofOfReservesSelected="goToProofOfReserves")
       #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
       proposals-list(:proposals="data.proposalsList" @onProposalSelected="goToProposalDetails")
@@ -132,13 +132,13 @@
           .text-overline {{ $t('pages.nbv.vaults.threshold') }}
           .text-body2 {{ `${data.threshold} of ${data.cosigners.length} Multisignature` }}
           hr
-          .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReserves') }}
-            q-btn.full-width.no-padding(
-              :label="$t('pages.nbv.proofOfReserves.goToProofOfReserves')"
-              color="secondary"
-              no-caps
-              :to="{ name: 'vaultProofOfReserves', query: { vault: data.vaultId } }"
-            )
+          //- .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReserves') }}
+          //-   q-btn.full-width.no-padding(
+          //-     :label="$t('pages.nbv.proofOfReserves.goToProofOfReserves')"
+          //-     color="secondary"
+          //-     no-caps
+          //-     :to="{ name: 'vaultProofOfReserves', query: { vault: data.vaultId } }"
+          //-   )
           .text-overline.q-mt-xs Actions
           .q-gutter-y-sm
             q-btn.full-width.no-padding(
@@ -281,7 +281,12 @@ onBeforeMount(async () => {
     // this.$route.meta.breadcrumb[1].name = 'Detailsss'
 
     unsubProofOfReserves = await getProofOfReserves({ vaultId: data.vaultId }, (v) => {
-      console.log('proof of reserves', v)
+      const proofOfReserves = v?.toHuman()
+      data.proofOfReserves = {
+        ...proofOfReserves,
+        threshold: data.threshold,
+        vaultId: data.vaultId
+      }
     })
 
     interval = setInterval(() => {
@@ -298,7 +303,12 @@ onBeforeMount(async () => {
 
 onBeforeUnmount(() => {
   clearInterval(interval)
+  if (unsubProofOfReserves) unsubProofOfReserves()
 })
+
+function goToProofOfReserves () {
+  $router.push({ name: 'vaultProofOfReserves', query: { vault: data.vaultId } })
+}
 
 async function updateVault () {
   try {
