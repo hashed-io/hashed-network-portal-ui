@@ -288,6 +288,7 @@ onBeforeMount(async () => {
 
     unsubProofOfReserves = await getProofOfReserves({ vaultId: data.vaultId }, (v) => {
       const proofOfReserves = v?.toHuman()
+      if (!proofOfReserves) return
       data.proofOfReserves = {
         ...proofOfReserves,
         threshold: data.threshold,
