@@ -8,6 +8,7 @@ export default {
     'en-US': 'English',
     'es-MEX': 'Spanish'
   },
+  HCD: 'HCD',
   general: {
     lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     loremShort: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -241,8 +242,9 @@ export default {
         status: 'Status',
         message: 'Message',
         psbt: 'PSBT',
-        emptyProofOfReserves: 'Have not been created a Proof of reserves for this vault.',
+        emptyProofOfReserves: 'Proof of Reserves has not been created for this vault.',
         createProofOfReserves: 'Create proof of reserves',
+        resetProofOfReserves: 'Reset proof of reserves',
         verifyProofOfReserves: 'Verify proof',
         downloadPsbt: 'Download PSBT',
         proofOfReservesResponse: 'Proof of reserves response',

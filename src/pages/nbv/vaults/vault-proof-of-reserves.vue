@@ -27,7 +27,7 @@
             q-btn.full-width.no-padding(
               v-if="data.vault"
               @click="onCreateProofOfReserves"
-              :label="$t('pages.nbv.proofOfReserves.createProofOfReserves')"
+              :label="$t('pages.nbv.proofOfReserves.resetProofOfReserves')"
               color="secondary"
               no-caps
             )
@@ -196,7 +196,7 @@ async function updateData (proofOfReserves) {
 async function onCreateProofOfReserves () {
   try {
     showLoading()
-    const message = `${data.vault.description}_proofOfReserves`
+    const message = `proof_${data.vault.description}_proofOfReserves`
     const payload = {
       vaultId: route.query.vault,
       descriptors: {
@@ -329,9 +329,10 @@ const canFinalize = computed(() => {
   const signers = proposalCosigners.value?.filter(v => v.signed)
   return !!(signers?.length >= data.vault?.threshold)
 })
-// const canBroadcast = computed(() => {
-//   return !!(data.proofOfReserves?.status === 'Finalized')
-// })
+const canBroadcast = computed(() => {
+  // return !!(data.proofOfReserves?.status === 'Finalized')
+  return false
+})
 const isBroadcasted = computed(() => {
   // return !!(data.proofOfReserves?.status === 'Broadcasted')
   return false

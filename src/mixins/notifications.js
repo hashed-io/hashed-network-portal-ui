@@ -111,11 +111,11 @@ export function useNotifications () {
   function copyTextToClipboard (data) {
     try {
       navigator.clipboard.writeText(data).then(e => {
-        this.showNotification({ message: 'Text copied to clipboard' })
+        showNotification({ message: 'Text copied to clipboard' })
       })
     } catch (e) {
       console.error('error', e)
-      this.showNotification({ message: e.message || e, color: 'negative' })
+      showNotification({ message: e.message || e, color: 'negative' })
     }
   }
 
