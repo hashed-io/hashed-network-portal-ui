@@ -329,9 +329,10 @@ const canFinalize = computed(() => {
   const signers = proposalCosigners.value?.filter(v => v.signed)
   return !!(signers?.length >= data.vault?.threshold)
 })
-// const canBroadcast = computed(() => {
-//   return !!(data.proofOfReserves?.status === 'Finalized')
-// })
+const canBroadcast = computed(() => {
+  // return !!(data.proofOfReserves?.status === 'Finalized')
+  return false
+})
 const isBroadcasted = computed(() => {
   // return !!(data.proofOfReserves?.status === 'Broadcasted')
   return false

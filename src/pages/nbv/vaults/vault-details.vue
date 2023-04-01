@@ -67,7 +67,13 @@
       //- Proposals
       #proofOfReserves.row.justify-between.items-center.q-mt-lg.q-mb-sm
         .text-subtitle2.q-mt-md Proof of reserves
-      proof-of-reserves-list(:proofOfReserves="data.proofOfReserves" @onProofOfReservesSelected="goToProofOfReserves")
+      proof-of-reserves-list(
+        :proofOfReserves="data.proofOfReserves"
+        @onProofOfReservesSelected="goToProofOfReserves"
+        @onCreateProofOfReserves="onCreateProofOfReserves"
+        :disabled="!data.outputDescriptor"
+        :isSupported="isHCDLogged"
+      )
       #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proposals.proposals') }}
       proposals-list(:proposals="data.proposalsList" @onProposalSelected="goToProposalDetails")
@@ -306,6 +312,27 @@ onBeforeUnmount(() => {
   if (unsubProofOfReserves) unsubProofOfReserves()
 })
 
+async function onCreateProofOfReserves () {
+  try {
+    showLoading()
+    const message = `proof_${data.description}_proofOfReserves`
+    const payload = {
+      vaultId: data.vaultId,
+      descriptors: {
+        descriptor: data.descriptors.outputDescriptor,
+        change_descriptor: data.descriptors.changeDescriptor
+      },
+      message
+    }
+    await createProofOfReserves(payload)
+    showNotification({ message: $t('pages.nbv.proofOfReserves.createdProofOfReservesSuccessfully') })
+  } catch (e) {
+    handlerError(e)
+  } finally {
+    hideLoading()
+  }
+}
+
 function goToProofOfReserves () {
   $router.push({ name: 'vaultProofOfReserves', query: { vault: data.vaultId } })
 }
@@ -508,6 +535,8 @@ async function refreshAndShowQrAddress () {
     handlerError(e)
   }
 }
+
+const isHCDLogged = computed(() => $store.getters['profile/isHCDLogged'])
 </script>
 
 <style lang="stylus" scoped>
