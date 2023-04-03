@@ -50,6 +50,7 @@ const routes = {
       meta: {
         breadcrumb: [
           { name: 'myVaults', icon: 'storage', to: { name: 'manageVaults' } },
+          { name: 'vaultDetails', icon: 'summarize', back: true },
           { name: 'proofOfReserves', icon: 'summarize' }
         ],
         app: 'nbv'

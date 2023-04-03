@@ -4,7 +4,7 @@
     //- Body
     .col-10.q-pr-md#Body
       //- Header
-      .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReserves') }}
+      .text-overline {{ $t('pages.nbv.proofOfReserves.proofOfReservesDetails') }}
       #ProofOfReservesDetails(v-if="data.proofOfReserves")
         .text-subtitle2.q-mt-md {{ $t('pages.nbv.proofOfReserves.status') }}
         .text-body2 {{ labelStatus }}

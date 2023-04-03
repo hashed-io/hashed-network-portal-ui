@@ -66,7 +66,7 @@
           )
       //- Proposals
       #proofOfReserves.row.justify-between.items-center.q-mt-lg.q-mb-sm
-        .text-subtitle2.q-mt-md Proof of reserves
+        .text-subtitle2.q-mt-md Proof of Reserves
       proof-of-reserves-list(
         :proofOfReserves="data.proofOfReserves"
         @onProofOfReservesSelected="goToProofOfReserves"
