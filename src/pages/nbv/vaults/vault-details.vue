@@ -71,7 +71,7 @@
         :proofOfReserves="data.proofOfReserves"
         @onProofOfReservesSelected="goToProofOfReserves"
         @onCreateProofOfReserves="onCreateProofOfReserves"
-        :disabled="!data.outputDescriptor"
+        :disabled="!data.outputDescriptor || (!data.balance || data.balance <= 0)"
         :isSupported="isHCDLogged"
       )
       #proposals.row.justify-between.items-center.q-mt-lg.q-mb-sm
