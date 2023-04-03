@@ -36,7 +36,7 @@ export default {
     create: 'create',
     marketplaces: 'Marketplaces',
     taxCredits: 'Tax Credits',
-    proofOfReserves: 'Proof of Reserves',
+    proofOfReserves: 'Proof of Reserves Details',
     wallet: 'Wallet',
     members: 'Members'
   },
@@ -218,7 +218,7 @@ export default {
         description: 'Description',
         recipientAddress: 'Recipient address',
         amountInSatoshi: 'Amount',
-        pendingStatus: 'Waiting on signatures',
+        pendingStatus: 'Waiting on co-signers',
         finalizedStatus: 'Finalized, waiting for broadcast',
         broadcastedStatus: 'Broadcasted',
         readyToFinalize: 'Ready to finalize',
@@ -237,7 +237,8 @@ export default {
         copyToClipboard: 'Copy to clipboard'
       },
       proofOfReserves: {
-        proofOfReserves: 'Proof of reserves',
+        proofOfReserves: 'Proof of Reserves',
+        proofOfReservesDetails: 'Proof of Reserves Details',
         goToProofOfReserves: 'Test',
         status: 'Status',
         message: 'Message',
