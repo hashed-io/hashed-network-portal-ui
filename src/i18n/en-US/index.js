@@ -218,7 +218,7 @@ export default {
         description: 'Description',
         recipientAddress: 'Recipient address',
         amountInSatoshi: 'Amount',
-        pendingStatus: 'Waiting on signatures',
+        pendingStatus: 'Waiting on co-signers',
         finalizedStatus: 'Finalized, waiting for broadcast',
         broadcastedStatus: 'Broadcasted',
         readyToFinalize: 'Ready to finalize',
