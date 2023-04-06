@@ -27,7 +27,7 @@ const $store = useStore()
 
 function contactUs () {
   // window.open('https://hashed.network/contact', '_blank')
-  window.open('https://hash-token.vercel.app', '_blank')
+  window.open('https://enter.hashed.club', '_blank')
 }
 // -
 </script>
