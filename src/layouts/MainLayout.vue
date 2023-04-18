@@ -113,7 +113,9 @@ export default defineComponent({
     })
 
     function logout () {
+      console.log('logout test')
       $store.dispatch('polkadotWallet/hashedLogout')
+      $store.$hcd.logout()
     }
 
     function onSelectAccount (account) {

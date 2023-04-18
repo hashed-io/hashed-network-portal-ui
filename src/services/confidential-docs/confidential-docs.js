@@ -7,7 +7,7 @@ import {
   Polkadot,
   HashedFaucet
 } from '@smontero/hashed-confidential-docs'
-// } = require('../../../../hashed-confidential-docs-client-api/src/index')
+// = require('../../../../hashed-confidential-docs-client-api/src/index')
 
 class ConfidentialDocs {
   constructor ({ ipfsURL, chainURI, appName, faucetServerUrl, ipfsAuthHeader }) {

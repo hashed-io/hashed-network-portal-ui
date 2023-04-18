@@ -200,10 +200,14 @@ export default defineComponent({
     })
 
     async function logout () {
+      // eslint-disable-next-line no-undef
+      google.accounts.id.disableAutoSelect()
       $store.dispatch('hcdWallet/logout')
       $store.dispatch('polkadotWallet/hashedLogout')
-      await $router.push({ name: 'login' })
       $store.commit('profile/cleanProfile')
+      $store.$hcd.logout()
+
+      await $router.push({ name: 'login' })
     }
 
     function onSelectAccount (account) {
