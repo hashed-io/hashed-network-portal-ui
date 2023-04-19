@@ -3427,10 +3427,10 @@
     sha.js "^2.4.11"
     uint8arrays "^3.0.0"
 
-"@smontero/hashed-confidential-docs@^0.2.20":
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.20.tgz#8ec98938010e39c5ed3f1241044fb30f91d697c4"
-  integrity sha512-gt7vxseFRBFcqUqsF31ZTaVT3djweU/jqx6qMxH+u2Cw7YRluHmZtwaL6LPQWCzz0u/dG0vjPU39Mz6PKmhQcw==
+"@smontero/hashed-confidential-docs@^0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@smontero/hashed-confidential-docs/-/hashed-confidential-docs-0.2.22.tgz#da179ffe86ce51c4eb30bc0cd9e478b2d81928e7"
+  integrity sha512-KjqMulETj35w2UgRRvVhghgmh2TKT3faWyjR8lXHJoh1AATfQA5u1ACQByKeq5kDV1CVOaUNPCbquZM1IIhx2w==
   dependencies:
     "@polkadot/api" "^8.1.1"
     "@polkadot/extension-dapp" "^0.43.1"
