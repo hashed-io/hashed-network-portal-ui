@@ -17,7 +17,7 @@ This tutorial will go through NBV user flow! The following tutorials will show s
  <!-- <a href="#refLogin">How to Login</a> -->
 [How to login](#refLogin)
   - [Polkadot extension](#polkadot-extension)
-  - [Hashed Confidential Docs](#hashed-confidential-docs-google-sigin)
+  - [Hashed Confidential Docs](#hashed-confidential-docs-google-signin)
 
  <a href="#refCreateXPUB">How to create and link a new xpub</a>
 
@@ -77,7 +77,7 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed.cl
 
 <hr/>
 
-#### Hashed Confidential Docs (Google Sigin)
+#### Hashed Confidential Docs (Google Signin)
 
 First, we need to access to the Hashed Network Portal [site](https://hashed.club/login).
 
