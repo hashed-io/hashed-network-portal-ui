@@ -10,11 +10,14 @@ This tutorial will go through NBV user flow! The following tutorials will show s
 * Install polkadot{.js} extension -> Download <a href="https://polkadot.js.org/extension/" target="_blank">here</a>.
 * Install BlueWallet on your mobile
 -> Download <a href="https://bluewallet.io/" target="_blank">here</a>
-    
+
 **Note:** If you aren't familiar with any concepts, we suggest reading the <a href="#refConcepts">last section</a> first.
 
 ### Sections
- <a href="#refLogin">How to Login</a>
+ <!-- <a href="#refLogin">How to Login</a> -->
+[How to login](#refLogin)
+  - [Polkadot extension](#polkadot-extension)
+  - [Hashed Confidential Docs](#hashed-confidential-docs-google-sigin)
 
  <a href="#refCreateXPUB">How to create and link a new xpub</a>
 
@@ -26,7 +29,15 @@ This tutorial will go through NBV user flow! The following tutorials will show s
 
  <a href="#refCreateProposal">How to create a proposal</a>
 
- <a href="#refSignProposal">How to sign a proposal.</a>
+[How to sign a proposal](#how-to-sign-a-proposal)
+  - [With Blue Wallet](#with-blue-wallet)
+  - [With Google Account](#with-hashed-confidential-docs)
+
+[How to create a Proof of Reserves](#how-to-sign-a-proposal)
+- [With Hashed Confidential Docs](#with-hashed-confidential-docs-1)
+
+[How to sign Proof of Reserves](#how-to-sign-proof-of-reserves)
+- [With Hashed Confidential Docs](#with-hashed-confidential-docs-2)
 
  <a href="#refFinalizeProposal">How to finalize and broadcast a proposal.</a>
 
@@ -34,8 +45,8 @@ This tutorial will go through NBV user flow! The following tutorials will show s
 <div id="refLogin"></div>
 
 ### How to Login
-
-First, we need to access to the Hashed Network Portal <a href="https://hashed-portal-dev.hashed.systems/login" target="blank">site</a>.
+#### Polkadot extension
+First, we need to access to the Hashed Network Portal <a href="https://hashed.club/login" target="blank">site</a>.
 
 <div style="text-align: center">
 <img src="./assets/login_screen.png" style="width: 30vw; min-width: 250px">
@@ -63,7 +74,48 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed-po
     <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
     </div>
 
+
 <hr/>
+
+#### Hashed Confidential Docs (Google Sigin)
+
+First, we need to access to the Hashed Network Portal [site](https://hashed.club/login).
+
+<div style="text-align: center">
+<img src="./assets/login_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+1. Click "Google Sign In" button
+    <div style="text-align: center">
+    <img src="./assets/hcd_login_btn.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+2. Choose an Google Account.
+    <div style="text-align: center">
+    <img src="./assets/hcd_choose_account.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+3. Confirm "Sign Payload" modal
+
+    **Note:** If is the first time login into portal.
+    <div style="text-align: center">
+      <img src="./assets/hcd_login_sign_payload.png" style="width: 40vw; min-width: 250px">
+    </div>
+
+4. Confirm "Call extrinsic" modal
+
+    **Note:** If is the first time login into portal.
+    <div style="text-align: center">
+      <img src="./assets/hcd_login_call_extrinsic.png" style="width: 40vw; min-width: 250px">
+    </div>
+
+5. If you logged correctly you will see the following screen.
+    <div style="text-align: center">
+    <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+<br>
+
 <div id="refCreateXPUB"></div>
 
 ### How to create a new xpub.
@@ -96,14 +148,35 @@ To create and link a new xpub we have two options:
 
     **Note:** If you aren't familiar with any concepts, we suggest reading the <a href="#refConcepts">last section</a> first.
 
-    <div>    
+    <div>
     <img src="./assets/nbv_seed_screen.png" style="width: 30vw; min-width: 250px">
     </div>
 
 4. Sign the transaction using polkadot extension.
 
 5. Now you have created a new Xpub linked to your polkadot account.
+<div style="text-align: center">
 <img src="./assets/nbv_manage_key_with_xpub_screen.png" style="width: 30vw; min-width: 250px">
+</div>
+
+#### Hashed Confidential Docs
+1. Go to *Extended Keys* page in the portal.
+    <div style="text-align: center">
+    <img src="./assets/nbv_header_options.png" style="width: 30vw; min-width: 250px">
+    </div>
+
+2. Click on *Link XPUB* button.
+    <div style="text-align: center">
+    <img src="./assets/hcd_link_xpub.png" style="width: 30vw; min-width: 250px">
+    </div>
+3. Click "Confirm" button to sign the extrinsic
+<div style="text-align: center">
+  <img src="./assets/hcd_sign_extrinsic.png" style="width: 30vw; min-width: 250px">
+</div>
+
+4. Now you have created a new Xpub linked to your polkadot account.
+<div style="text-align: center">
+<img src="./assets/hcd_xpub.png" style="width: 30vw; min-width: 250px">
 </div>
 
 <hr>
@@ -171,7 +244,7 @@ To create and link a new xpub we have two options:
 
 2. Click on "Scan XPUB from Blue Wallet" button.
 3. Open on your mobile the XPUB qr you got on previous steps.
-    
+
     ***Note:*** If you don't have an XPUB yet please review <a href="#refCreateXPUB">How to create a new XPUB from Blue Wallet</a>.
 
     ***Note:*** This image is just an example.
@@ -359,6 +432,8 @@ To create and link a new xpub we have two options:
 <div id="refSignProposal"></div>
 
 ### How to sign a proposal.
+#### With Blue Wallet
+
 **Note:** Remember to import the vault on Blue Wallet app if you have't already.
 
 1. Go to "My Vaults" page.
@@ -421,7 +496,87 @@ To create and link a new xpub we have two options:
 
 15. Sign transaction using polkadot extension.
 
+#### With Hashed Confidential Docs
+1. Go to "My Vaults" page.
+2. Click on the vault that contain the proposal you want to sign, now we are on *Vault details* screen.
+3. Click on the proposal you want to sign, now we are on *Proposal details* screen.
+4. Click on "Sign PSBT (HCD)" button.
+<div style="text-align: center">
+<img src="./assets/hcd_nbv_sign_psbt_button.png" style="width: 50vw; min-width: 250px" />
+</div>
+
+5. You should see the next modal and click confirm button to continue
+<div style="text-align: center">
+<img src="./assets/hcd_nbv_signing_psbt_1.png" style="width: 50vw; min-width: 250px" />
+</div>
+
+6. Click "Confirm" button to sign PSBT
+<div style="text-align: center">
+<img src="./assets/hcd_nvb_sign_psbt.png" style="width: 50vw; min-width: 250px" />
+</div>
+
+7. Click "Finish" button to save the sign PSBT
+<div style="text-align: center">
+<img src="./assets/hcd_nbv_signing_psbt_1.png" style="width: 50vw; min-width: 250px" />
+</div>
+
+8. Click "Confirm" button to call the extrinsic
+<div style="text-align: center">
+<img src="./assets/hcd_nbv_call_extrinsic.png" style="width: 50vw; min-width: 250px" />
+</div>
+
 <hr/>
+
+### How to create a Proof of Reserves
+
+#### With Hashed Confidential Docs
+1. Go to "My Vaults" page.
+2. Click on the vault, now we are on *Vault details* screen.
+3. Scrool down to Proof of Reserves section.
+4. Click "Create pool of reserves" button
+
+    *Note:* The vault must have balance (sats) to create a proof of reserves.
+    <div style="text-align: center">
+      <img src="./assets/hcd_create_proof_of_reserves.png" style="width: 50vw; min-width: 250px" />
+    </div>
+
+5. Click "Confirm" button to sign the extrinsic
+    <div style="text-align: center">
+      <img src="./assets/hcd_create_pr_sign_extrinsic.png" style="width: 50vw; min-width: 250px" />
+    </div>
+6. Now you have created a new Proof of Reserves.
+  <div style="text-align: center">
+    <img src="./assets/hcd_pr_created.png" style="width: 50vw; min-width: 250px" />
+  </div>
+
+### How to sign Proof of Reserves
+#### With Hashed Confidential Docs
+1. Go to "My Vaults" page.
+2. Click on the vault, now we are on *Vault details* screen.
+3. Scrool down to Proof of Reserves section.
+4. Click on the proof of reserve in the list, now we are on *Proof of Reserves Details* screen.
+5. Click on "Sign PSBT" button.
+<div style="text-align: center">
+<img src="./assets/hcd_sign_psbt_pr.png" style="width: 30vw; min-width: 250px" />
+</div>
+6. You should see the next modal and click "Continue" button to continue
+<div style="text-align: center">
+<img src="./assets/hcd_sign_psbt_pr_2.png" style="width: 30vw; min-width: 250px" />
+</div>
+7. Click "Confirm" button to sign PSBT
+<div style="text-align: center">
+<img src="./assets/hcd_sign_psbt_pr_2.png" style="width: 30vw; min-width: 250px" />
+</div>
+8. Click "Finish" Button to save signed PSBT
+<div style="text-align: center">
+<img src="./assets/hcd_sign_psbt_pr_2.png" style="width: 30vw; min-width: 250px" />
+</div>
+
+9. Click "Confirm" button to save
+<div style="text-align: center">
+<img src="./assets/hcd_call_extrinsic_pr.png" style="width: 30vw; min-width: 250px" />
+</div>
+
 
 <div id="refFinalizeProposal"></div>
 
@@ -468,7 +623,7 @@ In the following tutorial, we'll talk about some concepts related to wallets & k
 
 - ### **About Keys**
 
-You will be given two kinds of keys: a public key, which functions similar to an email address (you may safely share it with others, enabling you to send and receive payments), and a private key, which is often a string of letters and numbers (and which is not to be shared with anyone). 
+You will be given two kinds of keys: a public key, which functions similar to an email address (you may safely share it with others, enabling you to send and receive payments), and a private key, which is often a string of letters and numbers (and which is not to be shared with anyone).
 
 - ### **What is a private key?**
 
