@@ -57,7 +57,7 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed.cl
     <img src="./assets/portal_choose_account_login.png" style="width: 30vw; min-width: 250px">
     </div>
 
-2. Click on "Login" button
+2. Click "Login" button
     <div style="text-align: center">
     <img src="./assets/portal_login_btn.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -135,7 +135,7 @@ To create and link a new xpub we have two options:
     <img src="./assets/nbv_header_options.png" style="width: 30vw; min-width: 250px">
     </div>
 
-2. Click on *Generate a new XPUB* button.
+2. Click *Generate a new XPUB* button.
     <div style="text-align: center">
     <img src="./assets/nbv_manage_keys_screen.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -165,7 +165,7 @@ To create and link a new xpub we have two options:
     <img src="./assets/nbv_header_options.png" style="width: 30vw; min-width: 250px">
     </div>
 
-2. Click on *Link XPUB* button.
+2. Click *Link XPUB* button.
     <div style="text-align: center">
     <img src="./assets/hcd_link_xpub.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -242,7 +242,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/nbv_extended_keys_screen.png" style="width: 30vw; min-width: 250px">
 </div>
 
-2. Click on "Scan XPUB from Blue Wallet" button.
+2. Click "Scan XPUB from Blue Wallet" button.
 3. Open on your mobile the XPUB qr you got on previous steps.
 
     ***Note:*** If you don't have an XPUB yet please review <a href="#refCreateXPUB">How to create a new XPUB from Blue Wallet</a>.
@@ -275,7 +275,7 @@ To create and link a new xpub we have two options:
 ### How to create a new vault
 
 1. Go to "My Vaults" page.
-2. Click on "Create vault" button.
+2. Click "Create vault" button.
 <div style="text-align: center">
 <img src="./assets/nbv_vault_list.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -290,7 +290,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/nbv_create_vault.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-4. Click on "Create vault" button
+4. Click "Create vault" button
 5. Sign transaction using polkadot extension.
 6. Now you can find your new vault on "My vaults" page
 
@@ -301,7 +301,7 @@ To create and link a new xpub we have two options:
 ### How to export your vault and import on Blue Wallet
 
 1. Go to "My vaults" page.
-2. Click on the vault you want to see details.
+2. Click the vault you want to see details.
 <div style="text-align: center">
 <img src="./assets/nbv_click_to_see_details_vault.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -311,7 +311,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/nbv_vault_details_screen.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-4. Click on "Export descriptor" button.
+4. Click "Export descriptor" button.
 <div style="text-align: center">
 <img src="./assets/nbv_vaults_card.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -353,9 +353,9 @@ To create and link a new xpub we have two options:
 <img src="./assets/bw_vault_details.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-13. Click on "Manage Keys" button.
+13. Click "Manage Keys" button.
 
-14. Click on "I have a seed for this key" option for your respective XPUB.
+14. Click "I have a seed for this key" option for your respective XPUB.
 
 <div style="text-align: center">
 <img src="./assets/bw_manage_key.png" style="width: 30vw; min-width: 250px" />
@@ -373,22 +373,22 @@ To create and link a new xpub we have two options:
 ### How to deposit to vault
 
 1. Go to "My vaults" page.
-2. Click on the vault you want to transfer to see details.
+2. Click the vault you want to transfer to see details.
 
 3. Get **receive address** to transfer btc to vault from your preferred wallet.
      * Using QR
-        1. Click on "Refresh and show qr" button.
+        1. Click "Refresh and show qr" button.
         2. Scan this qr from your preferred wallet to transfer founds.
 
      * Using Address
-        1. Click on "Refresh and copy" button.
+        1. Click "Refresh and copy" button.
 
         2. Use this address to transfer founds from your preferred wallet.
 <div style="text-align: center">
 <img src="./assets/nbv_receive_address.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-4. Click on **Refresh** button positioned on bottom right corner to confirm the sats was received successfully.
+4. Click **Refresh** button positioned on bottom right corner to confirm the sats was received successfully.
 <div style="text-align: center">
 <img src="./assets/nbv_refresh_button.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -407,7 +407,7 @@ To create and link a new xpub we have two options:
 *Note:* The vault balance must be greather than 546 sats to create a proposal.
 
 1. Go to *Vault Details* page.
-2. Click on "Create proposal" button.
+2. Click "Create proposal" button.
 <div style="text-align: center">
 <img src="./assets/nbv_crate_proposal_btn.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -420,7 +420,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/nbv_create_proposal.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-4. Click on "Create proposal" button.
+4. Click "Create proposal" button.
 5. Sing transaction using polkadot extension.
 6. You should see your new proposal on *Vault Details* screen.
 <div style="text-align: center">
@@ -437,9 +437,9 @@ To create and link a new xpub we have two options:
 **Note:** Remember to import the vault on Blue Wallet app if you have't already.
 
 1. Go to "My Vaults" page.
-2. Click on the vault that contain the proposal you want to sign, now we are on *Vault details* screen.
-3. Click on the proposal you want to sign, now we are on *Proposal details* screen.
-4. Click on "Sign PSBT" button.
+2. Click the vault that contains the proposal you want to sign, now we are on *Vault details* screen.
+3. Click the proposal you want to sign, now we are on *Proposal details* screen.
+4. Click "Sign PSBT" button.
 <div style="text-align: center">
 <img src="./assets/nbv_sign_psbt_button.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -498,9 +498,9 @@ To create and link a new xpub we have two options:
 
 #### With Hashed Confidential Docs
 1. Go to "My Vaults" page.
-2. Click on the vault that contain the proposal you want to sign, now we are on *Vault details* screen.
-3. Click on the proposal you want to sign, now we are on *Proposal details* screen.
-4. Click on "Sign PSBT (HCD)" button.
+2. Click the vault that contains the proposal you want to sign, now we are on *Vault details* screen.
+3. Click the proposal you want to sign, now we are on *Proposal details* screen.
+4. Click "Sign PSBT (HCD)" button.
 <div style="text-align: center">
 <img src="./assets/hcd_nbv_sign_psbt_button.png" style="width: 50vw; min-width: 250px" />
 </div>
@@ -531,7 +531,7 @@ To create and link a new xpub we have two options:
 
 #### With Hashed Confidential Docs
 1. Go to "My Vaults" page.
-2. Click on the vault, now we are on *Vault details* screen.
+2. Click a vault in vault list, we are on Vault details screen.
 3. Scrool down to Proof of Reserves section.
 4. Click "Create pool of reserves" button
 
@@ -552,10 +552,10 @@ To create and link a new xpub we have two options:
 ### How to sign Proof of Reserves
 #### With Hashed Confidential Docs
 1. Go to "My Vaults" page.
-2. Click on the vault, now we are on *Vault details* screen.
+2. Click a vault in vault list, we are on Vault details screen.
 3. Scrool down to Proof of Reserves section.
-4. Click on the proof of reserve in the list, now we are on *Proof of Reserves Details* screen.
-5. Click on "Sign PSBT" button.
+4. Click the proof of reserve in the list, now we are on *Proof of Reserves Details* screen.
+5. Click "Sign PSBT" button.
 <div style="text-align: center">
 <img src="./assets/hcd_sign_psbt_pr.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -591,7 +591,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/nbv_proposal_home.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-2. Click on "Finalize and Broadcast" button.
+2. Click "Finalize and Broadcast" button.
 <div style="text-align: center">
 <img src="./assets/nbv_finalize_btn.png" style="width: 30vw; min-width: 250px" />
 </div>
