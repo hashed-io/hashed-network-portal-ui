@@ -3,7 +3,7 @@
 
 This tutorial will go through NBV user flow! The following tutorials will show some words highlighted in blue. If you click on them, they will take you to an external page if that is the case, or they will redirect you to some section of this document.
 
-### Requeriments
+### Requirements
 * Install one of the following browsers:
     * Firefox -> Download <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">here</a>.
     * Google chrome -> Download <a href="https://www.google.com/chrome/" target="_blank">here</a>.
@@ -52,7 +52,7 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed.cl
 <img src="./assets/login_screen.png" style="width: 30vw; min-width: 250px">
 </div>
 
-1. If you have more of one account imported on **Polkadot extension** you can choose an account.
+1. If you have more of one account imported on **Polkadot extension**, you can choose an account.
     <div style="text-align: center">
     <img src="./assets/portal_choose_account_login.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -69,7 +69,7 @@ First, we need to access to the Hashed Network Portal <a href="https://hashed.cl
 
     **Note:** You can activate the checkbox **Remember my password for the next 15 minutes** to sign transactions easier.
 
-4. If you logged correctly you will see the following screen.
+4. If you are logged correctly, you will see the following screen.
     <div style="text-align: center">
     <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -109,7 +109,7 @@ First, we need to access to the Hashed Network Portal [site](https://hashed.club
       <img src="./assets/hcd_login_call_extrinsic.png" style="width: 40vw; min-width: 250px">
     </div>
 
-5. If you logged correctly you will see the following screen.
+5. If you are logged correctly, you will see the following screen.
     <div style="text-align: center">
     <img src="./assets/nbv_home_screen.png" style="width: 30vw; min-width: 250px">
     </div>
@@ -140,7 +140,7 @@ To create and link a new xpub we have two options:
     <img src="./assets/nbv_manage_keys_screen.png" style="width: 30vw; min-width: 250px">
     </div>
 
-3. Save your ***Seed*** in a safe place then click on **I saved my seed in a safe place**.
+3. Save your ***Seed*** in a safe place, then click on **I saved my seed in a safe place**.
 
     **Important:** Not share this Seed with anyone, this value is required to sign transactions using your XPUB on Blue Wallet app.
 
@@ -320,7 +320,7 @@ To create and link a new xpub we have two options:
 
     **Note:** Please follow the steps showed on the modal.
 
-    **Note:** If you followed successfully the modal steps you can skip the followings steps to export the vault.
+    **Note:** If you followed successfully the modal steps, you can skip the followings steps to export the vault.
 
 <div style="text-align: center">
 <img src="./assets/nbv_export_descriptor.png" style="width: 30vw; min-width: 250px" />
@@ -345,7 +345,7 @@ To create and link a new xpub we have two options:
 <img src="./assets/bw_vault_list.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-**Note:** ***To sign transactions you need to write the SEED of your xpub***
+**Note:** ***To sign transactions, you need to write the SEED of your xpub***
 
 12. On Blue Wallet click on a vault to see details, you should see the next screen.
 
@@ -404,7 +404,7 @@ To create and link a new xpub we have two options:
 
 ### How to create a proposal
 
-*Note:* The vault balance must be greather than 546 sats to create a proposal.
+*Note:* The vault balance must be greater than 546 sats to create a proposal.
 
 1. Go to *Vault Details* page.
 2. Click "Create proposal" button.
@@ -434,7 +434,7 @@ To create and link a new xpub we have two options:
 ### How to sign a proposal.
 #### With Blue Wallet
 
-**Note:** Remember to import the vault on Blue Wallet app if you have't already.
+**Note:** Remember to import the vault on Blue Wallet app if you haven't already.
 
 1. Go to "My Vaults" page.
 2. Click the vault that contains the proposal you want to sign, now we are on *Vault details* screen.
@@ -448,13 +448,13 @@ To create and link a new xpub we have two options:
 
     **Note:** Please follow the steps showed on the modal.
 
-    **Note:** If you followed successfully the modal steps you can skip the followings steps to sign a proposal.
+    **Note:** If you followed successfully the modal steps, you can skip the followings steps to sign a proposal.
 
 <div style="text-align: center">
 <img src="./assets/nbv_signing_psbt_1.png" style="width: 30vw; min-width: 250px" />
 </div>
 
-6. On Blue Wallet go to home screen and click on previously imported vault.
+6. On Blue Wallet, go to home screen and click on previously imported vault.
 <div style="text-align: center">
 <img src="./assets/bw_vault_details.png" style="width: 30vw; min-width: 250px" />
 </div>
@@ -462,7 +462,7 @@ To create and link a new xpub we have two options:
 7. Tap on "Send" button.
 8. Tap on "..." button, positioned on top right corner.
 9. Tap on "Sign a transaction" option.
-    **Note:** If this option is not available please confirm you have imported your seed correctly on Blue Wallet. [Tutorial](#refExportVault)
+    **Note:** If this option is not available, please confirm you have imported your seed correctly on Blue Wallet. [Tutorial](#refExportVault)
 
 <div style="text-align: center">
 <img src="./assets/bw_sign_a_transaction_btn.png" style="width: 30vw; min-width: 250px" />
@@ -532,7 +532,7 @@ To create and link a new xpub we have two options:
 #### With Hashed Confidential Docs
 1. Go to "My Vaults" page.
 2. Click a vault in vault list, we are on Vault details screen.
-3. Scrool down to Proof of Reserves section.
+3. Scroll down to Proof of Reserves section.
 4. Click "Create pool of reserves" button
 
     *Note:* The vault must have balance (sats) to create a proof of reserves.
@@ -582,9 +582,9 @@ To create and link a new xpub we have two options:
 
 ### How to finalize and broadcast a proposal.
 
-**Note:** Remember to import the vault on Blue Wallet app if you have't already.
+**Note:** Remember to import the vault on Blue Wallet app if you haven't already.
 
-**Note:** To finalize and broadcast a proposal make sure the threshold of multisignature has been met. To sign a proposal review  <a>previous</a> step.
+**Note:** To finalize and broadcast a proposal, make sure the threshold of multisignature has been met. To sign a proposal review  <a>previous</a> step.
 
 1. Go to proposal page details.
 <div style="text-align: center">
@@ -619,7 +619,7 @@ To create and link a new xpub we have two options:
 
 # **How to Safely Store Your Wallet**
 
-In the following tutorial, we'll talk about some concepts related to wallets & keys so you can be familiar with them.
+In the following tutorial, we'll talk about some concepts related to wallets & keys, so you can be familiar with them.
 
 - ### **About Keys**
 
