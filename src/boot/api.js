@@ -68,10 +68,10 @@ export default async ({ app, store }) => {
       notify: showGlobalLoading
     })
 
-    const parachainPolkadotApi = new PolkadotApi(process.env.WSS_PARACHAIN)
-    await parachainPolkadotApi.connect()
-    const systemApi = new SystemApi(parachainPolkadotApi, showGlobalLoading)
-    const vestingApi = new VestingApi(parachainPolkadotApi, showGlobalLoading)
+    // const parachainPolkadotApi = new PolkadotApi(process.env.WSS)
+    // await parachainPolkadotApi.connect()
+    const systemApi = new SystemApi(api, showGlobalLoading)
+    const vestingApi = new VestingApi(api, showGlobalLoading)
 
     store['$systemApi'] = systemApi
     store['$vestingApi'] = vestingApi

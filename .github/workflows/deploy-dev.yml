@@ -46,7 +46,8 @@ jobs:
         run: quasar build
         env:
           APP_NAME: 'Hashed Club - Members Only'
-          WSS: 'wss://n1.main.hashed.systems'
+          # WSS: 'wss://n1.main.hashed.systems'
+          WSS: 'wss://c2.hashed.network'
           IPFS_URL: 'https://ipfs.infura.io:5001/'
           PRIVATE_URI: 'https://hp-dev.hashed.systems/v1/graphql'
           BDK_SERVICES_URL: 'https://bdk.hashed.live'
@@ -57,7 +58,7 @@ jobs:
           GATED_PALLET_ID: '0x5d208df71427902157988a56e7527474a7dce921f9d5efa159dcfc849289a53c'
           GATED_MARKETPLACE_ID: '0xb3914e1762ff9ca8caec57959715350885632a8a323b8c160fc814600669ad33'
           AFLOAT_COLLECTION_ID: '0'
-          WSS_PARACHAIN: 'wss://c2.hashed.network'
+          # WSS_PARACHAIN: 'wss://c2.hashed.network'
       #Auth google Could SDK
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'

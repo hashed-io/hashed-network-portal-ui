@@ -68,8 +68,7 @@ module.exports = configure(function (ctx) {
         FAUCET_SERVER_URL: process.env.FAUCET_SERVER_URL,
         GATED_PALLET_ID: process.env.GATED_PALLET_ID,
         GATED_MARKETPLACE_ID: process.env.GATED_MARKETPLACE_ID,
-        AFLOAT_COLLECTION_ID: process.env.AFLOAT_COLLECTION_ID,
-        WSS_PARACHAIN: process.env.WSS_PARACHAIN
+        AFLOAT_COLLECTION_ID: process.env.AFLOAT_COLLECTION_ID
       },
       // transpile: false,
       // publicPath: '/',
