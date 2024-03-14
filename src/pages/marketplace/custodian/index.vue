@@ -26,10 +26,6 @@ export default {
     polkadotAddress: {
       async handler () {
         this.applicants = []
-        const isLoggedIn = await this.$store.$hashedPrivateApi.isLoggedIn()
-        if (!isLoggedIn) {
-          await this.loginUser()
-        }
         await this.getApplications()
       }
     }
@@ -59,11 +55,7 @@ export default {
       const tmpApplicants = applicants.filter(applicant => {
         return applicant.fields[0].custodianCid !== null
       })
-      const isLogged = await this.$store.$hashedPrivateApi.isLoggedIn()
-      this.setIsHashedLoggedIn(isLogged)
-      if (!isLogged) {
-        await this.loginUser()
-      }
+      this.setIsHashedLoggedIn(true)
       tmpApplicants.forEach((applicant, indexApplicant) => {
         applicant.fields.forEach(privateFields => {
           const identifier = 'File:'
@@ -74,7 +66,7 @@ export default {
             if (cid.split(':').length > 1) {
               cid = cid.split(':')[0]
             }
-            promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
+            // promisesFields.push(this.$store.$hashedPrivateApi.sharedViewByCID(cid))
           }
         })
       })

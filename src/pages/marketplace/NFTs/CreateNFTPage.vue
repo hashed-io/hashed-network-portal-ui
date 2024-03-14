@@ -75,7 +75,7 @@ export default {
     },
     async uploadToPrivateService ({ attributes, addressToShare }) {
       const promises = []
-      const privateService = this.$store.$hashedPrivateApi
+      const privateService = undefined
       try {
         let fileName
         for (const attribute of attributes) {
@@ -85,7 +85,7 @@ export default {
           const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
           const ext = fileNameSplit[1]
           fileName = filename + '.' + ext
-          promises.push(privateService.shareNew({
+          promises.push(privateService?.shareNew?.({
             toUserAddress: addressToShare,
             name: fileName,
             description: label,

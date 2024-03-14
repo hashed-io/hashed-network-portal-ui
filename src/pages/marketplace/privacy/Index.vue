@@ -122,20 +122,20 @@ export default defineComponent({
       this.clearDownload()
     }
   },
-  async beforeMount () {
-    const isLoggedIn = this.$store.$hashedPrivateApi.isLoggedIn()
-    if (!isLoggedIn) {
-      await this.loginUser()
-    }
-  },
+  // async beforeMount () {
+  //   const isLoggedIn = this.$store.$hashedPrivateApi.isLoggedIn()
+  //   if (!isLoggedIn) {
+  //     await this.loginUser()
+  //   }
+  // },
   methods: {
     // ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
     async uploadFile () {
       if (this.isLoggedIn && this.selectedAccount) {
-        const hpApi = this.$store.$hashedPrivateApi
+        const hpApi = undefined
         if (this.isChecked && this.accountToShare) {
           try {
-            const response = await hpApi.shareNew({
+            const response = await hpApi?.shareNew?.({
               toUserAddress: this.accountToShare,
               name: 'demo name',
               description: 'demo description',
@@ -165,12 +165,12 @@ export default defineComponent({
     },
     async downloadFile () {
       if (this.isLoggedIn && this.selectedAccount) {
-        const hpApi = this.$store.$hashedPrivateApi
+        const hpApi = undefined
         try {
           const response =
             this.toggleDownload
-              ? await hpApi.sharedViewByCID(this.query)
-              : await hpApi.ownViewByCID(this.query)
+              ? await hpApi?.sharedViewByCID?.(this.query)
+              : await hpApi?.ownViewByCID?.(this.query)
           this.matchDataViewByCID(response)
         } catch (error) {
           console.error('download File', error)
