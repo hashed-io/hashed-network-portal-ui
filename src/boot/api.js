@@ -3,7 +3,6 @@ import PolkadotApi from '~/services/polkadotApi'
 import { MarketplaceApi, FruniquesApi, UniquesApi, SystemApi, VestingApi } from '~/services/polkadot-pallets'
 // import { NbvStorageApi, MarketplaceApi, FruniquesApi, UniquesApi } from '~/services/polkadot-pallets'
 import BdkApi from '~/services/bdk/bdkApi'
-// import HashedPrivateApi from '~/services/HashedPrivateApi'
 import ConfidentialDocs from '~/services/confidential-docs/confidential-docs'
 import { showGlobalLoading, hideGlobalLoading, showGlobalNotification } from '~/mixins/notifications'
 import { AfloatApi } from '@jmgayosso/afloat-client'
@@ -43,21 +42,6 @@ export default async ({ app, store }) => {
     showGlobalLoading({
       message: 'Connecting with Server'
     })
-    try {
-      // const hashedPrivateApi = new HashedPrivateApi({
-      //   ipfsURL: process.env.IPFS_URL,
-      //   ipfsAuthHeader,
-      //   privateURI: process.env.PRIVATE_URI,
-      //   signFn: async (address, message) => {
-      //     const { signature } = await api.signMessage(message, address)
-      //     return signature
-      //   }
-      // })
-      // await hashedPrivateApi.connect()
-      // store['$hashedPrivateApi'] = hashedPrivateApi
-    } catch (e) {
-      console.error(e)
-    }
 
     const nbvStorageApi = new NbvStorageApi(hashedConfidentialDocs.getPolkadotApi(), showGlobalLoading)
     const afloatApi = new AfloatApi({
