@@ -62,7 +62,6 @@ module.exports = configure(function (ctx) {
         IPFS_URL: process.env.IPFS_URL,
         IPFS_PROJECT_ID: process.env.IPFS_PROJECT_ID,
         IPFS_PROJECT_SECRET: process.env.IPFS_PROJECT_SECRET,
-        PRIVATE_URI: process.env.PRIVATE_URI,
         BDK_SERVICES_URL: process.env.BDK_SERVICES_URL,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         FAUCET_SERVER_URL: process.env.FAUCET_SERVER_URL,

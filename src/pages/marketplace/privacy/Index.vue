@@ -18,12 +18,6 @@
             :label="$t('pages.marketplace.privacy.uploadSection.custodian')"
             outlined
           )
-        .col-12
-          q-btn(
-            class="q-mr-md"
-            @click="uploadFile"
-            color="primary"
-          ) {{$t('pages.marketplace.privacy.buttons.save')}}
           q-btn(
             @click="clearUpload"
             color="primary"
@@ -50,11 +44,6 @@
             :label="$t('pages.marketplace.privacy.downloadSection.cidInput')"
           )
         .col-12
-          q-btn(
-            @click="downloadFile"
-            class="q-mr-md"
-            color="primary"
-          ) {{$t('pages.marketplace.privacy.buttons.download')}}
           q-btn(
             @click="clearDownload"
             color="primary"
@@ -122,62 +111,8 @@ export default defineComponent({
       this.clearDownload()
     }
   },
-  // async beforeMount () {
-  //   const isLoggedIn = this.$store.$hashedPrivateApi.isLoggedIn()
-  //   if (!isLoggedIn) {
-  //     await this.loginUser()
-  //   }
-  // },
   methods: {
     // ...mapMutations('polkadotWallet', ['setIsLoggedIn']),
-    async uploadFile () {
-      if (this.isLoggedIn && this.selectedAccount) {
-        const hpApi = undefined
-        if (this.isChecked && this.accountToShare) {
-          try {
-            const response = await hpApi?.shareNew?.({
-              toUserAddress: this.accountToShare,
-              name: 'demo name',
-              description: 'demo description',
-              payload: this.file
-            })
-            this.matchDataShare(response)
-          } catch (error) {
-            console.error('uploadFile', error)
-            this.showNotification({ message: error.message || error, color: 'negative' })
-          }
-        } else {
-          try {
-            const response = await hpApi.upsert({
-              name: 'name2',
-              description: 'desc1',
-              payload: this.file
-            })
-            this.matchDataUpsert(response)
-          } catch (error) {
-            console.error('uploadFile', error)
-            this.showNotification({ message: error.message || error, color: 'negative' })
-          }
-        }
-      } else {
-        this.showNotification({ message: this.$t('pages.marketplace.actions.loggedDownloadFile'), color: 'negative' })
-      }
-    },
-    async downloadFile () {
-      if (this.isLoggedIn && this.selectedAccount) {
-        const hpApi = undefined
-        try {
-          const response =
-            this.toggleDownload
-              ? await hpApi?.sharedViewByCID?.(this.query)
-              : await hpApi?.ownViewByCID?.(this.query)
-          this.matchDataViewByCID(response)
-        } catch (error) {
-          console.error('download File', error)
-          this.showNotification({ message: error.message || error, color: 'negative' })
-        }
-      } else if (!this.isLoggedIn) { this.showNotification({ message: this.$t('pages.marketplace.actions.loggedDownloadFile'), color: 'negative' }) }
-    },
     openFile () {
       if (this.getUploadResponse.payload && this.getUploadResponse.payload instanceof File) {
         window.open('https://ipfs.io/ipfs/' + this.getUploadResponse.cid)

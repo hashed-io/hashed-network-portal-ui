@@ -7,8 +7,6 @@ export const authentication = {
     ...mapMutations('polkadotWallet', ['setIsHashedLoggedIn']),
     async loginUser () {
       try {
-        // this.showLoading({ message: 'You must be logged in to submit an application' })
-        // await this.$store.$hashedPrivateApi.login(this.selectedAccount.address)
         this.setIsHashedLoggedIn(true)
       } catch (error) {
         console.error(error)
