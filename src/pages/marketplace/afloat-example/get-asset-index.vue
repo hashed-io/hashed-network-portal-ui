@@ -7,7 +7,7 @@
         table.text-caption
           th Label
           th value
-          tr(v-for="{label, value} of assetExample")
+          tr(v-for="{label, value} of getAssetExample")
             td {{label}}
             td(v-if="isFile(value?.payload) && value.extension !== 'json'" @click="openFile(value)").animated-item.text-bold {{'File'}}
             td(v-if="isFile(value?.payload) && value.extension === 'json'" @click="openFile(value)").animated-item.text-bold {{'Json'}}
@@ -46,7 +46,12 @@ export default {
     }
   },
   computed: {
-
+    getAssetExample () {
+      return this.assetExample || [{
+        label: 'NFT Name',
+        value: 'Virginia Port Volume Increase'
+      }]
+    }
   },
   async created () {
     await this.getAllAssets()

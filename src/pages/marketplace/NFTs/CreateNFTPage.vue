@@ -72,42 +72,6 @@ export default {
       } finally {
         this.hideLoading()
       }
-    },
-    async uploadToPrivateService ({ attributes, addressToShare }) {
-      const promises = []
-      const privateService = this.$store.$hashedPrivateApi
-      try {
-        let fileName
-        for (const attribute of attributes) {
-          const label = attribute[0]
-          const file = attribute[1]
-          const fileNameSplit = file.name.split('.')
-          const filename = fileNameSplit[0].length > this.maxLengthPrivateService ? fileNameSplit[0].substring(0, this.maxLengthPrivateService) : fileNameSplit[0]
-          const ext = fileNameSplit[1]
-          fileName = filename + '.' + ext
-          promises.push(privateService.shareNew({
-            toUserAddress: addressToShare,
-            name: fileName,
-            description: label,
-            payload: file
-          }))
-        }
-        const results = await Promise.all(promises)
-        for (const attribute of attributes) {
-          const result = results.shift()
-          const CID = result.sharedData.cid
-          attribute[1] = 'File:' + CID
-          // attribute[1] = {
-          //   id: result.ownedData.id,
-          //   value: 'File:' + CID,
-          //   description: result.sharedData.description
-          // }
-        }
-        return attributes
-      } catch (error) {
-        console.error(error)
-        throw new Error('Error uploading to private service: ', error)
-      }
     }
   }
 }

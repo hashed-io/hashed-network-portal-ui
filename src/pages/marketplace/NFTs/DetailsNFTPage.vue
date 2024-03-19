@@ -88,6 +88,7 @@ export default {
       return false
     },
     async downloadFile (file) {
+      const { creator, groupAddress, cid: CID } = JSON.parse(file) || {}
       try {
         this.showLoading({ message: this.$t('pages.marketplace.taxCredits.details.downloading') })
         const isFile = file?.payload instanceof File
@@ -116,8 +117,8 @@ export default {
       } finally {
         this.hideLoading()
       }
-      const isHCD = typeof file === 'string' ? file.includes(this.identifiers[1]) : false
-      const stringSplittedArray = file.split(this.identifiers[1])
+      const isHCD = typeof CID === 'string' ? CID.includes(this.identifiers[1]) : false
+      const stringSplittedArray = CID.split(this.identifiers[1])
       const cid = stringSplittedArray[1]
       let response
       try {
